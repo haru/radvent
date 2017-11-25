@@ -6,6 +6,13 @@ require 'rspec/rails'
 require 'devise'
 require File.expand_path("spec/support/controller_macros.rb")
 # Add additional requires below this line. Rails is not loaded until this point!
+require 'simplecov'
+require "codeclimate-test-reporter"
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+  SimpleCov::Formatter::HTMLFormatter,
+  CodeClimate::TestReporter::Formatter
+]
+SimpleCov.start "rails"
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are

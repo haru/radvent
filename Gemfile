@@ -58,6 +58,7 @@ group :test do
   gem "rspec-rails", '~> 3.0'
   gem "factory_girl_rails", "~> 4.5.0"
   gem 'rails-controller-testing'
+  gem 'simplecov'
 end
 
 gem 'haml-rails'
@@ -91,3 +92,5 @@ gem 'i18n_generators'
 source 'http://insecure.rails-assets.org' do
   gem 'rails-assets-bootstrap-material-design', '~> 4.0.0.beta.4'
 end
+
+gem "codeclimate-test-reporter", require: false
