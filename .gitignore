@@ -43,3 +43,4 @@ bower.json
 /public/uploads/**/*
 devise.rb
 secrets.yml
+database.yml
