@@ -16,7 +16,7 @@
                   %a{"data-toggle" => "modal", :href => "#markdown-modal", :class => "btn-xs btn-default"}
                     %span.fa.fa-question
                 %div.item-body-content
-                  = f.text_area :body, id: "item-text", placeholder:t("helpers.placeholder.text")
+                  = f.text_area :body, id: "item-text", placeholder:t("helpers.placeholder.text"), class: 'form-control'
                   = render "form_attachment", attachment: attachment
               %div.item-preview
                 %div.item-header.item-previw-header #{t "views.items._form.item_header_preview"}
@@ -29,5 +29,5 @@
           = link_to t("helpers.submit.cancel"), item_path(id: item.advent_calendar_item_id), class:"btn btn-default"
         - else
           = link_to t("helpers.submit.cancel"), advent_calendar_item_path(id: item.advent_calendar_item_id), class:"btn btn-default"
-        = f.submit t("helpers.submit.create"), class:"btn btn-primary btn-raised", onclick: '$(this).prop("disabled", true);true', data: {disable_with: false}
+        = f.submit t("helpers.submit.create"), class:"btn btn-primary btn-raised item-submit", data: {disable_with: false}
 

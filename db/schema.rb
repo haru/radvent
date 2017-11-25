@@ -13,8 +13,8 @@
 ActiveRecord::Schema.define(version: 20171124071736) do
 
   create_table "advent_calendar_items", force: :cascade do |t|
-    t.string "user_name", limit: 255
-    t.string "comment", limit: 255
+    t.string "user_name"
+    t.string "comment"
     t.integer "date"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 20171124071736) do
 
   create_table "attachments", force: :cascade do |t|
     t.integer "advent_calendar_item_id"
-    t.string "image", limit: 255
+    t.string "image"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["advent_calendar_item_id"], name: "index_attachments_on_advent_calendar_item_id"
@@ -32,8 +32,8 @@ ActiveRecord::Schema.define(version: 20171124071736) do
 
   create_table "comments", force: :cascade do |t|
     t.integer "item_id"
-    t.string "user_name", limit: 255
-    t.string "body", limit: 255
+    t.string "user_name"
+    t.string "body"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["item_id"], name: "index_comments_on_item_id"
@@ -53,7 +53,7 @@ ActiveRecord::Schema.define(version: 20171124071736) do
   end
 
   create_table "items", force: :cascade do |t|
-    t.string "title", limit: 255
+    t.string "title"
     t.integer "advent_calendar_item_id"
     t.datetime "created_at"
     t.datetime "updated_at"
