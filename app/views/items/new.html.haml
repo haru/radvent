@@ -1,5 +1,13 @@
-= render "shared/header_fluid", id: @item.advent_calendar_item_id, date: @date
+= render "shared/header_fluid", id: @item.advent_calendar_item_id, date: @date, event: @item.advent_calendar_item.event
 %div.container-fluid
   %h2 #{t "views.items.new.title"}
   %hr
   = render "form", item: @item, attachment: @attachment
+
+:coffee
+    parseBody = ->
+      $('#item-show').html(marked(text))
+      $('#item-show').find('pre code').each (i, block) ->
+        hljs.highlightBlock(block)
+    parseBody() if $('#item-show')[0]
+    parseText $('#item-text').val() if $('#item-text').val()

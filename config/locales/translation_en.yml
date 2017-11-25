@@ -83,7 +83,7 @@ en:
         link: Link
         horizontal_rule: Horizontal rule
       _navigation:
-        title: "Advent Calendar %{year} Day %{date}"
+        title: "%{title} Day %{date}"
       edit:
         title: Edit Advent Calendar Entry
       new:
@@ -98,3 +98,9 @@ en:
         description_title: About Advent Calendar
         description: Advent calendar is a special calendar used to count or celebrate the days in anticipation of Christmas.
           Let's enjoy coming Christmas with special entries everyday!
+  menu:
+    sign_out: Sign out
+    settings: Settings
+    sign_up: Sign up
+    sign_in: Sign in
+

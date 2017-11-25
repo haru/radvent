@@ -1,5 +1,5 @@
 %div.advent-calendar-breadcrumb
   %div.container-fluid
-    = link_to "AdventCalendar", root_path
+    = link_to event.title, show_event_path(event.name)
     \/
     = link_to t("views.day_format", date: date), advent_calendar_item_path(id: id)

@@ -10,22 +10,32 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
- *= require_tree .
- *= require_self
  */
+
+@import "bootstrap";
+@import "rails_bootstrap_forms";
+@import "devise_bootstrap_views";
+@import "dataTables/bootstrap/3/jquery.dataTables.bootstrap";
+@import "bootstrap-material-design";
 @import "font-awesome-sprockets";
 @import "font-awesome";
+@import 'bootstrap/glyphicons';
+@import "partials/*";
 
-body{
-  font-family:  'Helvetica Neue', Helvetica, 'ヒラギノ角ゴ ProN W3', 'Hiragino Kaku Gothic ProN', メイリオ, Meiryo, sans-serif;
+body {
+    font-family: 'Helvetica Neue', Helvetica, 'ヒラギノ角ゴ ProN W3', 'Hiragino Kaku Gothic ProN', メイリオ, Meiryo, sans-serif;
 }
 
-.advent-calendar-breadcrumb{
-  background: #2c3e50;
-  padding: .7em 0;
-  color: #18bc9c;
-  color: #fff;
-  a{
+.advent-calendar-breadcrumb {
+    background: #00532E;
+    padding: .7em 0;
+    color: #18bc9c;
     color: #fff;
-  }
- }
+    a {
+        color: #fff;
+    }
+}
+
+.alert-info {
+    background-color: #00693E;
+}

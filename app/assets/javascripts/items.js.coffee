@@ -45,6 +45,6 @@ ready = ->
   parseText $('#item-text').val() if $('#item-text').val()
 
 $(document).ready ready
-$(document).on 'page:load', ready
+$(document).on 'turbolinks:load', ready
 $(document).on 'keyup', '#item-text', checkTextChange()
 $(document).on 'change', '#attachment-image-select', attachmentImageInputChange

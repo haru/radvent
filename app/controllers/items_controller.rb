@@ -1,4 +1,5 @@
 class ItemsController < ApplicationController
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update]
   def new
     @date = params[:date]
     @item = Item.new(advent_calendar_item_id: params[:id])
@@ -23,8 +24,9 @@ class ItemsController < ApplicationController
       redirect_to root_path
     else
       @comment = Comment.new(item_id: @item.id)
-      @advent_calendar_item_prev = AdventCalendarItem.prev(@item.advent_calendar_item.date).first
-      @advent_calendar_item_next = AdventCalendarItem.next(@item.advent_calendar_item.date).first
+      @comment.user_name = current_user.name if user_signed_in?
+      @advent_calendar_item_prev = AdventCalendarItem.prev(@item.advent_calendar_item).first
+      @advent_calendar_item_next = AdventCalendarItem.next(@item.advent_calendar_item).first
     end
   end
 
@@ -42,7 +44,7 @@ class ItemsController < ApplicationController
     elsif !@item.save
       render :edit
     else
-      redirect_to advent_calendar_item_path(id: @item.advent_calendar_item_id)        	
+      redirect_to advent_calendar_item_path(id: @item.advent_calendar_item_id)
     end
   end
 

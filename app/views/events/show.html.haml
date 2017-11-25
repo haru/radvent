@@ -1,0 +1,31 @@
+%div
+  %div#event-header.jumbotron
+    %div.container
+      %h1= @event.title
+      =@event.description
+
+%div.container
+  %div.advent-calendar-description
+    %h2 #{t "views.welcome.index.description_title"}
+    %hr
+    %p #{t "views.welcome.index.description"}
+  %table.table.table-bordered.advent-calendar-calendar
+    %thead
+      %tr
+        - t("date.abbr_day_names").each do |day_name|
+          %th #{day_name}
+    %tbody
+      - @calendar_data.each do |week|
+        %tr
+          - week.each do |date|
+            %td
+              %p.advent-calendar-date
+                = date.day
+              -if advent_calendar_date?(date, @event)
+                = render "detail", advent_calendar_item: @advent_calendar_items.find_by(date: date.day), date: date.day
+
+%footer.welcome-footer
+  %div.container
+    %p.small
+      Powered by
+      = link_to "radvent", "https://github.com/nanonanomachine/radvent/"

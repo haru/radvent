@@ -1,0 +1,30 @@
+%h1 ユーザー情報
+
+%div.btn-group{role: "group", "aria-label": "..."}
+
+  %button.btn.btn-default.btn-primary{type: "button",  "data-toggle": "modal", "data-target": "#deleteDialog"}
+    %i.fa.fa-trash 削除
+
+= bootstrap_form_for(@user, url: user_path(@user), method: "put", layout: :horizontal, label_col: "col-sm-2", control_col: "col-sm-10")do |f|
+  = f.text_field :email
+  = f.text_field :name
+  %p= f.check_box :admin, inline: true
+  = link_to 'キャンセル', users_path, class: "btn btn-default"
+  = f.submit "登録", class: "btn btn-primary btn-raised"
+
+%div#deleteDialog.modal.fade{role: "dialog", "aria-labelledby": "myModalLabel"}
+  %div.modal-dialog{role: "document"}
+    %div.modal-content
+      %div.modal-header
+        %button.close{type: "button", "data-dismiss": "modal", "aria-label": "Close"}
+          %span{"aria-hidden": "true"}
+            &times;
+        %h4#myModalLabel.modal-title
+          ユーザー削除
+      %div.modal-body
+        = "#{@user.name} を本当に削除しますか？"
+      %div.modal-footer
+        %button.btn.btn-primary{type: "button",  "data-dismiss": "modal"}
+          キャンセル
+        =button_to "削除", delete_user_path(@user.id), method: "delete", class:"btn btn-primary btn-raised"
+

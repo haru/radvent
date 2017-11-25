@@ -31,7 +31,7 @@
           margin: 0;
           padding: 10px;
           border: none;
-          outline: 0;	
+          outline: 0;
         }
         .attachment-image{
           box-sizing: border-box;
@@ -68,7 +68,7 @@
         padding: 10px;
         overflow: scroll;
       }
-    }	
+    }
   }
 }
 
@@ -84,10 +84,10 @@
   }
   .item-show-header-author{
     margin-bottom:0;
-    color: #798389;
+    color: #FFFFFF;
     .item-show-header-edit a{
       font-size: 15px;
-      color: #798389;
+      color: #FFFFFF;
     }
   }
   .item-show-header-comment-count{
@@ -107,6 +107,10 @@
 .item-nav{
   font-size: 13px;
   padding: 10px !important;
+  color: #ffffff;
+  a.alert-link {
+    color: #ffffff;
+  }
 }
 
 .comments{
@@ -258,4 +262,3 @@
     margin-top: 0;
   }
 }
-

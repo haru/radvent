@@ -1,7 +1,21 @@
-= render "shared/header", id: nil, date: @item.advent_calendar_item.date
+= render "shared/header", id: nil, date: @item.advent_calendar_item.date, event: @item.advent_calendar_item.event
 = render "content", item: @item, advent_calendar_item_prev: @advent_calendar_item_prev, advent_calendar_item_next: @advent_calendar_item_next
+
+%div#like-buttons
+  = render "like", item: @item
+
 %div.container.comments
-  %div.comment-title #{t "activerecord.models.comment"}
+  %div.comment-title
+    %i.fa.fa-comments
+    = "#{t 'activerecord.models.comment'}"
   %hr
   = render @item.comments
   = render "comments/form", comment: @comment
+
+:coffee
+    parseBody = ->
+      $('#item-show').html(marked(text))
+      $('#item-show').find('pre code').each (i, block) ->
+        hljs.highlightBlock(block)
+    parseBody() if $('#item-show')[0]
+    parseText $('#item-text').val() if $('#item-text').val()

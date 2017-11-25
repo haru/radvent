@@ -1,0 +1,25 @@
+%div.container
+  %div.btn-group{role: "group", "aria-label": "..."}
+  = link_to :new_event, {class: "btn btn-primary"} do
+    %i.fa.fa-plus 新規登録
+
+
+
+
+  %h1 イベント
+
+  %table#events.table.table-striped
+    %thead
+      %tr
+        %th タイトル
+        %th 開始日
+        %th 終了日
+    %tbody
+      - @events.each do |event|
+        %tr
+          %td.title= link_to event.title, edit_event_path(event)
+          %td.start= event.start_date
+          %td.end= event.end_date
+
+:javascript
+  $('#events').DataTable();

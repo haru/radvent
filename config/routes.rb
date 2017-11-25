@@ -1,9 +1,19 @@
 Rails.application.routes.draw do
+
+  resources :events, except: [:show]
+  get 'events/:name' => 'events#show', as: :show_event
+  get 'admin/events' => 'events#list', as: :events_list
+  delete 'users/delete/:id' => 'users#destroy', as: :delete_user
+  resources :users, :only => [:index, :edit, :update]
+
+  devise_for :users
   resources :items do
     member do
       get 'preview'
     end
+    resources :likes, only: [:create, :destroy]
   end
+
 
   resources :advent_calendar_items
   resources :attachments

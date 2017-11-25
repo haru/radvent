@@ -7,12 +7,13 @@
   - else
     %p.advent-calendar-entry
       = advent_calendar_item.comment
-    %p.advent-calendar-join
-      = link_to t("views.welcome._detail.button_edit"),
-        advent_calendar_item_path(id:advent_calendar_item.id),
-        class:"btn btn-default btn-block btn-xs"
+    - if (advent_calendar_item.editable_by? current_user)
+      %p.advent-calendar-join
+        = link_to t("views.welcome._detail.button_edit"),
+          advent_calendar_item_path(id:advent_calendar_item.id),
+          class:"btn btn-default btn-block btn-xs"
 - else
   %div.advent-calendar-join
     = link_to t("views.welcome._detail.button_create"),
-      new_advent_calendar_item_path(date: date),
+      new_advent_calendar_item_path(date: date, event_id: @event.id),
       class: "btn btn-success btn-block"

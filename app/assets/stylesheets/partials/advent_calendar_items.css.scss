@@ -6,3 +6,12 @@
   margin-top: 21px;
   margin-bottom: 10.5px;
 }
+
+div.jumbotron.item-show-header {
+  background-color: #B81C22;
+  color: #FFFFFF;
+  border-radius: 0;
+  .btn-outline-primary {
+    border-color: #ffffff;
+  }
+}

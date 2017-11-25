@@ -1,0 +1,26 @@
+%div.container.likes{align: "right"}
+  %div.button-box{style: "display: inline-block;"}
+    - if user_signed_in?
+      - if item.liked_by?(current_user)
+        %div.button-box{style: "display: inline-block;"}
+          = button_to item_like_path(Like.find_by(user_id: current_user.id), item_id: item.id), method: :delete, id: "like-button",
+          class:"btn btn-primary", remote: true do
+            %i.fa.fa-heart
+            = item.likes.count
+      - else
+        = button_to item_likes_path(item), id: "like-button", class:"btn btn-primary", remote: true do
+          %i.fa.fa-heart-o
+          = item.likes.count
+    - else
+      %i.fa.fa-heart
+      %span= item.likes.count
+
+  %a.like-count.btn.btn-info{tabindex: "0", role:"button", "data-toggle": "popover", "data-trigger": "focus", "data-placement": "bottom",
+    title: t("views.items._content.liked_person"), "data-content": item.likes.map{|like|like.user.name}.join("<br/>")}
+    %i.fa.fa-user
+
+
+:javaScript
+  $('.like-count').popover({
+    trigger: 'focus'
+  })

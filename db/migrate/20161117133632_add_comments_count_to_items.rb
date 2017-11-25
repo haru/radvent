@@ -1,4 +1,4 @@
-class AddCommentsCountToItems < ActiveRecord::Migration
+class AddCommentsCountToItems < ActiveRecord::Migration[4.2]
   def up
     add_column :items, :comments_count, :integer, null: false, default: 0
     Item.find_each { |i| Item.reset_counters(i.id, :comments) }

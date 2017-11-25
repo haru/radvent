@@ -1,11 +1,14 @@
 %div.comment
   %div.comment-header
     %div.text-info.comment-user
+      %i.fa.fa-user
       = comment.user_name
       #{t "views.courtesy_title"}
     %div.pull-right.comment-metadata
       %div.text-muted
         = comment.created_at.to_s
-        = link_to t("helpers.button.delete"), comment_path(comment), method: :delete, data: { confirm: t("views.comments._comment.confirm_delete") }, class:"text-muted"
+        = link_to comment_path(comment), method: :delete, data: { confirm: t("views.comments._comment.confirm_delete") }, class:"text-muted" do
+          %i.fa.fa-trash
+          = t("helpers.button.delete")
   %div.comment-content
     = simple_format(h(comment.body))

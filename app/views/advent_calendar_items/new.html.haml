@@ -1,6 +1,6 @@
 %div.container
   %div.page-header
-    %h1 #{t "views.advent_calendar_items.new.title", date: @advent_calendar_item.date, month: Constants::MONTH}
+    %h1 #{t "views.advent_calendar_items.new.title", date: @advent_calendar_item.date, month: @advent_calendar_item.month}
     %hr
   = form_for @advent_calendar_item do |f|
     %fieldset
@@ -13,6 +13,7 @@
         %div
           = f.text_area :comment, class:"form-control"
       = f.hidden_field :date, value: @advent_calendar_item.date
+      = f.hidden_field :event_id, value: @advent_calendar_item.event_id
       %div
         = link_to t("helpers.submit.cancel"), root_path, class:"btn btn-default"
-        = f.submit t("helpers.submit.create"), class:"btn btn-primary"
+        = f.submit t("helpers.submit.create"), class:"btn btn-primary btn-raised"

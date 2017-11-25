@@ -1,0 +1,26 @@
+%div{:class => "container"}
+
+  %h1 Users#index
+
+  %table#users.table.table-striped
+    %thead
+      %tr
+        %th ID
+        %th Name
+        %th 管理者
+        %th Email
+        %th Created At
+        %th Last Logged In
+    %tbody
+      - @users.each do |user|
+        %tr
+          %td= user.id
+          %td= link_to user.name, edit_user_path(user.id)
+          %td= user.admin?
+          %td= user.email
+          %td= user.created_at
+          %td= user.last_sign_in_at
+
+
+:javascript
+  $('#users').DataTable({});
