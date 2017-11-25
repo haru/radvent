@@ -41,3 +41,5 @@ bower.json
 # Ignore assets data
 /public/assets/*
 /public/uploads/**/*
+devise.rb
+secrets.yml
