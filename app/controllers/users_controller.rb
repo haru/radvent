@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :admin_user!, only: [:index, :update_info, :destroy]
-  before_action :find_user, only: [:show, :edit, :update_info, :destroy]
+  before_action :find_user, only: [:show, :edit_info, :update_info, :destroy]
   def index
     @menu = :users
     @users = User.all
@@ -10,7 +10,7 @@ class UsersController < ApplicationController
   def show
   end
 
-  def edit
+  def edit_info
     @menu = :users
     render layout: 'admin'
   end
