@@ -6,19 +6,15 @@ radvent
 [![Test Coverage](https://api.codeclimate.com/v1/badges/6ef37e4698d17ed0596b/test_coverage)](https://codeclimate.com/github/haru/radvent/test_coverage)
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 
-<a href="http://i.imgur.com/oRqAeo5.png"><img src="http://i.imgur.com/oRqAeo5.png"  width="300px" ></a>
-<a href="http://i.imgur.com/aq5fCL5.png"><img src="http://i.imgur.com/aq5fCL5.png"  width="300px" ></a>
 
 
-日本語
--------
 
 QiitaライクなAdventCalendarアプリです。Markdownを用い記事を登録します。記事は事前に登録し、該当日がすぎると自動的に公開されます。
 
 以下に公開されている radvent を元に改造を行いました。
 https://github.com/nanonanomachine/radvent/
 
-元のradventはシンプルで素晴らしいツールですが、こちらのバージョンではオリジナルに以下の改造を加えています。
+元のradventはシンプルで素晴らしいツールですが、こちらのバージョンではオリジナルに以下の改造を加えています。
 
 - ユーザ認証
 - 複数のAdvent Calendarイベント対応
@@ -29,7 +25,7 @@ radventはMarkdownパーサーとして[chjj/marked](https://github.com/chjj/mar
 
 ```$ bundle install```
 
-以下のコマンドを実行し、デフォルトの設定ファイルを作ります。
+以下のコマンドを実行し、デフォルトの設定ファイルを作ります。
 
 ```$ bundle exec rake radvent:generate_default_settings```
 
@@ -37,11 +33,11 @@ radventはMarkdownパーサーとして[chjj/marked](https://github.com/chjj/mar
 - config/secrets.yml
 - config/initializers/devise.yml
 
-が作られるので必要に応じて編集します。
+が作られるので必要に応じて編集します。
 
 ```$ bundle exec rake db:migrate RAILS_ENV=production```
 
-でDBをマイグレーション後、以下のコマンドをで起動します。
+でDBをマイグレーション後、以下のコマンドをで起動します。
 
 
 ```bash
@@ -49,7 +45,7 @@ $ export SECRET_KEY_BASE=XXXXXXX(シークレットキー)
 $ bundle exec rails s -e production
 ```
 
-シークレットキーは 
+シークレットキーは
 ```bundle exec rake secret```
 等で生成してください。
 
@@ -57,9 +53,9 @@ http://localhost:3000
 
 ### 初期ユーザー
 
-以下の管理者ユーザーが登録されています。ログイン後、パスワードを変更してください。
+以下の管理者ユーザーが登録されています。ログイン後、パスワードを変更してください。
 
-- ログイン: admin@example.com
+- ログイン: admin@example.com
 - パスワード: adminadmin
 
 また日本語と英語のロケールがサポートされています。
