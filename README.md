@@ -37,7 +37,7 @@ radventはMarkdownパーサーとして[chjj/marked](https://github.com/chjj/mar
 
 ```$ bundle exec rake db:migrate RAILS_ENV=production```
 
-でDBをマイグレーション後、以下のコマンドをで起動します。
+でDBをマイグレーション後、以下のコマンドでradventを起動します。
 
 
 ```bash
