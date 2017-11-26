@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
-  before_action :admin_user!
-  before_action :find_user, except: [:index]
+  before_action :admin_user!, only: [:index, :update_info, :destroy]
+  before_action :find_user, only: [:show, :edit, :update_info, :destroy]
   def index
     @menu = :users
     @users = User.all
@@ -15,7 +15,7 @@ class UsersController < ApplicationController
     render layout: 'admin'
   end
 
-  def update
+  def update_info
     @user.attributes =params.require(:user).permit(:email, :name, :admin)
     if (@user.save)
       redirect_to edit_user_path(@user)

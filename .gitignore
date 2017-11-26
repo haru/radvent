@@ -44,3 +44,4 @@ bower.json
 devise.rb
 secrets.yml
 database.yml
+mail.rb

@@ -4,7 +4,9 @@ Rails.application.routes.draw do
   get 'events/:name' => 'events#show', as: :show_event
   get 'admin/events' => 'events#list', as: :events_list
   delete 'users/delete/:id' => 'users#destroy', as: :delete_user
-  resources :users, :only => [:index, :edit, :update]
+  get 'user/:id/edit' => 'users#edit', as: :edit_user
+  put 'user/:id/update' => 'users#update_info', as: :update_user
+  resources :users, :only => [:index]
 
   devise_for :users
   resources :items do
