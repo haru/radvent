@@ -59,6 +59,7 @@ group :test do
   gem "factory_girl_rails", "~> 4.5.0"
   gem 'rails-controller-testing'
   gem 'simplecov'
+  gem "codeclimate-test-reporter", require: false
 end
 
 gem 'haml-rails'
@@ -80,7 +81,6 @@ gem 'devise-i18n-views'
 gem 'devise-bootstrap-views'
 
 gem 'bootstrap', '~> 4.0.0.beta2.1'
-gem 'jquery-rails'
 gem 'jquery-datatables-rails', '~> 3.4.0'
 gem 'bootstrap_form'
 gem 'bootstrap-glyphicons'
@@ -93,4 +93,3 @@ source 'http://insecure.rails-assets.org' do
   gem 'rails-assets-bootstrap-material-design', '~> 4.0.0.beta.4'
 end
 
-gem "codeclimate-test-reporter", require: false
