@@ -1,19 +1,19 @@
 %div.container
   %div.btn-group{role: "group", "aria-label": "..."}
   = link_to :new_event, {class: "btn btn-primary"} do
-    %i.fa.fa-plus 新規登録
+    %i.fa.fa-plus= t('helpers.button.add')
 
 
 
 
-  %h1 イベント
+  %h1= t('views.event.list.title')
 
   %table#events.table.table-striped
     %thead
       %tr
-        %th タイトル
-        %th 開始日
-        %th 終了日
+        %th= t('activerecord.attributes.event.title')
+        %th= t('activerecord.attributes.event.start_date')
+        %th= t('activerecord.attributes.event.end_date')
     %tbody
       - @events.each do |event|
         %tr

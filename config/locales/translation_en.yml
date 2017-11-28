@@ -17,6 +17,7 @@ en:
       cancel: Cancel
     button:
       delete: Delete
+      add: New
     placeholder:
       text: Body
       title: Title
@@ -36,6 +37,15 @@ en:
       item:
         title: Title
         title_empty: No title
+      event:
+        advent_calendar_items: Advent Calendar Items
+        created_by: :activerecord.models.created_by
+        description: Description
+        end_date: End date
+        name: Name
+        start_date: Start date
+        title: title
+        updated_by: :activerecord.models.updated_by
       user:
         name: Name
         admin: Administrator
@@ -113,8 +123,16 @@ en:
       edit:
         title: User
       delete:
-        title: User delete
+        title: Delete User
         confirm: "Are you sure to delete %{user}?"
+    event:
+      list:
+        title: Events
+      edit:
+        title: Event
+      delete:
+        title: Delete Event
+        confirm: "Are you sure to delete %{event}?"
   menu:
     sign_out: Sign out
     settings: Settings

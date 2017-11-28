@@ -17,6 +17,7 @@ ja:
       cancel: キャンセル
     button:
       delete: 削除
+      add: 追加
     placeholder:
       text: 本文を入力してください
       title: タイトル
@@ -141,6 +142,14 @@ ja:
       delete:
         title: ユーザー削除
         confirm: "%{user} を削除します。よろしいですか?"
+    event:
+      list:
+        title: イベント
+      edit:
+        title: イベント
+      delete:
+        title: イベント削除
+        confirm: "%{event} を削除します。よろしいですか?"
   menu:
     sign_out: ログアウト
     settings: 設定
