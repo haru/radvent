@@ -84,6 +84,7 @@ en:
       _content:
         date_short: "%{day}/%{month}"
         link_edit: Edit this entry
+        liked_person: Liked by
       _form:
         item_header_preview: Preview
       _form_attachment:
