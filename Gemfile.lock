@@ -117,6 +117,7 @@ GEM
       haml (>= 4.0, < 6)
       nokogiri (>= 1.6.0)
       ruby_parser (~> 3.5)
+    http_accept_language (2.1.1)
     i18n (0.9.1)
       concurrent-ruby (~> 1.0)
     i18n_generators (2.1.1)
@@ -297,6 +298,7 @@ DEPENDENCIES
   factory_girl_rails (~> 4.5.0)
   font-awesome-sass
   haml-rails
+  http_accept_language
   i18n_generators
   jbuilder (~> 2.5)
   jquery-datatables-rails (~> 3.4.0)
