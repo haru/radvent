@@ -52,10 +52,10 @@
             "type": "Ruby",
             "request": "launch",
             "cwd": "${workspaceRoot}",
-            "program": "${workspaceRoot}/bin/rspec",
+            "program": "${workspaceRoot}/bin/bundle",
             "args": [
-                "-I",
-                "${workspaceRoot}",
+                "exec",
+                "rspec",
                 "${file}"
             ]
         },

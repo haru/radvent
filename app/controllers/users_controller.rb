@@ -20,7 +20,7 @@ class UsersController < ApplicationController
     if (@user.save)
       redirect_to edit_user_path(@user)
     else
-      render :edit
+      render :edit_info
     end
   end
 
