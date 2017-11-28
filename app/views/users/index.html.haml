@@ -1,16 +1,16 @@
 %div{:class => "container"}
 
-  %h1 Users#index
+  %h1= t('views.user.index.title')
 
   %table#users.table.table-striped
     %thead
       %tr
         %th ID
-        %th Name
-        %th 管理者
-        %th Email
-        %th Created At
-        %th Last Logged In
+        %th= t('activerecord.attributes.user.name')
+        %th= t('activerecord.attributes.user.admin')
+        %th= t('activerecord.attributes.user.email')
+        %th= t('activerecord.attributes.user.created_at')
+        %th= t('activerecord.attributes.user.last_sign_in_at')
     %tbody
       - @users.each do |user|
         %tr

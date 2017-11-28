@@ -22,10 +22,13 @@ en:
       title: Title
       name: Enter your name
       comment: Leave a comment
+    common:
+      show: Show
   activerecord:
     models:
       item: Entry
       comment: Comment
+      user: User
     attributes:
       advent_calendar_item:
         user_name: Name
@@ -33,6 +36,12 @@ en:
       item:
         title: Title
         title_empty: No title
+      user:
+        name: Name
+        admin: Administrator
+        email: E-mail
+        created_at: Created at
+        last_sign_in_at: Last signed in
   controllers:
     attachments:
       create:
@@ -98,6 +107,14 @@ en:
         description_title: About Advent Calendar
         description: Advent calendar is a special calendar used to count or celebrate the days in anticipation of Christmas.
           Let's enjoy coming Christmas with special entries everyday!
+    user:
+      index:
+        title: Users
+      edit:
+        title: User
+      delete:
+        title: User delete
+        confirm: "Are you sure to delete %{user}?"
   menu:
     sign_out: Sign out
     settings: Settings
