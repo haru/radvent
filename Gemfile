@@ -93,3 +93,4 @@ source 'http://insecure.rails-assets.org' do
   gem 'rails-assets-bootstrap-material-design', '~> 4.0.0.beta.4'
 end
 
+gem 'http_accept_language'
