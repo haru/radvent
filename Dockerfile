@@ -3,7 +3,10 @@ LABEL maintainer="Haruyuki Iida"
 
 RUN mkdir -p /usr/local
 
-RUN git clone https://github.com/haru/radvent.git -b 2.0b3 /usr/local/radvent
+COPY lib/radvent/version.rb /tmp/
+RUN ruby -I /tmp -r version.rb -e "puts Radvent::VERSION.version" > /tmp/version
+RUN git clone https://github.com/haru/radvent.git -b `cat /tmp/version` /usr/local/radvent
+RUN rm /tmp/version.rb /tmp/version
 WORKDIR /usr/local/radvent
 
 RUN bundle install --without test development
