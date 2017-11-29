@@ -42,6 +42,7 @@ bower.json
 /public/assets/*
 /public/uploads/**/*
 devise.rb
-secrets.yml
-database.yml
+config/secrets.yml
+config/database.yml
 mail.rb
+docker/data
