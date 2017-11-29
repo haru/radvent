@@ -2,9 +2,9 @@
   %div.container
     %ul#admin-menu.nav.nav-tabs
       %li.nav-item{role: "presentation", class: @menu == :events ? 'nav-link active': 'nav-link'}
-        = link_to "イベント", events_list_path
+        = link_to t('views.event.list.title'), events_list_path
       %li.nav-item{role: "presentation", class: @menu == :users ? 'nav-link active': 'nav-link'}
-        = link_to "ユーザー", users_path
+        = link_to t('views.user.index.title'), users_path
 
   %div.container
     %div.card

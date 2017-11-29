@@ -17,11 +17,14 @@ ja:
       cancel: キャンセル
     button:
       delete: 削除
+      add: 追加
     placeholder:
       text: 本文を入力してください
       title: タイトル
       name: お名前を入力してください
       comment: コメントを入力してください
+    common:
+      show: 表示する
   activerecord:
     models:
       item: 記事
@@ -48,6 +51,7 @@ ja:
         version: バージョン  #g
       user:
         admin: 管理者  #g
+        created_at: 作成日時
         confirmation_sent_at: パスワード確認送信時刻  #g
         confirmation_token: パスワード確認用トークン  #g
         confirmed_at: パスワード確認時刻  #g
@@ -56,7 +60,7 @@ ja:
         email: メールアドレス  #g
         encrypted_password: 暗号化パスワード  #g
         failed_attempts: 失敗したログイン試行回数  #g
-        last_sign_in_at: 最終ログイン時刻  #g
+        last_sign_in_at: 最終ログイン日時  #g
         last_sign_in_ip: 最終ログインIPアドレス  #g
         locked_at: ロック時刻  #g
         name: 名前  #g
@@ -130,6 +134,22 @@ ja:
       index:
         description_title: AdventCalendarとは
         description: AdventCalendarとはクリスマスまでの期間をより楽しく過ごすため、12月1日から25日まで1日に1つ、みんなで記事を投稿するイベントです。
+    user:
+      index:
+        title: ユーザー
+      edit:
+        title: ユーザー
+      delete:
+        title: ユーザー削除
+        confirm: "%{user} を削除します。よろしいですか?"
+    event:
+      list:
+        title: イベント
+      edit:
+        title: イベント
+      delete:
+        title: イベント削除
+        confirm: "%{event} を削除します。よろしいですか?"
   menu:
     sign_out: ログアウト
     settings: 設定

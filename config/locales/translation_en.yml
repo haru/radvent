@@ -17,15 +17,19 @@ en:
       cancel: Cancel
     button:
       delete: Delete
+      add: New
     placeholder:
       text: Body
       title: Title
       name: Enter your name
       comment: Leave a comment
+    common:
+      show: Show
   activerecord:
     models:
       item: Entry
       comment: Comment
+      user: User
     attributes:
       advent_calendar_item:
         user_name: Name
@@ -33,6 +37,21 @@ en:
       item:
         title: Title
         title_empty: No title
+      event:
+        advent_calendar_items: Advent Calendar Items
+        created_by: :activerecord.models.created_by
+        description: Description
+        end_date: End date
+        name: Name
+        start_date: Start date
+        title: title
+        updated_by: :activerecord.models.updated_by
+      user:
+        name: Name
+        admin: Administrator
+        email: E-mail
+        created_at: Created at
+        last_sign_in_at: Last signed in
   controllers:
     attachments:
       create:
@@ -65,6 +84,7 @@ en:
       _content:
         date_short: "%{day}/%{month}"
         link_edit: Edit this entry
+        liked_person: Liked by
       _form:
         item_header_preview: Preview
       _form_attachment:
@@ -98,6 +118,22 @@ en:
         description_title: About Advent Calendar
         description: Advent calendar is a special calendar used to count or celebrate the days in anticipation of Christmas.
           Let's enjoy coming Christmas with special entries everyday!
+    user:
+      index:
+        title: Users
+      edit:
+        title: User
+      delete:
+        title: Delete User
+        confirm: "Are you sure to delete %{user}?"
+    event:
+      list:
+        title: Events
+      edit:
+        title: Event
+      delete:
+        title: Delete Event
+        confirm: "Are you sure to delete %{event}?"
   menu:
     sign_out: Sign out
     settings: Settings

@@ -21,7 +21,7 @@
           %p#description.card-text
             = event.description
         %div.card-footer
-          = link_to '表示する', show_event_path(event.name)
+          = link_to t('helpers.common.show'), show_event_path(event.name)
 
 %footer.welcome-footer
   %div.container
