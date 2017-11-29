@@ -3,7 +3,7 @@ LABEL maintainer="Haruyuki Iida"
 
 RUN mkdir -p /usr/local
 
-RUN git clone https://github.com/haru/radvent.git -b 2.0b2 /usr/local/radvent
+RUN git clone https://github.com/haru/radvent.git -b 2.0b3 /usr/local/radvent
 WORKDIR /usr/local/radvent
 
 RUN bundle install --without test development
