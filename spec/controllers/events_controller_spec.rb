@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe EventsController, type: :controller do
   before do
     @user = create(:user, admin: true)
-    login_user @user
+    sign_in @user
     @event = create(:event, name: 'hogehoge', title: 'foobar', start_date: '2016-12-01', end_date: '2016-12-30', created_by: @user, updated_by: @user)
   end
   describe "GET #new" do
