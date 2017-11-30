@@ -1,6 +1,6 @@
 
 = render 'shared/header', id: @advent_calendar_item.id, date: @advent_calendar_item.date, event: @advent_calendar_item.event
-%div.container
+%div
   %div.page-header
     %h1 #{t "views.advent_calendar_items.show.title", date: @advent_calendar_item.date, month: @advent_calendar_item.month}
     %hr
