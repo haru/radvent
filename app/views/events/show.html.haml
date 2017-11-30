@@ -1,10 +1,10 @@
-%div
+- content_for(:jumbotron) do
   %div#event-header.jumbotron
     %div.container
       %h1= @event.title
       =@event.description
 
-%div.container
+%div
   %div.advent-calendar-description
     %h2 #{t "views.welcome.index.description_title"}
     %hr
@@ -24,8 +24,4 @@
               -if advent_calendar_date?(date, @event)
                 = render "detail", advent_calendar_item: @advent_calendar_items.find_by(date: date.day), date: date.day
 
-%footer.welcome-footer
-  %div.container
-    %p.small
-      Powered by
-      = link_to "radvent", "https://github.com/nanonanomachine/radvent/"
+

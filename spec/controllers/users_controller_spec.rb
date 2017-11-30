@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe UsersController, :type => :controller do
   before do
     @user = create(:user, admin: true)
-    login_user @user
+    sign_in @user
   end
   describe "GET index" do
     it "returns http success" do

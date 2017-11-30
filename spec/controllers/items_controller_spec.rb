@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe ItemsController, :type => :controller do
   before do
     @user = create(:user)
-    login_user @user
+    sign_in @user
     @event = create(:event, name: 'test', title: 'test', start_date: '2015-12-01', end_date: '2015-12-30', created_by: @user, updated_by: @user)
   end
   describe "GET #show" do
@@ -107,7 +107,7 @@ RSpec.describe ItemsController, :type => :controller do
     end
 
     it "raises an error when the requested item is not found" do
-      expect{ get :edit, use_route: :radvent, id: 1 }.to raise_error
+      expect{ get :edit, use_route: :radvent, id: 1 }.to raise_error(Exception)
     end
   end
 

@@ -4,7 +4,7 @@ RSpec.describe AttachmentsController, :type => :controller do
   describe "POST #create" do
     before do
       @user = create(:user)
-      login_user @user
+      sign_in @user
     end
     it "saves the new attachment in the database" do
       expect{

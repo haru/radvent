@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe AdventCalendarItemsController, :type => :controller do
   before do
     @user = create(:user)
-    login_user @user
+    sign_in @user
   end
 
   describe "GET #show" do

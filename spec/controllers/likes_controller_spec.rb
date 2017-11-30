@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe LikesController, :type => :controller do
   before do
     @user = create(:user, admin: true)
-    login_user @user
+    sign_in @user
     @event = create(:event, name: 'hogehoge', title: 'foobar', start_date: '2016-12-01', end_date: '2016-12-30', created_by: @user, updated_by: @user)
     @advent_calendar_item = create(:advent_calendar_item, date: 1, event: @event)
     @item = @advent_calendar_item.item

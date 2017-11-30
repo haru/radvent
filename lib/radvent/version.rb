@@ -1,6 +1,6 @@
 module Radvent
     module VERSION
-    VERSION = '2.0b3'
+    VERSION = '2.0b4'
         def self.version
             VERSION
         end

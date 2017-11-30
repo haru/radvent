@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe CommentsController, :type => :controller do
   before do
     @user = create(:user)
-    login_user @user
+    sign_in @user
   end
   describe "POST #create" do
     it "saves the new comment in the database" do

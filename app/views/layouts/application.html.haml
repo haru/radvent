@@ -44,5 +44,14 @@
               = link_to new_user_session_path, class: "nav-link" do
                 %i.fa.fa-sign-in
                 = t("menu.sign_in")
+    = content_for?(:header_bar) ? yield(:header_bar) : ''
+    = content_for?(:jumbotron) ? yield(:jumbotron) : ''
+    %div.container
+      = content_for?(:content) ? yield(:content) : yield
 
-    = content_for?(:content) ? yield(:content) : yield
+%footer.welcome-footer
+  %div.container
+    %p.small
+      Powered by
+      = link_to "radvent", "https://github.com/haru/radvent/"
+      = "v#{Radvent::VERSION.version}"
