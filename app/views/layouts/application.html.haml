@@ -46,3 +46,10 @@
                 = t("menu.sign_in")
 
     = content_for?(:content) ? yield(:content) : yield
+
+%footer.welcome-footer
+  %div.container
+    %p.small
+      Powered by
+      = link_to "radvent", "https://github.com/haru/radvent/"
+      = "v#{Radvent::VERSION.version}"

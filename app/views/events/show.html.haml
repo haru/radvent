@@ -24,8 +24,4 @@
               -if advent_calendar_date?(date, @event)
                 = render "detail", advent_calendar_item: @advent_calendar_items.find_by(date: date.day), date: date.day
 
-%footer.welcome-footer
-  %div.container
-    %p.small
-      Powered by
-      = link_to "radvent", "https://github.com/nanonanomachine/radvent/"
+
