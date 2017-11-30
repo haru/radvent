@@ -7,7 +7,7 @@ RSpec.describe CommentsController, :type => :controller do
   end
   describe "POST #create" do
     it "saves the new comment in the database" do
-      expect{
+      expect {
         post :create, params: {comment: attributes_for(:comment, item_id: 1)}
       }.to change(Comment, :count).by(1)
     end
@@ -24,7 +24,7 @@ RSpec.describe CommentsController, :type => :controller do
     end
 
     it "deletes the comment" do
-      expect{
+      expect {
         delete :destroy, params: {id: @comment}
       }.to change(Comment, :count).by(-1)
     end

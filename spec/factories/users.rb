@@ -10,5 +10,4 @@ FactoryGirl.define do
 
     password "hogehoge"
   end
-
 end

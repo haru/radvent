@@ -15,14 +15,14 @@ RSpec.describe EventsController, type: :controller do
 
   describe "POST #create" do
     it "returns http success" do
-      post :create, params: {event:{title: 'test', start_date: '2017-12-01', end_date: '2017-12-25', name: 'aaa', description: 'description'}}
+      post :create, params: {event: {title: 'test', start_date: '2017-12-01', end_date: '2017-12-25', name: 'aaa', description: 'description'}}
       expect(response).to have_http_status(:redirect)
     end
   end
 
   describe "PUT #update" do
     it "returns http success" do
-      put :update, params: {id: @event.id, event:{title: 'test', start_date: '2017-12-01', end_date: '2017-12-25', name: 'aaa', description: 'description'}}
+      put :update, params: {id: @event.id, event: {title: 'test', start_date: '2017-12-01', end_date: '2017-12-25', name: 'aaa', description: 'description'}}
       expect(response).to have_http_status(:redirect)
     end
   end
@@ -47,5 +47,4 @@ RSpec.describe EventsController, type: :controller do
       expect(response).to have_http_status(:success)
     end
   end
-
 end

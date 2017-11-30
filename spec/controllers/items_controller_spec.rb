@@ -40,7 +40,7 @@ RSpec.describe ItemsController, :type => :controller do
     end
 
     it "assigns next advent_calendar_item to @advent_calendar_item_next" do
-      advent_calendar_item_next = create(:advent_calendar_item, date:2, event: @event)
+      advent_calendar_item_next = create(:advent_calendar_item, date: 2, event: @event)
       item = create(:advent_calendar_item, date: 1, event: @event).item
       get :show, params: {id: item}
       expect(assigns(:advent_calendar_item_next)).to eq advent_calendar_item_next
@@ -107,7 +107,7 @@ RSpec.describe ItemsController, :type => :controller do
     end
 
     it "raises an error when the requested item is not found" do
-      expect{ get :edit, use_route: :radvent, id: 1 }.to raise_error(Exception)
+      expect { get :edit, use_route: :radvent, id: 1 }.to raise_error(Exception)
     end
   end
 
@@ -118,14 +118,14 @@ RSpec.describe ItemsController, :type => :controller do
     end
 
     it "saves the new item in the database" do
-      expect{
+      expect {
         post :create, params: {item: attributes_for(:item, advent_calendar_item_id: 1)}
       }.to change(Item, :count).by(1)
     end
 
     it "renders the :new if the new item is not saved" do
       allow_any_instance_of(Item).to receive(:save).and_return(false)
-      post :create, params:{item: attributes_for(:item)}
+      post :create, params: {item: attributes_for(:item)}
       expect(response).to render_template :new
     end
 
@@ -152,7 +152,7 @@ RSpec.describe ItemsController, :type => :controller do
 
     it "changes @item's attributes" do
       patch :update, params: {id: @item, item: attributes_for(:item,
-                                                     title: "title_updated", body: "body_updated")}
+                                                              title: "title_updated", body: "body_updated")}
       @item.reload
       expect(@item.title).to eq("title_updated")
       expect(@item.body).to eq("body_updated")

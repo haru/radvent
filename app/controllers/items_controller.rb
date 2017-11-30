@@ -1,5 +1,6 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update]
+
   def new
     @date = params[:date]
     @item = Item.new(advent_calendar_item_id: params[:id])
@@ -52,6 +53,7 @@ class ItemsController < ApplicationController
   end
 
   private
+
   def item_params
     params.require(:item).permit(:title, :body, :advent_calendar_item_id)
   end

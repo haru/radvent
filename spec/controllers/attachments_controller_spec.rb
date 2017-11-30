@@ -7,7 +7,7 @@ RSpec.describe AttachmentsController, :type => :controller do
       sign_in @user
     end
     it "saves the new attachment in the database" do
-      expect{
+      expect {
         post :create, params: {attachment: attributes_for(:attachment)}
       }.to change(Attachment, :count).by(1)
     end

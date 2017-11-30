@@ -11,7 +11,7 @@ class EventsController < ApplicationController
 
   def create
     @event = Event.new
-    @event.attributes =params.require(:event).permit(:title, :start_date, :end_date, :name, :description)
+    @event.attributes = params.require(:event).permit(:title, :start_date, :end_date, :name, :description)
     @event.created_by = current_user
     @event.updated_by = current_user
     if @event.save
@@ -22,7 +22,7 @@ class EventsController < ApplicationController
   end
 
   def update
-    @event.attributes =params.require(:event).permit(:title, :start_date, :end_date, :name, :description)
+    @event.attributes = params.require(:event).permit(:title, :start_date, :end_date, :name, :description)
     @event.updated_by = current_user
     if @event.save
       redirect_to edit_event_path(@event.id)
@@ -59,6 +59,7 @@ class EventsController < ApplicationController
   end
 
   private
+
   def set_events_menu
     @menu = :events
   end
@@ -88,5 +89,4 @@ class EventsController < ApplicationController
     end
     weeks
   end
-
 end

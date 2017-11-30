@@ -9,5 +9,4 @@ FactoryGirl.define do
     created_by 1
     updated_by 1
   end
-
 end
