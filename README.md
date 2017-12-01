@@ -67,10 +67,12 @@ http://localhost:3000
 
 ## Docker
 
+[![Docker build](http://dockeri.co/image/haru/radvent)](https://registry.hub.docker.com/u/haru/radvent/)
+
 ### Start container with docker command
 
 ```
-$ docker run -d -p 3000:3000 -v /tmp/data:/var/radvent_data haru/radvent
+$ docker run -d -p 3000:3000 -v /host/data/directory:/var/radvent_data haru/radvent
 ```
 
 ### docker-compose.yml sample
