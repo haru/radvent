@@ -46,3 +46,4 @@ config/secrets.yml
 config/database.yml
 mail.rb
 docker/data
+docker/mysql
