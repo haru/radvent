@@ -75,18 +75,48 @@ http://localhost:3000
 $ docker run -d -p 3000:3000 -v /host/data/directory:/var/radvent_data haru/radvent
 ```
 
-### docker-compose.yml sample
+### docker-compose.yml example
+
+example with mysql.
 
 ```yaml
 version: '2'
 services:
   radvent:
     image: haru/radvent:latest
+    build: .
     ports:
       - "3000:3000"
     volumes:
-      - "$PWD/data:/var/radvent_data"
+      - "$PWD/docker/data:/var/radvent_data"
+    links:
+      - mysql
+    environment:
+      DBMS: mysql
+      DB_USERNAME: root
+      DB_PASSWORD: example
+      DB_HOST: mysql
+  mysql:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    volumes:
+      - "$PWD/docker/mysql:/var/lib/mysql"
+
+
 ```
+
+### environment variables
+
+| key         | value                     |     default    |
+|-------------|---------------------------|:--------------:|
+| DBMS        | sqlite3, mysqsl, postgres |     sqlite3    |
+| DBNAME      | name of database          |     radvent    |
+| DB_USERNAME | username of dbms          |        -       |
+| DB_PASSWORD | password of dbms          |        -       |
+| DB_HOST     | hostname of dbms          |        -       |
+| DB_PORT     | port of dbms              | 3306 for mysql |
+
 
 Thanks
 --------
