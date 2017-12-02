@@ -1,7 +1,10 @@
 class AdventCalendarItemsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update]
+
   def new
-    @advent_calendar_item = AdventCalendarItem.new(date: params[:date], user_name: current_user.name, event_id: params[:event_id])
+    @advent_calendar_item = AdventCalendarItem.new(date: params[:date],
+                                                   user_name: current_user.name,
+                                                   event_id: params[:event_id])
   end
 
   def create
@@ -30,6 +33,7 @@ class AdventCalendarItemsController < ApplicationController
   end
 
   private
+
   def advent_calendar_item_params
     params.require(:advent_calendar_item).permit(:user_name, :comment, :date, :event_id)
   end

@@ -8,17 +8,18 @@ class AttachmentsController < ApplicationController
     if attachment.save
       render json: {
         image_name: attachment.image.identifier,
-        image_url: attachment.image.url
+        image_url: attachment.image.url,
       }
     else
       render json: {
         image_name: t("controllers.attachments.create.fail_upload"),
-        image_url: nil
+        image_url: nil,
       }
     end
   end
 
   private
+
   def attachment_params
     params.require(:attachment).permit(:image, :advent_calendar_item_id)
   end

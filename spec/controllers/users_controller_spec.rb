@@ -27,7 +27,7 @@ RSpec.describe UsersController, :type => :controller do
   describe "PUT #update_info" do
     it "assigns @user as requested user" do
       user = create(:user, admin: false)
-      put :update_info, params: {id: user, user:{email: "aaa@bbb.com"}, name: "newname", admin: true}
+      put :update_info, params: {id: user, user: {email: "aaa@bbb.com"}, name: "newname", admin: true}
       updated_user = assigns(:user)
       expect(updated_user.id).to eq user.id
       expect(updated_user.email).to eq "aaa@bbb.com"
@@ -36,13 +36,13 @@ RSpec.describe UsersController, :type => :controller do
 
     it "redirect to edit_user_path when update successful." do
       user = create(:user, admin: false)
-      put :update_info, params: {id: user, user:{email: "aaa@bbb.com"}, name: "newname", admin: true}
+      put :update_info, params: {id: user, user: {email: "aaa@bbb.com"}, name: "newname", admin: true}
       expect(response).to redirect_to edit_user_path(id: user)
     end
 
     it "renders the :edit_info template when update fail" do
       user = create(:user, admin: false)
-      put :update_info, params: {id: user, user:{email: ""}, name: "", admin: true}
+      put :update_info, params: {id: user, user: {email: ""}, name: "", admin: true}
       expect(response).to render_template :edit_info
     end
   end
@@ -60,5 +60,4 @@ RSpec.describe UsersController, :type => :controller do
       expect(response).to redirect_to users_path
     end
   end
-
 end

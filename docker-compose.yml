@@ -7,3 +7,17 @@ services:
       - "3000:3000"
     volumes:
       - "$PWD/docker/data:/var/radvent_data"
+    links:
+      - mysql
+    environment:
+      DBMS: mysql
+      DB_USERNAME: root
+      DB_PASSWORD: example
+      DB_HOST: mysql
+  mysql:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    volumes:
+      - "$PWD/docker/mysql:/var/lib/mysql"
+

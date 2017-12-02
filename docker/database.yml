@@ -8,10 +8,20 @@ default: &default
   adapter: sqlite3
   pool: 5
   timeout: 5000
+  database: /var/radvent_data/radvent.sqlite3
+
+mysql: &mysql
+  adapter: mysql2
+  encoding: utf8
+  database: <%= ENV['DB_NAME'] || 'radvent' %>
+  username: <%= ENV['DB_USERNAME'] %>
+  password: <%= ENV['DB_PASSWORD'] %>
+  host: <%= ENV['DB_HOST'] %>
+  port: <%= ENV['DB_PORT'] || 3306 %>
 
 development:
-  <<: *default
-  database: db/development.sqlite3
+  <<: *<%= ENV['DBMS'] || 'default' %>
+  database: <%= ENV['DB_NAME'] || 'db/development.sqlite3' %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -21,5 +31,13 @@ test:
   database: db/test.sqlite3
 
 production:
-  <<: *default
-  database: /var/radvent_data/radvent.sqlite3
+  <<: *<%= ENV['DBMS'] || 'default' %>
+
+dummy:
+  adapter: mysql2
+  database: test
+  host: localhost
+  username: root
+  password: ""
+  encoding: utf8
+

@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :event do
     title "MyString"
     version 1
@@ -9,5 +9,4 @@ FactoryGirl.define do
     created_by 1
     updated_by 1
   end
-
 end

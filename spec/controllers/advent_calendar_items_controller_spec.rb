@@ -53,17 +53,20 @@ RSpec.describe AdventCalendarItemsController, :type => :controller do
 
   describe "POST #create" do
     it "saves the new advent_calendar_item in the database" do
-      expect{
+      expect {
         post :create, params: {advent_calendar_item: attributes_for(
-          :advent_calendar_item)}
+                   :advent_calendar_item
+                 )}
       }.to change(AdventCalendarItem, :count).by(1)
     end
 
     it "redirects to advent_calendar_items#show" do
       post :create, params: {advent_calendar_item: attributes_for(
-        :advent_calendar_item)}
-        expect(response).to redirect_to advent_calendar_item_path(
-          id: 1)
+                 :advent_calendar_item
+               )}
+      expect(response).to redirect_to advent_calendar_item_path(
+                    id: 1,
+                  )
     end
   end
 
@@ -73,15 +76,15 @@ RSpec.describe AdventCalendarItemsController, :type => :controller do
     end
 
     it "locates the requested @advent_calendar_item" do
-      patch :update, params:{id: @advent_calendar_item,
-        advent_calendar_item: attributes_for(:advent_calendar_item)}
+      patch :update, params: {id: @advent_calendar_item,
+                              advent_calendar_item: attributes_for(:advent_calendar_item)}
       expect(assigns(:advent_calendar_item)).to eq(@advent_calendar_item)
     end
 
     it "changes @advent_calendar_item's attributes" do
       patch :update, params: {id: @advent_calendar_item,
-        advent_calendar_item: attributes_for(:advent_calendar_item,
-                                             user_name: "user_name_updated", comment: "comment_updated")}
+                              advent_calendar_item: attributes_for(:advent_calendar_item,
+                                                                   user_name: "user_name_updated", comment: "comment_updated")}
       @advent_calendar_item.reload
       expect(@advent_calendar_item.user_name).to eq("user_name_updated")
       expect(@advent_calendar_item.comment).to eq("comment_updated")
@@ -89,17 +92,18 @@ RSpec.describe AdventCalendarItemsController, :type => :controller do
 
     it "renders the :edit if the advent_calendar_item is not updated" do
       allow_any_instance_of(AdventCalendarItem).to receive(:save)
-      .and_return(false)
-      patch :update, params:{id: @advent_calendar_item,
-        advent_calendar_item: attributes_for(:advent_calendar_item)}
+                                                     .and_return(false)
+      patch :update, params: {id: @advent_calendar_item,
+                              advent_calendar_item: attributes_for(:advent_calendar_item)}
       expect(response).to render_template :edit
     end
 
     it "redirects to advent_calendar_item#show if the advent_calendar_item is updated" do
       patch :update, params: {id: @advent_calendar_item,
-        advent_calendar_item: attributes_for(:advent_calendar_item)}
+                              advent_calendar_item: attributes_for(:advent_calendar_item)}
       expect(response).to redirect_to advent_calendar_item_path(
-        @advent_calendar_item)
+                    @advent_calendar_item
+                  )
     end
   end
 end

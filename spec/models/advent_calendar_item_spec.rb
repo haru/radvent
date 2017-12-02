@@ -42,17 +42,17 @@ describe AdventCalendarItem do
     end
 
     it "returns true if it has an item and it's date is passed" do
-      advent_calendar_item = build(:advent_calendar_item, date:1, event: @event)
+      advent_calendar_item = build(:advent_calendar_item, date: 1, event: @event)
       expect(advent_calendar_item.published?).to be_truthy
     end
 
     it "returns false if it doesn't have an item" do
-      advent_calendar_item = build(:advent_calendar_item, date: 1, item:nil, event: @event)
+      advent_calendar_item = build(:advent_calendar_item, date: 1, item: nil, event: @event)
       expect(advent_calendar_item.published?).to be_falsey
     end
 
     it "returns false if it's date isn't passed" do
-      advent_calendar_item = build(:advent_calendar_item, date:2, event: @event)
+      advent_calendar_item = build(:advent_calendar_item, date: 2, event: @event)
       expect(advent_calendar_item.published?).to be_falsey
     end
   end

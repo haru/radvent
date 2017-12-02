@@ -4,5 +4,4 @@ class WelcomeController < ApplicationController
   end
 
   private
-
 end
