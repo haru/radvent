@@ -9,6 +9,8 @@ cd ..
 # install gems
 bundle install
 
+cp travis/database.yml config/
+
 # generate default settings
 bundle exec rake radvent:generate_default_settings
 
