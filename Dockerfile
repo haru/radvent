@@ -11,12 +11,13 @@ RUN ruby -I /tmp -r version.rb -e "puts Radvent::VERSION.version" > /tmp/version
 RUN git clone https://github.com/haru/radvent.git -b `cat /tmp/version` /usr/local/radvent
 RUN rm /tmp/version.rb /tmp/version
 WORKDIR /usr/local/radvent
-COPY docker/database.yml /usr/local/radvent/config/
+
 RUN echo "gem 'mysql2'" >> Gemfile
+RUN echo "gem 'pg'" >> Gemfile
 
 RUN bundle install --without test development
 
-
+COPY docker/database.yml /usr/local/radvent/config/
 RUN bundle exec rake radvent:generate_default_settings
 RUN bundle exec rake assets:clean && bundle exec rake assets:precompile
 COPY docker/run.sh /usr/local/bin/run.sh

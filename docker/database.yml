@@ -4,7 +4,7 @@
 #   Ensure the SQLite 3 gem is defined in your Gemfile
 #   gem 'sqlite3'
 #
-default: &default
+sqlite3: &sqlite3
   adapter: sqlite3
   pool: 5
   timeout: 5000
@@ -19,25 +19,27 @@ mysql: &mysql
   host: <%= ENV['DB_HOST'] %>
   port: <%= ENV['DB_PORT'] || 3306 %>
 
+postgres: &postgres
+  adapter: postgresql
+  encoding: utf8
+  database: <%= ENV['DB_NAME'] || 'radvent' %>
+  username: <%= ENV['DB_USERNAME'] %>
+  password: <%= ENV['DB_PASSWORD'] %>
+  host: <%= ENV['DB_HOST'] %>
+  port: <%= ENV['DB_PORT'] || 5432 %>
+
 development:
-  <<: *<%= ENV['DBMS'] || 'default' %>
+  <<: *<%= ENV['DBMS'] || 'sqlite3' %>
   database: <%= ENV['DB_NAME'] || 'db/development.sqlite3' %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
-  <<: *default
+  <<: *sqlite3
   database: db/test.sqlite3
 
 production:
-  <<: *<%= ENV['DBMS'] || 'default' %>
+  <<: *<%= ENV['DBMS'] || 'sqlite3' %>
 
-dummy:
-  adapter: mysql2
-  database: test
-  host: localhost
-  username: root
-  password: ""
-  encoding: utf8
 

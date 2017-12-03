@@ -84,7 +84,6 @@ version: '2'
 services:
   radvent:
     image: haru/radvent:latest
-    build: .
     ports:
       - "3000:3000"
     volumes:
@@ -102,8 +101,32 @@ services:
       MYSQL_ROOT_PASSWORD: example
     volumes:
       - "$PWD/docker/mysql:/var/lib/mysql"
+```
 
+example with postgresql.
 
+```yaml
+version: '2'
+services:
+  radvent:
+    image: haru/radvent:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - "$PWD/docker/data:/var/radvent_data"
+    links:
+      - postgres
+    environment:
+      DBMS: postgres
+      DB_USERNAME: postgres
+      DB_PASSWORD: example
+      DB_HOST: postgres
+  postgres:
+    image: postgres
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    volumes:
+      - "$PWD/docker/postgres:/var/lib/postgresql/data"
 ```
 
 ### environment variables
