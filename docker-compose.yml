@@ -10,7 +10,7 @@ services:
     links:
       - postgres
     environment:
-      DBMS: postgres
+      DB: postgres
       DB_USERNAME: postgres
       DB_PASSWORD: example
       DB_HOST: postgres
