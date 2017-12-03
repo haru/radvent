@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe AdventCalendarItemsController, :type => :controller do
   before do
+    AdventCalendarItem.destroy_all
     @user = create(:user)
     sign_in @user
   end
@@ -64,8 +65,9 @@ RSpec.describe AdventCalendarItemsController, :type => :controller do
       post :create, params: {advent_calendar_item: attributes_for(
                  :advent_calendar_item
                )}
+      items = AdventCalendarItem.all
       expect(response).to redirect_to advent_calendar_item_path(
-                    id: 1,
+                    id: items[0].id,
                   )
     end
   end

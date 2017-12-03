@@ -20,6 +20,8 @@ services:
       MYSQL_ROOT_PASSWORD: example
     volumes:
       - "$PWD/docker/mysql:/var/lib/mysql"
+    ports:
+      - "3306:3306"
   postgres:
     image: postgres
     environment:

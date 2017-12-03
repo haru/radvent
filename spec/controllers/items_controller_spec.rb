@@ -166,7 +166,7 @@ RSpec.describe ItemsController, :type => :controller do
 
     it "redirects to advent_calendar_items#show if the item is updated" do
       patch :update, params: {id: @item, item: attributes_for(:item)}
-      expect(response).to redirect_to advent_calendar_item_path(@item)
+      expect(response).to redirect_to advent_calendar_item_path(@item.advent_calendar_item_id)
     end
   end
 end
