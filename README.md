@@ -91,7 +91,7 @@ services:
     links:
       - mysql
     environment:
-      DBMS: mysql
+      DB: mysql
       DB_USERNAME: root
       DB_PASSWORD: example
       DB_HOST: mysql
@@ -117,7 +117,7 @@ services:
     links:
       - postgres
     environment:
-      DBMS: postgres
+      DB: postgres
       DB_USERNAME: postgres
       DB_PASSWORD: example
       DB_HOST: postgres
@@ -133,8 +133,8 @@ services:
 
 | key         | value                     |     default    |
 |-------------|---------------------------|:--------------:|
-| DBMS        | sqlite3, mysqsl, postgres |     sqlite3    |
-| DBNAME      | name of database          |     radvent    |
+| DB          | sqlite3, mysqsl, postgres |     sqlite3    |
+| DB_NAME     | name of database          |     radvent    |
 | DB_USERNAME | username of dbms          |        -       |
 | DB_PASSWORD | password of dbms          |        -       |
 | DB_HOST     | hostname of dbms          |        -       |

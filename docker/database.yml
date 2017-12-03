@@ -29,17 +29,16 @@ postgres: &postgres
   port: <%= ENV['DB_PORT'] || 5432 %>
 
 development:
-  <<: *<%= ENV['DBMS'] || 'sqlite3' %>
+  <<: *<%= ENV['DB'] || 'sqlite3' %>
   database: <%= ENV['DB_NAME'] || 'db/development.sqlite3' %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
-  <<: *sqlite3
-  database: db/test.sqlite3
+  <<: *<%= ENV['DB'] || 'sqlite3' %>
 
 production:
-  <<: *<%= ENV['DBMS'] || 'sqlite3' %>
+  <<: *<%= ENV['DB'] || 'sqlite3' %>
 
 
