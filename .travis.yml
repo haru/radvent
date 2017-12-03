@@ -1,11 +1,14 @@
 language: ruby
 rvm:
-- 2.3
-- 2.4
+  - 2.3
+  - 2.4
+env:
+  - DB=sqlite3
+  - DB=mysql
 install:
-- bash -x ./travis/travis_install.sh
+  - bash -x ./travis/travis_install.sh
 script:
-- bash -x ./travis/travis.sh
+  - bash -x ./travis/travis.sh
 notifications:
   slack:
     secure: iLn+K+5Blyz3yOET19111R+E+KPrvP/+32H0sE1Hq3mCQI3e4oUE+5niQ05nHeweEw9G/Yxa0jOyLXRZsC33II5bjgbuqL1uGH1yELw+1I9YAjjCel/8/ISMOhqin2V367kkV3hubpvO7UzJt75sY7bm7D5m93frJRXlbmxjWElKmKACAP+8MX5LsiMtZUUkY3JRmvxY8+W648ggTbw5YXFNyFfWzrdwzgEuGui7fNy6BKnt/3HrAFV4Miwk47pO6QsAqQtxbHz86GdBg77YGa9izJBPcSVssB6yqgxLzQ6w3coOFg3PEGGcq3VU3IInxnz74trLjLQ2gP4Yu/gewuiO0xUvLMBzKU8nwOZQktgdyWroata7C62sh48mSb17VmAThDwGF4a4gqPpVNtSnuvh1hqq9fXkuq6NxXE0XiEzn9l2k4sgtCoxIRJCXG2dZnMK2a9vWSQXjx4yG1oyZVE8A6KySKpADsORx1O883gyZTL33gEuQ+hB/tssT84Y8dtZtqyIxuoHzklciOtq7hq3k/jE4DieijIdKmRW8k+kOBdK/iijlQYHVvfK1PCav8S8he4qH2m5/GJotywibl7Xfgiy4MtkG2ArDlBDZ0lUQzpJ4hHG87yxJMBfWOnXAcnigUV0YKCGUkrZUEIZzNfZeagZIynHYhECGG1Fsww=

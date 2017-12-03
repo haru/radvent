@@ -6,6 +6,12 @@ cd `dirname $0`
 . env.sh
 cd ..
 
+if [ "$DB" = "mysql" ]
+then
+  export DB_USER="root"
+  export DB_HOST="localhost"
+fi
+
 # install gems
 bundle install
 
