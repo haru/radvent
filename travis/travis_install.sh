@@ -21,7 +21,8 @@ cp travis/database.yml config/
 bundle exec rake radvent:generate_default_settings
 
 # run redmine database migrations
-rm -f db/test.sqlite3
+rm -f db/radvent.sqlite3
+bundle exec rake db:create
 bundle exec rake db:migrate
 
 
