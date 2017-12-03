@@ -17,4 +17,4 @@ mkdir -p /var/radvent_data/uploads
 rm -f /usr/local/radvent/tmp/pids/server.pid
 bundle exec rake db:create
 bundle exec rake db:migrate
-bundle exec rails s -e production
+bundle exec rails s
