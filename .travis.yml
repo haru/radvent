@@ -5,6 +5,7 @@ rvm:
 env:
   - DB=sqlite3
   - DB=mysql
+  - DB=postgres
 install:
   - bash -x ./travis/travis_install.sh
 script:
