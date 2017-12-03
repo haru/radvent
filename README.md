@@ -75,7 +75,9 @@ http://localhost:3000
 $ docker run -d -p 3000:3000 -v /host/data/directory:/var/radvent_data haru/radvent
 ```
 
-### docker-compose.yml sample
+### docker-compose.yml example
+
+example with mysql.
 
 ```yaml
 version: '2'
@@ -85,8 +87,59 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - "$PWD/data:/var/radvent_data"
+      - "$PWD/docker/data:/var/radvent_data"
+    links:
+      - mysql
+    environment:
+      DB: mysql
+      DB_USERNAME: root
+      DB_PASSWORD: example
+      DB_HOST: mysql
+  mysql:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    volumes:
+      - "$PWD/docker/mysql:/var/lib/mysql"
 ```
+
+example with postgresql.
+
+```yaml
+version: '2'
+services:
+  radvent:
+    image: haru/radvent:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - "$PWD/docker/data:/var/radvent_data"
+    links:
+      - postgres
+    environment:
+      DB: postgres
+      DB_USERNAME: postgres
+      DB_PASSWORD: example
+      DB_HOST: postgres
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: example
+    volumes:
+      - "$PWD/docker/postgres:/var/lib/postgresql/data"
+```
+
+### environment variables
+
+| key         | value                     |     default    |
+|-------------|---------------------------|:--------------:|
+| DB          | sqlite3, mysqsl, postgres |     sqlite3    |
+| DB_NAME     | name of database          |     radvent    |
+| DB_USERNAME | username of dbms          |        -       |
+| DB_PASSWORD | password of dbms          |        -       |
+| DB_HOST     | hostname of dbms          |        -       |
+| DB_PORT     | port of dbms              | 3306 for mysql |
+
 
 Thanks
 --------

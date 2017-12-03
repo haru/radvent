@@ -94,3 +94,13 @@ source 'http://insecure.rails-assets.org' do
 end
 
 gem 'http_accept_language'
+
+# if you don't need mysql, use "--without mysql" option.
+group :mysql do
+  gem 'mysql2'
+end
+
+# if you don't need postgres, use "--without postgres" option.
+group :postgres do
+  gem 'pg'
+end

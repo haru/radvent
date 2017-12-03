@@ -47,3 +47,4 @@ config/database.yml
 mail.rb
 docker/data
 docker/mysql
+docker/postgres

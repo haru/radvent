@@ -8,7 +8,7 @@ sqlite3: &sqlite3
   adapter: sqlite3
   pool: 5
   timeout: 5000
-  database: /var/radvent_data/radvent.sqlite3
+  database: db/radvent.sqlite3
 
 mysql: &mysql
   adapter: mysql2

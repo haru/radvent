@@ -11,12 +11,10 @@ RUN ruby -I /tmp -r version.rb -e "puts Radvent::VERSION.version" > /tmp/version
 RUN git clone https://github.com/haru/radvent.git -b `cat /tmp/version` /usr/local/radvent
 RUN rm /tmp/version.rb /tmp/version
 WORKDIR /usr/local/radvent
-COPY docker/database.yml /usr/local/radvent/config/
-RUN echo "gem 'mysql2'" >> Gemfile
 
 RUN bundle install --without test development
 
-
+COPY docker/database.yml /usr/local/radvent/config/
 RUN bundle exec rake radvent:generate_default_settings
 RUN bundle exec rake assets:clean && bundle exec rake assets:precompile
 COPY docker/run.sh /usr/local/bin/run.sh
@@ -24,6 +22,8 @@ COPY docker/run.sh /usr/local/bin/run.sh
 RUN mkdir -p /var/radvent_data/uploads
 RUN rm -f /usr/local/radvent/public/uploads
 RUN ln -s /var/radvent_data/uploads /usr/local/radvent/public/uploads
+
+ENV RAILS_ENV=production
 
 EXPOSE 3000
 

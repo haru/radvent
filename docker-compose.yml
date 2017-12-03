@@ -8,16 +8,24 @@ services:
     volumes:
       - "$PWD/docker/data:/var/radvent_data"
     links:
-      - mysql
+      - postgres
     environment:
-      DBMS: mysql
-      DB_USERNAME: root
+      DB: postgres
+      DB_USERNAME: postgres
       DB_PASSWORD: example
-      DB_HOST: mysql
+      DB_HOST: postgres
   mysql:
     image: mysql
     environment:
       MYSQL_ROOT_PASSWORD: example
     volumes:
       - "$PWD/docker/mysql:/var/lib/mysql"
+    ports:
+      - "3306:3306"
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: example
+    volumes:
+      - "$PWD/docker/postgres:/var/lib/postgresql/data"
 
