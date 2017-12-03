@@ -12,6 +12,12 @@ then
   export DB_HOST="localhost"
 fi
 
+if [ "$DB" = "postgres" ]
+then
+  export DB_USER="postgres"
+  export DB_HOST="localhost"
+fi
+
 # install gems
 bundle install
 
