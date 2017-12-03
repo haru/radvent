@@ -124,7 +124,7 @@ services:
   postgres:
     image: postgres
     environment:
-      MYSQL_ROOT_PASSWORD: example
+      POSTGRES_PASSWORD: example
     volumes:
       - "$PWD/docker/postgres:/var/lib/postgresql/data"
 ```
