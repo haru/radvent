@@ -23,6 +23,8 @@ RUN mkdir -p /var/radvent_data/uploads
 RUN rm -f /usr/local/radvent/public/uploads
 RUN ln -s /var/radvent_data/uploads /usr/local/radvent/public/uploads
 
+ENV RAILS_ENV=production
+
 EXPOSE 3000
 
 CMD sh -x /usr/local/bin/run.sh
