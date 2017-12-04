@@ -133,15 +133,16 @@ services:
 
 ### environment variables
 
-| key               | value                     |     default                       |
-|-------------------|---------------------------|:----------------------------------|
-| DB                | sqlite3, mysqsl, postgres |     sqlite3                       |
-| DB_NAME           | name of database          |     radvent                       |
-| DB_USERNAME       | username of dbms          |        -                          |
-| DB_PASSWORD       | password of dbms          |        -                          |
-| DB_HOST           | hostname of dbms          |        -                          |
-| DB_PORT           | port of dbms              | 3306 for mysql, 5432 for postgres |
-| DB_CREATE_ON_START| true: execute rake db:create when starting conainer. | false  |
+| key                | value                                                | default                           |
+|--------------------|------------------------------------------------------|-----------------------------------|
+| DB                 | sqlite3, mysqsl, postgres                            | sqlite3                           |
+| DB_NAME            | name of database                                     | radvent                           |
+| DB_USERNAME        | username of dbms                                     | -                                 |
+| DB_PASSWORD        | password of dbms                                     | -                                 |
+| DB_HOST            | hostname of dbms                                     | -                                 |
+| DB_PORT            | port of dbms                                         | 3306 for mysql, 5432 for postgres |
+| DB_CREATE_ON_START | true: execute rake db:create when starting conainer. | false                             |
+| RADVENT_TITLE      | site title: show in header                           | Advent Calendar                   |
 
 
 Thanks
