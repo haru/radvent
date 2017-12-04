@@ -32,7 +32,8 @@
         "-b", "0.0.0.0"
       ],
       "env": {
-        "SECRET_KEY_BASE": "XXXXXXXXXXXXXXXXXXXXXX"
+        "SECRET_KEY_BASE": "XXXXXXXXXXXXXXXXXXXXXX",
+        "RADVENT_TITLE": "HOGEHOGE"
       }
     },
     {

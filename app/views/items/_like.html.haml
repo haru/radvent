@@ -16,11 +16,12 @@
       %span= item.likes.count
 
   %a.like-count.btn.btn-info{tabindex: "0", role:"button", "data-toggle": "popover", "data-trigger": "focus", "data-placement": "bottom",
-    title: t("views.items._content.liked_person"), "data-content": item.likes.map{|like|like.user.name}.join("<br/>")}
+    title: t("views.items._content.liked_person"), "data-content": item.likes.map{|like|html_escape(like.user.name)}.join("<br/>")}
     %i.fa.fa-user
 
 
 :javaScript
   $('.like-count').popover({
-    trigger: 'focus'
+    trigger: 'focus',
+    html: true
   })

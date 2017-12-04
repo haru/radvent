@@ -15,6 +15,9 @@ fi
 mkdir -p /var/radvent_data/uploads
 
 rm -f /usr/local/radvent/tmp/pids/server.pid
-bundle exec rake db:create
+if [ "$DB_CREATE_ON_START" = "true" ]
+then
+  bundle exec rake db:create
+fi
 bundle exec rake db:migrate
 bundle exec rails s
