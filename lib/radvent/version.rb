@@ -1,6 +1,6 @@
 module Radvent
   module VERSION
-    VERSION = '2.0b7'.freeze
+    VERSION = '2.0b8'.freeze
     def self.version
       VERSION
     end
