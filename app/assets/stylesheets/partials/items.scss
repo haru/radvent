@@ -1,30 +1,29 @@
 // Place all the styles related to the items controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-
 //
 // Item new / edit
 //
-.form-container{
+.form-container {
   padding-bottom: 50px;
-  .item-container{
+  .item-container {
     display: table;
     width: 100%;
-    border:1px solid #dce4ec;
+    border: 1px solid #dce4ec;
     border-radius: 3px;
-    .item-header{
-      box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+    .item-header {
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
       width: 100%;
       padding: 0 10px;
       line-height: 39px;
       background-color: #fafafa;
       color: #999;
     }
-    .item-body{
+    .item-body {
       display: table-cell;
       width: 50%;
-      .item-body-content{
-        textarea{
+      .item-body-content {
+        textarea {
           width: 100%;
           min-height: 500px;
           resize: none;
@@ -33,7 +32,7 @@
           border: none;
           outline: 0;
         }
-        .attachment-image{
+        .attachment-image {
           box-sizing: border-box;
           border-top-right-radius: 3px;
           border-top-left-radius: 3px;
@@ -46,7 +45,7 @@
           color: #999;
           margin: 10px;
           padding: 10px 0;
-          #attachment-image-select{
+          #attachment-image-select {
             position: absolute;
             top: 8px;
             left: 50%;
@@ -57,13 +56,13 @@
         }
       }
     }
-    .item-preview{
+    .item-preview {
       display: table-cell;
       width: 50%;
       background-color: #fff;
-      border-left:1px solid #dce4ec;
+      border-left: 1px solid #dce4ec;
       height: 500px;
-      #item-preview-content{
+      #item-preview-content {
         height: 558px;
         padding: 10px;
         overflow: scroll;
@@ -75,36 +74,36 @@
 //
 // Item show
 //
-.item-show-header{
+.item-show-header {
   padding: 30px 15px !important;
   margin-bottom: 20px !important;
-  .item-show-header-title{
+  .item-show-header-title {
     margin-top: 0 !important;
-    font-size:34px !important;
+    font-size: 34px !important;
   }
-  .item-show-header-author{
-    margin-bottom:0;
+  .item-show-header-author {
+    margin-bottom: 0;
     color: #FFFFFF;
-    .item-show-header-edit a{
+    .item-show-header-edit a {
       font-size: 15px;
       color: #FFFFFF;
     }
   }
-  .item-show-header-comment-count{
-    text-align:center;
+  .item-show-header-comment-count {
+    text-align: center;
     line-height: 22px;
     font-size: 22px;
     font-weight: 400;
-    i{
+    i {
       margin-right: 5px;
     }
-    .item-show-header-comment-count-text{
+    .item-show-header-comment-count-text {
       font-size: 12px;
     }
   }
 }
 
-.item-nav{
+.item-nav {
   font-size: 13px;
   padding: 10px !important;
   color: #ffffff;
@@ -113,14 +112,14 @@
   }
 }
 
-.comments{
+.comments {
   margin-bottom: 40px;
-  .comment-title{
+  .comment-title {
     padding-top: 12px;
     padding-bottom: 12px;
     font-weight: bold;
   }
-  hr{
+  hr {
     margin: 0;
     margin-bottom: 21px;
     border-top: 2px solid #ccc;
@@ -130,134 +129,143 @@
 //
 // Markdown
 //
-.markdown{
-  font-size:15px;
-  >*:first-child{
-    margin-top:0!important
+.markdown {
+  font-size: 15px;
+  >*:first-child {
+    margin-top: 0!important
   }
-  h1{
+  h1 {
     padding-bottom: .3em;
     line-height: 1.2;
     border-bottom: 2px solid#dedede;
     font-size: 2.1em
   }
-  h2{
+  h2 {
     padding-bottom: .3em;
     line-height: 1.225;
     border-bottom: 1px dotted#ccc;
     font-size: 1.8em;
   }
-  h3{
+  h3 {
     font-size: 1.5em;
     line-height: 1.43;
     margin-top: 1.4em;
   }
-  h4{
+  h4 {
     margin-top: 1.3em;
     font-size: 1.4em;
   }
-  h5{
+  h5 {
     margin-top: 1.5em;
     font-size: 1em;
   }
-  h6{
+  h6 {
     margin-top: 1.5em;
     font-size: 1em;
     color: #777
   }
-  blockquote{
+  blockquote {
     color: #555;
-    font-size:1em;
-    border-left:solid 4px #ddd;
+    font-size: 1em;
+    border-left: solid 4px #ddd;
     padding: .8em;
     margin-top: 1em;
     margin-bottom: 1em;
     margin-left: .8em;
-    h1, h2, h3, h4, h5, h6{
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
       color: #555;
     }
   }
-  blockquote > *:first-child{
+  blockquote>*:first-child {
     margin-top: 0;
   }
-  a{
+  a {
     word-wrap: break-word;
     word-break: break-all;
   }
-  hr{
-    margin:1em 0;
-    border:0;
-    height:2px;
-    background-color:#ccc;
+  hr {
+    margin: 1em 0;
+    border: 0;
+    height: 2px;
+    background-color: #ccc;
   }
-  em{
+  em {
     font-family: "Helvetica Neue", Helvetica, "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "游ゴシック", YuGothic, sans-serif;
     font-style: italic;
   }
-  strong{
+  strong {
     font-weight: 900;
   }
-  b{
+  b {
     font-weight: 900;
   }
-  ins{
+  ins {
     font-weight: 900;
   }
-  del{
+  del {
     text-decoration: line-through;
   }
-  p{
+  p {
     word-wrap: break-word;
     margin: 1em 0;
     font-size: 1em;
     line-height: 1.7;
   }
-  img{
-    max-width: 50%;
+  img {
+    max-width: 80%;
   }
-  dl{
+  dl {
     margin: 1em 0;
   }
-  dl dd{
+  dl dd {
     margin-left: 2em;
   }
-  table{
+  table {
     margin: 1em 0;
     border-left: solid 1px #d9d9d9;
     border-top: solid 1px #d9d9d9;
   }
-  td, th{
+  td,
+  th {
     border-bottom: solid 1px #ccc;
     border-right: solid 1px #ccc;
     padding: 8px 10px;
     word-wrap: break-word;
   }
-  thead td, th{
+  thead td,
+  th {
     font-weight: 900;
     background-color: #fff;
   }
-  tbody tr:nth-child(odd){
+  tbody tr:nth-child(odd) {
     background-color: rgba(0, 0, 0, 0.03);
   }
-  li p:first-child{
+  li p:first-child {
     margin: 0;
   }
-  ol,ul{
+  ol,
+  ul {
     line-height: 1.7;
     margin-bottom: 1em;
     margin-top: 1em;
     padding-left: 1.5em;
   }
-  ol > li {
+  ol>li {
     list-style-type: decimal;
   }
-  ul > li{
+  ul>li {
     list-style-type: disc;
   }
-  li{
+  li {
     list-style-type: 0;
   }
-  li > ol, li >ul{
+  li>ol,
+  li>ul {
     margin-bottom: 0;
     margin-top: 0;
   }
