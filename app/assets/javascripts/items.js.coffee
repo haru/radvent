@@ -41,10 +41,13 @@ ready = ->
     $('#item-show').html(marked(text))
     $('#item-show').find('pre code').each (i, block) ->
       hljs.highlightBlock(block)
+    $('.comment-content').each (i, block) ->
+      comment = $(block).text()
+      $(block).html(marked(comment))
   parseBody() if $('#item-show')[0]
   parseText $('#item-text').val() if $('#item-text').val()
 
 $(document).ready ready
-$(document).on 'turbolinks:load', ready
+$(document).on 'turbolinks:render', ready
 $(document).on 'keyup', '#item-text', checkTextChange()
 $(document).on 'change', '#attachment-image-select', attachmentImageInputChange
