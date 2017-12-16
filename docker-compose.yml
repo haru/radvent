@@ -1,5 +1,11 @@
 version: '3'
 services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: example
+    volumes:
+      - "$PWD/docker/postgres:/var/lib/postgresql/data"
   radvent:
     image: haru/radvent:latest
     build: .
@@ -8,7 +14,7 @@ services:
     volumes:
       - "$PWD/docker/data:/var/radvent_data"
     links:
-      - radvent_postgres:postgres
+      - postgres:radvent_postgres
     environment:
       DB: postgres
       DB_USERNAME: postgres
@@ -23,10 +29,5 @@ services:
   #     - "$PWD/docker/mysql:/var/lib/mysql"
   #   ports:
   #     - "3306:3306"
-  postgres:
-    image: postgres
-    environment:
-      POSTGRES_PASSWORD: example
-    volumes:
-      - "$PWD/docker/postgres:/var/lib/postgresql/data"
+
 
