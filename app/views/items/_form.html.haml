@@ -10,17 +10,20 @@
         %div.row
           %div.col-sm-12
             %div.item-container
-              %div.item-body
-                %div.item-header.item-body-header
-                  Markdown
-                  %a{"data-toggle" => "modal", :href => "#markdown-modal", :class => "btn-xs btn-default"}
-                    %span.fa.fa-question
-                %div.item-body-content
-                  = f.text_area :body, id: "item-text", placeholder:t("helpers.placeholder.text"), class: 'form-control'
-                  = render "form_attachment", attachment: attachment
-              %div.item-preview
-                %div.item-header.item-previw-header #{t "views.items._form.item_header_preview"}
-                %div.markdown#item-preview-content
+              %div.row
+                %div.col-sm-6
+                  %div.item-body
+                    %div.item-header.item-body-header
+                      Markdown
+                      %a{"data-toggle" => "modal", :href => "#markdown-modal", :class => "btn-xs btn-default"}
+                        %span.fa.fa-question
+                    %div.item-body-content
+                      = f.text_area :body, id: "item-text", placeholder:t("helpers.placeholder.text"), class: 'form-control'
+                      = render "form_attachment", attachment: attachment
+                %div.col-sm-6
+                  %div.item-preview
+                    %div.item-header.item-previw-header #{t "views.items._form.item_header_preview"}
+                    %div.markdown#item-preview-content
       = f.hidden_field :advent_calendar_item_id, value: item.advent_calendar_item_id
       %div.pull-left
         = f.submit t("helpers.submit.preview"), name: "preview_button", data: {disable_with: false}, class:"btn btn-success btn-raised", formtarget:"_blank"
