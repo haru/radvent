@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 services:
   radvent:
     image: haru/radvent:latest
@@ -8,21 +8,21 @@ services:
     volumes:
       - "$PWD/docker/data:/var/radvent_data"
     links:
-      - postgres
+      - radvent_postgres:postgres
     environment:
       DB: postgres
       DB_USERNAME: postgres
       DB_PASSWORD: example
-      DB_HOST: postgres
+      DB_HOST: radvent_postgres
       DB_CREATE_ON_START: "true"
-  mysql:
-    image: mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: example
-    volumes:
-      - "$PWD/docker/mysql:/var/lib/mysql"
-    ports:
-      - "3306:3306"
+  # mysql:
+  #   image: mysql
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: example
+  #   volumes:
+  #     - "$PWD/docker/mysql:/var/lib/mysql"
+  #   ports:
+  #     - "3306:3306"
   postgres:
     image: postgres
     environment:
