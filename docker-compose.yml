@@ -21,6 +21,7 @@ services:
       DB_PASSWORD: example
       DB_HOST: radvent_postgres
       DB_CREATE_ON_START: "true"
+      #RAILS_RELATIVE_URL_ROOT: "/test"
   # mysql:
   #   image: mysql
   #   environment:
