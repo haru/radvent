@@ -5,14 +5,14 @@ services:
     environment:
       POSTGRES_PASSWORD: example
     volumes:
-      - "$PWD/docker/postgres:/var/lib/postgresql/data"
+      - "postgres-db:/var/lib/postgresql/data"
   radvent:
     image: haru/radvent:latest
     build: .
     ports:
       - "3000:3000"
     volumes:
-      - "$PWD/docker/data:/var/radvent_data"
+      - "radvent-data:/var/radvent_data"
     links:
       - postgres:radvent_postgres
     environment:
@@ -29,5 +29,9 @@ services:
   #     - "$PWD/docker/mysql:/var/lib/mysql"
   #   ports:
   #     - "3306:3306"
-
+volumes:
+  postgres-db:
+    driver: local
+  radvent-data:
+    driver: local
 
