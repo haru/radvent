@@ -8,7 +8,7 @@ class AttachmentsController < ApplicationController
     if attachment.save
       render json: {
         image_name: attachment.image.identifier,
-        image_url: attachment.image.url,
+        image_url: "#{root_path}#{attachment.image.url}",
       }
     else
       render json: {

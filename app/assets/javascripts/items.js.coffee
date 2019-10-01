@@ -24,7 +24,7 @@
   form_data.append $(this).attr('name'), $(this).prop('files')[0]
   form_data.append $('#attachment-advent-calendar-id').attr('name'),
     $('#attachment-advent-calendar-id').val()
-  $.ajax '/attachments',
+  $.ajax '../../attachments',
     type: 'POST',
     dataType: 'json',
     data: form_data,
