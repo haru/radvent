@@ -2,6 +2,11 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
+window.relative_url_root_path = '/'
+
+@setRootPath = (path) ->
+  window.relative_url_root_path = path
+
 @parseText = (text) ->
   # parsing markdown to html
   $('#item-preview-content').html(marked(text))
@@ -24,7 +29,7 @@
   form_data.append $(this).attr('name'), $(this).prop('files')[0]
   form_data.append $('#attachment-advent-calendar-id').attr('name'),
     $('#attachment-advent-calendar-id').val()
-  $.ajax '../../attachments',
+  $.ajax window.relative_url_root_path + 'attachments',
     type: 'POST',
     dataType: 'json',
     data: form_data,
