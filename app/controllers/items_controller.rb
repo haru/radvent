@@ -1,7 +1,7 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update]
   before_action :find_item, only: [:show, :edit, :update]
-  before_action :has_edit_permission?, only: [:edit, :update]
+  before_action :edit_permission?, only: [:edit, :update]
 
   def new
     @date = params[:date]
@@ -62,8 +62,9 @@ class ItemsController < ApplicationController
     render_404 unless @item
   end
 
-  def has_edit_permission?
+  def edit_permission?
     return true if current_user.admin?
+
     render_403 unless @item.editable_by? current_user
   end
 end
