@@ -1,5 +1,7 @@
 class AdventCalendarItemsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update]
+  before_action :find_calendar_item, only: [:show, :edit, :update]
+  before_action :edit_permission?, only: [:edit, :update]
 
   def new
     @advent_calendar_item = AdventCalendarItem.new(date: params[:date],
@@ -15,15 +17,12 @@ class AdventCalendarItemsController < ApplicationController
   end
 
   def show
-    @advent_calendar_item = AdventCalendarItem.find(params[:id])
   end
 
   def edit
-    @advent_calendar_item = AdventCalendarItem.find(params[:id])
   end
 
   def update
-    @advent_calendar_item = AdventCalendarItem.find(params[:id])
     @advent_calendar_item.user ||= current_user
     if @advent_calendar_item.update(advent_calendar_item_params)
       redirect_to @advent_calendar_item
@@ -36,5 +35,16 @@ class AdventCalendarItemsController < ApplicationController
 
   def advent_calendar_item_params
     params.require(:advent_calendar_item).permit(:user_name, :comment, :date, :event_id)
+  end
+
+  def find_calendar_item
+    @advent_calendar_item = AdventCalendarItem.find_by(id: params[:id])
+    render_404 unless @advent_calendar_item
+  end
+
+  def edit_permission?
+    return true if current_user.admin?
+
+    render_403 unless @advent_calendar_item.editable_by? current_user
   end
 end

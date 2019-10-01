@@ -1,5 +1,7 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update]
+  before_action :find_item, only: [:show, :edit, :update]
+  before_action :edit_permission?, only: [:edit, :update]
 
   def new
     @date = params[:date]
@@ -20,7 +22,6 @@ class ItemsController < ApplicationController
   end
 
   def show
-    @item = Item.find(params[:id])
     if !@item.advent_calendar_item.published?
       redirect_to root_path
     else
@@ -32,12 +33,10 @@ class ItemsController < ApplicationController
   end
 
   def edit
-    @item = Item.find(params[:id])
     @attachment = Attachment.new(advent_calendar_item_id: @item.advent_calendar_item_id)
   end
 
   def update
-    @item = Item.find(params[:id])
     @item.assign_attributes(item_params)
 
     if params[:preview_button]
@@ -56,5 +55,16 @@ class ItemsController < ApplicationController
 
   def item_params
     params.require(:item).permit(:title, :body, :advent_calendar_item_id)
+  end
+
+  def find_item
+    @item = Item.find_by(id: params[:id])
+    render_404 unless @item
+  end
+
+  def edit_permission?
+    return true if current_user.admin?
+
+    render_403 unless @item.editable_by? current_user
   end
 end

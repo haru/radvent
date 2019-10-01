@@ -16,11 +16,15 @@ class ApplicationController < ActionController::Base
 
   def admin_user!
     if !user_signed_in? or !current_user.admin?
-      render 'errors/forbidden', status: :forbidden
+      render_403
     end
   end
 
   def render_404
     render template: 'errors/notfound', status: 404, layout: 'application', content_type: 'text/html'
+  end
+
+  def render_403
+    render 'errors/forbidden', status: :forbidden
   end
 end
