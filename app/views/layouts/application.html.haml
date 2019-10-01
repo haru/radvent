@@ -4,13 +4,13 @@
     %title= system_title
     %meta{"http-equiv"=>"X-UA-Compatible", :content=>"IE=Edge"}
     %meta{"charset"=>"UTF-8"}
-    %link{:href=>"/assets/default.min.css", :rel=>"stylesheet"}
+    %link{:href=>"#{root_path}/assets/default.min.css", :rel=>"stylesheet"}
     = favicon_link_tag if Rails.application.assets.find_asset('favicon.ico')
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = csrf_meta_tags
 
-    %script{:src=>"/assets/highlight.min.js"}
+    %script{:src=>"#{root_path}/assets/highlight.min.js"}
     :javascript
       hljs.initHighlightingOnLoad()
   %body
