@@ -2,14 +2,17 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+
+
+ 
 .advent-calendar-item-link{
   margin-top: 21px;
   margin-bottom: 10.5px;
 }
 
 div.jumbotron.item-show-header {
-  background-color: #B81C22;
-  color: #FFFFFF;
+  background-color: var(--header-bg-color);
+  color: var(--header-txt-color);
   border-radius: 0;
   .btn-outline-primary {
     border-color: #ffffff;

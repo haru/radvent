@@ -20,10 +20,54 @@
 @import "font-awesome-sprockets";
 @import "font-awesome";
 @import 'bootstrap/glyphicons';
+
+:root {
+    --main-txt-color: #333;
+    --main-bg-color: #f7f7f7;
+    --header-txt-color: #fff;
+    --header-bg-color: #B81C22;
+    --calendar-date-txt-color: #999;
+    --calendar-date-bg-color: #eee;
+    --top-menu-bg-color: #00693E;
+}
+  
+  @media (prefers-color-scheme: dark) {
+    :root {
+        --main-txt-color: #fff;
+        --main-bg-color: #1F262A;
+        --header-txt-color: #fff;
+        --header-bg-color: #2A3439;
+        --calendar-date-txt-color: #fff;
+        --calendar-date-bg-color: #5b676d;
+        --top-menu-bg-color: #375a7f;
+    }
+    .event-card{
+        $border_color: #848689;
+         .card-header, .card-body, .card-footer {
+            color: var(--main-txt-color);
+            background-color: #2A3439;
+         }
+         .card-header {
+             border-bottom-color: $border_color;
+         }
+         .card-footer {
+             border-top-color: $border_color;
+         }
+    }
+
+    .table thead th {
+        color: var(--main-txt-color);
+    }
+  }
+
 @import "partials/*";
+	
+ 
 
 body {
     font-family: 'Helvetica Neue', Helvetica, 'ヒラギノ角ゴ ProN W3', 'Hiragino Kaku Gothic ProN', メイリオ, Meiryo, sans-serif;
+    color: var(--main-txt-color);
+    background-color: var(--main-bg-color);
 }
 
 .advent-calendar-breadcrumb {
