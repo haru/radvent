@@ -29,6 +29,9 @@
     --calendar-date-txt-color: #999;
     --calendar-date-bg-color: #eee;
     --top-menu-bg-color: #00693E;
+    --item-preview-bg-color: #fff;
+    --bread-crumb-bg-color: #00532E;
+    --alert-info-bg-color: #00693E;
 }
   
   @media (prefers-color-scheme: dark) {
@@ -40,6 +43,10 @@
         --calendar-date-txt-color: #fff;
         --calendar-date-bg-color: #5b676d;
         --top-menu-bg-color: #375a7f;
+        --item-preview-bg-color: #1F262A;
+        --card-body-bg-color: #2A3439;
+        --bread-crumb-bg-color: #293A4A;
+        --alert-info-bg-color: #2A7DFF;
     }
     .event-card{
         $border_color: #848689;
@@ -58,6 +65,39 @@
     .table thead th {
         color: var(--main-txt-color);
     }
+    hr {
+        border-top-color: #fff;
+    }
+    form {
+        .bmd-label-static {
+            color: #fff;
+        }
+        .form-control, .custom-file-control,.is-focused .form-control,.is-focused .custom-file-control  {
+            background-image: linear-gradient(to top, #009688 2px, rgba(0, 150, 136, 0) 2px), linear-gradient(to top, rgba(255, 255, 255, 0.26) 1px, transparent 1px);
+
+        }
+        .form-control, .custom-file-control {
+            color: #fff;
+        }
+        .form-control:focus, .custom-file-control:focus {
+            color: #fff;
+        }
+
+    } 
+    .btn, .custom-file-control::before {
+        color: rgba(255, 255, 255, 0.87);
+    }
+    .btn:hover, .custom-file-control:hover::before {
+        color: rgba(255, 255, 255, 0.87);
+    }
+
+    .card-body {
+        background-color: var(--card-body-bg-color);
+    }
+
+    a, a:hover {
+        color: #1DCBE6;
+    }
   }
 
 @import "partials/*";
@@ -71,7 +111,7 @@ body {
 }
 
 .advent-calendar-breadcrumb {
-    background: #00532E;
+    background: var(--bread-crumb-bg-color);
     padding: .7em 0;
     color: #18bc9c;
     color: #fff;
@@ -81,7 +121,7 @@ body {
 }
 
 .alert-info {
-    background-color: #00693E;
+    background-color: var(--alert-info-bg-color);
 }
 
 .navbar-light {
