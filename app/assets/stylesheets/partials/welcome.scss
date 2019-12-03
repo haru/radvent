@@ -38,8 +38,8 @@
       padding: 0 !important;
       .advent-calendar-date {
         padding: 2px 10px;
-        background-color: #eee;
-        color: #999;
+        background-color: var(--calendar-date-bg-color);
+        color: var(--calendar-date-txt-color);
         font-size: 16px;
       }
       .advent-calendar-join {
@@ -68,13 +68,13 @@
 }
 
 #event-header.jumbotron {
-  background-color: #B81C22;
-  color: #FFFFFF;
+  background-color: var(--header-bg-color);
+  color: var(--header-txt-color);
   border-radius: 0;
 }
 
 #top-menu {
-  background-color: #00693E;
+  background-color: var(--top-menu-bg-color);
   color: #FFFFFF;
   border-radius: 0;
   margin-bottom: 0;

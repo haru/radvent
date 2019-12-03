@@ -20,14 +20,124 @@
 @import "font-awesome-sprockets";
 @import "font-awesome";
 @import 'bootstrap/glyphicons';
+
+:root {
+    --main-txt-color: #333;
+    --main-bg-color: #f7f7f7;
+    --header-txt-color: #fff;
+    --header-bg-color: #B81C22;
+    --calendar-date-txt-color: #999;
+    --calendar-date-bg-color: #eee;
+    --top-menu-bg-color: #00693E;
+    --item-preview-bg-color: #fff;
+    --bread-crumb-bg-color: #00532E;
+    --alert-info-bg-color: #00693E;
+    --comment-color: #333;
+    --comment-bg-color: #fff;
+}
+  
+  @media (prefers-color-scheme: dark) {
+    :root {
+        --main-txt-color: #ddd;
+        --main-bg-color: #1F262A;
+        --header-txt-color: #fff;
+        --header-bg-color: #2A3439;
+        --calendar-date-txt-color: #fff;
+        --calendar-date-bg-color: #5b676d;
+        --top-menu-bg-color: #375a7f;
+        --item-preview-bg-color: #1F262A;
+        --card-body-bg-color: #2A3439;
+        --bread-crumb-bg-color: #293A4A;
+        --alert-info-bg-color: #2A7DFF;
+    }
+    .event-card{
+        $border_color: #848689;
+         .card-header, .card-body, .card-footer {
+            color: var(--main-txt-color);
+            background-color: #2A3439;
+         }
+         .card-header {
+             border-bottom-color: $border_color;
+         }
+         .card-footer {
+             border-top-color: $border_color;
+         }
+    }
+
+    .table thead th {
+        color: var(--main-txt-color);
+    }
+    hr {
+        border-top-color: #fff;
+    }
+    form {
+        .bmd-label-static {
+            color: #ddd;
+        }
+        .form-control, .custom-file-control,.is-focused .form-control,.is-focused .custom-file-control  {
+            background-image: linear-gradient(to top, #009688 2px, rgba(0, 150, 136, 0) 2px), linear-gradient(to top, rgba(221, 221, 221, 0.26) 1px, transparent 1px);
+
+        }
+        .form-control, .custom-file-control {
+            color: #ddd;
+        }
+        .form-control:focus, .custom-file-control:focus {
+            color: #ddd;
+        }
+
+    } 
+    .btn, .custom-file-control::before {
+        color: rgba(255, 255, 255, 0.87);
+    }
+    .btn:hover, .custom-file-control:hover::before {
+        color: rgba(255, 255, 255, 0.87);
+    }
+
+    .card-body {
+        background-color: var(--card-body-bg-color);
+    }
+
+    a, a:hover {
+        color: #1DCBE6;
+    }
+
+    label.checkbox-inline, label.checkbox-inline:hover {
+        color: #fff;
+    }
+    .popover-header {
+        color: #000
+    }
+
+    .bg-success {
+        background-color: #2A7DFF !important
+    }
+
+    .nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
+        background-color: var(--card-body-bg-color);
+    }
+
+    .table-striped tbody tr:nth-of-type(2n+1) {
+        background-color: 
+        rgba(255, 255, 255, 0.05);
+    }
+
+    .checkbox label .checkbox-decorator .check, label.checkbox-inline .checkbox-decorator .check {
+        border-color: rgba(255, 255, 255, 0.54);;
+    }
+  }
+
 @import "partials/*";
+	
+ 
 
 body {
     font-family: 'Helvetica Neue', Helvetica, 'ヒラギノ角ゴ ProN W3', 'Hiragino Kaku Gothic ProN', メイリオ, Meiryo, sans-serif;
+    color: var(--main-txt-color);
+    background-color: var(--main-bg-color);
 }
 
 .advent-calendar-breadcrumb {
-    background: #00532E;
+    background: var(--bread-crumb-bg-color);
     padding: .7em 0;
     color: #18bc9c;
     color: #fff;
@@ -37,5 +147,14 @@ body {
 }
 
 .alert-info {
-    background-color: #00693E;
+    background-color: var(--alert-info-bg-color);
+}
+
+.navbar-light {
+    .navbar-toggler{
+        border-color: #ffffff;
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255,1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+        }     
+    }
 }

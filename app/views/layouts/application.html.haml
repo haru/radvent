@@ -11,39 +11,35 @@
     = csrf_meta_tags
 
     %script{:src=>"#{root_path}assets/highlight.min.js"}
+    %script{:src=>"#{root_path}assets/css-variables-ie.js"}
+    
     :javascript
       hljs.initHighlightingOnLoad()
   %body
-    %nav#top-menu.navbar.navbar-expand-lg
+    %nav#top-menu.navbar.navbar-light.navbar-expand-lg
       = link_to "TOP", root_path, class: "navbar-brand"
-      %button.navbar-toggler{type:"button", "data-toggle": "collapse", "data-target": "#navbarSupportedContent", "aria-controls": "navbarSupportedContent", "aria-expanded": "false", "aria-label": "Toggle navigation"}
+      %button.navbar-toggler{type:"button", "data-toggle": "collapse", "data-target": "#navTopMenu", "aria-controls": "navTopMenu", "aria-expanded": "false", "aria-label": "Toggle navigation"}
         %span.navbar-toggler-icon
-
-      %div#navbarSupportedContent.collapse.navbar-collapse
-        %ul.navbar-nav.ml-auto
+      %div#navTopMenu.collapse.navbar-collapse
+        %div.navbar-nav.ml-auto
           - if user_signed_in?
             - if current_user.admin?
-              %li.nav-item
-                = link_to  events_list_path, class: "nav-link" do
-                  %i.fa.fa-cog
-                  = t('menu.settings')
-            %li.nav-item
-              = link_to  edit_user_registration_path, class: "nav-link" do
-                %i.fa.fa-user
-                = "#{current_user.name}"
-            %li.nav-item
-              = link_to destroy_user_session_path, method: :delete, class: "nav-link" do
-                %i.fa.fa-sign-out
-                = t('menu.sign_out')
+              = link_to  events_list_path, class: "nav-item nav-link" do
+                %i.fa.fa-cog
+                = t('menu.settings')
+            = link_to  edit_user_registration_path, class: "nav-item nav-link" do
+              %i.fa.fa-user
+              = "#{current_user.name}"
+            = link_to destroy_user_session_path, method: :delete, class: "nav-item nav-link" do
+              %i.fa.fa-sign-out
+              = t('menu.sign_out')
           - else
-            %li.nav-item
-              = link_to new_user_registration_path, class: "nav-link" do
-                %i.fa.fa-user-plus
-                = t("menu.sign_up")
-            %li.nav-item
-              = link_to new_user_session_path, class: "nav-link" do
-                %i.fa.fa-sign-in
-                = t("menu.sign_in")
+            = link_to new_user_registration_path, class: "nav-item nav-link" do
+              %i.fa.fa-user-plus
+              = t("menu.sign_up")
+            = link_to new_user_session_path, class: "nav-item nav-link" do
+              %i.fa.fa-sign-in
+              = t("menu.sign_in")
     = content_for?(:header_bar) ? yield(:header_bar) : ''
     = content_for?(:jumbotron) ? yield(:jumbotron) : ''
     %div.container
