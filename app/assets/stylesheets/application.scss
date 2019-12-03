@@ -32,11 +32,13 @@
     --item-preview-bg-color: #fff;
     --bread-crumb-bg-color: #00532E;
     --alert-info-bg-color: #00693E;
+    --comment-color: #333;
+    --comment-bg-color: #fff;
 }
   
   @media (prefers-color-scheme: dark) {
     :root {
-        --main-txt-color: #fff;
+        --main-txt-color: #ddd;
         --main-bg-color: #1F262A;
         --header-txt-color: #fff;
         --header-bg-color: #2A3439;
@@ -70,17 +72,17 @@
     }
     form {
         .bmd-label-static {
-            color: #fff;
+            color: #ddd;
         }
         .form-control, .custom-file-control,.is-focused .form-control,.is-focused .custom-file-control  {
-            background-image: linear-gradient(to top, #009688 2px, rgba(0, 150, 136, 0) 2px), linear-gradient(to top, rgba(255, 255, 255, 0.26) 1px, transparent 1px);
+            background-image: linear-gradient(to top, #009688 2px, rgba(0, 150, 136, 0) 2px), linear-gradient(to top, rgba(221, 221, 221, 0.26) 1px, transparent 1px);
 
         }
         .form-control, .custom-file-control {
-            color: #fff;
+            color: #ddd;
         }
         .form-control:focus, .custom-file-control:focus {
-            color: #fff;
+            color: #ddd;
         }
 
     } 
@@ -97,6 +99,30 @@
 
     a, a:hover {
         color: #1DCBE6;
+    }
+
+    label.checkbox-inline, label.checkbox-inline:hover {
+        color: #fff;
+    }
+    .popover-header {
+        color: #000
+    }
+
+    .bg-success {
+        background-color: #2A7DFF !important
+    }
+
+    .nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
+        background-color: var(--card-body-bg-color);
+    }
+
+    .table-striped tbody tr:nth-of-type(2n+1) {
+        background-color: 
+        rgba(255, 255, 255, 0.05);
+    }
+
+    .checkbox label .checkbox-decorator .check, label.checkbox-inline .checkbox-decorator .check {
+        border-color: rgba(255, 255, 255, 0.54);;
     }
   }
 
