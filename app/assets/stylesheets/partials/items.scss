@@ -59,7 +59,7 @@
     .item-preview {
       display: table-cell;
       width: 50%;
-      background-color: #fff;
+      background-color: var(--item-preview-bg-color);
       border-left: 1px solid #dce4ec;
       height: 500px;
       #item-preview-content {
