@@ -2,6 +2,8 @@ require 'rails_helper'
 
 RSpec.describe ItemsController, :type => :controller do
   before do
+    AdventCalendarItem.destroy_all
+    Item.destroy_all
     @user = create(:user)
     sign_in @user
     @event = create(:event, name: 'test', title: 'test', start_date: '2015-12-01', end_date: '2015-12-30', created_by: @user, updated_by: @user)
@@ -95,13 +97,14 @@ RSpec.describe ItemsController, :type => :controller do
 
   describe "GET #edit" do
     it "assigns the requested item to @item" do
-      item = create(:item, advent_calendar_item_id: 1)
+      advent_calendar_item = create(:advent_calendar_item, date: 2, event: @event, user: @user)
+      item = advent_calendar_item.item
       get :edit, params: {use_route: :radvent, id: item}
       expect(assigns(:item)).to eq item
     end
 
     it "renders the :edit template" do
-      item = create(:item)
+      item =  create(:advent_calendar_item, date: 2, event: @event, user: @user).item
       get :edit, params: {use_route: :radvent, id: item}
       expect(response).to render_template :edit
     end
@@ -137,7 +140,7 @@ RSpec.describe ItemsController, :type => :controller do
 
   describe "PATCH #update" do
     before :each do
-      @item = create(:item, advent_calendar_item_id: 1)
+      @item = create(:advent_calendar_item, date: 2, event: @event, user: @user).item
     end
 
     it "locates the requested @item" do

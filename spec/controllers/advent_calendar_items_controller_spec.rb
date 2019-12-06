@@ -46,7 +46,7 @@ RSpec.describe AdventCalendarItemsController, :type => :controller do
     end
 
     it "renders the :edit template" do
-      advent_calendar_item = create(:advent_calendar_item)
+      advent_calendar_item = create(:advent_calendar_item, user: @user)
       get :edit, params: {id: advent_calendar_item}
       expect(response).to render_template :edit
     end
@@ -74,7 +74,7 @@ RSpec.describe AdventCalendarItemsController, :type => :controller do
 
   describe "PATCH #update" do
     before :each do
-      @advent_calendar_item = create(:advent_calendar_item)
+      @advent_calendar_item = create(:advent_calendar_item, user: @user)
     end
 
     it "locates the requested @advent_calendar_item" do
