@@ -6,6 +6,8 @@ env:
   - DB=sqlite3
   - DB=mysql
   - DB=postgres
+services:
+  - mysql
 install:
   - bash -x ./travis/travis_install.sh
 script:
