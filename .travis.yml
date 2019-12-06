@@ -8,6 +8,7 @@ env:
   - DB=postgres
 services:
   - mysql
+  - postgresql
 install:
   - bash -x ./travis/travis_install.sh
 script:
