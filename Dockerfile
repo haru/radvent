@@ -12,6 +12,8 @@ RUN git clone https://github.com/haru/radvent.git -b `cat /tmp/version` /usr/loc
 RUN rm /tmp/version.rb /tmp/version
 WORKDIR /usr/local/radvent
 
+RUN gem install bundler
+RUN bundle update --bundler
 RUN bundle install --without test development
 
 COPY docker/database.yml /usr/local/radvent/config/
