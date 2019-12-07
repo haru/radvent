@@ -8,7 +8,7 @@ if [ "$SECRET_KEY_BASE" = "" ]
 then
   if [ ! -f $KEYBASE_FILE ]
   then
-    rake secret > $KEYBASE_FILE
+    bundle exec rake secret > $KEYBASE_FILE
   fi
   export SECRET_KEY_BASE=`cat $KEYBASE_FILE`
 fi

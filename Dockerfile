@@ -1,8 +1,8 @@
-FROM ruby:2.4.2
+FROM ruby:2.6.3
 LABEL maintainer="Haruyuki Iida"
 
 RUN apt-get update \
-  && apt-get install -y nodejs libmysqlclient-dev --no-install-recommends \
+  && apt-get install -y nodejs  --no-install-recommends \
   && rm -rf /var/lib/apt/lists/*
 RUN mkdir -p /usr/local
 
