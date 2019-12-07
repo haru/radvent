@@ -18,6 +18,13 @@ RSpec.describe EventsController, type: :controller do
       post :create, params: {event: {title: 'test', start_date: '2017-12-01', end_date: '2017-12-25', name: 'aaa', description: 'description'}}
       expect(response).to have_http_status(:redirect)
     end
+
+    it "returns 403 if user is not admin" do
+      user = create(:user)
+      sign_in user
+      post :create, params: {event: {title: 'test', start_date: '2017-12-01', end_date: '2017-12-25', name: 'aaa', description: 'description'}}
+      expect(response).to have_http_status(403)
+    end
   end
 
   describe "PUT #update" do
