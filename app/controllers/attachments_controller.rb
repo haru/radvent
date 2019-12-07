@@ -17,7 +17,7 @@ class AttachmentsController < ApplicationController
       }
     else
       render json: {
-        image_name: t("controllers.attachments.create.fail_upload"),
+        image_name: t('controllers.attachments.create.fail_upload'),
         image_url: nil,
       }
     end

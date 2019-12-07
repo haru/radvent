@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   resources :events, except: [:show]
   get 'events/:name' => 'events#show', as: :show_event
   get 'admin/events' => 'events#list', as: :events_list
@@ -15,7 +14,6 @@ Rails.application.routes.draw do
     end
     resources :likes, only: [:create, :destroy]
   end
-
 
   resources :advent_calendar_items
   resources :attachments

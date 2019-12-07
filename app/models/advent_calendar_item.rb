@@ -3,8 +3,8 @@ class AdventCalendarItem < ActiveRecord::Base
   belongs_to :event
   has_one :item, dependent: :destroy
   has_many :attachments, dependent: :destroy
-  scope :prev, -> (item) { joins(:item, :event).where("event_id = ? and date < ?", item.event_id, item.date).order(:date).reverse_order }
-  scope :next, -> (item) { joins(:item, :event).where("event_id = ? and date > ?", item.event_id, item.date).order(:date) }
+  scope :prev, ->(item) { joins(:item, :event).where('event_id = ? and date < ?', item.event_id, item.date).order(:date).reverse_order }
+  scope :next, ->(item) { joins(:item, :event).where('event_id = ? and date > ?', item.event_id, item.date).order(:date) }
   validates :user_id, :presence => true
 
   def published?

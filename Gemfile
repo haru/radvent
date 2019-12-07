@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 git_source(:github) do |repo_name|
-  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
+  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?('/')
   "https://github.com/#{repo_name}.git"
 end
 
@@ -55,11 +55,11 @@ group :development do
 end
 
 group :test do
-  gem "rspec-rails", '~> 3.0'
-  gem "factory_bot_rails"
+  gem 'rspec-rails', '~> 3.0'
+  gem 'factory_bot_rails'
   gem 'rails-controller-testing'
   gem 'simplecov'
-  gem "codeclimate-test-reporter", require: false
+  gem 'codeclimate-test-reporter', require: false
 end
 
 gem 'haml-rails'
