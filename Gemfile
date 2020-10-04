@@ -73,7 +73,6 @@ gem 'font-awesome-sass'
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw]
 
 gem 'coffee-script-source', platforms: [:mingw, :mswin, :x64_mingw]
-gem 'bcrypt-ruby', '~> 3.0.0'
 
 gem 'devise'
 gem 'devise-i18n'
