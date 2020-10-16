@@ -5,7 +5,7 @@
   %button.btn.btn-default.btn-primary{type: "button",  "data-toggle": "modal", "data-target": "#deleteDialog"}
     %i.fa.fa-trash= t('helpers.button.delete')
 
-= bootstrap_form_for(@user, url: update_user_url(@user), method: "put", layout: :horizontal, label_col: "col-sm-2", control_col: "col-sm-10")do |f|
+= bootstrap_form_for(@user, url: update_user_path(@user), method: "put", layout: :horizontal, label_col: "col-sm-2", control_col: "col-sm-10")do |f|
   = f.text_field :email
   = f.text_field :name
   %p= f.check_box :admin, inline: true

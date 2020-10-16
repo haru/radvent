@@ -8,6 +8,6 @@ FactoryBot.define do
       "person#{n}"
     end
 
-    password "hogehoge"
+    password 'hogehoge'
   end
 end

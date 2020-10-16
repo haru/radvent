@@ -44,7 +44,6 @@ GEM
       execjs
     bcrypt (3.1.11)
     bcrypt (3.1.11-x64-mingw32)
-    bcrypt-ruby (3.0.1)
     better_errors (2.4.0)
       coderay (>= 1.0.0)
       erubi (>= 1.0.0)
@@ -286,7 +285,6 @@ PLATFORMS
 
 DEPENDENCIES
   bcrypt (~> 3.1.7)
-  bcrypt-ruby (~> 3.0.0)
   better_errors
   bootstrap (~> 4.0.0.beta2.1)
   bootstrap-glyphicons
@@ -331,4 +329,4 @@ RUBY VERSION
    ruby 2.4.2p198
 
 BUNDLED WITH
-   2.0.2
+   2.1.4

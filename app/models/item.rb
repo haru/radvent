@@ -1,10 +1,10 @@
 class Item < ActiveRecord::Base
   belongs_to :advent_calendar_item
-  has_many :comments, -> { order("id") }, dependent: :destroy
+  has_many :comments, -> { order('id') }, dependent: :destroy
   has_many :likes, dependent: :destroy
 
   def title
-    self[:title].presence || I18n.t("activerecord.attributes.item.title_empty")
+    self[:title].presence || I18n.t('activerecord.attributes.item.title_empty')
   end
 
   def editable_by?(author)

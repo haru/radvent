@@ -8,34 +8,34 @@ describe AdventCalendarItem do
     @advent_calendar_item2 = create(:advent_calendar_item, date: 2, event: @event)
     @item2 = @advent_calendar_item2.item
   end
-  it "returns previous advent_calendar_item which has Item" do
+  it 'returns previous advent_calendar_item which has Item' do
     expect(AdventCalendarItem.prev(@advent_calendar_item2).first.date).to equal(1)
   end
 
-  it "returns next advent_calendar_item which has Item" do
+  it 'returns next advent_calendar_item which has Item' do
     create(:advent_calendar_item, date: 2, event: @event)
     expect(AdventCalendarItem.next(@advent_calendar_item1).first.date).to equal(2)
   end
 
-  it "returns nil if there are no previous advent_calendar_item" do
+  it 'returns nil if there are no previous advent_calendar_item' do
     expect(AdventCalendarItem.prev(@advent_calendar_item1).first).to be_nil
   end
 
-  it "returns nil if there are no previous advent_calendar_item which has Item" do
+  it 'returns nil if there are no previous advent_calendar_item which has Item' do
     @advent_calendar_item1.item = nil
     expect(AdventCalendarItem.prev(@advent_calendar_item2).first).to be_nil
   end
 
-  it "returns nil if there are no next advent_calendar_item" do
+  it 'returns nil if there are no next advent_calendar_item' do
     expect(AdventCalendarItem.next(@advent_calendar_item2).first).to be_nil
   end
 
-  it "returns nil if there are no next advent_calendar_item which have Item" do
+  it 'returns nil if there are no next advent_calendar_item which have Item' do
     @advent_calendar_item2.item = nil
     expect(AdventCalendarItem.next(@advent_calendar_item1).first).to be_nil
   end
 
-  describe "#published?" do
+  describe '#published?' do
     before :each do
       today = Date.new(2015, 12, 1)
       allow(Time.zone).to receive(:today).and_return(today)

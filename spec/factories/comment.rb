@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :comment do
-    user_name "nanonanomachine"
-    body "body"
+    user_name 'nanonanomachine'
+    body 'body'
   end
 end
