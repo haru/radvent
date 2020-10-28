@@ -37,8 +37,18 @@ window.relative_url_root_path = '/'
     contentType: false,
     success: (data) ->
       $(this).val('')
-      $('#item-text').val $('#item-text').val() +
-        "\r\n![#{data.image_name}](#{data.image_url})"
+      $('#item-text').focus()
+      sentence = $('#item-text').val();
+      len      = sentence.length;
+      pos      = $('#item-text').get(0).selectionStart;
+      if pos == undefined
+          pos = 0
+    
+      before   = sentence.substr(0, pos);
+      after    = sentence.substr(pos, len);
+      console.log('pos = ' + pos)
+      $('#item-text').val before +
+        "\r\n![#{data.image_name}](#{data.image_url})" + after
       parseText $('#item-text').val()
 
 ready = ->
