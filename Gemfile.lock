@@ -1,5 +1,6 @@
 GEM
   remote: https://rubygems.org/
+  remote: http://insecure.rails-assets.org/
   specs:
     actioncable (5.1.4)
       actionpack (= 5.1.4)
@@ -302,7 +303,7 @@ DEPENDENCIES
   pry-rails
   puma (~> 3.7)
   rails (~> 5.1.4)
-  rails-assets-bootstrap-material-design (~> 4.0.0.beta.4)
+  rails-assets-bootstrap-material-design!
   rails-controller-testing
   rspec-rails (~> 3.0)
   sass-rails (~> 5.0)
