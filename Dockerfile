@@ -1,4 +1,4 @@
-FROM ruby:2.4.9
+FROM ruby:2.6.6
 LABEL maintainer="Haruyuki Iida"
 
 RUN apt-get update \
