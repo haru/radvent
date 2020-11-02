@@ -46,7 +46,7 @@ gem 'bcrypt', '~> 3.1.7'
 # gem 'debugger', group: [:development, :test]
 
 # Use thin instead of WEBrick
-gem 'thin'
+#gem 'thin'
 
 group :development do
   gem 'pry-rails'
@@ -88,9 +88,7 @@ gem 'bootstrap-glyphicons'
 
 gem 'i18n_generators'
 
-source 'http://insecure.rails-assets.org' do
-  gem 'rails-assets-bootstrap-material-design', '~> 4.0.0.beta.4'
-end
+gem 'rails-assets-bootstrap-material-design', '~> 4.0.0.beta.4'
 
 gem 'http_accept_language'
 
