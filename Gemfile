@@ -88,7 +88,9 @@ gem 'bootstrap-glyphicons'
 
 gem 'i18n_generators'
 
-gem 'rails-assets-bootstrap-material-design', '~> 4.0.0.beta.4'
+source 'http://insecure.rails-assets.org' do
+  gem 'rails-assets-bootstrap-material-design'
+end
 
 gem 'http_accept_language'
 
