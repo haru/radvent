@@ -74,6 +74,8 @@ en:
         button_create_item: Register
         item_not_created: You haven't registered yet
         item_created: You have already registered
+        delete_advent_calendar_item: Remove entry
+        confirm_delete_entry: Are you sure to remove entry?
     comments:
       _comment:
         confirm_delete: Are you sure to delete comment?

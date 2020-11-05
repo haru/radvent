@@ -91,6 +91,8 @@ ja:
         button_create_item: 記事を登録する
         item_not_created: 記事が登録されていません
         item_created: 記事が登録されています
+        delete_advent_calendar_item: エントリの削除
+        confirm_delete_entry: エントリーを削除します。よろしいですか？
     comments:
       _comment:
         confirm_delete: コメントを削除しますか

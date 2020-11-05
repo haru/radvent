@@ -1,7 +1,7 @@
 class AdventCalendarItemsController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update]
-  before_action :find_calendar_item, only: [:show, :edit, :update]
-  before_action :edit_permission?, only: [:edit, :update]
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
+  before_action :find_calendar_item, only: [:show, :edit, :update, :destroy]
+  before_action :edit_permission?, only: [:edit, :update, :destroy]
 
   def new
     @advent_calendar_item = AdventCalendarItem.new(date: params[:date],
@@ -29,6 +29,12 @@ class AdventCalendarItemsController < ApplicationController
     else
       render :edit
     end
+  end
+
+  def destroy
+    event = @advent_calendar_item.event
+    @advent_calendar_item.destroy
+    redirect_to show_event_path(event.name)
   end
 
   private
