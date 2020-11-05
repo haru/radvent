@@ -26,3 +26,8 @@
       - if @advent_calendar_item.editable_by? current_user
         %p.advent-calendar-item-link
           = link_to t("views.advent_calendar_items.show.button_create_item"), new_item_path(id: @advent_calendar_item.id, date: @advent_calendar_item.date), class:"btn btn-primary btn-raised"
+  %div.page-header
+    %hr
+    %h3 #{t "views.advent_calendar_items.show.delete_advent_calendar_item"}
+    %p.advent-calendar-item-link
+      = link_to t("helpers.button.delete"), @advent_calendar_item, method: :delete,  data: { confirm: t("views.advent_calendar_items.show.confirm_delete_entry") }, class:"btn btn-primary btn-raised ext-muted"
