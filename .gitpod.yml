@@ -1,5 +1,5 @@
 tasks:
-  - init: bundle install && bundle exec rake radvent:generate_default_settings && bundle exec rake db:migrate
+  - init: bundle install --path=vendor/bundle && bundle exec rake radvent:generate_default_settings && bundle exec rake db:migrate
     command: bundle exec rails s
 ports:
   - port: 3000
