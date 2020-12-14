@@ -1,0 +1,13 @@
+tasks:
+  - init: bundle install && bundle exec rake radvent:generate_default_settings && bundle exec rake db:migrate
+    command: bundle exec rails s
+ports:
+  - port: 3000
+    onOpen: open-browser
+vscode:
+  extensions:
+    - bung87.rails@0.16.7:IXQaE7PUhn9K+2iTc/HF1w==
+    - wingrunr21.vscode-ruby@0.27.0:beIqQUhLRuJ5Vao4B2Lyng==
+    - mbessey.vscode-rufo@0.2.1:QlBwvnvHJPqtDjkgo7+OEQ==
+    - bung87.vscode-gemfile@0.4.1:jYT6FRuH8C+Y+pBqaSL8BA==
+    - sianglim.slim@0.1.1:NQFS+52G0SH0/fp66K9i6g==
