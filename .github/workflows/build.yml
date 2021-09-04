@@ -37,6 +37,9 @@ jobs:
         run: bash -x ./travis/travis_install.sh
       - name: Build
         run: bash -x ./travis/travis.sh
+      - uses: paambaati/codeclimate-action@v2.7.5
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
       - name: Slack Notification on Success
         if: success()
         uses: rtCamp/action-slack-notify@v2.0.2
