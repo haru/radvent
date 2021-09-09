@@ -12,6 +12,7 @@ apt-get install -y nodejs
 npm install -g yarn
 
 # install gems
+gem install bundler
 bundle install
 
 cp build-scripts/database.yml config/
