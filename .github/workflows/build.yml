@@ -34,9 +34,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install
-        run: bash -x ./travis/travis_install.sh
+        run: bash -x ./build-scripts/install.sh
       - name: Build
-        run: bash -x ./travis/travis.sh
+        run: bash -x ./build-scripts/build.sh
       - uses: paambaati/codeclimate-action@v2.7.5
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}

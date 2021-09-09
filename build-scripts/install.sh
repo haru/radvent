@@ -14,7 +14,7 @@ npm install -g yarn
 # install gems
 bundle install
 
-cp travis/database.yml config/
+cp build-scripts/database.yml config/
 
 # generate default settings
 bundle exec rake radvent:generate_default_settings

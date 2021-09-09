@@ -1,7 +1,7 @@
 radvent
 =======
 
-[![Build Status](https://travis-ci.org/haru/radvent.svg?branch=master)](https://travis-ci.org/haru/radvent)
+[![build](https://github.com/haru/radvent/actions/workflows/build.yml/badge.svg)](https://github.com/haru/radvent/actions/workflows/build.yml)
 [![Maintainability](https://api.codeclimate.com/v1/badges/6ef37e4698d17ed0596b/maintainability)](https://codeclimate.com/github/haru/radvent/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/6ef37e4698d17ed0596b/test_coverage)](https://codeclimate.com/github/haru/radvent/test_coverage)
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
