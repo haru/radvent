@@ -59,7 +59,7 @@ group :test do
   gem 'factory_bot_rails'
   gem 'rails-controller-testing'
   gem 'simplecov'
-  gem 'codeclimate-test-reporter', require: false
+  gem 'simplecov-lcov', require: false
 end
 
 gem 'haml-rails'
