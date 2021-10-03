@@ -1,5 +1,7 @@
 name: build
-on: [push]
+on: 
+  push:
+    tags:
 env:
   SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
 jobs:
@@ -15,13 +17,19 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           DOCKER_REGISTRY_URL: docker.io
 
-      - name: Build :latest
+      - name: Build 
         if: success()
-        run: docker build -t haru/radvent:latest .
-
+        run: |
+          docker build -t ${{ github.repository }}:latest .
+          docker tag ${{ github.repository }}:latest ${{ github.repository }}:${{ github.ref }}
       - name: Deploy :latest
         if: success()
         uses: actions-hub/docker@master
         with:
-          args: push haru/radvent:latest
+          args: push ${{ github.repository }}:latest
+      - name: Deploy :tag
+        if: success()
+        uses: actions-hub/docker@master
+        with:
+          args: push ${{ github.repository }}:${{ github.ref }}
 
