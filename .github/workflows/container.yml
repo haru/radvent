@@ -1,7 +1,10 @@
 name: build
-on: 
+on:
   push:
+    branches-ignore:
+      - '**'
     tags:
+      - '**'
 env:
   SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
 jobs:
