@@ -11,8 +11,12 @@ jobs:
   push:
     runs-on: ubuntu-latest
     steps:
+      - name: Set version
+        id: version
+        run: |
+          VERSION=$(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
+          echo ::set-output name=version::$VERSION
       - uses: actions/checkout@v2
-
       - name: Login to Docker Hub
         uses: actions-hub/docker/login@master
         env:
@@ -24,7 +28,7 @@ jobs:
         if: success()
         run: |
           docker build -t ${{ github.repository }}:latest .
-          docker tag ${{ github.repository }}:latest ${{ github.repository }}:${{ github.ref }}
+          docker tag ${{ github.repository }}:latest ${{ github.repository }}:${{ steps.version.outputs.version }}
       - name: Deploy :latest
         if: success()
         uses: actions-hub/docker@master
@@ -34,5 +38,5 @@ jobs:
         if: success()
         uses: actions-hub/docker@master
         with:
-          args: push ${{ github.repository }}:${{ github.ref }}
+          args: push ${{ github.repository }}:${{ steps.version.outputs.version }}
 
