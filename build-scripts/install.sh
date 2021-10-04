@@ -6,22 +6,16 @@ cd `dirname $0`
 . env.sh
 cd ..
 
-if [ "$DB" = "mysql" ]
-then
-  export DB_USER="root"
-  export DB_HOST="localhost"
-fi
-
-if [ "$DB" = "postgres" ]
-then
-  export DB_USER="postgres"
-  export DB_HOST="localhost"
-fi
+#install Node
+curl -sL https://deb.nodesource.com/setup_14.x | bash -
+apt-get install -y nodejs
+npm install -g yarn
 
 # install gems
+gem install bundler
 bundle install
 
-cp travis/database.yml config/
+cp build-scripts/database.yml config/
 
 # generate default settings
 bundle exec rake radvent:generate_default_settings
@@ -30,6 +24,8 @@ bundle exec rake radvent:generate_default_settings
 rm -f db/radvent.sqlite3
 bundle exec rake db:create
 bundle exec rake db:migrate
+
+
 
 
 
