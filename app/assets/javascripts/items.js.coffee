@@ -29,6 +29,9 @@ window.relative_url_root_path = '/'
   form_data.append $(this).attr('name'), $(this).prop('files')[0]
   form_data.append $('#attachment-advent-calendar-id').attr('name'),
     $('#attachment-advent-calendar-id').val()
+  uploadFile(form_data)
+
+@uploadFile = (form_data) ->
   $.ajax window.relative_url_root_path + 'attachments',
     type: 'POST',
     dataType: 'json',
@@ -38,18 +41,33 @@ window.relative_url_root_path = '/'
     success: (data) ->
       $(this).val('')
       $('#item-text').focus()
-      sentence = $('#item-text').val();
-      len      = sentence.length;
-      pos      = $('#item-text').get(0).selectionStart;
+      sentence = $('#item-text').val()
+      len      = sentence.length
+      pos      = $('#item-text').get(0).selectionStart
       if pos == undefined
           pos = 0
     
-      before   = sentence.substr(0, pos);
-      after    = sentence.substr(pos, len);
-      console.log('pos = ' + pos)
+      before   = sentence.substr(0, pos)
+      after    = sentence.substr(pos, len)
       $('#item-text').val before +
         "\r\n![#{data.image_name}](#{data.image_url})" + after
       parseText $('#item-text').val()
+
+$(document).on 'paste', '#item-text', (event) ->
+  items = event.originalEvent.clipboardData.items
+  i = 0
+  while i < items.length
+    item = items[i]
+    if item.type.indexOf('image') != -1
+      # 画像のみサーバへ送信する
+      file = item.getAsFile()
+      form_data = new FormData
+      form_data.append $('#attachment-image-select').attr('name'), file
+      form_data.append $('#attachment-advent-calendar-id').attr('name'),
+        $('#attachment-advent-calendar-id').val()
+      uploadFile(form_data)
+    i++
+  return
 
 ready = ->
   parseBody = ->

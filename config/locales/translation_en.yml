@@ -29,7 +29,9 @@ en:
     models:
       item: Entry
       comment: Comment
+      event: Event
       user: User
+      like: like
     attributes:
       advent_calendar_item:
         user_name: Name
@@ -46,12 +48,27 @@ en:
         start_date: Start date
         title: title
         updated_by: :activerecord.models.updated_by
+        version: version
       user:
-        name: Name
         admin: Administrator
+        created_at: Created at 
+        confirmation_sent_at: Password confirmation sent at
+        confirmation_token: Password confirmaion token
+        confirmed_at: Password confirmed at
+        current_sign_in_at: current sign in
+        current_sign_in_ip: current sign in ip address
         email: E-mail
-        created_at: Created at
-        last_sign_in_at: Last signed in
+        encrypted_password: Encrypted password
+        failed_attempts: Failed attempts
+        last_sign_in_at: Last sign in
+        last_sign_in_ip: Last sign in ip address
+        locked_at: Locked at
+        name: Name
+        remember_created_at: Remember created
+        reset_password_sent_at: Reset password sent
+        reset_password_token: Reset password token
+        unconfirmed_email: Unconfirmed email
+        unlock_token: Unlock token
   controllers:
     attachments:
       create:
@@ -91,6 +108,7 @@ en:
         item_header_preview: Preview
       _form_attachment:
         select_image: Upload an image
+        paset_from_clipboard: You can also paste images from clipboard.ß
       _form_markdown_help_modal:
         title: Markdown notations
         output: Output
@@ -118,8 +136,7 @@ en:
         button_create: Register
       index:
         description_title: About Advent Calendar
-        description: Advent calendar is a special calendar used to count or celebrate the days in anticipation of Christmas.
-          Let's enjoy coming Christmas with special entries everyday!
+        description: Advent calendar is a special calendar used to count or celebrate the days in anticipation of Christmas. Let's enjoy coming Christmas with special entries everyday!
         entries: "Entries: %{entries}/%{days}"
     user:
       index:
