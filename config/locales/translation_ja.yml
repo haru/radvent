@@ -108,6 +108,7 @@ ja:
         item_header_preview: プレビュー
       _form_attachment:
         select_image: 画像を選択
+        paset_from_clipboard: 画像はクリップボードから貼り付けることもできます。
       _form_markdown_help_modal:
         title: Markdownの書き方
         output: 表示
