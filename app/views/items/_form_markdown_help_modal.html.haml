@@ -7,7 +7,7 @@
         = t("views.items._form_markdown_help_modal.title")
     .modal-body
       %table.table.table-bordered
-        %thread
+        %thead
           %tr
             %th= t("views.items._form_markdown_help_modal.output")
             %th Markdown
@@ -44,7 +44,8 @@
             %td > #{t("views.items._form_markdown_help_modal.blockquote")}
           %tr
             %td
-              %pre= t("views.items._form_markdown_help_modal.code_block")
+              %pre
+                %code= t("views.items._form_markdown_help_modal.code_block")
             %td
               ```
               %br
