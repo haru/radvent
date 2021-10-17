@@ -52,6 +52,8 @@ group :development do
   gem 'pry-rails'
   gem 'tapp'
   gem 'better_errors'
+  gem "ruby-debug-ide"
+  gem "debase"
 end
 
 group :test do
