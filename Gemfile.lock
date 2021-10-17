@@ -70,6 +70,9 @@ GEM
     coffee-script-source (1.12.2)
     concurrent-ruby (1.1.7)
     crass (1.0.6)
+    debase (0.2.4.1)
+      debase-ruby_core_source (>= 0.10.2)
+    debase-ruby_core_source (0.10.12)
     devise (4.7.3)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -215,6 +218,8 @@ GEM
       rspec-mocks (~> 3.7.0)
       rspec-support (~> 3.7.0)
     rspec-support (3.7.0)
+    ruby-debug-ide (0.7.3)
+      rake (>= 0.8.1)
     ruby_parser (3.10.1)
       sexp_processor (~> 4.9)
     sass (3.5.3)
@@ -284,6 +289,7 @@ DEPENDENCIES
   carrierwave
   coffee-rails (~> 4.2)
   coffee-script-source
+  debase
   devise
   devise-bootstrap-views
   devise-i18n
@@ -305,6 +311,7 @@ DEPENDENCIES
   rails-assets-bootstrap-material-design!
   rails-controller-testing
   rspec-rails (~> 3.0)
+  ruby-debug-ide
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   simplecov

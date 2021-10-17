@@ -27,6 +27,7 @@
       "request": "launch",
       "cwd": "${workspaceRoot}",
       "program": "${workspaceRoot}/bin/rails",
+      "useBundler": true,
       "args": [
         "server",
         "-b", "0.0.0.0"
