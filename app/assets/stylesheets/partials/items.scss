@@ -62,12 +62,12 @@
       background-color: var(--item-preview-bg-color);
       border-left: 1px solid #dce4ec;
       height: 500px;
-      overflow: scroll;
+      // overflow: scroll;
       max-width: 50;
       #item-preview-content {
-        height: 558px;
+        height: 602px;
         padding: 10px;
-        // overflow: scroll;
+        overflow: scroll;
       }
     }
   }

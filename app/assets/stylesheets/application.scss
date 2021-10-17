@@ -158,3 +158,16 @@ body {
         }     
     }
 }
+
+.modal-content {
+    background-color: var(--main-bg-color);
+    .table-bordered {
+        border-color: var(--main-txt-color);
+        th, td {
+            border-color: var(--main-txt-color);
+        }
+    }
+    button.close {
+        color: var(--main-txt-color);
+    }
+}
