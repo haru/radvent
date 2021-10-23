@@ -1,27 +1,27 @@
-%div.container.likes{align: "right"}
-  %div.button-box{style: "display: inline-block;"}
+%div.container.likes.text-end
+  %div.btn-group.shadow-0{role: "group"}
     - if user_signed_in?
       - if item.liked_by?(current_user)
-        %div.button-box{style: "display: inline-block;"}
-          = button_to item_like_path(Like.find_by(user_id: current_user.id), item_id: item.id), method: :delete, id: "like-button",
-          class:"btn btn-primary", remote: true do
-            %i.fa.fa-heart
-            = item.likes.count
+        = button_to item_like_path(Like.find_by(user_id: current_user.id), item_id: item.id), method: :delete, id: "like-button", class:"btn btn-link", "data-mdb-ripple-color": "dark", remote: true do
+          %i.fas.fa-heart
+          = item.likes.count
       - else
-        = button_to item_likes_path(item), id: "like-button", class:"btn btn-primary", remote: true do
-          %i.fa.fa-heart-o
+        = button_to item_likes_path(item), id: "like-button", class:"btn btn-link", remote: true do
+          %i.far.fa-heart
           = item.likes.count
     - else
-      %i.fa.fa-heart
+      %i.fas.fa-heart
       %span= item.likes.count
 
-  %a.like-count.btn.btn-info{tabindex: "0", role:"button", "data-toggle": "popover", "data-trigger": "focus", "data-placement": "bottom",
-    title: t("views.items._content.liked_person"), "data-content": item.likes.map{|like|html_escape(like.user.name)}.join("<br/>")}
-    %i.fa.fa-user
 
+    %a.like-count.btn.btn-link{tabindex: "0",
+      role: "button", 
+      "data-mdb-toggle": "popover", 
+      title: t("views.items._content.liked_person"), 
+      "data-mdb-placement": "bottom",
+      "data-mdb-trigger": "focus",
+      "data-mdb-content": (item.likes.map{|like|html_escape(like.user.name)}.join("<br/>") + " ")
+    }
+      %i.fa.fa-user
+  
 
-:javaScript
-  $('.like-count').popover({
-    trigger: 'focus',
-    html: true
-  })

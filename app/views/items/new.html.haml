@@ -4,11 +4,6 @@
   %hr
   = render "form", item: @item, attachment: @attachment
 
-:coffee
-    parseBody = ->
-      $('#item-show').html(marked(text))
-      $('#item-show').find('pre code').each (i, block) ->
-        hljs.highlightBlock(block)
-    parseBody() if $('#item-show')[0]
-    parseText $('#item-text').val() if $('#item-text').val()
-    setRootPath("#{root_path}")
+:javascript
+  window.relative_url_root_path = "#{root_path}"
+  

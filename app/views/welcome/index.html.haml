@@ -1,5 +1,5 @@
 - content_for(:jumbotron) do
-  %div#event-header.jumbotron
+  %div#event-header.jumbotron.container-fluid.p-5
     %div.container
       %h1= system_title
 
@@ -9,12 +9,12 @@
     %hr
     %p #{t "views.welcome.index.description"}
 
-  %div.card-deck
+  %div.row
     - @events.each do |event|
       = link_to show_event_path(event.name), class: "event-card card", style: "width: 30rem;" do
         %div.card-header
           %h4
-            %i.fa.fa-calendar
+            %i.far.fa-calendar-alt
             = event.title
           = "#{event.start_date} - #{event.end_date}"
         %div.card-body

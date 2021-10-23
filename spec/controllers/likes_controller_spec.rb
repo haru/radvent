@@ -2,11 +2,14 @@ require 'rails_helper'
 
 RSpec.describe LikesController, :type => :controller do
   before do
-    @user = create(:user, admin: true)
+    Item.destroy_all
+    AdventCalendarItem.destroy_all
+    Event.destroy_all
+    @user = create(:user, admin: false)
     sign_in @user
     @event = create(:event, name: 'hogehoge', title: 'foobar', start_date: '2016-12-01', end_date: '2016-12-30', created_by: @user, updated_by: @user)
-    @advent_calendar_item = create(:advent_calendar_item, date: 1, event: @event)
-    @item = @advent_calendar_item.item
+    @advent_calendar_item = create(:advent_calendar_item, date: 1, event: @event, user: @user)
+    @item = create(:item, advent_calendar_item: @advent_calendar_item)
   end
   describe 'POST create' do
     it 'returns http success' do

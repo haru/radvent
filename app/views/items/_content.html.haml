@@ -1,6 +1,6 @@
 - content_for :jumbotron do
   %div.bs-doc-header
-    %div.jumbotron.item-show-header
+    %div.jumbotron.item-show-header.container-fluid.p-5
       %div.container
         %div.row
           %div.col-sm-10
@@ -13,11 +13,11 @@
               - if item.id and item.editable_by? current_user
                 %span.item-show-header-edit
                   = link_to edit_item_path(item), class: "btn btn-outline-primary btn-sm" do
-                    %i.fa.fa-pencil
+                    %i.fas.fa-pencil-alt
                     = t("views.items._content.link_edit")
           %div.col-sm-2
             %div.item-show-header-comment-count
-              %i.fa.fa-comment-o
+              %i.far.fa-comment
               = item.comments.count
               %div.item-show-header-comment-count-text
                 #{t "activerecord.models.comment"}

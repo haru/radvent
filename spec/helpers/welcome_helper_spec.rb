@@ -2,6 +2,10 @@ require 'rails_helper'
 
 describe WelcomeHelper do
   before do
+    Item.destroy_all
+    AdventCalendarItem.destroy_all
+    Event.destroy_all
+    @user = create(:user, admin: false)
     @event = create(:event, name: 'hogehoge', title: 'foobar', start_date: '2015-12-01', end_date: '2015-12-25', created_by: @user, updated_by: @user)
   end
   it "returns true if the date is in advent calendar's date" do

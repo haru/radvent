@@ -64,7 +64,10 @@
         "exec",
         "rspec",
         "spec"
-      ]
+      ],
+      "env": {
+        "DB": "sqlite3"
+      }
     },
     {
       "name": "RSpec - all-mysql",
