@@ -4,115 +4,128 @@
 //
 // Description
 //
-.advent-calendar-description {
-  hr {
-    margin-top: 10px;
-    margin-bottom: 10px;
-  }
-  p {
-    margin-bottom: 51px;
-    padding-top: 5px
-  }
-}
 
-//
-// Calendar
-//
-.advent-calendar-calendar {
-  border: none !important;
-  thead {
+body#advent_calendar_body {
+  .advent-calendar-description {
+    hr {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    p {
+      margin-bottom: 51px;
+      padding-top: 5px
+    }
+  }
+
+  //
+  // Calendar
+  //
+  .advent-calendar-calendar {
     border: none !important;
-    tr {
+    thead {
       border: none !important;
-      th {
+      tr {
         border: none !important;
+        th {
+          border: none !important;
+        }
+      }
+    }
+    tbody {
+      td {
+        border: 1px solid #ddd;
+        width: 14.2857142857%;
+        height: 150px;
+        border-color: #ddd !important;
+        padding: 0 !important;
+        .advent-calendar-date {
+          padding: 2px 10px;
+          background-color: var(--calendar-date-bg-color);
+          color: var(--calendar-date-txt-color);
+          font-size: 16px;
+        }
+        .advent-calendar-join {
+          margin: 0 10px 10px;
+        }
+        .advent-calendar-author {
+          padding: 0 10px;
+        }
+        .advent-calendar-entry {
+          padding: 0 10px;
+        }
       }
     }
   }
-  tbody {
-    td {
-      border: 1px solid #ddd;
-      width: 14.2857142857%;
-      height: 150px;
-      border-color: #ddd !important;
-      padding: 0 !important;
-      .advent-calendar-date {
-        padding: 2px 10px;
-        background-color: var(--calendar-date-bg-color);
-        color: var(--calendar-date-txt-color);
-        font-size: 16px;
-      }
-      .advent-calendar-join {
-        margin: 0 10px 10px;
-      }
-      .advent-calendar-author {
-        padding: 0 10px;
-      }
-      .advent-calendar-entry {
-        padding: 0 10px;
-      }
-    }
+
+  //
+  // Footer
+  //
+  .welcome-footer {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    text-align: center;
+    margin-top: 30px;
+    color: #777;
+    border-top: 1px solid #e5e5e5;
   }
-}
 
-//
-// Footer
-//
-.welcome-footer {
-  padding-top: 20px;
-  padding-bottom: 20px;
-  text-align: center;
-  margin-top: 30px;
-  color: #777;
-  border-top: 1px solid #e5e5e5;
-}
+  #event-header.jumbotron {
+    background-color: var(--header-bg-color);
+    color: var(--header-txt-color);
+    border-radius: 0;
+  }
 
-#event-header.jumbotron {
-  background-color: var(--header-bg-color);
-  color: var(--header-txt-color);
-  border-radius: 0;
-}
-
-#top-menu {
-  background-color: var(--top-menu-bg-color);
-  color: #FFFFFF;
-  border-radius: 0;
-  margin-bottom: 0;
-  min-height: 20px;
-  a {
+  #top-menu {
+    background-color: var(--top-menu-bg-color);
     color: #FFFFFF;
-    padding-top: 5px;
-    padding-bottom: 5px;
-  }
-  .navbar-collapse.collapse {
+    border-radius: 0;
+    margin-bottom: 0;
     min-height: 20px;
+    a {
+      color: #FFFFFF;
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+    .navbar-collapse.collapse {
+      min-height: 20px;
+    }
+    .navbar-brand {
+      padding-top: 0px;
+      padding-bottom: 5px;
+      height: 15px;
+    }
   }
-  .navbar-brand {
-    padding-top: 0px;
-    padding-bottom: 5px;
-    height: 15px;
-  }
-}
 
-#event-cards {
-  .card-title {
-    //height: 2em;
-  }
-  .card {
-    min-width: 20em;
-    max-width: 25em;
-    margin-bottom: 2em;
-    .card-body {
-      //height: 15em;
+  #event-cards {
+    .card-title {
+      //height: 2em;
     }
-    .progress {
-      height: 20px;
+    .card {
+      .card-header, .card-body, .card-footer {
+        color: var(--main-txt-color);
+        background-color: var(--event-card-bg-color);
+      }
+      //border-width: 1px;
+      //border-color: #000000;
+      //border-style: solid;
+      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+      min-width: 20em;
+      max-width: 25em;
+      margin-bottom: 2em;
+      margin-left: 2em;
+      background-color: var(--main-bg-color);
+      .card-body {
+        //height: 15em;
+      }
+      .progress {
+        height: 20px;
+      }
     }
-  }
-  a.event-card {
-    color: #000000;
-  }
-  a.event-card:hover {
-    text-decoration: none;
+    a.event-card {
+      color: #000000;
+    }
+    a.event-card:hover {
+      text-decoration: none;
+    }
   }
 }

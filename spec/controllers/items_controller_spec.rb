@@ -2,11 +2,19 @@ require 'rails_helper'
 
 RSpec.describe ItemsController, :type => :controller do
   before do
+    Event.destroy_all
     AdventCalendarItem.destroy_all
     Item.destroy_all
     @user = create(:user)
     sign_in @user
     @event = create(:event, name: 'test', title: 'test', start_date: '2015-12-01', end_date: '2015-12-30', created_by: @user, updated_by: @user)
+    @advent_calendar_item_prev = create(:advent_calendar_item, event: @event, user: @user, date: 1)
+    create(:item, advent_calendar_item: @advent_calendar_item_prev)
+    @advent_calendar_item = create(:advent_calendar_item, event: @event, user: @user, date: 2)
+    create(:item, advent_calendar_item: @advent_calendar_item)
+    @advent_calendar_item_next = create(:advent_calendar_item, event: @event, user: @user, date: 3)
+    create(:item, advent_calendar_item: @advent_calendar_item_next)
+
   end
   describe 'GET #show' do
     before :each do
@@ -15,7 +23,7 @@ RSpec.describe ItemsController, :type => :controller do
     end
 
     it "redirects to root if requested item's date doesn't come yet" do
-      item = create(:advent_calendar_item, date: 2, event: @event).item
+      item = @advent_calendar_item.item
       today = Date.new(2014, 12, 3)
       allow(Time.zone).to receive(:today).and_return(today)
       get :show, params: { id: item }
@@ -23,39 +31,37 @@ RSpec.describe ItemsController, :type => :controller do
     end
 
     it 'assigns the requested item to @item' do
-      item = create(:advent_calendar_item, date: 1, event: @event).item
-      get :show, params: { id: item }
+      item = @advent_calendar_item.item
+      get :show, params: { id: item.id }
       expect(assigns(:item)).to eq item
     end
 
     it 'assigns previous advent_calendar_item to @advent_calendar_item_prev' do
-      advent_calendar_item_prev = create(:advent_calendar_item, date: 1, event: @event)
-      item = create(:advent_calendar_item, date: 2, event: @event).item
+      item = @advent_calendar_item.item
       get :show, params: { id: item }
-      expect(assigns(:advent_calendar_item_prev)).to eq advent_calendar_item_prev
+      expect(assigns(:advent_calendar_item_prev)).to eq @advent_calendar_item_prev
     end
 
     it 'assigns nil to @advent_calendar_item_prev if previous advent_calendar_item is not exist' do
-      item = create(:advent_calendar_item, date: 2, event: @event).item
+      item = @advent_calendar_item_prev.item
       get :show, params: { id: item }
       expect(assigns(:advent_calendar_item_prev)).to be_nil
     end
 
     it 'assigns next advent_calendar_item to @advent_calendar_item_next' do
-      advent_calendar_item_next = create(:advent_calendar_item, date: 2, event: @event)
-      item = create(:advent_calendar_item, date: 1, event: @event).item
+      item = @advent_calendar_item.item
       get :show, params: { id: item }
-      expect(assigns(:advent_calendar_item_next)).to eq advent_calendar_item_next
+      expect(assigns(:advent_calendar_item_next)).to eq @advent_calendar_item_next
     end
 
     it 'assigns nil to @advent_calendar_item_next if next advent_calendar_item is not exist' do
-      item = create(:advent_calendar_item, date: 1, event: @event).item
+      item = @advent_calendar_item_next.item
       get :show, params: { id: item }
       expect(assigns(:advent_calendar_item_next)).to be_nil
     end
 
     it "renders the :show template if item's date is passed" do
-      item = create(:advent_calendar_item, date: 1, event: @event).item
+      item = @advent_calendar_item_prev.item
       today = Date.new(2016, 11, 2)
       allow(Time.zone).to receive(:today).and_return(today)
       get :show, params: { id: item }
@@ -104,7 +110,7 @@ RSpec.describe ItemsController, :type => :controller do
     end
 
     it 'renders the :edit template' do
-      item = create(:advent_calendar_item, date: 2, event: @event, user: @user).item
+      item = @advent_calendar_item.item
       get :edit, params: { use_route: :radvent, id: item }
       expect(response).to render_template :edit
     end
@@ -121,8 +127,9 @@ RSpec.describe ItemsController, :type => :controller do
     end
 
     it 'saves the new item in the database' do
+      advent_calendar_item = create(:advent_calendar_item, date: 8, event: @event, user: @user)
       expect {
-        post :create, params: { item: attributes_for(:item, advent_calendar_item_id: 1) }
+        post :create, params: { item: build(:item, advent_calendar_item: advent_calendar_item).attributes }
       }.to change(Item, :count).by(1)
     end
 
@@ -133,14 +140,15 @@ RSpec.describe ItemsController, :type => :controller do
     end
 
     it 'redirects to advent_calendar_items#show if the new item is saved' do
-      post :create, params: { item: attributes_for(:item, advent_calendar_item_id: 1) }
-      expect(response).to redirect_to advent_calendar_item_path(id: 1)
+      advent_calendar_item = create(:advent_calendar_item, date: 9, event: @event, user: @user)
+      post :create, params: { item: build(:item, advent_calendar_item: advent_calendar_item).attributes }
+      expect(response).to redirect_to advent_calendar_item_path(id: advent_calendar_item)
     end
   end
 
   describe 'PATCH #update' do
     before :each do
-      @item = create(:advent_calendar_item, date: 2, event: @event, user: @user).item
+      @item = @advent_calendar_item.item
     end
 
     it 'locates the requested @item' do

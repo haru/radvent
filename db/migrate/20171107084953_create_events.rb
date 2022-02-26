@@ -4,8 +4,8 @@ class CreateEvents < ActiveRecord::Migration[4.2]
       t.string :title
       t.string :name
       t.integer :version
-      t.datetime :updated_at
-      t.datetime :created_at
+      #t.datetime :updated_at
+      #t.datetime :created_at
       t.date :start
       t.date :end
       t.integer :created_by_id

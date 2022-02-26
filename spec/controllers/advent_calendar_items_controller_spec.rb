@@ -2,8 +2,11 @@ require 'rails_helper'
 
 RSpec.describe AdventCalendarItemsController, :type => :controller do
   before do
+    Item.destroy_all
     AdventCalendarItem.destroy_all
-    @user = create(:user)
+    Event.destroy_all
+    User.destroy_all
+    @user = create(:user, admin: false)
     sign_in @user
   end
 
@@ -54,17 +57,19 @@ RSpec.describe AdventCalendarItemsController, :type => :controller do
 
   describe 'POST #create' do
     it 'saves the new advent_calendar_item in the database' do
+      event = create(:event)
       expect {
-        post :create, params: { advent_calendar_item: attributes_for(
-                   :advent_calendar_item
-                 ) }
+        post :create, params: { advent_calendar_item: build(
+                   :advent_calendar_item, event: event
+        ).attributes }
       }.to change(AdventCalendarItem, :count).by(1)
     end
 
     it 'redirects to advent_calendar_items#show' do
-      post :create, params: { advent_calendar_item: attributes_for(
-                 :advent_calendar_item
-               ) }
+      event = create(:event)
+      post :create, params: { advent_calendar_item: build(
+                 :advent_calendar_item, event: event
+      ).attributes }
       items = AdventCalendarItem.all
       expect(response).to redirect_to advent_calendar_item_path(
                     id: items[0].id,

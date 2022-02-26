@@ -3,11 +3,15 @@
     %fieldset
       %legend #{t "views.comments._form.title"}
       %div.form-group
-        %div
-          = f.text_field :user_name, class:"form-control", placeholder:t("helpers.placeholder.name")
+        %div.form-outline
+          = f.text_field :user_name, class:"form-control"
+          %label.form-label{for: "comment_user_name"} 
+            =t("helpers.placeholder.name")
       %div.form-group
-        %div
-          = f.text_area :body, class:"form-control", placeholder:t("helpers.placeholder.comment")
+        %div.form-outline
+          = f.text_area :body, class:"form-control"
+          %label.form-label{for: "comment_body"} 
+            =t("helpers.placeholder.comment")
       = f.hidden_field :item_id, value: comment.item_id
-      %div.pull-right
+      %div.text-end
         = f.submit t("views.comments._form.button_create"), class:"btn btn-raised btn-primary"

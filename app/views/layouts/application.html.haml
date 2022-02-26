@@ -4,24 +4,28 @@
     %title= system_title
     %meta{"http-equiv"=>"X-UA-Compatible", :content=>"IE=Edge"}
     %meta{"charset"=>"UTF-8"}
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %meta{:content => "width=device-width,initial-scale=1", :name => "viewport"}/
     %link{:href=>"#{root_path}assets/default.min.css", :rel=>"stylesheet"}
     = favicon_link_tag if Rails.application.assets.find_asset('favicon.ico')
-    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
-    = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = csrf_meta_tags
+    = csp_meta_tag
+    = stylesheet_pack_tag 'application', 'data-turbolinks-track': 'reload' 
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
+
 
     %script{:src=>"#{root_path}assets/highlight.min.js"}
-    %script{:src=>"#{root_path}assets/css-variables-ie.js"}
     
     :javascript
       hljs.initHighlightingOnLoad()
-  %body
+  %body#advent_calendar_body
     %nav#top-menu.navbar.navbar-light.navbar-expand-lg
       = link_to "TOP", root_path, class: "navbar-brand"
-      %button.navbar-toggler{type:"button", "data-toggle": "collapse", "data-target": "#navTopMenu", "aria-controls": "navTopMenu", "aria-expanded": "false", "aria-label": "Toggle navigation"}
+      %button.navbar-toggler{type:"button", "data-mdb-toggle": "collapse", "data-mdb-target": "#navTopMenu", "aria-controls": "navTopMenu", "aria-expanded": "false", "aria-label": "Toggle navigation"}
         %span.navbar-toggler-icon
       %div#navTopMenu.collapse.navbar-collapse
-        %div.navbar-nav.ml-auto
+        %div.navbar-nav.ms-auto
           - if user_signed_in?
             - if current_user.admin?
               = link_to  events_list_path, class: "nav-item nav-link" do
@@ -31,14 +35,14 @@
               %i.fa.fa-user
               = "#{current_user.name}"
             = link_to destroy_user_session_path, method: :delete, class: "nav-item nav-link" do
-              %i.fa.fa-sign-out
+              %i.fa.fa-sign-out-alt
               = t('menu.sign_out')
           - else
             = link_to new_user_registration_path, class: "nav-item nav-link" do
               %i.fa.fa-user-plus
               = t("menu.sign_up")
             = link_to new_user_session_path, class: "nav-item nav-link" do
-              %i.fa.fa-sign-in
+              %i.fa.fa-sign-in-alt
               = t("menu.sign_in")
     = content_for?(:header_bar) ? yield(:header_bar) : ''
     = content_for?(:jumbotron) ? yield(:jumbotron) : ''

@@ -2,11 +2,16 @@ require 'rails_helper'
 
 describe AdventCalendarItem do
   before do
+    Item.destroy_all
+    AdventCalendarItem.destroy_all
+    Event.destroy_all
+    User.destroy_all
+    @user = create(:user, admin: false)
     @event = create(:event, name: 'hogehoge', title: 'foobar', start_date: '2015-12-01', end_date: '2015-12-25', created_by: @user, updated_by: @user)
     @advent_calendar_item1 = create(:advent_calendar_item, date: 1, event: @event)
-    @item1 = @advent_calendar_item1.item
+    @item1 = create(:item, advent_calendar_item: @advent_calendar_item1)
     @advent_calendar_item2 = create(:advent_calendar_item, date: 2, event: @event)
-    @item2 = @advent_calendar_item2.item
+    @item2 = create(:item, advent_calendar_item: @advent_calendar_item2)
   end
   it 'returns previous advent_calendar_item which has Item' do
     expect(AdventCalendarItem.prev(@advent_calendar_item2).first.date).to equal(1)
@@ -42,8 +47,7 @@ describe AdventCalendarItem do
     end
 
     it "returns true if it has an item and it's date is passed" do
-      advent_calendar_item = build(:advent_calendar_item, date: 1, event: @event)
-      expect(advent_calendar_item.published?).to be_truthy
+      expect(@advent_calendar_item1.published?).to be_truthy
     end
 
     it "returns false if it doesn't have an item" do

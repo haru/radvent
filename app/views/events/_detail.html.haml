@@ -5,10 +5,10 @@
   - if advent_calendar_item.published?
     %p.text-info.advent-calendar-entry
       = link_to "#{advent_calendar_item.item.title}", item_path(advent_calendar_item.item.id)
-      %p.text-info.text-right
-        %i.fa.fa-comment-o
+      %p.text-info.text-end
+        %i.far.fa-comment
         = advent_calendar_item.item.comments_count
-        %i.fa.fa-heart-o
+        %i.far.fa-heart
         = advent_calendar_item.item.likes.count
   - else
     %p.advent-calendar-entry
@@ -16,7 +16,7 @@
     - if (advent_calendar_item.editable_by? current_user)
       %p.advent-calendar-join
         = link_to advent_calendar_item_path(id:advent_calendar_item.id), class:"btn btn-default btn-block btn-xs" do
-          %i.fa.fa-pencil
+          %i.fas.fa-pencil-alt
           = t("views.welcome._detail.button_edit")
 - else
   %div.advent-calendar-join

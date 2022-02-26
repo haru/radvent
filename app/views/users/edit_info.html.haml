@@ -2,8 +2,9 @@
 
 %div.btn-group{role: "group", "aria-label": "..."}
 
-  %button.btn.btn-default.btn-primary{type: "button",  "data-toggle": "modal", "data-target": "#deleteDialog"}
-    %i.fa.fa-trash= t('helpers.button.delete')
+  %button.btn.btn-default.btn-primary{type: "button",  "data-mdb-toggle": "modal", "data-mdb-target": "#deleteDialog"}
+    %i.far.fa-trash-alt
+    = t('helpers.button.delete')
 
 = bootstrap_form_for(@user, url: update_user_path(@user), method: "put", layout: :horizontal, label_col: "col-sm-2", control_col: "col-sm-10")do |f|
   = f.text_field :email
@@ -16,7 +17,7 @@
   %div.modal-dialog{role: "document"}
     %div.modal-content
       %div.modal-header
-        %button.close{type: "button", "data-dismiss": "modal", "aria-label": "Close"}
+        %button.close{type: "button", "data-mdb-dismiss": "modal", "aria-label": "Close"}
           %span{"aria-hidden": "true"}
             &times;
         %h4#myModalLabel.modal-title

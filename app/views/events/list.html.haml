@@ -1,7 +1,8 @@
 %div.container
   %div.btn-group{role: "group", "aria-label": "..."}
   = link_to :new_event, {class: "btn btn-primary"} do
-    %i.fa.fa-plus= t('helpers.button.add')
+    %i.fas.fa-plus
+    = t('helpers.button.add')
 
 
 
@@ -22,4 +23,4 @@
           %td.end= event.end_date
 
 :javascript
-  $('#events').DataTable();
+
