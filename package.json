@@ -10,7 +10,7 @@
     "datatables.net-bs5": "^1.11.3",
     "jquery": "^3.6.0",
     "marked": "^3.0.8",
-    "mdb-ui-kit": "^3.9.0",
+    "mdb-ui-kit": "^3.10.2",
     "turbolinks": "^5.2.0",
     "webpack": "^4.46.0",
     "webpack-cli": "^3.3.12"
