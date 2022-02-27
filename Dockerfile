@@ -1,9 +1,10 @@
-FROM ruby:2.6.6
+FROM ruby:3.1.1
 LABEL maintainer="Haruyuki Iida"
 
 RUN apt-get update \
-  && apt-get install -y nodejs  --no-install-recommends \
+  && apt-get install -y npm --no-install-recommends \
   && rm -rf /var/lib/apt/lists/*
+RUN npm install -g yarn nodejs
 RUN mkdir -p /usr/local
 
 COPY lib/radvent/version.rb /tmp/
@@ -18,6 +19,7 @@ RUN bundle install --without test development
 
 COPY docker/database.yml /usr/local/radvent/config/
 RUN bundle exec rake radvent:generate_default_settings
+RUN yarn install
 RUN bundle exec rake assets:clean && bundle exec rake assets:precompile
 COPY docker/run.sh /usr/local/bin/run.sh
 
