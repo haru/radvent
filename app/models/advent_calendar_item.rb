@@ -1,4 +1,4 @@
-class AdventCalendarItem < ActiveRecord::Base
+class AdventCalendarItem < ApplicationRecord
   belongs_to :user
   belongs_to :event
   has_one :item, dependent: :destroy

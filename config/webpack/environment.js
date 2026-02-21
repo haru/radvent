@@ -1,4 +1,4 @@
-const { environment } = require('@rails/webpacker')
+const { environment } = require('shakapacker')
 
 const webpack = require('webpack')
 environment.plugins.prepend('Provide',

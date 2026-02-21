@@ -9,7 +9,7 @@ Bundler.require(*Rails.groups)
 module Radvent
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.1
+    config.load_defaults 7.0
 
     # Configuration for the application, engines, and railties goes here.
     #
@@ -29,7 +29,7 @@ module Radvent
         routing_specs: false,
         controller_specs: true,
         request_specs: false
-        g.fixture_replacement :factory_girl, dir: 'spec/factories'
+        g.fixture_replacement :factory_bot, dir: 'spec/factories'
       end
   end
 end

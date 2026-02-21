@@ -15,7 +15,7 @@ import 'marked'
 import './items';
 import './events';
 import './users';
-import '../stylesheets/application'
+import '../stylesheets/application.scss'
 
 
 Rails.start()

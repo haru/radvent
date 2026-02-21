@@ -1,5 +1,6 @@
 #!/bin/sh
 
+curl -LsSf https://astral.sh/uv/install.sh | sh
 bundle install
 if [ ! -f workspace/config/secrets.yml ]
 then
