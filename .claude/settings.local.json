@@ -31,7 +31,9 @@
       "Bash(bundle list:*)",
       "Bash(gem list:*)",
       "Bash(bundle outdated:*)",
-      "Bash(node -e:*)"
+      "Bash(node -e:*)",
+      "Bash(find:*)",
+      "Bash(bundle show:*)"
     ],
     "additionalDirectories": [
       "/workspace/specs"
