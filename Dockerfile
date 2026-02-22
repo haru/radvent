@@ -8,7 +8,7 @@ RUN npm install -g yarn nodejs
 RUN mkdir -p /usr/local
 
 COPY lib/radvent/version.rb /tmp/
-RUN ruby -I /tmp -r version.rb -e "puts Radvent::VERSION.version" > /tmp/version
+RUN ruby -I /tmp -r version.rb -e "puts Radvent::Version.version" > /tmp/version
 RUN git clone https://github.com/haru/radvent.git -b `cat /tmp/version` /usr/local/radvent
 RUN rm /tmp/version.rb /tmp/version
 WORKDIR /usr/local/radvent
