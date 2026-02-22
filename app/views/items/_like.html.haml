@@ -2,11 +2,11 @@
   %div.btn-group.shadow-0{role: "group"}
     - if user_signed_in?
       - if item.liked_by?(current_user)
-        = button_to item_like_path(Like.find_by(user_id: current_user.id), item_id: item.id), method: :delete, id: "like-button", class:"btn btn-link", "data-mdb-ripple-color": "dark", remote: true do
+        = button_to item_like_path(Like.find_by(user_id: current_user.id), item_id: item.id), method: :delete, id: "like-button", class:"btn btn-link", "data-mdb-ripple-color": "dark" do
           %i.fas.fa-heart
           = item.likes.count
       - else
-        = button_to item_likes_path(item), id: "like-button", class:"btn btn-link", remote: true do
+        = button_to item_likes_path(item), id: "like-button", class:"btn btn-link" do
           %i.far.fa-heart
           = item.likes.count
     - else
@@ -15,13 +15,12 @@
 
 
     %a.like-count.btn.btn-link{tabindex: "0",
-      role: "button", 
-      "data-mdb-toggle": "popover", 
-      title: t("views.items._content.liked_person"), 
+      role: "button",
+      "data-mdb-toggle": "popover",
+      title: t("views.items._content.liked_person"),
       "data-mdb-placement": "bottom",
       "data-mdb-trigger": "focus",
       "data-mdb-content": (item.likes.map{|like|html_escape(like.user.name)}.join("<br/>") + " ")
     }
       %i.fa.fa-user
-  
 

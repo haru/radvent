@@ -1,22 +1,22 @@
 {
   "name": "radvent",
   "private": true,
-  "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.15.4",
-    "@rails/actioncable": "^6.0.0",
-    "@rails/activestorage": "^6.0.0",
-    "@rails/ujs": "^6.0.0",
-    "@rails/webpacker": "5.4.3",
-    "datatables.net-bs5": "^1.11.3",
-    "jquery": "^3.6.0",
-    "marked": "^3.0.8",
-    "mdb-ui-kit": "^3.10.2",
-    "turbolinks": "^5.2.0",
-    "webpack": "^4.46.0",
-    "webpack-cli": "^3.3.12"
-  },
   "version": "0.1.0",
-  "devDependencies": {
-    "webpack-dev-server": "^3"
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^7.2.0",
+    "@hotwired/turbo-rails": "^8.0.0",
+    "@rails/actioncable": "^8.1.0",
+    "@rails/activestorage": "^8.1.0",
+    "datatables.net-bs5": "^2.3.7",
+    "esbuild": "^0.27.3",
+    "jquery": "^4.0.0",
+    "marked": "^17.0.3",
+    "mdb-ui-kit": "^9.3.0",
+    "sass": "^1.97.3"
+  },
+  "scripts": {
+    "build": "node esbuild.config.mjs",
+    "build:css": "sass ./app/javascript/stylesheets/application.scss:./app/assets/builds/application_pack.css --no-source-map --load-path=node_modules",
+    "copy:fonts": "cp -r node_modules/@fortawesome/fontawesome-free/webfonts public/assets/webfonts"
   }
 }

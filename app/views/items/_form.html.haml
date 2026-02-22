@@ -28,7 +28,8 @@
                 %div.markdown#item-preview-content
       = f.hidden_field :advent_calendar_item_id, value: item.advent_calendar_item_id
       %div.float-start
-        = f.submit t("helpers.submit.preview"), name: "preview_button", data: {disable_with: false}, class:"btn btn-success btn-raised", formtarget:"_blank"
+        %button.btn.btn-success.btn-raised#preview-button{type: "button", data: {preview_url: (item.new_record? ? preview_items_path : preview_item_path(item))}}
+          = t("helpers.submit.preview")
       %div.float-end
         - if item.advent_calendar_item.published?
           = link_to t("helpers.submit.cancel"), item_path(id: item.advent_calendar_item_id), class:"btn btn-default"

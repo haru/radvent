@@ -1,4 +1,4 @@
-= form_for attachment, remote: true do |a|
+= form_for attachment, data: { turbo: false } do |a|
   %div.attachment-image
     = a.file_field :image, id: "attachment-image-select"
     #{t "views.items._form_attachment.select_image"}

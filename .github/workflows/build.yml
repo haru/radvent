@@ -1,5 +1,21 @@
 name: build
-on: [push, pull_request]
+on:
+  push:
+    paths-ignore:
+      - '.devcontainer/**'
+      - '.serena/**'
+      - '.vscode/**'
+      - 'lib/radvent/version.rb'
+      - 'CLAUDE.md'
+      - 'README.md'
+  pull_request:
+    paths-ignore:
+      - '.devcontainer/**'
+      - '.serena/**'
+      - '.vscode/**'
+      - 'lib/radvent/version.rb'
+      - 'CLAUDE.md'
+      - 'README.md'
 env:
   SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
 jobs:
@@ -8,15 +24,15 @@ jobs:
     strategy:
       matrix:
         db: [sqlite3, mysql, postgres]
-        ruby_version: ["3.0", "3.1"]
+        ruby_version: ["3.2", "3.3"]
     services:
       mysql:
-        image: mysql:5.7
+        image: mysql:8
         options: --health-cmd "mysqladmin ping -h localhost" --health-interval 20s --health-timeout 10s --health-retries 10
         env:
           MYSQL_ROOT_PASSWORD: dbpassword
       postgres:
-        image: postgres
+        image: postgres:14
         env:
           POSTGRES_USER: root
           POSTGRES_PASSWORD: dbpassword

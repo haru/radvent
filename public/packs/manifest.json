@@ -1,0 +1,125 @@
+{
+  "application.css": "/packs/css/application.css",
+  "application.css.map": "/packs/css/application.css.map",
+  "application.eot": "/packs/static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400-23f19bb08961f37aaf69.eot",
+  "application.js": "/packs/js/application.js",
+  "application.js.map": "/packs/js/application.js.map",
+  "application.svg": "/packs/static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400-4689f52cc96215721344.svg",
+  "application.ttf": "/packs/static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400-527940b104eb2ea366c8.ttf",
+  "application.woff": "/packs/static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400-2285773e6b4b172f07d9.woff",
+  "application.woff2": "/packs/static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400-7a3337626410ca2f4071.woff2",
+  "common.js": "/packs/js/common.js",
+  "common.js.map": "/packs/js/common.js.map",
+  "entrypoints": {
+    "application": {
+      "assets": {
+        "js": [
+          "/packs/js/runtime.js",
+          "/packs/js/vendors-node_modules_jquery_src_jquery_js.js",
+          "/packs/js/vendors-node_modules_datatables_net-bs5_js_dataTables_bootstrap5_mjs.js",
+          "/packs/js/vendors-node_modules_mdb-ui-kit_js_mdb_min_js.js",
+          "/packs/js/vendors-node_modules_marked_lib_marked_js.js",
+          "/packs/js/vendors-node_modules_fortawesome_fontawesome-free_js_all_js-node_modules_rails_activestorage_-728e17.js",
+          "/packs/js/application.js"
+        ],
+        "css": [
+          "/packs/css/application.css"
+        ]
+      }
+    },
+    "common": {
+      "assets": {
+        "js": [
+          "/packs/js/runtime.js",
+          "/packs/js/vendors-node_modules_jquery_src_jquery_js.js",
+          "/packs/js/common.js"
+        ]
+      }
+    },
+    "events": {
+      "assets": {
+        "js": [
+          "/packs/js/runtime.js",
+          "/packs/js/vendors-node_modules_jquery_src_jquery_js.js",
+          "/packs/js/vendors-node_modules_datatables_net-bs5_js_dataTables_bootstrap5_mjs.js",
+          "/packs/js/events.js"
+        ]
+      }
+    },
+    "items": {
+      "assets": {
+        "js": [
+          "/packs/js/runtime.js",
+          "/packs/js/vendors-node_modules_jquery_src_jquery_js.js",
+          "/packs/js/vendors-node_modules_mdb-ui-kit_js_mdb_min_js.js",
+          "/packs/js/vendors-node_modules_marked_lib_marked_js.js",
+          "/packs/js/items.js"
+        ]
+      }
+    },
+    "likes": {
+      "assets": {
+        "js": [
+          "/packs/js/runtime.js",
+          "/packs/js/likes.js"
+        ]
+      }
+    },
+    "mdb": {
+      "assets": {
+        "js": [
+          "/packs/js/runtime.js",
+          "/packs/js/vendors-node_modules_mdb-ui-kit_js_mdb_min_js.js",
+          "/packs/js/mdb.js"
+        ]
+      }
+    },
+    "users": {
+      "assets": {
+        "js": [
+          "/packs/js/runtime.js",
+          "/packs/js/vendors-node_modules_jquery_src_jquery_js.js",
+          "/packs/js/vendors-node_modules_datatables_net-bs5_js_dataTables_bootstrap5_mjs.js",
+          "/packs/js/users.js"
+        ]
+      }
+    }
+  },
+  "events.js": "/packs/js/events.js",
+  "events.js.map": "/packs/js/events.js.map",
+  "items.js": "/packs/js/items.js",
+  "items.js.map": "/packs/js/items.js.map",
+  "js/vendors-node_modules_datatables_net-bs5_js_dataTables_bootstrap5_mjs.js": "/packs/js/vendors-node_modules_datatables_net-bs5_js_dataTables_bootstrap5_mjs.js",
+  "js/vendors-node_modules_datatables_net-bs5_js_dataTables_bootstrap5_mjs.js.map": "/packs/js/vendors-node_modules_datatables_net-bs5_js_dataTables_bootstrap5_mjs.js.map",
+  "js/vendors-node_modules_fortawesome_fontawesome-free_js_all_js-node_modules_rails_activestorage_-728e17.js": "/packs/js/vendors-node_modules_fortawesome_fontawesome-free_js_all_js-node_modules_rails_activestorage_-728e17.js",
+  "js/vendors-node_modules_fortawesome_fontawesome-free_js_all_js-node_modules_rails_activestorage_-728e17.js.map": "/packs/js/vendors-node_modules_fortawesome_fontawesome-free_js_all_js-node_modules_rails_activestorage_-728e17.js.map",
+  "js/vendors-node_modules_jquery_src_jquery_js.js": "/packs/js/vendors-node_modules_jquery_src_jquery_js.js",
+  "js/vendors-node_modules_jquery_src_jquery_js.js.map": "/packs/js/vendors-node_modules_jquery_src_jquery_js.js.map",
+  "js/vendors-node_modules_marked_lib_marked_js.js": "/packs/js/vendors-node_modules_marked_lib_marked_js.js",
+  "js/vendors-node_modules_marked_lib_marked_js.js.map": "/packs/js/vendors-node_modules_marked_lib_marked_js.js.map",
+  "js/vendors-node_modules_mdb-ui-kit_js_mdb_min_js.js": "/packs/js/vendors-node_modules_mdb-ui-kit_js_mdb_min_js.js",
+  "js/vendors-node_modules_mdb-ui-kit_js_mdb_min_js.js.map": "/packs/js/vendors-node_modules_mdb-ui-kit_js_mdb_min_js.js.map",
+  "likes.js": "/packs/js/likes.js",
+  "likes.js.map": "/packs/js/likes.js.map",
+  "mdb.js": "/packs/js/mdb.js",
+  "mdb.js.map": "/packs/js/mdb.js.map",
+  "runtime.js": "/packs/js/runtime.js",
+  "runtime.js.map": "/packs/js/runtime.js.map",
+  "static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.eot": "/packs/static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400-23f19bb08961f37aaf69.eot",
+  "static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.svg": "/packs/static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400-2f517e09eb2ca6650ff5.svg",
+  "static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.ttf": "/packs/static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400-527940b104eb2ea366c8.ttf",
+  "static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.woff": "/packs/static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400-2285773e6b4b172f07d9.woff",
+  "static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.woff2": "/packs/static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400-d878b0a6a1144760244f.woff2",
+  "static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.eot": "/packs/static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400-77206a6bb316fa0aded5.eot",
+  "static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.svg": "/packs/static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400-4689f52cc96215721344.svg",
+  "static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.ttf": "/packs/static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400-491974d108fe4002b2aa.ttf",
+  "static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.woff": "/packs/static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400-bb58e57c48a3e911f15f.woff",
+  "static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.woff2": "/packs/static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400-7a3337626410ca2f4071.woff2",
+  "static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.eot": "/packs/static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900-9bbb245e67a133f6e486.eot",
+  "static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.svg": "/packs/static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900-7a8b4f130182d19a2d7c.svg",
+  "static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf": "/packs/static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900-be9ee23c0c6390141475.ttf",
+  "static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff": "/packs/static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900-eeccf4f66002c6f2ba24.woff",
+  "static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2": "/packs/static/node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900-1551f4f60c37af51121f.woff2",
+  "users.js": "/packs/js/users.js",
+  "users.js.map": "/packs/js/users.js.map"
+}

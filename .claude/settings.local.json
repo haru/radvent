@@ -1,0 +1,48 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/haruyuki/Library/Application Support/Code/logs/20260221T224009/window3/exthost/ms-vscode-remote.remote-containers/**)",
+      "Bash(ruby -v:*)",
+      "Bash(bundle exec rails:*)",
+      "Bash(gem search:*)",
+      "Bash(curl -LsSf https://astral.sh/uv/install.sh | sh 2>&1)",
+      "Bash(export:*)",
+      "Bash(EDITOR=\"cat\" bundle exec rails:*)",
+      "Bash(echo Done:*)",
+      "Bash(bundle exec rspec:*)",
+      "Bash(yarn:*)",
+      "Bash(grep:*)",
+      "Bash(node --version:*)",
+      "Bash(npm --version:*)",
+      "Bash(ruby:*)",
+      "mcp__serena__check_onboarding_performed",
+      "mcp__serena__activate_project",
+      "mcp__serena__write_memory",
+      "mcp__serena__get_symbols_overview",
+      "mcp__serena__search_for_pattern",
+      "Bash(python3:*)",
+      "Bash(bundle install:*)",
+      "Bash(bundle exec rake:*)",
+      "mcp__serena__find_file",
+      "mcp__serena__find_symbol",
+      "mcp__serena__list_memories",
+      "Bash(bundle update:*)",
+      "Bash(curl -s http://localhost:3099/)",
+      "Bash(bundle list:*)",
+      "Bash(gem list:*)",
+      "Bash(bundle outdated:*)",
+      "Bash(node -e:*)"
+    ],
+    "additionalDirectories": [
+      "/workspace/specs"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "context7",
+    "spec-workflow",
+    "deepwiki",
+    "serena",
+    "playwright"
+  ]
+}

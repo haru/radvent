@@ -1,37 +1,12 @@
 {
-  // IntelliSense を使用して利用可能な属性を学べます。
-  // 既存の属性の説明をホバーして表示します。
-  // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
-
-    {
-      "name": "Debug Local File",
-      "type": "Ruby",
-      "request": "launch",
-      "cwd": "${workspaceRoot}",
-      "program": "${workspaceRoot}/main.rb"
-    },
-    {
-      "name": "Listen for rdebug-ide",
-      "type": "Ruby",
-      "request": "attach",
-      "cwd": "${workspaceRoot}",
-      "remoteHost": "127.0.0.1",
-      "remotePort": "1234",
-      "remoteWorkspaceRoot": "${workspaceRoot}"
-    },
     {
       "name": "Rails server",
-      "type": "Ruby",
+      "type": "ruby_lsp",
       "request": "launch",
       "cwd": "${workspaceRoot}",
-      "program": "${workspaceRoot}/bin/rails",
-      "useBundler": true,
-      "args": [
-        "server",
-        "-b", "0.0.0.0"
-      ],
+      "program": "bin/rails server -b 0.0.0.0",
       "env": {
         "SECRET_KEY_BASE": "XXXXXXXXXXXXXXXXXXXXXX",
         "RADVENT_TITLE": "HOGEHOGE"
@@ -39,14 +14,10 @@
     },
     {
       "name": "Rails server(mysql)",
-      "type": "Ruby",
+      "type": "ruby_lsp",
       "request": "launch",
       "cwd": "${workspaceRoot}",
-      "program": "${workspaceRoot}/bin/rails",
-      "args": [
-        "server",
-        "-b", "0.0.0.0"
-      ],
+      "program": "bin/rails server -b 0.0.0.0",
       "env": {
         "SECRET_KEY_BASE": "XXXXXXXXXXXXXXXXXXXXXX",
         "DB_USERNAME": "root",
@@ -56,30 +27,20 @@
     },
     {
       "name": "RSpec - all",
-      "type": "Ruby",
+      "type": "ruby_lsp",
       "request": "launch",
       "cwd": "${workspaceRoot}",
-      "program": "${workspaceRoot}/bin/bundle",
-      "args": [
-        "exec",
-        "rspec",
-        "spec"
-      ],
+      "program": "bin/bundle exec rspec spec",
       "env": {
         "DB": "sqlite3"
       }
     },
     {
       "name": "RSpec - all-mysql",
-      "type": "Ruby",
+      "type": "ruby_lsp",
       "request": "launch",
       "cwd": "${workspaceRoot}",
-      "program": "${workspaceRoot}/bin/bundle",
-      "args": [
-        "exec",
-        "rspec",
-        "spec"
-      ],
+      "program": "bin/bundle exec rspec spec",
       "env": {
         "SECRET_KEY_BASE": "XXXXXXXXXXXXXXXXXXXXXX",
         "DB_USERNAME": "root",
@@ -89,22 +50,10 @@
     },
     {
       "name": "RSpec - active spec file only",
-      "type": "Ruby",
+      "type": "ruby_lsp",
       "request": "launch",
       "cwd": "${workspaceRoot}",
-      "program": "${workspaceRoot}/bin/bundle",
-      "args": [
-        "exec",
-        "rspec",
-        "${file}"
-      ]
-    },
-    {
-      "name": "Cucumber",
-      "type": "Ruby",
-      "request": "launch",
-      "cwd": "${workspaceRoot}",
-      "program": "${workspaceRoot}/bin/cucumber"
+      "program": "bin/bundle exec rspec ${file}"
     }
   ]
 }
