@@ -1,4 +1,4 @@
-import * as mdb from "mdb-ui-kit/js/mdb.min.js"
+import * as mdb from "mdb-ui-kit/js/mdb.es.min.js"
 
 // Function to refresh input element style when necessary
 var mdbInputUpdate = function () {

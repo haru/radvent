@@ -1,6 +1,6 @@
 import $ from 'jquery'
-import marked from 'marked'
-import * as mdb from 'mdb-ui-kit';
+import { marked } from 'marked'
+import * as mdb from 'mdb-ui-kit/js/mdb.es.min.js';
 window.relative_url_root_path = '/';
 
 export const setRootPath = path => window.relative_url_root_path = path;

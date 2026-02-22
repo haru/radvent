@@ -29,12 +29,15 @@
       "Bash(bundle update:*)",
       "Bash(curl -s http://localhost:3099/)",
       "Bash(bundle list:*)",
-      "Bash(gem list:*)"
+      "Bash(gem list:*)",
+      "Bash(bundle outdated:*)",
+      "Bash(node -e:*)"
     ],
     "additionalDirectories": [
       "/workspace/specs"
     ]
   },
+  "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "context7",
     "spec-workflow",
