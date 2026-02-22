@@ -2,6 +2,13 @@ import $ from "jquery"
 window.$ = $
 window.jQuery = $
 
+$.ajaxSetup({
+  beforeSend(xhr) {
+    const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
+    if (token) { xhr.setRequestHeader('X-CSRF-Token', token) }
+  }
+})
+
 import * as mdb from 'mdb-ui-kit/js/mdb.es.min.js'
 import './mdb'
 import "@hotwired/turbo-rails"
