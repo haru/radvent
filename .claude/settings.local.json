@@ -33,7 +33,9 @@
       "Bash(bundle outdated:*)",
       "Bash(node -e:*)",
       "Bash(find:*)",
-      "Bash(bundle show:*)"
+      "Bash(bundle show:*)",
+      "Bash(git log:*)",
+      "Bash(gh api:*)"
     ],
     "additionalDirectories": [
       "/workspace/specs"

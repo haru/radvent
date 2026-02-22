@@ -47,11 +47,11 @@
     = content_for?(:header_bar) ? yield(:header_bar) : ''
     = content_for?(:jumbotron) ? yield(:jumbotron) : ''
     %div.container
-      - if flash[:notice]
+      - if flash[:notice].present?
         %div.alert.alert-success.alert-dismissible.fade.show{role: "alert"}
           = flash[:notice]
           %button.btn-close{type: "button", "data-mdb-dismiss": "alert", "aria-label": "Close"}
-      - if flash[:alert]
+      - if flash[:alert].present?
         %div.alert.alert-danger.alert-dismissible.fade.show{role: "alert"}
           = flash[:alert]
           %button.btn-close{type: "button", "data-mdb-dismiss": "alert", "aria-label": "Close"}
