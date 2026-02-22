@@ -9,8 +9,11 @@ Rails.application.routes.draw do
 
   devise_for :users
   resources :items do
+    collection do
+      post 'preview'
+    end
     member do
-      get 'preview'
+      match 'preview', via: [:get, :post, :patch]
     end
     resources :likes, only: [:create, :destroy]
   end

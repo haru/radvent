@@ -121,11 +121,6 @@ RSpec.describe ItemsController, :type => :controller do
   end
 
   describe 'POST #create' do
-    it "renders the :preview if there's an preview_button param" do
-      post :create, params: { item: attributes_for(:item), preview_button: true }
-      expect(response).to render_template :preview
-    end
-
     it 'saves the new item in the database' do
       advent_calendar_item = create(:advent_calendar_item, date: 8, event: @event, user: @user)
       expect {
@@ -156,11 +151,6 @@ RSpec.describe ItemsController, :type => :controller do
       expect(assigns(:item)).to eq(@item)
     end
 
-    it "renders the :preview if there's an preview_button param" do
-      patch :update, params: { id: @item, item: attributes_for(:item), preview_button: true }
-      expect(response).to render_template :preview
-    end
-
     it "changes @item's attributes" do
       patch :update, params: { id: @item, item: attributes_for(:item,
                                                               title: 'title_updated', body: 'body_updated') }
@@ -178,6 +168,19 @@ RSpec.describe ItemsController, :type => :controller do
     it 'redirects to advent_calendar_items#show if the item is updated' do
       patch :update, params: { id: @item, item: attributes_for(:item) }
       expect(response).to redirect_to advent_calendar_item_path(@item.advent_calendar_item_id)
+    end
+  end
+
+  describe 'POST #preview' do
+    it 'renders the :preview for a new item' do
+      post :preview, params: { item: attributes_for(:item) }
+      expect(response).to render_template :preview
+    end
+
+    it 'renders the :preview for an existing item' do
+      item = @advent_calendar_item.item
+      post :preview, params: { id: item, item: attributes_for(:item) }
+      expect(response).to render_template :preview
     end
   end
 end
