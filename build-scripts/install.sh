@@ -7,7 +7,7 @@ cd `dirname $0`
 cd ..
 
 #install Node
-curl -sL https://deb.nodesource.com/setup_14.x | bash -
+curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
 apt-get install -y nodejs
 npm install -g yarn
 

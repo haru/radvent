@@ -10,17 +10,17 @@
     = favicon_link_tag if Rails.application.assets.find_asset('favicon.ico')
     = csrf_meta_tags
     = csp_meta_tag
-    = stylesheet_pack_tag 'application', 'data-turbolinks-track': 'reload' 
-    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
-    = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
+    = stylesheet_link_tag 'application_pack', 'data-turbo-track': 'reload'
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload'
+    = javascript_include_tag 'application', 'data-turbo-track': 'reload', defer: true
 
 
     %script{:src=>"#{root_path}assets/highlight.min.js"}
-    
+
     :javascript
       hljs.initHighlightingOnLoad()
   %body#advent_calendar_body
-    %nav#top-menu.navbar.navbar-light.navbar-expand-lg
+    %nav#top-menu.navbar.navbar-light.navbar-expand-lg.px-3
       = link_to "TOP", root_path, class: "navbar-brand"
       %button.navbar-toggler{type:"button", "data-mdb-toggle": "collapse", "data-mdb-target": "#navTopMenu", "aria-controls": "navTopMenu", "aria-expanded": "false", "aria-label": "Toggle navigation"}
         %span.navbar-toggler-icon
@@ -34,7 +34,7 @@
             = link_to  edit_user_registration_path, class: "nav-item nav-link" do
               %i.fa.fa-user
               = "#{current_user.name}"
-            = link_to destroy_user_session_path, method: :delete, class: "nav-item nav-link" do
+            = link_to destroy_user_session_path, class: "nav-item nav-link", data: { "turbo-method": :delete } do
               %i.fa.fa-sign-out-alt
               = t('menu.sign_out')
           - else
@@ -54,4 +54,4 @@
     %p.small
       Powered by
       = link_to "radvent", "https://github.com/haru/radvent/"
-      = "v#{Radvent::VERSION.version}"
+      = "v#{Radvent::Version.version}"

@@ -1,7 +1,8 @@
 class ItemsController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update]
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :preview]
   before_action :find_item, only: [:show, :edit, :update]
   before_action :edit_permission?, only: [:edit, :update]
+  skip_before_action :verify_authenticity_token, only: [:preview]
 
   def new
     @date = params[:date]
@@ -12,9 +13,7 @@ class ItemsController < ApplicationController
   def create
     @item = Item.new(item_params)
 
-    if params[:preview_button]
-      render :preview
-    elsif !@item.save
+    if !@item.save
       render :new
     else
       redirect_to advent_calendar_item_path(id: @item.advent_calendar_item_id)
@@ -39,9 +38,7 @@ class ItemsController < ApplicationController
   def update
     @item.assign_attributes(item_params)
 
-    if params[:preview_button]
-      render :preview
-    elsif !@item.save
+    if !@item.save
       render :edit
     else
       redirect_to advent_calendar_item_path(id: @item.advent_calendar_item_id)
@@ -49,6 +46,13 @@ class ItemsController < ApplicationController
   end
 
   def preview
+    @item = if params[:id]
+      item = Item.find_by(id: params[:id])
+      render_404 and return unless item
+      item.tap { |i| i.assign_attributes(item_params) }
+    else
+      Item.new(item_params)
+    end
   end
 
   private

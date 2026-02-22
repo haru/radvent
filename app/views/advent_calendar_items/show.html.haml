@@ -30,4 +30,4 @@
     %hr
     %h3 #{t "views.advent_calendar_items.show.delete_advent_calendar_item"}
     %p.advent-calendar-item-link
-      = link_to t("helpers.button.delete"), @advent_calendar_item, method: :delete,  data: { confirm: t("views.advent_calendar_items.show.confirm_delete_entry") }, class:"btn btn-primary btn-raised ext-muted"
+      = button_to t("helpers.button.delete"), @advent_calendar_item, method: :delete, data: { turbo_confirm: t("views.advent_calendar_items.show.confirm_delete_entry") }, class:"btn btn-primary btn-raised ext-muted"
