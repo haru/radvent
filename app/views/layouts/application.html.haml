@@ -20,7 +20,7 @@
     :javascript
       hljs.initHighlightingOnLoad()
   %body#advent_calendar_body
-    %nav#top-menu.navbar.navbar-light.navbar-expand-lg
+    %nav#top-menu.navbar.navbar-light.navbar-expand-lg.px-3
       = link_to "TOP", root_path, class: "navbar-brand"
       %button.navbar-toggler{type:"button", "data-mdb-toggle": "collapse", "data-mdb-target": "#navTopMenu", "aria-controls": "navTopMenu", "aria-expanded": "false", "aria-label": "Toggle navigation"}
         %span.navbar-toggler-icon
@@ -34,7 +34,7 @@
             = link_to  edit_user_registration_path, class: "nav-item nav-link" do
               %i.fa.fa-user
               = "#{current_user.name}"
-            = button_to destroy_user_session_path, method: :delete, class: "nav-item nav-link", form: { class: "d-inline" } do
+            = link_to destroy_user_session_path, class: "nav-item nav-link", data: { "turbo-method": :delete } do
               %i.fa.fa-sign-out-alt
               = t('menu.sign_out')
           - else
