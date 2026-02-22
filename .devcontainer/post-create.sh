@@ -10,4 +10,5 @@ fi
 cp /database.yml /workspace/config/database.yml
 bundle exec rake db:migrate
 bundle exec rake db:migrate RAILS_ENV=test
+npm install -g yarn
 yarn

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2017_12_11_141402) do
+ActiveRecord::Schema[8.0].define(version: 2017_12_11_141402) do
   create_table "advent_calendar_items", force: :cascade do |t|
     t.string "user_name"
     t.string "comment"
@@ -95,5 +95,4 @@ ActiveRecord::Schema[7.0].define(version: 2017_12_11_141402) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
-
 end
