@@ -11,12 +11,12 @@ jobs:
         ruby_version: ["3.2", "3.3"]
     services:
       mysql:
-        image: mysql:5.7
+        image: mysql:8
         options: --health-cmd "mysqladmin ping -h localhost" --health-interval 20s --health-timeout 10s --health-retries 10
         env:
           MYSQL_ROOT_PASSWORD: dbpassword
       postgres:
-        image: postgres
+        image: postgres:14
         env:
           POSTGRES_USER: root
           POSTGRES_PASSWORD: dbpassword
