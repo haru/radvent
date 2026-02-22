@@ -1,0 +1,69 @@
+# Git
+.git
+.gitignore
+
+# Logs
+log/*
+*.log
+
+# Temporary files
+tmp/*
+
+# Node modules
+node_modules/
+
+# Bundler
+vendor/bundle/
+.bundle/
+
+# Test coverage
+coverage/
+
+# Database files
+db/*.sqlite3
+db/*.sqlite3-*
+
+# Environment files
+.env
+.env.*
+
+# Assets (will be recompiled)
+public/packs/
+public/assets/
+app/assets/builds/
+
+# Storage
+storage/*
+
+# Uploads (will be mounted as volume)
+public/uploads/
+
+# IDE
+.vscode/
+.idea/
+
+# macOS
+.DS_Store
+
+# Docker
+.dockerignore
+Dockerfile
+docker-compose.yml
+
+# CI/CD
+.github/
+
+# Documentation for development
+CLAUDE.md
+README.md
+
+# Specs and tests
+spec/
+test/
+specs/
+
+# Build scripts
+build-scripts/
+
+# Dev container
+.devcontainer/

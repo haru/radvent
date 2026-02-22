@@ -1,21 +1,19 @@
-FROM ruby:3.1.1
+FROM ruby:3.2
 LABEL maintainer="Haruyuki Iida"
 
 RUN apt-get update \
-  && apt-get install -y npm --no-install-recommends \
+  && apt-get install -y curl --no-install-recommends \
+  && curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
+  && apt-get install -y nodejs --no-install-recommends \
   && rm -rf /var/lib/apt/lists/*
-RUN npm install -g yarn nodejs
+RUN npm install -g yarn
 RUN mkdir -p /usr/local
 
-COPY lib/radvent/version.rb /tmp/
-RUN ruby -I /tmp -r version.rb -e "puts Radvent::Version.version" > /tmp/version
-RUN git clone https://github.com/haru/radvent.git -b `cat /tmp/version` /usr/local/radvent
-RUN rm /tmp/version.rb /tmp/version
+COPY . /usr/local/radvent/
 WORKDIR /usr/local/radvent
 
-RUN gem install bundler
-RUN bundle update --bundler
-RUN bundle install --without test development
+RUN bundle config set --local without 'test development'
+RUN bundle install
 
 COPY docker/database.yml /usr/local/radvent/config/
 RUN bundle exec rake radvent:generate_default_settings
