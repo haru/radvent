@@ -1,5 +1,21 @@
 name: build
-on: [push, pull_request]
+on:
+  push:
+    paths-ignore:
+      - '.devcontainer/**'
+      - '.serena/**'
+      - '.vscode/**'
+      - 'lib/radvent/version.rb'
+      - 'CLAUDE.md'
+      - 'README.md'
+  pull_request:
+    paths-ignore:
+      - '.devcontainer/**'
+      - '.serena/**'
+      - '.vscode/**'
+      - 'lib/radvent/version.rb'
+      - 'CLAUDE.md'
+      - 'README.md'
 env:
   SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
 jobs:
