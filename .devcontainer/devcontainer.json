@@ -6,9 +6,8 @@
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "app",
 	"workspaceFolder": "/workspace",
-
 	// Set *default* container specific settings.json values on container create.
-	"settings": { 
+	"settings": {
 		"sqltools.connections": [
 			{
 				"name": "Rails Development Database",
@@ -16,7 +15,6 @@
 				"previewLimit": 50,
 				"server": "localhost",
 				"port": 5432,
-
 				// update this to match config/database.yml
 				"database": "app_development",
 				"username": "vscode"
@@ -27,27 +25,22 @@
 				"previewLimit": 50,
 				"server": "localhost",
 				"port": 5432,
-
 				// update this to match config/database.yml
 				"database": "app_test",
 				"username": "vscode"
 			}
 		]
 	},
-
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
 		"Shopify.ruby-lsp",
 		"mtxr.sqltools",
 		"mtxr.sqltools-driver-pg"
 	],
-
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [3000, 5432],
-
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "sh -x /post-create.sh",
-
+	"postCreateCommand": "sh -x .devcontainer/post-create.sh",
 	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "vscode",
 	"features": {
