@@ -6,19 +6,13 @@
     %meta{"charset"=>"UTF-8"}
     %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
     %meta{:content => "width=device-width,initial-scale=1", :name => "viewport"}/
-    %link{:href=>"#{root_path}assets/default.min.css", :rel=>"stylesheet"}
     = favicon_link_tag if Rails.application.assets.find_asset('favicon.ico')
     = csrf_meta_tags
     = csp_meta_tag
     = stylesheet_link_tag 'application_pack', 'data-turbo-track': 'reload'
     = stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload'
     = javascript_include_tag 'application', 'data-turbo-track': 'reload', defer: true
-
-
-    %script{:src=>"#{root_path}assets/highlight.min.js"}
-
-    :javascript
-      hljs.initHighlightingOnLoad()
+    = content_for(:head) if content_for?(:head)
   %body#advent_calendar_body
     %nav#top-menu.navbar.navbar-light.navbar-expand-lg.px-3
       = link_to "TOP", root_path, class: "navbar-brand"

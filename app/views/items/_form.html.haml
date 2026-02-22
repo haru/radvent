@@ -1,3 +1,6 @@
+- content_for :head do
+  %link{:href=>"#{root_path}assets/default.min.css", :rel=>"stylesheet"}
+  %script{:src=>"#{root_path}assets/highlight.min.js"}
 .modal.fade#markdown-modal(tabindex="-1" role="dialog" aria-labelledby="modal-label")
   = render "form_markdown_help_modal"
 %div.form-container

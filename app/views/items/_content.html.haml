@@ -1,3 +1,6 @@
+- content_for :head do
+  %link{:href=>"#{root_path}assets/default.min.css", :rel=>"stylesheet"}
+  %script{:src=>"#{root_path}assets/highlight.min.js"}
 - content_for :jumbotron do
   %div.bs-doc-header
     %div.jumbotron.item-show-header.container-fluid.p-5
