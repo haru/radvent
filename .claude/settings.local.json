@@ -35,7 +35,9 @@
       "Bash(find:*)",
       "Bash(bundle show:*)",
       "Bash(git log:*)",
-      "Bash(gh api:*)"
+      "Bash(gh api:*)",
+      "Bash(ls:*)",
+      "Bash(npx sass:*)"
     ],
     "additionalDirectories": [
       "/workspace/specs"
