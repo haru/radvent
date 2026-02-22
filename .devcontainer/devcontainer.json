@@ -35,7 +35,10 @@
 	"extensions": [
 		"Shopify.ruby-lsp",
 		"mtxr.sqltools",
-		"mtxr.sqltools-driver-pg"
+		"mtxr.sqltools-driver-pg",
+		"Serhioromano.vscode-gitflow",
+		"donjayamanne.git-extension-pack",
+		"KoichiSasada.vscode-rdbg"
 	],
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [3000, 5432],
