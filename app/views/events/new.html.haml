@@ -1,11 +1,12 @@
 %h1 イベント作成
 
-= bootstrap_form_for(@event, url: events_path, method: "post", layout: :horizontal, label_col: "col-sm-2", control_col: "col-sm-10")do |f|
+= bootstrap_form_for(@event, url: events_path, method: "post", layout: :horizontal, label_col: "col-sm-2", control_col: "col-sm-10", inline_errors: false)do |f|
+  = f.alert_message "以下のエラーにより保存できませんでした："
   = f.text_field :name, help: "英数字, -, _を使用可能です。イベントのURLの一部になります。"
   = f.text_field :title
   = f.text_area :description, rows: 5
   = f.date_field :start_date
-  = f.date_field :end_date, help: "終了日は開始日と同じ月にする必要があります。"
+  = f.date_field :end_date
 
   = link_to 'キャンセル', events_list_path, class: "btn btn-primary"
   = f.submit "登録", class: "btn btn-primary btn-raised"

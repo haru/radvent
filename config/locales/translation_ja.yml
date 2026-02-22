@@ -32,6 +32,14 @@ ja:
       event: イベント
       user: ユーザ
       like: いいね
+    errors:
+      models:
+        event:
+          attributes:
+            end_date:
+              different_month: は開始日と同じ月にしてください
+          format:
+            end_date: "%{message}"
     attributes:
       advent_calendar_item:
         user_name: お名前

@@ -1,10 +1,6 @@
 %h1= t('views.user.edit.title')
 
-%div.btn-group{role: "group", "aria-label": "..."}
-
-  %button.btn.btn-default.btn-primary{type: "button",  "data-mdb-toggle": "modal", "data-mdb-target": "#deleteDialog"}
-    %i.far.fa-trash-alt
-    = t('helpers.button.delete')
+= button_to t('helpers.button.delete'), delete_user_path(@user.id), method: :delete, data: { turbo_confirm: t('views.user.delete.confirm', user: @user.name) }, class: "btn btn-primary"
 
 = bootstrap_form_for(@user, url: update_user_path(@user), method: "put", layout: :horizontal, label_col: "col-sm-2", control_col: "col-sm-10")do |f|
   = f.text_field :email
@@ -12,20 +8,3 @@
   %p= f.check_box :admin, inline: true
   = link_to t('helpers.submit.cancel'), users_path, class: "btn btn-default"
   = f.submit t('helpers.submit.update'), class: "btn btn-primary btn-raised"
-
-%div#deleteDialog.modal.fade{role: "dialog", "aria-labelledby": "myModalLabel"}
-  %div.modal-dialog{role: "document"}
-    %div.modal-content
-      %div.modal-header
-        %button.close{type: "button", "data-mdb-dismiss": "modal", "aria-label": "Close"}
-          %span{"aria-hidden": "true"}
-            &times;
-        %h4#myModalLabel.modal-title
-          = t('views.user.delete.title')
-      %div.modal-body
-        = t('views.user.delete.confirm', user: @user.name)
-      %div.modal-footer
-        %button.btn.btn-primary{type: "button",  "data-dismiss": "modal"}
-          = t('helpers.submit.cancel')
-        =button_to t('helpers.button.delete'), delete_user_path(@user.id), method: "delete", class:"btn btn-primary btn-raised"
-

@@ -17,7 +17,7 @@ class EventsController < ApplicationController
     if @event.save
       redirect_to events_list_path
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -27,7 +27,7 @@ class EventsController < ApplicationController
     if @event.save
       redirect_to edit_event_path(@event.id)
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -36,9 +36,9 @@ class EventsController < ApplicationController
 
   def destroy
     if @event.destroy
-      redirect_to events_list_path
+      redirect_to events_list_path, status: :see_other
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 

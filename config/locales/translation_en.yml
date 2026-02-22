@@ -32,6 +32,12 @@ en:
       event: Event
       user: User
       like: like
+    errors:
+      models:
+        event:
+          attributes:
+            end_date:
+              different_month: must be in the same month as start date
     attributes:
       advent_calendar_item:
         user_name: Name

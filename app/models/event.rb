@@ -4,6 +4,19 @@ class Event < ApplicationRecord
   belongs_to :updated_by, class_name: 'User'
   validates :title, presence: true, uniqueness: true
   validates :name, presence: true, uniqueness: true, format: { with: /\A[-_a-z0-9]+\z/ }
+  validate :start_and_end_dates_must_be_same_month
+
+  private
+
+  def start_and_end_dates_must_be_same_month
+    return if start_date.blank? || end_date.blank?
+
+    if start_date.month != end_date.month || start_date.year != end_date.year
+      errors.add(:end_date, :different_month)
+    end
+  end
+
+  public
 
   def day_count
     (1 + (end_date - start_date)).to_i

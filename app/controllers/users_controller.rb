@@ -27,7 +27,7 @@ class UsersController < ApplicationController
 
   def destroy
     @user.destroy!
-    redirect_to users_path
+    redirect_to users_path, status: :see_other
   end
 
   private

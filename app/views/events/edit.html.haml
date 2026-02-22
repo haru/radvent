@@ -1,12 +1,9 @@
 %h1= t('views.event.edit.title')
 
-%div.btn-group{role: "group", "aria-label": "..."}
+= button_to t('helpers.button.delete'), event_path(@event.id), method: :delete, data: { turbo_confirm: t('views.event.delete.confirm', event: @event.title) }, class: "btn btn-primary"
 
-  %button.btn.btn-primary{type: "button",  "data-mdb-toggle": "modal", "data-mdb-target": "#deleteDialog"}
-    %i.far.fa-trash-alt
-    = t('helpers.button.delete')
-
-= bootstrap_form_for(@event, url: event_path(@event), method: "put", layout: :horizontal, label_col: "col-sm-2", control_col: "col-sm-10")do |f|
+= bootstrap_form_for(@event, url: event_path(@event), method: "put", layout: :horizontal, label_col: "col-sm-2", control_col: "col-sm-10", inline_errors: false)do |f|
+  = f.alert_message "以下のエラーにより保存できませんでした："
   = f.text_field :name
   = f.text_field :title
   = f.text_area :description, rows: 5
@@ -14,22 +11,3 @@
   = f.date_field :end_date
   = link_to t('helpers.submit.cancel'), events_list_path,  class: "btn btn-primary"
   = f.submit t('helpers.submit.update'), class: "btn btn-primary btn-raised"
-
-
-
-%div#deleteDialog.modal.fade{role: "dialog", "aria-labelledby": "myModalLabel"}
-  %div.modal-dialog{role: "document"}
-    %div.modal-content
-      %div.modal-header
-        %button.close{type: "button", "data-mdb-dismiss": "modal", "aria-label": "Close"}
-          %span{"aria-hidden": "true"}
-            &times;
-        %h4#myModalLabel.modal-title
-          = t('views.event.delete.title')
-      %div.modal-body
-        = t('views.event.delete.confirm', event: @event.title)
-      %div.modal-footer
-        %button.btn.btn-default{type: "button",  "data-mdb-dismiss": "modal"}
-          =t('helpers.submit.cancel')
-        =button_to t('helpers.button.delete'), event_path(@event.id), method: "delete", type: "button", class:"btn btn-primary"
-
