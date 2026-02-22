@@ -22,7 +22,13 @@
       "mcp__serena__search_for_pattern",
       "Bash(python3:*)",
       "Bash(bundle install:*)",
-      "Bash(bundle exec rake:*)"
+      "Bash(bundle exec rake:*)",
+      "mcp__serena__find_file",
+      "mcp__serena__find_symbol",
+      "mcp__serena__list_memories",
+      "Bash(bundle update:*)",
+      "Bash(curl -s http://localhost:3099/)",
+      "Bash(bundle list:*)"
     ],
     "additionalDirectories": [
       "/workspace/specs"
