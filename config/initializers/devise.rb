@@ -265,6 +265,11 @@ Devise.setup do |config|
   # The "*/*" below is required to match Internet Explorer requests.
   # config.navigational_formats = ['*/*', :html]
 
+  # ==> Turbo compatibility
+  # Turbo requires error responses to return 422 and redirects to return 303.
+  config.responder.error_status = :unprocessable_entity
+  config.responder.redirect_status = :see_other
+
   # The default HTTP method used to sign out a resource. Default is :delete.
   config.sign_out_via = :delete
 
