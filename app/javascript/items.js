@@ -94,10 +94,50 @@ const ready = function() {
   if ($('#item-text').val()) { return parseText($('#item-text').val()); }
 };
 
+// Submit preview in a new tab using a dedicated form with a valid CSRF token.
+// The main form's token is bound to its original action (create/update) via
+// Rails per-form CSRF tokens, so using formaction causes a token mismatch.
+const submitPreview = function(button) {
+  const url = button.getAttribute('data-preview-url');
+  const form = button.closest('form');
+  const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+  const previewForm = document.createElement('form');
+  previewForm.method = 'post';
+  previewForm.action = url;
+  previewForm.target = '_blank';
+  previewForm.style.display = 'none';
+
+  const tokenInput = document.createElement('input');
+  tokenInput.type = 'hidden';
+  tokenInput.name = 'authenticity_token';
+  tokenInput.value = token;
+  previewForm.appendChild(tokenInput);
+
+  // Copy item fields
+  const title = form.querySelector('[name="item[title]"]');
+  const body = form.querySelector('[name="item[body]"]');
+  const aciId = form.querySelector('[name="item[advent_calendar_item_id]"]');
+  [title, body, aciId].forEach(function(field) {
+    if (field) {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = field.name;
+      input.value = field.value;
+      previewForm.appendChild(input);
+    }
+  });
+
+  document.body.appendChild(previewForm);
+  previewForm.submit();
+  document.body.removeChild(previewForm);
+};
+
 $(document).ready(ready);
 $(document).on('turbo:render', ready);
 $(document).on('keyup', '#item-text', checkTextChange());
 $(document).on('change', '#attachment-image-select', attachmentImageInputChange);
+$(document).on('click', '#preview-button', function() { submitPreview(this); });
 
 
 var setPopOver = function() {

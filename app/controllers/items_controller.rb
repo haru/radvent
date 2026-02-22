@@ -1,8 +1,7 @@
 class ItemsController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update]
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :preview]
   before_action :find_item, only: [:show, :edit, :update]
   before_action :edit_permission?, only: [:edit, :update]
-  protect_from_forgery with: :null_session, only: [:preview]
 
   def new
     @date = params[:date]
