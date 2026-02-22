@@ -10,13 +10,13 @@
     = favicon_link_tag if Rails.application.assets.find_asset('favicon.ico')
     = csrf_meta_tags
     = csp_meta_tag
-    = stylesheet_pack_tag 'application', 'data-turbolinks-track': 'reload' 
-    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
-    = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
+    = stylesheet_link_tag 'application_pack', 'data-turbo-track': 'reload'
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload'
+    = javascript_include_tag 'application', 'data-turbo-track': 'reload', defer: true
 
 
     %script{:src=>"#{root_path}assets/highlight.min.js"}
-    
+
     :javascript
       hljs.initHighlightingOnLoad()
   %body#advent_calendar_body
@@ -34,7 +34,7 @@
             = link_to  edit_user_registration_path, class: "nav-item nav-link" do
               %i.fa.fa-user
               = "#{current_user.name}"
-            = link_to destroy_user_session_path, method: :delete, class: "nav-item nav-link" do
+            = button_to destroy_user_session_path, method: :delete, class: "nav-item nav-link", form: { class: "d-inline" } do
               %i.fa.fa-sign-out-alt
               = t('menu.sign_out')
           - else

@@ -7,7 +7,7 @@
     %div.text-end.comment-metadata
       %div.text-muted
         = comment.created_at.to_s
-        = link_to comment_path(comment), method: :delete, data: { confirm: t("views.comments._comment.confirm_delete") }, class:"text-muted" do
+        = button_to comment_path(comment), method: :delete, data: { turbo_confirm: t("views.comments._comment.confirm_delete") }, class:"text-muted btn btn-link p-0", form: { class: "d-inline" } do
           %i.far.fa-trash-alt
           = t("helpers.button.delete")
   %div.comment-content

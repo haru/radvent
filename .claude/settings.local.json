@@ -28,7 +28,8 @@
       "mcp__serena__list_memories",
       "Bash(bundle update:*)",
       "Bash(curl -s http://localhost:3099/)",
-      "Bash(bundle list:*)"
+      "Bash(bundle list:*)",
+      "Bash(gem list:*)"
     ],
     "additionalDirectories": [
       "/workspace/specs"
