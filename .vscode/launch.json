@@ -3,10 +3,12 @@
   "configurations": [
     {
       "name": "Rails server",
-      "type": "ruby_lsp",
+      "type": "rdbg",
       "request": "launch",
       "cwd": "${workspaceRoot}",
-      "program": "bin/rails server -b 0.0.0.0",
+      "command": "${workspaceRoot}/bin/rails",
+      "script": "server",
+      "useBundler": true,
       "env": {
         "SECRET_KEY_BASE": "XXXXXXXXXXXXXXXXXXXXXX",
         "RADVENT_TITLE": "HOGEHOGE"
@@ -14,10 +16,12 @@
     },
     {
       "name": "Rails server(mysql)",
-      "type": "ruby_lsp",
+      "type": "rdbg",
       "request": "launch",
       "cwd": "${workspaceRoot}",
-      "program": "bin/rails server -b 0.0.0.0",
+      "command": "${workspaceRoot}/bin/rails",
+      "script": "server",
+      "useBundler": true,
       "env": {
         "SECRET_KEY_BASE": "XXXXXXXXXXXXXXXXXXXXXX",
         "DB_USERNAME": "root",
@@ -27,20 +31,23 @@
     },
     {
       "name": "RSpec - all",
-      "type": "ruby_lsp",
+      "type": "rdbg",
       "request": "launch",
-      "cwd": "${workspaceRoot}",
-      "program": "bin/bundle exec rspec spec",
+      "command": "${workspaceRoot}/bin/rspec",
+      "script": "spec",
+      "useBundler": true,
       "env": {
         "DB": "sqlite3"
       }
     },
     {
       "name": "RSpec - all-mysql",
-      "type": "ruby_lsp",
+      "type": "rdbg",
       "request": "launch",
       "cwd": "${workspaceRoot}",
-      "program": "bin/bundle exec rspec spec",
+      "command": "${workspaceRoot}/bin/rspec",
+      "script": "spec",
+      "useBundler": true,
       "env": {
         "SECRET_KEY_BASE": "XXXXXXXXXXXXXXXXXXXXXX",
         "DB_USERNAME": "root",
@@ -50,10 +57,15 @@
     },
     {
       "name": "RSpec - active spec file only",
-      "type": "ruby_lsp",
+      "type": "rdbg",
       "request": "launch",
       "cwd": "${workspaceRoot}",
-      "program": "bin/bundle exec rspec ${file}"
+      "command": "${workspaceRoot}/bin/rspec",
+      "script": "spec",
+      "useBundler": true,
+      "args": [
+        "${file}"
+      ]
     }
   ]
 }

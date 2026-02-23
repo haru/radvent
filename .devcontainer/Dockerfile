@@ -3,7 +3,10 @@ ARG VARIANT=3.0
 FROM mcr.microsoft.com/devcontainers/ruby:${VARIANT}
 
 # Install Rails
-RUN gem install rails webdrivers 
+RUN gem install rails webdrivers
+
+# Install debug gem (rdbg) into the RVM gem path so VS Code debugger can find it
+RUN gem install --install-dir /usr/local/rvm/gems/default --bindir /usr/local/rvm/gems/default/bin debug
 
 # Default value to allow debug server to serve content over GitHub Codespace's port forwarding service
 # The value is a comma-separated list of allowed domains 
@@ -34,8 +37,6 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
 
 # [Optional] Uncomment this line to install global node packages.
 # RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g <your-package-here>" 2>&1
-
-COPY database.yml /database.yml
 
 ENV DB="sqlite3"
 ENV SECRET_KEY_BASE="9f04b49f2082db69e973ef257614ff2533ab2fe07e88767c3d34241c1766288f9a371bf8660102d034e11843ab8493c43312d8a4e0bfbae08842f4f2140342e1"

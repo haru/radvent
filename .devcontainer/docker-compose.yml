@@ -13,8 +13,8 @@ services:
         # Optional Node.js version to install
         NODE_VERSION: "lts/*"
 
-    # volumes:
-    #   - ..:/workspaces/radvent:cached
+    volumes:
+      - ..:/workspaces/radvent:cached
 
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
