@@ -18,7 +18,8 @@ RUN bundle install
 COPY docker/database.yml /usr/local/radvent/config/
 RUN bundle exec rake radvent:generate_default_settings
 RUN yarn install
-RUN bundle exec rake assets:clean && bundle exec rake assets:precompile
+RUN mkdir -p app/assets/builds
+RUN SECRET_KEY_BASE=dummy RAILS_ENV=production bundle exec rake assets:clean assets:precompile
 COPY docker/run.sh /usr/local/bin/run.sh
 
 RUN mkdir -p /var/radvent_data/uploads

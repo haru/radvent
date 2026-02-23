@@ -13,6 +13,7 @@ services:
       - "3000:3000"
     volumes:
       - "radvent-data:/var/radvent_data"
+      - "./log:/usr/local/radvent/log"
     links:
       - postgres:radvent_postgres
     environment:
@@ -21,6 +22,7 @@ services:
       DB_PASSWORD: example
       DB_HOST: radvent_postgres
       DB_CREATE_ON_START: "true"
+      RAILS_SERVE_STATIC_FILES: "true"
       #RAILS_RELATIVE_URL_ROOT: "/test"
   # mysql:
   #   image: mysql
