@@ -5,7 +5,7 @@ FROM ruby:${VARIANT}
 
 # [Optional] Install additional OS packages (git-flow for git branching support).
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-	&& apt-get -y install --no-install-recommends git-flow \
+	&& apt-get -y install --no-install-recommends git-flow less \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Install GitHub CLI (gh)
