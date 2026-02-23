@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2017_12_11_141402) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_23_000000) do
   create_table "advent_calendar_items", force: :cascade do |t|
     t.string "comment"
     t.datetime "created_at", precision: nil
     t.integer "date"
-    t.integer "event_id"
+    t.bigint "event_id"
     t.datetime "updated_at", precision: nil
     t.integer "user_id"
     t.string "user_name"
@@ -29,20 +29,22 @@ ActiveRecord::Schema[8.1].define(version: 2017_12_11_141402) do
     t.index ["advent_calendar_item_id"], name: "index_attachments_on_advent_calendar_item_id"
   end
 
-  create_table "comments", id: :integer, default: nil, force: :cascade do |t|
+  create_table "comments", id: false, force: :cascade do |t|
     t.text "body"
     t.datetime "created_at", precision: nil
-    t.integer "item_id"
+    t.bigint "id"
+    t.bigint "item_id"
     t.datetime "updated_at", precision: nil
     t.string "user_name"
     t.index ["item_id"], name: "index_comments_on_item_id"
   end
 
-  create_table "events", id: :integer, default: nil, force: :cascade do |t|
+  create_table "events", id: false, force: :cascade do |t|
     t.datetime "created_at", precision: nil, null: false
     t.integer "created_by_id"
     t.text "description"
     t.date "end_date"
+    t.bigint "id"
     t.string "name"
     t.date "start_date"
     t.string "title"
@@ -51,11 +53,12 @@ ActiveRecord::Schema[8.1].define(version: 2017_12_11_141402) do
     t.integer "version"
   end
 
-  create_table "items", id: :integer, default: nil, force: :cascade do |t|
+  create_table "items", id: false, force: :cascade do |t|
     t.integer "advent_calendar_item_id"
     t.text "body"
     t.integer "comments_count", default: 0, null: false
     t.datetime "created_at", precision: nil
+    t.bigint "id"
     t.string "title"
     t.datetime "updated_at", precision: nil
     t.index ["advent_calendar_item_id"], name: "index_items_on_advent_calendar_item_id", unique: true
@@ -63,7 +66,7 @@ ActiveRecord::Schema[8.1].define(version: 2017_12_11_141402) do
 
   create_table "likes", force: :cascade do |t|
     t.datetime "created_at", precision: nil
-    t.integer "item_id"
+    t.bigint "item_id"
     t.datetime "updated_at", precision: nil
     t.integer "user_id"
   end
