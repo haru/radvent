@@ -70,4 +70,7 @@ Rails.application.configure do
 
   # Allow access via the Docker service hostname (e.g. from browserless container).
   config.hosts << 'app'
+
+  # Allow access from GitHub Codespaces forwarded ports.
+  config.hosts << /.*\.app\.github\.dev/
 end
