@@ -16,7 +16,7 @@
   },
   "scripts": {
     "build": "node esbuild.config.mjs",
-    "build:css": "sass ./app/javascript/stylesheets/application.scss:./app/assets/builds/application_pack.css --no-source-map --load-path=node_modules",
+    "build:css": "sass ./app/javascript/stylesheets/application.scss:./app/assets/builds/application_pack.css --no-source-map --load-path=node_modules --quiet-deps",
     "copy:fonts": "cp -r node_modules/@fortawesome/fontawesome-free/webfonts public/assets/webfonts"
   }
 }
