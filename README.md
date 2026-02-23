@@ -156,7 +156,7 @@ bundle exec rake assets:precompile RAILS_ENV=production
 bundle exec rake db:migrate RAILS_ENV=production
 
 # 4. シークレットキーを設定して起動
-export SECRET_KEY_BASE=$(bundle exec rake secret)
+export SECRET_KEY_BASE=$(bundle exec rails secret)
 bundle exec rails s -e production
 ```
 
