@@ -48,5 +48,8 @@
 	"remoteUser": "vscode",
 	"features": {
 		"git": "latest"
-	}
+	},
+	"forwardPorts": [
+		3000
+	]
 }
