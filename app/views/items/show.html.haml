@@ -1,8 +1,7 @@
 = render "shared/header", id: nil, date: @item.advent_calendar_item.date, event: @item.advent_calendar_item.event
 = render "content", item: @item, advent_calendar_item_prev: @advent_calendar_item_prev, advent_calendar_item_next: @advent_calendar_item_next
 
-%div#like-buttons
-  = render "like", item: @item
+= render "like", item: @item
 
 %div.container.comments
   %div.comment-title

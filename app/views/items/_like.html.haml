@@ -1,4 +1,4 @@
-%div.container.likes.text-end
+%div#like-buttons.container.likes.text-end
   %div.btn-group.shadow-0{role: "group"}
     - if user_signed_in?
       - if item.liked_by?(current_user)
