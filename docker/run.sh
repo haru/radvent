@@ -21,4 +21,5 @@ then
   bundle exec rake db:create
 fi
 bundle exec rake db:migrate
+bundle exec rake db:seed
 bundle exec puma -w 3 -p 3000 -e $RAILS_ENV
