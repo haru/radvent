@@ -1,5 +1,5 @@
 {
-    "mcpServers": {
+    "servers": {
         "context7": {
             "type": "stdio",
             "command": "npx",

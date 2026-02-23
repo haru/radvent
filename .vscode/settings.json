@@ -1,0 +1,7 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "nslookup": true,
+        "ss": true,
+        "netstat": true
+    }
+}

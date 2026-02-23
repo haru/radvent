@@ -57,3 +57,4 @@ config/database.yml
 
 /public/uploads/*
 radvent.sqlite3_test
+.playwright-mcp/

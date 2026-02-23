@@ -12,7 +12,11 @@
       "env": {
         "SECRET_KEY_BASE": "XXXXXXXXXXXXXXXXXXXXXX",
         "RADVENT_TITLE": "HOGEHOGE"
-      }
+      },
+      "args": [
+        "-b",
+        "0.0.0.0"
+      ]
     },
     {
       "name": "Rails server(mysql)",

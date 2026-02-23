@@ -6,7 +6,7 @@ services:
       POSTGRES_PASSWORD: example
     volumes:
       - "postgres-db:/var/lib/postgresql/data"
-  radvent:
+  app:
     image: haru/radvent:latest
     build: .
     ports:
@@ -22,6 +22,22 @@ services:
       DB_HOST: radvent_postgres
       DB_CREATE_ON_START: "true"
       #RAILS_RELATIVE_URL_ROOT: "/test"
+  browserless:
+    image: browserless/chrome
+    restart: unless-stopped
+    # ports:
+    #   - 3000:3000
+    environment:
+      # Maximum concurrent sessions
+      MAX_CONCURRENT_SESSIONS: 10
+      # Connection timeout in milliseconds
+      CONNECTION_TIMEOUT: 60000
+      # Maximum queue length
+      MAX_QUEUE_LENGTH: 10
+      # Enable debugger for Playwright
+      ENABLE_DEBUGGER: "false"
+      # Token for authentication (optional, set to empty for no auth)
+      TOKEN: ""
   # mysql:
   #   image: mysql
   #   environment:
