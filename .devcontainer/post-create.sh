@@ -20,4 +20,4 @@ bundle exec rake db:migrate
 bundle exec rake db:migrate RAILS_ENV=test
 npm install -g yarn
 yarn
-
+bundle exec rake assets:precompile
