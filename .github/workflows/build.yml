@@ -2,20 +2,20 @@ name: build
 on:
   push:
     paths-ignore:
-      - '.devcontainer/**'
-      - '.serena/**'
-      - '.vscode/**'
-      - 'lib/radvent/version.rb'
-      - 'CLAUDE.md'
-      - 'README.md'
+      - ".devcontainer/**"
+      - ".serena/**"
+      - ".vscode/**"
+      - "lib/radvent/version.rb"
+      - "CLAUDE.md"
+      - "README.md"
   pull_request:
     paths-ignore:
-      - '.devcontainer/**'
-      - '.serena/**'
-      - '.vscode/**'
-      - 'lib/radvent/version.rb'
-      - 'CLAUDE.md'
-      - 'README.md'
+      - ".devcontainer/**"
+      - ".serena/**"
+      - ".vscode/**"
+      - "lib/radvent/version.rb"
+      - "CLAUDE.md"
+      - "README.md"
 env:
   SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
 jobs:
@@ -24,7 +24,7 @@ jobs:
     strategy:
       matrix:
         db: [sqlite3, mysql, postgres]
-        ruby_version: ["3.2", "3.3"]
+        ruby_version: ["3.2", "3.3", "3.4", "4.0"]
     services:
       mysql:
         image: mysql:8
@@ -65,4 +65,3 @@ jobs:
           SLACK_CHANNEL: general
           SLACK_TITLE: Test Failure
           SLACK_COLOR: danger
-
