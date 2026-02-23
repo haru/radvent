@@ -13,8 +13,8 @@ services:
         # Optional Node.js version to install
         NODE_VERSION: "lts/*"
 
-    volumes:
-      - ..:/workspace:cached
+    # volumes:
+    #   - ..:/workspaces/radvent:cached
 
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
@@ -39,6 +39,21 @@ services:
       POSTGRES_PASSWORD: postgres
     # Add "forwardPorts": ["5432"] to **devcontainer.json** to forward PostgreSQL locally.
     # (Adding the "ports" property to this file will not forward from a Codespace.)
-
+  browserless:
+    image: browserless/chrome
+    restart: unless-stopped
+    # ports:
+    #   - 3000:3000
+    environment:
+      # Maximum concurrent sessions
+      MAX_CONCURRENT_SESSIONS: 10
+      # Connection timeout in milliseconds
+      CONNECTION_TIMEOUT: 60000
+      # Maximum queue length
+      MAX_QUEUE_LENGTH: 10
+      # Enable debugger for Playwright
+      ENABLE_DEBUGGER: "false"
+      # Token for authentication (optional, set to empty for no auth)
+      TOKEN: ""
 volumes:
   postgres-data: null

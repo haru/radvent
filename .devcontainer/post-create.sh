@@ -1,5 +1,9 @@
 #!/bin/sh
 
+## cd to script directory
+cd "$(dirname "$0")"
+cd ..
+
 curl -LsSf https://astral.sh/uv/install.sh | sh
 curl -fsSL https://claude.ai/install.sh | bash
 bundle config set --local path vendor/bundle
