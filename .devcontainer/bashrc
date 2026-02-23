@@ -1,0 +1,20 @@
+# Git branch in prompt.
+parse_git_branch() {
+    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
+
+export PS1="\[\033[32m\]\u:\w\[\033[36m\]\$(parse_git_branch)\[\033[00m\] $ "
+
+# Enable bash completion if available
+if [ -f /etc/bash_completion ]; then
+    # shellcheck disable=SC1090
+    . /etc/bash_completion
+fi
+
+# Try to source git completion if it's available in common locations
+if [ -f /usr/share/bash-completion/completions/git ]; then
+    # system bash-completion git script
+    . /usr/share/bash-completion/completions/git
+elif [ -f /etc/bash_completion.d/git ]; then
+    . /etc/bash_completion.d/git
+fi

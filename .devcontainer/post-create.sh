@@ -5,6 +5,8 @@ set -e
 cd "$(dirname "$0")"
 cd ..
 
+cat .devcontainer/bashrc >> ~/.bashrc
+
 curl -LsSf https://astral.sh/uv/install.sh | sh
 curl -fsSL https://claude.ai/install.sh | bash
 
