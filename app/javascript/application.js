@@ -21,3 +21,10 @@ import './events'
 import './users'
 
 ActiveStorage.start()
+
+// Bootstrap 4 compatibility: handle data-dismiss="alert" for devise-bootstrap-views gem
+$(document).on('turbo:load', function() {
+  $(document).on('click', '[data-dismiss="alert"]', function() {
+    $(this).closest('.alert').remove()
+  })
+})

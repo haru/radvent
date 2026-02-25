@@ -1,3 +1,31 @@
 // Place all the styles related to the Users controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+// Fix Bootstrap 4 style close button in Devise error alerts for Bootstrap 5 compatibility
+.alert {
+  position: relative;
+
+  button.close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.75rem;
+    float: none;
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 1.25rem;
+    line-height: 1;
+    color: inherit;
+    opacity: 0.65;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    span {
+      display: block;
+    }
+  }
+}

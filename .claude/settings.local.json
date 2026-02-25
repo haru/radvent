@@ -48,7 +48,12 @@
       "mcp__playwright__browser_take_screenshot",
       "mcp__playwright__browser_run_code",
       "mcp__serena__read_memory",
-      "mcp__serena__list_dir"
+      "mcp__serena__list_dir",
+      "WebFetch(domain:rubygems.org)",
+      "Bash(cat /workspaces/radvent/public/assets/.sprockets-manifest-*.json)",
+      "Bash(pgrep -a ruby)",
+      "Bash(kill -USR2 11924)",
+      "mcp__playwright__browser_wait_for"
     ],
     "additionalDirectories": [
       "/workspace/specs"
@@ -57,8 +62,6 @@
   "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "context7",
-    "spec-workflow",
-    "deepwiki",
     "serena",
     "playwright"
   ]
