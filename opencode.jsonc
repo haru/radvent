@@ -1,18 +1,20 @@
 {
-    "mcpServers": {
+    "$schema": "https://opencode.ai/config.json",
+    "mcp": {
         "context7": {
-            "type": "stdio",
-            "command": "npx",
-            "args": [
+            "type": "local",
+            "command": [
+                "npx",
                 "-y",
                 "@upstash/context7-mcp"
             ],
-            "env": {}
+            "enabled": true,
+            "environment": {}
         },
         "serena": {
-            "type": "stdio",
-            "command": "uvx",
-            "args": [
+            "type": "local",
+            "command": [
+                "uvx",
                 "--from",
                 "git+https://github.com/oraios/serena",
                 "serena",
@@ -22,18 +24,20 @@
                 "--project",
                 "/workspaces/radvent"
             ],
-            "env": {}
+            "enabled": true,
+            "environment": {}
         },
         "playwright": {
-            "type": "stdio",
-            "command": "npx",
-            "args": [
+            "type": "local",
+            "command": [
+                "npx",
                 "-y",
                 "@playwright/mcp@latest",
                 "--cdp-endpoint",
                 "ws://browserless:3000"
             ],
-            "env": {}
+            "enabled": true,
+            "environment": {}
         }
     }
 }
