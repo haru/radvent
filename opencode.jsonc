@@ -39,5 +39,27 @@
             "enabled": true,
             "environment": {}
         }
+    },
+    "permission": {
+        "bash": {
+            "*": "ask",
+            "ls *": "allow",
+            "cat *": "allow",
+            "git status": "allow",
+            "git diff *": "allow",
+            "git log *": "allow",
+            "git commit *": "ask",
+            "git push *": "deny",
+            "npm run *": "allow",
+            "npm test": "allow",
+            "cargo check": "allow"
+        },
+        "edit": {
+            "*": "ask"
+        },
+        "read": "allow",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow"
     }
 }

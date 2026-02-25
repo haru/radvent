@@ -16,6 +16,8 @@ on:
       - "lib/radvent/version.rb"
       - "CLAUDE.md"
       - "README.md"
+permissions:
+  contents: read
 env:
   SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
 jobs:

@@ -1,5 +1,47 @@
 # AGENTS.md - Guidelines for Agentic Coding in Radvent
 
+## ABSOLUTE RULES (CRITICAL)
+
+**NEVER commit or push changes without explicit user permission**
+- Do NOT run `git commit` under any circumstances
+- Do NOT run `git push` under any circumstances
+- Do NOT create pull requests under any circumstances
+- Only show changes with `git diff` after user approves
+- Wait for explicit user confirmation before ANY git operations
+
+**NEVER decide commit message without user approval**
+- Let user write the commit message
+- Do not automatically generate or suggest commit messages
+- Ask user for commit message before running `git commit`
+
+## Git Flow (Branching Model)
+
+This project uses **Git Flow** branching model (also known as A successful git branching model).
+
+### Branch Structure
+- `main`: Production-ready code. Never commit directly to main.
+- `develop`: Integration branch. Never commit directly to develop.
+- `bugfix/*`: Feature branches for bug fixes.
+- `feature/*`: Feature branches for new features.
+
+### Development Workflow
+1. Create a `bugfix/` or `feature/` branch from `develop`
+2. Make changes, test, and commit to your branch
+3. Push branch to remote: `git push -u origin branch-name`
+4. Create pull request from your branch to `develop`
+5. Merge PR into `develop` after review
+6. Never commit or push directly to `main` or `develop`
+
+### Example Commands
+```bash
+git checkout develop
+git pull origin develop
+git checkout -b bugfix/your-fix
+# Make changes, test, commit
+git push -u origin bugfix/your-fix
+# Create PR from bugfix/your-fix to develop
+```
+
 ## Build, Lint, and Test Commands
 
 ### Setup

@@ -5,6 +5,8 @@ on:
       - '**'
     tags:
       - '**'
+permissions:
+  contents: read
 env:
   SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
 jobs:
