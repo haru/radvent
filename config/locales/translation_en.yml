@@ -80,6 +80,8 @@ en:
       create:
         fail_upload: Upload failed.
   views:
+    common:
+      alert_save_failed: "Could not be saved due to the following errors:"
     courtesy_title: ""
     day_format: "Day %{date}"
     advent_calendar_items:
@@ -155,6 +157,9 @@ en:
     event:
       list:
         title: Events
+      new:
+        title: Create Event
+        name_help: "Alphanumeric characters, -, and _ are allowed. This will be part of the event's URL."
       edit:
         title: Event
       delete:

@@ -57,7 +57,8 @@
       "mcp__playwright__browser_press_key"
     ],
     "additionalDirectories": [
-      "/workspace/specs"
+      "/workspace/specs",
+      "/workspaces/radvent"
     ]
   },
   "enableAllProjectMcpServers": true,

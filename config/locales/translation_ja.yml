@@ -82,6 +82,8 @@ ja:
       create:
         fail_upload: 画像のアップロードに失敗しました
   views:
+    common:
+      alert_save_failed: "以下のエラーにより保存できませんでした："
     courtesy_title: さん
     day_format: "%{date}日目"
     advent_calendar_items:
@@ -157,6 +159,9 @@ ja:
     event:
       list:
         title: イベント
+      new:
+        title: イベント作成
+        name_help: "英数字, -, _を使用可能です。イベントのURLの一部になります。"
       edit:
         title: イベント
       delete:
