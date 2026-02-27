@@ -264,10 +264,6 @@ Event ──< AdventCalendarItem >── User
 | `Comment` | 記事へのコメント（`user_name` 文字列のみ保持） |
 | `Attachment` | CarrierWave によるファイル添付 |
 
-### ルーティングの注意点
-
-- Event の詳細ページは ID ではなく名前ベースのルート（`/events/:name`）
-- `show_event_path(event.name)` を使用すること（`event_path(event)` は誤り）
 
 ---
 
