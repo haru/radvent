@@ -11,7 +11,38 @@ permissions:
 env:
   SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
 jobs:
-  push:
+  build:
+    strategy:
+      matrix:
+        include:
+          - runs-on: ubuntu-latest
+            suffix: amd64
+          - runs-on: ubuntu-24.04-arm
+            suffix: arm64
+    runs-on: ${{ matrix.runs-on }}
+    steps:
+      - name: Set version
+        id: version
+        run: |
+          VERSION=$(echo "${{ github.ref_name }}" | sed 's/\//-/g')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+      - uses: actions/checkout@v4
+      - name: Login to Docker Hub
+        uses: actions-hub/docker/login@master
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DOCKER_REGISTRY_URL: docker.io
+      - name: Build and push platform image
+        if: success()
+        run: |
+          docker build -t ${{ github.repository }}:latest-${{ matrix.suffix }} .
+          docker push ${{ github.repository }}:latest-${{ matrix.suffix }}
+          docker tag ${{ github.repository }}:latest-${{ matrix.suffix }} ${{ github.repository }}:${{ steps.version.outputs.version }}-${{ matrix.suffix }}
+          docker push ${{ github.repository }}:${{ steps.version.outputs.version }}-${{ matrix.suffix }}
+
+  manifest:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Set version
@@ -19,27 +50,20 @@ jobs:
         run: |
           VERSION=$(echo "${{ github.ref_name }}" | sed 's/\//-/g')
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-      - uses: actions/checkout@v2
       - name: Login to Docker Hub
         uses: actions-hub/docker/login@master
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           DOCKER_REGISTRY_URL: docker.io
-
-      - name: Build 
+      - name: Create and push multi-arch manifest
         if: success()
         run: |
-          docker build -t ${{ github.repository }}:latest .
-          docker tag ${{ github.repository }}:latest ${{ github.repository }}:${{ steps.version.outputs.version }}
-      - name: Deploy :latest
-        if: success()
-        uses: actions-hub/docker@master
-        with:
-          args: push ${{ github.repository }}:latest
-      - name: Deploy :tag
-        if: success()
-        uses: actions-hub/docker@master
-        with:
-          args: push ${{ github.repository }}:${{ steps.version.outputs.version }}
-
+          docker manifest create ${{ github.repository }}:latest \
+            ${{ github.repository }}:latest-amd64 \
+            ${{ github.repository }}:latest-arm64
+          docker manifest push ${{ github.repository }}:latest
+          docker manifest create ${{ github.repository }}:${{ steps.version.outputs.version }} \
+            ${{ github.repository }}:${{ steps.version.outputs.version }}-amd64 \
+            ${{ github.repository }}:${{ steps.version.outputs.version }}-arm64
+          docker manifest push ${{ github.repository }}:${{ steps.version.outputs.version }}
