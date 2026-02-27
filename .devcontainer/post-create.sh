@@ -7,8 +7,9 @@ cd ..
 
 cat .devcontainer/bashrc >> ~/.bashrc
 
-curl -LsSf https://astral.sh/uv/install.sh | sh
+# curl -LsSf https://astral.sh/uv/install.sh | sh
 curl -fsSL https://claude.ai/install.sh | bash
+uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
 
 # bundle config set --local path vendor/bundle
 bundle install

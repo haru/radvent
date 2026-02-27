@@ -37,3 +37,6 @@ ENV SECRET_KEY_BASE="9f04b49f2082db69e973ef257614ff2533ab2fe07e88767c3d34241c176
 
 USER vscode
 RUN curl -fsSL https://opencode.ai/install | bash
+
+# Install uv (includes uvx)
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
