@@ -276,3 +276,4 @@ Event ──< AdventCalendarItem >── User
 ## クレジット
 
 - Original radvent: [Yohei Koyama](https://github.com/nanonanomachine)
+- Maintainer: [haru](https://github.com/haru)
