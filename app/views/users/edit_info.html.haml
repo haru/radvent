@@ -1,10 +1,12 @@
-%h1= t('views.user.edit.title')
-
-= button_to t('helpers.button.delete'), delete_user_path(@user.id), method: :delete, data: { turbo_confirm: t('views.user.delete.confirm', user: @user.name) }, class: "btn btn-primary"
+%div.d-flex.justify-content-between.align-items-center
+  %h1= t('views.user.edit.title')
+  = button_to delete_user_path(@user.id), method: :delete, data: { turbo_confirm: t('views.user.delete.confirm', user: @user.name) }, class: "btn btn-outline-success text-success" do
+    %i.fa-solid.fa-trash
+    = t('helpers.button.delete')
 
 = bootstrap_form_for(@user, url: update_user_path(@user), method: "put", layout: :horizontal, label_col: "col-sm-2", control_col: "col-sm-10")do |f|
   = f.text_field :email
   = f.text_field :name
   %p= f.check_box :admin, inline: true
-  = link_to t('helpers.submit.cancel'), users_path, class: "btn btn-default"
+  = link_to t('helpers.submit.cancel'), users_path, class: "btn btn-outline-success text-success"
   = f.submit t('helpers.submit.update'), class: "btn btn-primary btn-raised"
