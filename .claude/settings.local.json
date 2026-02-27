@@ -53,7 +53,8 @@
       "Bash(cat /workspaces/radvent/public/assets/.sprockets-manifest-*.json)",
       "Bash(pgrep -a ruby)",
       "Bash(kill -USR2 11924)",
-      "mcp__playwright__browser_wait_for"
+      "mcp__playwright__browser_wait_for",
+      "mcp__playwright__browser_press_key"
     ],
     "additionalDirectories": [
       "/workspace/specs"

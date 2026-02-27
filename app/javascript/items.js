@@ -142,8 +142,17 @@ $(document).on('click', '#preview-button', function() { submitPreview(this); });
 
 var setPopOver = function() {
   var popoverTriggerList = $('[data-mdb-toggle="popover"]');
-  var popoverList = popoverTriggerList.each(function (i, popoverTriggerEl) {
-    return new mdb.Popover(popoverTriggerEl);
+  popoverTriggerList.each(function (i, popoverTriggerEl) {
+    if (!mdb.Popover.getInstance(popoverTriggerEl)) {
+      new mdb.Popover(popoverTriggerEl);
+    }
   });
 };
 $(document).on('turbo:load', setPopOver);
+document.addEventListener('turbo:before-stream-render', function(event) {
+  var originalRender = event.detail.render;
+  event.detail.render = function(streamElement) {
+    originalRender(streamElement);
+    setPopOver();
+  };
+});
