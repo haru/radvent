@@ -54,7 +54,10 @@
       "Bash(pgrep -a ruby)",
       "Bash(kill -USR2 11924)",
       "mcp__playwright__browser_wait_for",
-      "mcp__playwright__browser_press_key"
+      "mcp__playwright__browser_press_key",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__query-docs",
+      "Bash(node --input-type=module -e \" import * as mdb from ''/workspaces/radvent/node_modules/mdb-ui-kit/js/mdb.es.min.js''; console.log\\(Object.keys\\(mdb\\).filter\\(k => k.toLowerCase\\(\\).includes\\(''init''\\) || k === ''Modal''\\)\\); \")"
     ],
     "additionalDirectories": [
       "/workspace/specs"
