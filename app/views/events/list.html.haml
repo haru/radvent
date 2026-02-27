@@ -1,13 +1,9 @@
 %div.container
-  %div.btn-group{role: "group", "aria-label": "..."}
-  = link_to :new_event, {class: "btn btn-primary"} do
-    %i.fas.fa-plus
-    = t('helpers.button.add')
-
-
-
-
-  %h1= t('views.event.list.title')
+  %div.d-flex.justify-content-between.align-items-center
+    %h1= t('views.event.list.title')
+    = link_to :new_event, {class: "btn btn-outline-success text-success"} do
+      %i.fas.fa-plus
+      = t('helpers.button.add')
 
   %table#events.table.table-striped
     %thead

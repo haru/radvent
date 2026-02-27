@@ -1,12 +1,12 @@
 - content_for(:content) do
   %div.container
     %ul#admin-menu.nav.nav-tabs
-      %li.nav-item{role: "presentation", class: @menu == :events ? 'nav-link active': 'nav-link'}
-        = link_to t('views.event.list.title'), events_list_path
-      %li.nav-item{role: "presentation", class: @menu == :users ? 'nav-link active': 'nav-link'}
-        = link_to t('views.user.index.title'), users_path
+      %li.nav-item{role: "presentation"}
+        = link_to t('views.event.list.title'), events_list_path, class: @menu == :events ? 'nav-link active' : 'nav-link'
+      %li.nav-item{role: "presentation"}
+        = link_to t('views.user.index.title'), users_path, class: @menu == :users ? 'nav-link active' : 'nav-link'
 
-  %div.container
+  %div.container.admin-card-container
     %div.card
       %div.card-body= yield
 

@@ -116,6 +116,10 @@
             background-color: var(--card-body-bg-color);
         }
 
+        .nav-tabs .nav-link {
+            --mdb-nav-tabs-link-border-bottom-width: 3px;
+        }
+
         .table-striped tbody tr:nth-of-type(2n+1) {
             background-color: 
             rgba(255, 255, 255, 0.05);
@@ -200,6 +204,15 @@ body#advent_calendar_body {
 
     .container {
         padding-top: 0.75em;
+    }
+
+    .admin-card-container {
+        padding-top: 0;
+    }
+
+    #admin-menu {
+        position: relative;
+        z-index: 1;
     }
 
     .form-outline {
