@@ -16,6 +16,7 @@ on:
       - "lib/radvent/version.rb"
       - "CLAUDE.md"
       - "README.md"
+  workflow_dispatch:
 permissions:
   contents: read
 env:
