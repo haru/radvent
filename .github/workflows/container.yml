@@ -33,7 +33,6 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Build and push platform image
-        if: success()
         run: |
           docker build -t ${{ github.repository }}:latest-${{ matrix.suffix }} .
           docker push ${{ github.repository }}:latest-${{ matrix.suffix }}
@@ -55,7 +54,6 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Create and push multi-arch manifest
-        if: success()
         run: |
           docker manifest create ${{ github.repository }}:latest \
             ${{ github.repository }}:latest-amd64 \
