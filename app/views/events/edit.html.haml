@@ -5,7 +5,7 @@
     = t('helpers.button.delete')
 
 = bootstrap_form_for(@event, url: event_path(@event), method: "put", layout: :horizontal, label_col: "col-sm-2", control_col: "col-sm-10", inline_errors: false)do |f|
-  = f.alert_message "以下のエラーにより保存できませんでした："
+  = f.alert_message t('views.common.alert_save_failed')
   = f.text_field :name
   = f.text_field :title
   = f.text_area :description, rows: 5
