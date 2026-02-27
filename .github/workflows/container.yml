@@ -17,8 +17,8 @@ jobs:
       - name: Set version
         id: version
         run: |
-          VERSION=$(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
-          echo ::set-output name=version::$VERSION
+          VERSION=$(echo "${{ github.ref_name }}" | sed 's/\//-/g')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
       - uses: actions/checkout@v2
       - name: Login to Docker Hub
         uses: actions-hub/docker/login@master
