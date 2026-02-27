@@ -33,11 +33,13 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Build and push platform image
+        env:
+          RADVENT_VERSION: latest-${{ matrix.suffix }}
         run: |
-          docker build -t ${{ github.repository }}:latest-${{ matrix.suffix }} .
-          docker push ${{ github.repository }}:latest-${{ matrix.suffix }}
-          docker tag ${{ github.repository }}:latest-${{ matrix.suffix }} ${{ github.repository }}:${{ steps.version.outputs.version }}-${{ matrix.suffix }}
-          docker push ${{ github.repository }}:${{ steps.version.outputs.version }}-${{ matrix.suffix }}
+          docker compose build radvent
+          docker compose push radvent
+          docker tag haru/radvent:latest-${{ matrix.suffix }} haru/radvent:${{ steps.version.outputs.version }}-${{ matrix.suffix }}
+          docker push haru/radvent:${{ steps.version.outputs.version }}-${{ matrix.suffix }}
 
   manifest:
     needs: build

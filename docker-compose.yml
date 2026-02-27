@@ -6,7 +6,7 @@ services:
     volumes:
       - "postgres-db:/var/lib/postgresql"
   radvent:
-    image: haru/radvent:latest
+    image: haru/radvent:${RADVENT_VERSION:-latest}
     build: .
     ports:
       - "3000:3000"
