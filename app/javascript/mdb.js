@@ -12,6 +12,7 @@ var mdbInputUpdate = function () {
 
 document.addEventListener('turbo:load', () => {
   mdbInputUpdate();
+  mdb.initMDB(mdb);
 });
 
 document.addEventListener('turbo:render', () => {
