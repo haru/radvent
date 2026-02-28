@@ -6,10 +6,11 @@ on:
       - main
     types: [closed]
   workflow_dispatch:
-
 permissions:
   contents: write
   pull-requests: write
+env:
+  IMAGE_NAME: haru/radvent
 
 jobs:
   tag-release-backmerge:
