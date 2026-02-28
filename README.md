@@ -1,9 +1,11 @@
 # radvent
 
-[![build](https://github.com/haru/radvent/actions/workflows/build.yml/badge.svg)](https://github.com/haru/radvent/actions/workflows/build.yml)
-[![Maintainability](https://api.codeclimate.com/v1/badges/6ef37e4698d17ed0596b/maintainability)](https://codeclimate.com/github/haru/radvent/maintainability)
-[![codecov](https://codecov.io/gh/haru/radvent/branch/main/graph/badge.svg?token=MM74F6ZLL6)](https://codecov.io/gh/haru/radvent)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
+[![build](https://github.com/haru/radvent/actions/workflows/build.yml/badge.svg)](https://github.com/haru/radvent/actions/workflows/build.yml)
+[![Maintainability](https://qlty.sh/gh/haru/projects/radvent/maintainability.svg)](https://qlty.sh/gh/haru/projects/radvent)
+[![codecov](https://codecov.io/gh/haru/radvent/branch/main/graph/badge.svg?token=MM74F6ZLL6)](https://codecov.io/gh/haru/radvent)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/haru/redmine_ai_helper)
+
 
 Qiita風のアドベントカレンダー Webアプリです。Markdown で記事を執筆し、指定日を過ぎると自動的に公開されます。
 
@@ -173,14 +175,15 @@ docker run -d -p 3000:3000 -v /host/data/directory:/var/radvent_data haru/radven
 ### docker-compose の例（MySQL）
 
 ```yaml
-version: '2'
 services:
   radvent:
     image: haru/radvent:latest
     ports:
       - "3000:3000"
+    restart: unless-stopped
     volumes:
-      - "$PWD/docker/data:/var/radvent_data"
+      - "./docker/data:/var/radvent_data"
+      - "./log:/usr/local/radvent/log"
     links:
       - mysql
     environment:
@@ -191,25 +194,25 @@ services:
       DB_CREATE_ON_START: "true"
   mysql:
     image: mysql
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: example
     volumes:
-      - "$PWD/docker/mysql:/var/lib/mysql"
+      - "./docker/mysql:/var/lib/mysql"
 ```
 
 ### docker-compose の例（PostgreSQL）
 
 ```yaml
-version: '2'
 services:
   radvent:
     image: haru/radvent:latest
     ports:
       - "3000:3000"
     volumes:
-      - "$PWD/docker/data:/var/radvent_data"
-    links:
-      - postgres
+      - "./docker/data:/var/radvent_data"
+      - "./log:/usr/local/radvent/log"
+    restart: unless-stopped
     environment:
       DB: postgres
       DB_USERNAME: postgres
@@ -218,10 +221,11 @@ services:
       DB_CREATE_ON_START: "true"
   postgres:
     image: postgres
+    restart: unless-stopped
     environment:
       POSTGRES_PASSWORD: example
     volumes:
-      - "$PWD/docker/postgres:/var/lib/postgresql/data"
+      - "./docker/postgres:/var/lib/postgresql"
 ```
 
 ### 環境変数一覧
@@ -260,10 +264,6 @@ Event ──< AdventCalendarItem >── User
 | `Comment` | 記事へのコメント（`user_name` 文字列のみ保持） |
 | `Attachment` | CarrierWave によるファイル添付 |
 
-### ルーティングの注意点
-
-- Event の詳細ページは ID ではなく名前ベースのルート（`/events/:name`）
-- `show_event_path(event.name)` を使用すること（`event_path(event)` は誤り）
 
 ---
 
@@ -276,3 +276,4 @@ Event ──< AdventCalendarItem >── User
 ## クレジット
 
 - Original radvent: [Yohei Koyama](https://github.com/nanonanomachine)
+- Maintainer: [haru](https://github.com/haru)

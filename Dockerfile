@@ -27,6 +27,7 @@ RUN rm -f /usr/local/radvent/public/uploads
 RUN ln -s /var/radvent_data/uploads /usr/local/radvent/public/uploads
 
 ENV RAILS_ENV=production
+ENV RAILS_SERVE_STATIC_FILES=true
 
 EXPOSE 3000
 

@@ -3,5 +3,6 @@
         "nslookup": true,
         "ss": true,
         "netstat": true
-    }
+    },
+    "gitflow.autoBumpVersion": false
 }
