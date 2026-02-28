@@ -7,6 +7,10 @@
 body#advent_calendar_body  {
   .form-container {
     padding-bottom: 50px;
+    .EasyMDEContainer .CodeMirror {
+      min-height: 150px;
+      max-height: 400px;
+    }
     .item-container {
       display: table;
       width: 100%;
