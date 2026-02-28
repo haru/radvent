@@ -11,6 +11,10 @@ body#advent_calendar_body  {
       min-height: 150px;
       max-height: 400px;
     }
+    .EasyMDEContainer.sided--no-fullscreen .CodeMirror,
+    .EasyMDEContainer .CodeMirror-fullscreen {
+      max-height: none;
+    }
     .item-container {
       display: table;
       width: 100%;
