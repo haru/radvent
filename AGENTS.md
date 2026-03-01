@@ -19,6 +19,7 @@
 - Red → Green → Refactor cycle must be followed strictly
 - No production code without a failing test that justifies it
 - Run `bundle exec rspec spec` to verify tests pass after implementation
+- **Maintain test coverage at 90% or above** — check `coverage/` report after running tests
 
 ## Git Flow (Branching Model)
 
