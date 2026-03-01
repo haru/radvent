@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Manages comments on articles.
 #
 # Handles creating and deleting comments on items.
@@ -23,6 +25,6 @@ class CommentsController < ApplicationController
   private
 
   def comment_params
-    params.require(:comment).permit(:user_name, :body, :item_id)
+    params.expect(comment: %i[user_name body item_id])
   end
 end

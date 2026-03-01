@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Manages likes on articles.
 #
 # Handles creating and deleting likes on items.

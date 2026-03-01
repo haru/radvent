@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 # Represents an article in an advent calendar.
 #
 # Items contain the markdown content (body) that users publish on specific dates.
 class Item < ApplicationRecord
   belongs_to :advent_calendar_item
-  has_many :comments, -> { order('id') }, dependent: :destroy
+  has_many :comments, -> { order(:id) }, dependent: :destroy, inverse_of: :item
   has_many :likes, dependent: :destroy
 
   # Returns the title, or a default placeholder if empty.
@@ -17,9 +19,7 @@ class Item < ApplicationRecord
   #
   # @param author [User, nil] the user to check
   # @return [Boolean] true if the item can be edited by the author
-  def editable_by?(author)
-    advent_calendar_item.editable_by? author
-  end
+  delegate :editable_by?, to: :advent_calendar_item
 
   # Checks if the item has been liked by the given user.
   #
@@ -27,6 +27,7 @@ class Item < ApplicationRecord
   # @return [Boolean] true if the user has liked this item
   def liked_by?(user)
     return false unless user
+
     likes.find_by(user_id: user.id) != nil
   end
 end

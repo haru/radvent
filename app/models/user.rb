@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Represents a user in the system.
 #
 # Users can create events, publish articles, like items, and comment.

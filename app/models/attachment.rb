@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Represents an image attachment for an advent calendar item.
 #
 # This model stores image files uploaded via CarrierWave for advent calendar items.

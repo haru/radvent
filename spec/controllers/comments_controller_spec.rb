@@ -1,21 +1,25 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe CommentsController, :type => :controller do
+RSpec.describe CommentsController, type: :controller do
+  let(:user) { create(:user) }
+
   before do
     Comment.destroy_all
     Item.destroy_all
     AdventCalendarItem.destroy_all
     Event.destroy_all
     User.destroy_all
-    @user = create(:user)
-    sign_in @user
+    sign_in user
   end
+
   describe 'POST #create' do
     it 'saves the new comment in the database' do
       item = create(:item)
-      expect {
+      expect do
         post :create, params: { comment: build(:comment, item: item).attributes }
-      }.to change(Comment, :count).by(1)
+      end.to change(Comment, :count).by(1)
     end
 
     it 'redirect to items#show if the new comment is saved' do
@@ -26,20 +30,20 @@ RSpec.describe CommentsController, :type => :controller do
   end
 
   describe 'DELETE #destroy' do
-    before :each do
-      @item = create(:item)
-      @comment = create(:comment, item: @item)
-    end
+    let(:item) { create(:item) }
+    let(:comment) { create(:comment, item: item) }
+
+    before { comment }
 
     it 'deletes the comment' do
-      expect {
-        delete :destroy, params: { id: @comment }
-      }.to change(Comment, :count).by(-1)
+      expect do
+        delete :destroy, params: { id: comment }
+      end.to change(Comment, :count).by(-1)
     end
 
     it 'redirect to items#show if the comment is deleted' do
-      delete :destroy, params: { id: @comment }
-      expect(response).to redirect_to item_path(id: @item)
+      delete :destroy, params: { id: comment }
+      expect(response).to redirect_to item_path(id: item)
     end
   end
 end

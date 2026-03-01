@@ -1,10 +1,17 @@
+# frozen_string_literal: true
+
 # Manages advent calendar item slots.
 #
 # Handles creating, reading, updating, and deleting calendar day slots for advent calendar events.
 class AdventCalendarItemsController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
-  before_action :find_calendar_item, only: [:show, :edit, :update, :destroy]
-  before_action :edit_permission?, only: [:edit, :update, :destroy]
+  before_action :authenticate_user!, only: %i[new create edit update destroy]
+  before_action :find_calendar_item, only: %i[show edit update destroy]
+  before_action :edit_permission?, only: %i[edit update destroy]
+
+  # Shows an advent calendar item.
+  #
+  # @return [void]
+  def show; end
 
   # Displays a form to create a new advent calendar item.
   #
@@ -15,6 +22,11 @@ class AdventCalendarItemsController < ApplicationController
                                                    event_id: params[:event_id])
   end
 
+  # Displays a form to edit an advent calendar item.
+  #
+  # @return [void]
+  def edit; end
+
   # Creates a new advent calendar item.
   #
   # @return [void]
@@ -23,18 +35,6 @@ class AdventCalendarItemsController < ApplicationController
     advent_calendar_item.user = current_user if user_signed_in?
     advent_calendar_item.save!
     redirect_to advent_calendar_item
-  end
-
-  # Shows an advent calendar item.
-  #
-  # @return [void]
-  def show
-  end
-
-  # Displays a form to edit an advent calendar item.
-  #
-  # @return [void]
-  def edit
   end
 
   # Updates an existing advent calendar item.
@@ -61,17 +61,17 @@ class AdventCalendarItemsController < ApplicationController
   private
 
   def advent_calendar_item_params
-    params.require(:advent_calendar_item).permit(:user_name, :comment, :date, :event_id)
+    params.expect(advent_calendar_item: %i[user_name comment date event_id])
   end
 
   def find_calendar_item
     @advent_calendar_item = AdventCalendarItem.find_by(id: params[:id])
-    render_404 unless @advent_calendar_item
+    render_not_found unless @advent_calendar_item
   end
 
   def edit_permission?
     return true if current_user.admin?
 
-    render_403 unless @advent_calendar_item.editable_by? current_user
+    render_forbidden unless @advent_calendar_item.editable_by? current_user
   end
 end

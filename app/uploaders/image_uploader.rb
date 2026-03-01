@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Uploader for image files using CarrierWave.
 #
 # Handles storage of image attachments for advent calendar items.

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Represents a like on an article.
 #
 # Likes associate a user with an item they've liked.

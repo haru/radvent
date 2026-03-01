@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   resources :events, except: [:show]
   get 'events/:name' => 'events#show', as: :show_event
@@ -5,7 +7,7 @@ Rails.application.routes.draw do
   delete 'users/delete/:id' => 'users#destroy', as: :delete_user
   get 'user/:id/edit' => 'users#edit_info', as: :edit_user
   put 'user/:id/update' => 'users#update_info', as: :update_user
-  resources :users, :only => [:index]
+  resources :users, only: [:index]
 
   devise_for :users
   resources :items do
@@ -13,9 +15,9 @@ Rails.application.routes.draw do
       post 'preview'
     end
     member do
-      match 'preview', via: [:get, :post, :patch]
+      match 'preview', via: %i[get post patch]
     end
-    resources :likes, only: [:create, :destroy]
+    resources :likes, only: %i[create destroy]
   end
 
   resources :advent_calendar_items

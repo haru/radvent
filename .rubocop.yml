@@ -1,5 +1,3 @@
-inherit_from: .rubocop_todo.yml
-
 plugins:
   - rubocop-rails
   - rubocop-rspec
@@ -18,8 +16,44 @@ AllCops:
 Style/StringLiterals:
   Enabled: false
 
+# YARD によるドキュメントチェックでカバーされるため無効化
+Style/Documentation:
+  Enabled: false
+
 Rails:
   Enabled: true
 
 RSpec:
   Enabled: true
+
+# マイグレーションファイルは歴史的なコードなのでメトリクス系を除外
+Metrics/AbcSize:
+  Exclude:
+    - 'db/migrate/**/*'
+
+Metrics/MethodLength:
+  Exclude:
+    - 'db/migrate/**/*'
+
+# マイグレーション内での update_attribute 使用は許容
+Rails/SkipsModelValidations:
+  Exclude:
+    - 'db/migrate/**/*'
+
+# 既存マイグレーションの boolean カラム定義は変更不可
+Rails/ThreeStateBooleanColumn:
+  Exclude:
+    - 'db/migrate/**/*'
+
+# Deviseが自動生成する長いコメント行を許容
+Layout/LineLength:
+  Exclude:
+    - 'config/initializers/devise.rb'
+
+# コントローラテストでは allow_any_instance_of が実用上必要なケースがある
+RSpec/AnyInstance:
+  Enabled: false
+
+# テスト対象によっては多くの let が必要になる
+RSpec/MultipleMemoizedHelpers:
+  Max: 7

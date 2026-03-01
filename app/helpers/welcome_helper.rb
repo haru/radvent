@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Helper methods for welcome views.
 module WelcomeHelper
   # Checks if a date falls within an advent calendar event's date range.

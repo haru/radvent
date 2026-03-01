@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Base controller for all application controllers.
 #
 # Provides common functionality including CSRF protection, Devise parameter configuration,
@@ -25,22 +27,22 @@ class ApplicationController < ActionController::Base
   #
   # @return [void]
   def admin_user!
-    if !user_signed_in? or !current_user.admin?
-      render_403
-    end
+    return unless !user_signed_in? || !current_user.admin?
+
+    render_forbidden
   end
 
   # Renders a 404 not found error page.
   #
   # @return [void]
-  def render_404
-    render template: 'errors/notfound', status: 404, layout: 'application', content_type: 'text/html'
+  def render_not_found
+    render template: 'errors/notfound', status: :not_found, layout: 'application', content_type: 'text/html'
   end
 
   # Renders a 403 forbidden error page.
   #
   # @return [void]
-  def render_403
+  def render_forbidden
     render 'errors/forbidden', status: :forbidden
   end
 end

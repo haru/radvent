@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Handles the homepage and welcome actions.
 #
 # Displays the list of events on the homepage.
@@ -6,8 +8,6 @@ class WelcomeController < ApplicationController
   #
   # @return [void]
   def index
-    @events = Event.order('start_date desc')
+    @events = Event.order(start_date: :desc)
   end
-
-  private
 end
