@@ -28,6 +28,5 @@
   = render "navigation", date: item.advent_calendar_item.date, advent_calendar_item_prev: advent_calendar_item_prev, advent_calendar_item_next: advent_calendar_item_next, item: item
   %div.card
     %div.card-body
-      - markdown_body_attr = ERB::Util.html_escape(item.body.to_s).gsub("\n", '&#10;').html_safe
-      %div.markdown#item-show{data: {controller: 'markdown', markdown_body_value: markdown_body_attr}}
+      %div.markdown#item-show{data: {controller: 'markdown', markdown_body_value: item.body.to_s}}
   = render "navigation", date: item.advent_calendar_item.date, advent_calendar_item_prev: advent_calendar_item_prev, advent_calendar_item_next: advent_calendar_item_next, item: item
