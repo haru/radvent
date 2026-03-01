@@ -14,6 +14,12 @@
 - Do not automatically generate or suggest commit messages
 - Ask user for commit message before running `git commit`
 
+**ALWAYS follow Test-Driven Development (TDD)**
+- Write tests BEFORE writing implementation code
+- Red → Green → Refactor cycle must be followed strictly
+- No production code without a failing test that justifies it
+- Run `bundle exec rspec spec` to verify tests pass after implementation
+
 ## Git Flow (Branching Model)
 
 This project uses **Git Flow** branching model (also known as A successful git branching model).
