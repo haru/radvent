@@ -54,6 +54,7 @@ jobs:
         uses: super-linter/super-linter@v8.5.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LINTER_RULES_PATH: .
           VALIDATE_JAVASCRIPT_ES: true
           VALIDATE_RUBY: true
 
