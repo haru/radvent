@@ -1,6 +1,12 @@
+# Manages image attachments for advent calendar items.
+#
+# Handles file uploads for the markdown editor.
 class AttachmentsController < ApplicationController
   before_action :authenticate_user!, only: [:create]
 
+  # Creates a new image attachment.
+  #
+  # @return [void]
   def create
     attachment = Attachment.new(attachment_params)
 

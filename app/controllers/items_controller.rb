@@ -1,14 +1,23 @@
+# Manages article items.
+#
+# Handles creating, reading, updating, and previewing articles (items) in the advent calendar.
 class ItemsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :preview]
   before_action :find_item, only: [:show, :edit, :update]
   before_action :edit_permission?, only: [:edit, :update]
 
+  # Displays a form to create a new item.
+  #
+  # @return [void]
   def new
     @date = params[:date]
     @item = Item.new(advent_calendar_item_id: params[:id])
     @attachment = Attachment.new(advent_calendar_item_id: params[:id])
   end
 
+  # Creates a new item.
+  #
+  # @return [void]
   def create
     @item = Item.new(item_params)
 
@@ -19,6 +28,9 @@ class ItemsController < ApplicationController
     end
   end
 
+  # Shows an item (article).
+  #
+  # @return [void]
   def show
     if !@item.advent_calendar_item.published?
       redirect_to root_path
@@ -30,10 +42,16 @@ class ItemsController < ApplicationController
     end
   end
 
+  # Displays a form to edit an item.
+  #
+  # @return [void]
   def edit
     @attachment = Attachment.new(advent_calendar_item_id: @item.advent_calendar_item_id)
   end
 
+  # Updates an existing item.
+  #
+  # @return [void]
   def update
     @item.assign_attributes(item_params)
 
@@ -44,6 +62,9 @@ class ItemsController < ApplicationController
     end
   end
 
+  # Previews an item without saving.
+  #
+  # @return [void]
   def preview
     @item = if params[:id]
       item = Item.find_by(id: params[:id])

@@ -1,3 +1,6 @@
+# Manages advent calendar events.
+#
+# Handles creating, reading, updating, and deleting events, as well as displaying the calendar view.
 class EventsController < ApplicationController
   layout 'admin'
   before_action :set_events_menu
@@ -5,10 +8,16 @@ class EventsController < ApplicationController
   before_action :find_event, except: [:index, :new, :create, :list, :show]
   before_action :find_event_by_name, only: [:show]
 
+  # Displays a form to create a new event.
+  #
+  # @return [void]
   def new
     @event ||= Event.new
   end
 
+  # Creates a new event.
+  #
+  # @return [void]
   def create
     @event = Event.new
     @event.attributes = params.require(:event).permit(:title, :start_date, :end_date, :name, :description)
@@ -21,6 +30,9 @@ class EventsController < ApplicationController
     end
   end
 
+  # Updates an existing event.
+  #
+  # @return [void]
   def update
     @event.attributes = params.require(:event).permit(:title, :start_date, :end_date, :name, :description)
     @event.updated_by = current_user
@@ -31,9 +43,15 @@ class EventsController < ApplicationController
     end
   end
 
+  # Displays a form to edit an event.
+  #
+  # @return [void]
   def edit
   end
 
+  # Deletes an event.
+  #
+  # @return [void]
   def destroy
     if @event.destroy
       redirect_to events_list_path, status: :see_other
@@ -42,14 +60,23 @@ class EventsController < ApplicationController
     end
   end
 
+  # Lists all events (public view).
+  #
+  # @return [void]
   def index
     @events = Event.order('start_date desc')
   end
 
+  # Lists all events (admin view).
+  #
+  # @return [void]
   def list
     @events = Event.order('start_date desc')
   end
 
+  # Shows an event with its calendar view.
+  #
+  # @return [void]
   def show
     from_date = @event.start_date.beginning_of_week(:sunday)
     to_date = @event.end_date.end_of_week(:sunday)

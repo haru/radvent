@@ -1,6 +1,14 @@
+# Main module for the Radvent application.
 module Radvent
+  # Module for version information.
+  # Module for version information.
   module Version
+    # The current version of Radvent.
     VERSION = '3.0.0'.freeze
+
+    # Returns the current version string.
+    #
+    # @return [String] the version
     def self.version
       VERSION
     end

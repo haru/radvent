@@ -1,21 +1,36 @@
+# Manages users in the system.
+#
+# Handles listing, showing, editing info, and deleting users (admin functions).
 class UsersController < ApplicationController
   before_action :admin_user!, only: [:index, :update_info, :destroy]
   before_action :find_user, only: [:show, :edit_info, :update_info, :destroy]
 
+  # Lists all users (admin view).
+  #
+  # @return [void]
   def index
     @menu = :users
     @users = User.all
     render layout: 'admin'
   end
 
+  # Shows a user profile.
+  #
+  # @return [void]
   def show
   end
 
+  # Displays a form to edit user info (admin view).
+  #
+  # @return [void]
   def edit_info
     @menu = :users
     render layout: 'admin'
   end
 
+  # Updates user info.
+  #
+  # @return [void]
   def update_info
     @user.attributes = params.require(:user).permit(:email, :name, :admin)
     if (@user.save)
@@ -25,6 +40,9 @@ class UsersController < ApplicationController
     end
   end
 
+  # Deletes a user.
+  #
+  # @return [void]
   def destroy
     @user.destroy!
     redirect_to users_path, status: :see_other

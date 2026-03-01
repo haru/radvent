@@ -1,3 +1,7 @@
+# Represents a calendar day slot in an advent calendar event.
+#
+# This model associates a user with a specific date (1-31) in an advent calendar event.
+# It contains the actual article content through the has_one :item relationship.
 class AdventCalendarItem < ApplicationRecord
   belongs_to :user
   belongs_to :event
@@ -21,10 +25,16 @@ class AdventCalendarItem < ApplicationRecord
     end
   end
 
+  # Returns the year of the event's start date.
+  #
+  # @return [Integer] the year
   def year
     event.start_date.year
   end
 
+  # Returns the month of the event's start date.
+  #
+  # @return [Integer] the month (1-12)
   def month
     event.start_date.month
   end
