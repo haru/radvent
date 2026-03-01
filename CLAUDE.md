@@ -42,6 +42,7 @@ bundle exec rake assets:precompile
 ### Tech Stack
 - **Backend**: Ruby (>= 3.0) / Rails, Puma, Devise (auth)
 - **Frontend**: Webpacker 5, HAML templates, SCSS, Bootstrap 5 (mdb-ui-kit), jQuery
+- **Markdown editor**: EasyMDE (easy-markdown-editor) with toolbar, side-by-side preview, image upload, and DOMPurify sanitization
 - **Markdown**: Marked.js with highlight.js for syntax highlighting
 - **File uploads**: CarrierWave
 - **Database**: SQLite3 (dev default), MySQL 5.7+, or PostgreSQL (configurable via env vars in `config/database.yml`)

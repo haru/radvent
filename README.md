@@ -16,7 +16,7 @@ Qiita風のアドベントカレンダー Webアプリです。Markdown で記�
 - いいね・コメント機能
 - ファイル添付（CarrierWave）
 
-Markdown パーサーに [marked](https://github.com/markedjs/marked)、シンタックスハイライトに [highlight.js](https://github.com/highlightjs/highlight.js) を使用しています。
+Markdown エディタに [EasyMDE](https://github.com/Ionaru/easy-markdown-editor)、Markdown パーサーに [marked](https://github.com/markedjs/marked)、シンタックスハイライトに [highlight.js](https://github.com/highlightjs/highlight.js) を使用しています。
 
 ---
 
@@ -41,6 +41,7 @@ Markdown パーサーに [marked](https://github.com/markedjs/marked)、シン�
 | 言語 | Ruby >= 3.2 |
 | フレームワーク | Ruby on Rails 8.1 |
 | フロントエンド | esbuild / SCSS (Bootstrap 5 / mdb-ui-kit) |
+| Markdown エディタ | EasyMDE (easy-markdown-editor) |
 | テンプレート | HAML |
 | 認証 | Devise |
 | DB（開発） | SQLite3 |
