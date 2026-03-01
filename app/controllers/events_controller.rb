@@ -32,7 +32,7 @@ class EventsController < ApplicationController
   #
   # @return [void]
   def new
-    @event ||= Event.new
+    @new ||= Event.new
   end
 
   # Displays a form to edit an event.
@@ -51,7 +51,7 @@ class EventsController < ApplicationController
     if @event.save
       redirect_to events_list_path
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -64,7 +64,7 @@ class EventsController < ApplicationController
     if @event.save
       redirect_to edit_event_path(@event.id)
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 
@@ -75,7 +75,7 @@ class EventsController < ApplicationController
     if @event.destroy
       redirect_to events_list_path, status: :see_other
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 
