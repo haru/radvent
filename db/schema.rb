@@ -29,7 +29,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_01_000000) do
     t.index ["advent_calendar_item_id"], name: "index_attachments_on_advent_calendar_item_id"
   end
 
-  create_table "comments", id: :integer, default: nil, force: :cascade do |t|
+  create_table "comments", id: :integer, force: :cascade do |t|
     t.text "body"
     t.datetime "created_at", precision: nil
     t.integer "item_id"
@@ -38,7 +38,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_01_000000) do
     t.index ["item_id"], name: "index_comments_on_item_id"
   end
 
-  create_table "events", id: :integer, default: nil, force: :cascade do |t|
+  create_table "events", id: :integer, force: :cascade do |t|
     t.datetime "created_at", precision: nil, null: false
     t.integer "created_by_id"
     t.text "description"
@@ -53,7 +53,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_01_000000) do
     t.index ["title"], name: "index_events_on_title", unique: true
   end
 
-  create_table "items", id: :integer, default: nil, force: :cascade do |t|
+  create_table "items", id: :integer, force: :cascade do |t|
     t.integer "advent_calendar_item_id"
     t.text "body"
     t.integer "comments_count", default: 0, null: false
