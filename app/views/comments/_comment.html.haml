@@ -10,5 +10,5 @@
         = button_to comment_path(comment), method: :delete, data: { turbo_confirm: t("views.comments._comment.confirm_delete") }, class:"text-muted btn btn-link p-0", form: { class: "d-inline" } do
           %i.far.fa-trash-alt
           = t("helpers.button.delete")
-  %div.comment-content
+  %div.comment-content{data: {controller: 'comment'}}
     = comment.body

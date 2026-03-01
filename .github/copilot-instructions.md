@@ -87,3 +87,24 @@ end
 | スキーマ | `db/schema.rb` |
 | ファクトリ | `spec/factories/` |
 | i18n | `config/locales/` |
+| JS コントローラー | `app/javascript/controllers/` — Stimulus コントローラー群 |
+| CSS エントリポイント | `app/javascript/stylesheets/application.css` |
+
+## Frontend (Stimulus)
+
+- フロントエンドは **@hotwired/stimulus**。jQuery は使用しない
+- コントローラーは `app/javascript/controllers/` に配置し `index.js` で登録
+- 命名: ファイル名 `{name}_controller.js` → HTML属性 `data-controller="{name}"`
+- Turbo スナップショットからの復元時の二重初期化防止: `data-rendered` フラグをチェック
+- CSS は PostCSS（`yarn build:css`）。`.scss` ファイルは使用しない
+
+```javascript
+// 新規コントローラーの追加パターン
+// app/javascript/controllers/index.js に追記:
+application.register('my-feature', MyFeatureController)
+```
+
+```haml
+/ HAMLでの使用例
+%div{data: {controller: 'markdown', markdown_body_value: item.body}}
+```

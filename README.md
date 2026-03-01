@@ -40,7 +40,7 @@ Markdown エディタに [EasyMDE](https://github.com/Ionaru/easy-markdown-edito
 |------|------|
 | 言語 | Ruby >= 3.2 |
 | フレームワーク | Ruby on Rails 8.1 |
-| フロントエンド | esbuild / SCSS (Bootstrap 5 / mdb-ui-kit) |
+| フロントエンド | esbuild / PostCSS (Bootstrap 5 / mdb-ui-kit) / @hotwired/stimulus |
 | Markdown エディタ | EasyMDE (easy-markdown-editor) |
 | テンプレート | HAML |
 | 認証 | Devise |

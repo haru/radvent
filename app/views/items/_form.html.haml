@@ -1,5 +1,5 @@
-%div.form-container
-  = form_for item, html: { data: { upload_error: t('items.upload_error'), network_error: t('items.network_error') } } do |f|
+%div.form-container{data: {controller: 'editor', editor_upload_path_value: attachments_path, editor_upload_error_value: t('items.upload_error'), editor_network_error_value: t('items.network_error')}}
+  = form_for item do |f|
     %fieldset
       %div.form-group
         %div.form-outline
@@ -8,10 +8,10 @@
             =t("activerecord.attributes.item.title")
       %div.mb-3
         = f.label :body, t("activerecord.attributes.item.body"), for: "item-text", class: "form-label"
-        = f.text_area :body, id: "item-text", class: 'form-control'
+        = f.text_area :body, id: "item-text", class: 'form-control', data: {editor_target: 'textarea'}
       = f.hidden_field :advent_calendar_item_id, value: item.advent_calendar_item_id
       %div.d-flex.justify-content-between.mt-2
-        %button.btn.btn-success.btn-raised#preview-button{type: "button", data: {preview_url: (item.new_record? ? preview_items_path : preview_item_path(item))}}
+        %button.btn.btn-success.btn-raised#preview-button{type: "button", data: {action: 'click->editor#submitPreview', editor_target: 'previewButton', preview_url: (item.new_record? ? preview_items_path : preview_item_path(item))}}
           = t("helpers.submit.preview")
         %div
           - if item.advent_calendar_item.published?

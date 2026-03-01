@@ -4,21 +4,27 @@
   "version": "3.0.0",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^7.2.0",
+    "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo-rails": "^8.0.0",
     "@rails/actioncable": "^8.1.0",
     "@rails/activestorage": "^8.1.0",
-    "datatables.net-bs5": "^2.3.7",
     "dompurify": "^3.3.1",
     "easymde": "^2.20.0",
     "esbuild": "^0.27.3",
-    "jquery": "^4.0.0",
     "marked": "^17.0.3",
     "mdb-ui-kit": "^9.3.0",
-    "sass": "^1.97.3"
+    "simple-datatables": "^10.2.0"
   },
   "scripts": {
     "build": "node esbuild.config.mjs",
-    "build:css": "sass ./app/javascript/stylesheets/application.scss:./app/assets/builds/application_pack.css --no-source-map --load-path=node_modules --quiet-deps",
+    "build:css": "postcss ./app/javascript/stylesheets/application.css -o ./app/assets/builds/application_pack.css",
     "copy:fonts": "cp -r node_modules/@fortawesome/fontawesome-free/webfonts public/assets/webfonts"
+  },
+  "devDependencies": {
+    "postcss": "^8.5.6",
+    "postcss-cli": "^11.0.1",
+    "postcss-flexbugs-fixes": "^5.0.2",
+    "postcss-import": "^16.1.1",
+    "postcss-preset-env": "^11.2.0"
   }
 }
