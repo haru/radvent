@@ -198,6 +198,9 @@ ja:
       last_word_connector: "、"
       two_words_connector: "、"
       words_connector: "、"
+  items:
+    upload_error: 'アップロードに失敗しました'
+    network_error: 'ネットワークエラーが発生しました'
   devise:
     sessions:
       signed_in: ""

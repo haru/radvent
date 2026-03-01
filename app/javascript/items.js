@@ -10,6 +10,9 @@ export const setRootPath = path => window.relative_url_root_path = path;
 let easyMDEInstance = null;
 
 const uploadImageToServer = function(file, onSuccess, onError) {
+  const formEl = document.querySelector('form[data-upload-error]');
+  const uploadErrorMsg = (formEl && formEl.dataset.uploadError) || 'アップロードに失敗しました';
+  const networkErrorMsg = (formEl && formEl.dataset.networkError) || 'ネットワークエラーが発生しました';
   const formData = new FormData();
   formData.append('attachment[image]', file);
   const aciField = document.querySelector('[name="item[advent_calendar_item_id]"]');
@@ -22,15 +25,15 @@ const uploadImageToServer = function(file, onSuccess, onError) {
     headers: { 'X-CSRF-Token': csrfMeta ? csrfMeta.content : '' },
     body: formData
   })
-    .then(function(r) { return r.json(); })
+    .then(function(r) { if (!r.ok) { throw new Error('HTTP ' + r.status); } return r.json(); })
     .then(function(data) {
       if (data.image_url) {
         onSuccess(data.image_url);
       } else {
-        onError(data.image_name || 'アップロードに失敗しました');
+        onError(data.image_name || uploadErrorMsg);
       }
     })
-    .catch(function() { onError('ネットワークエラーが発生しました'); });
+    .catch(function() { onError(networkErrorMsg); });
 };
 
 const initEditor = function() {
@@ -57,6 +60,9 @@ const initEditor = function() {
       sanitizerFunction: function(renderedHTML) {
         return DOMPurify.sanitize(renderedHTML);
       }
+    },
+    previewRender: function(plainText) {
+      return DOMPurify.sanitize(marked(plainText));
     },
     uploadImage: true,
     imageUploadFunction: uploadImageToServer

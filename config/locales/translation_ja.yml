@@ -47,6 +47,7 @@ ja:
       item:
         title: タイトル
         title_empty: 無題
+        body: 本文
       event:
         advent_calendar_items: Adventカレンダーアイテム  #g
         created_by: :activerecord.models.created_by  #g
