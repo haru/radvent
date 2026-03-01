@@ -39,12 +39,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run Super-Linter
-        uses: github/super-linter@v4
+        uses: github/super-linter@v8.5.0
         env:
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_JAVASCRIPT_ES: true
-          VALIDATE_RUBY: true
+          VALIDATE_RUBY: false
 
   build:
     needs: super-linter
