@@ -112,3 +112,10 @@ current_user.admin?                  # Admin check
 
 ## CI
 GitHub Actions matrix tests against Ruby 3.0 & 3.1 with SQLite3, MySQL, and PostgreSQL.
+
+## Active Technologies
+- Ruby 3.x / Rails 8.1 / Node.js（esbuild） (001-remove-jquery-stimulus)
+- N/A（データベース変更なし） (001-remove-jquery-stimulus)
+
+## Recent Changes
+- 001-remove-jquery-stimulus: Added Ruby 3.x / Rails 8.1 / Node.js（esbuild）
