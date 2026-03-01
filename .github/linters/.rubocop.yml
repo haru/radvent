@@ -1,0 +1,26 @@
+AllCops:
+  NewCops: enable
+  Exclude:
+    - 'bin/**/*'
+    - 'config/environments/*'
+    - 'db/schema.rb'
+    - 'node_modules/**/*'
+    - 'tmp/**/*'
+    - 'vendor/**/*'
+
+# rufo と競合する Cop を無効化
+Style/StringLiterals:
+  Enabled: false
+
+# YARD によるドキュメントチェックでカバーされるため無効化
+Style/Documentation:
+  Enabled: false
+
+# マイグレーションファイルは歴史的なコードなのでメトリクス系を除外
+Metrics/AbcSize:
+  Exclude:
+    - 'db/migrate/**/*'
+
+Metrics/MethodLength:
+  Exclude:
+    - 'db/migrate/**/*'
