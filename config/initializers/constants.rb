@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Constants
   # Set advent calendar date
   YEAR = 2015

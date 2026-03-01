@@ -66,3 +66,5 @@ radvent.sqlite3_test
 !.env.example
 docker-compose.override.yml
 specs/
+.yardoc/
+doc/

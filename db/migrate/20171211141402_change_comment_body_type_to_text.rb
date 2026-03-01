@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ChangeCommentBodyTypeToText < ActiveRecord::Migration[5.1]
   def up
     change_column :comments, :body, :text, default: nil

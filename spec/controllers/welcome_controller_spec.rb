@@ -1,6 +1,3 @@
-require 'rails_helper'
+# frozen_string_literal: true
 
-describe WelcomeController, :type => :controller do
-  describe 'GET #index' do
-  end
-end
+require 'rails_helper'

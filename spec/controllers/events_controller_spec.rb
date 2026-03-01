@@ -1,11 +1,19 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe EventsController, type: :controller do
-  before do
-    @user = create(:user, admin: true)
-    sign_in @user
-    @event = create(:event, name: 'hogehoge', title: 'foobar', start_date: '2016-12-01', end_date: '2016-12-30', created_by: @user, updated_by: @user)
+  let(:user) { create(:user, admin: true) }
+  let(:event) do
+    create(:event, name: 'hogehoge', title: 'foobar', start_date: '2016-12-01', end_date: '2016-12-30',
+                   created_by: user, updated_by: user)
   end
+
+  before do
+    sign_in user
+    event
+  end
+
   describe 'GET #new' do
     it 'returns http success' do
       get :new
@@ -15,28 +23,34 @@ RSpec.describe EventsController, type: :controller do
 
   describe 'POST #create' do
     it 'returns http success' do
-      post :create, params: { event: { title: 'test', start_date: '2017-12-01', end_date: '2017-12-25', name: 'aaa', description: 'description' } }
+      post :create,
+           params: { event: { title: 'test', start_date: '2017-12-01', end_date: '2017-12-25', name: 'aaa',
+                              description: 'description' } }
       expect(response).to have_http_status(:redirect)
     end
 
     it 'returns 403 if user is not admin' do
-      user = create(:user)
-      sign_in user
-      post :create, params: { event: { title: 'test', start_date: '2017-12-01', end_date: '2017-12-25', name: 'aaa', description: 'description' } }
+      sign_in create(:user)
+      post :create,
+           params: { event: { title: 'test2', start_date: '2017-12-01', end_date: '2017-12-25', name: 'bbb',
+                              description: 'description' } }
       expect(response).to have_http_status(403)
     end
   end
 
   describe 'PUT #update' do
     it 'returns http success' do
-      put :update, params: { id: @event.id, event: { title: 'test', start_date: '2017-12-01', end_date: '2017-12-25', name: 'aaa', description: 'description' } }
+      put :update,
+          params: { id: event.id,
+                    event: { title: 'test', start_date: '2017-12-01', end_date: '2017-12-25', name: 'aaa',
+                             description: 'description' } }
       expect(response).to have_http_status(:redirect)
     end
   end
 
   describe 'DELETE #destroy' do
     it 'returns http success' do
-      delete :destroy, params: { id: @event.id }
+      delete :destroy, params: { id: event.id }
       expect(response).to have_http_status(:redirect)
     end
   end
@@ -50,7 +64,7 @@ RSpec.describe EventsController, type: :controller do
 
   describe 'GET #show' do
     it 'returns http success' do
-      get :show, params: { name: @event.name }
+      get :show, params: { name: event.name }
       expect(response).to have_http_status(:success)
     end
   end

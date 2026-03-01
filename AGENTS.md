@@ -120,6 +120,16 @@ bundle exec rake assets:precompile             # Production assets
 rufo app/ spec/ lib/                           # Format Ruby files (single quotes, configured in .rufo)
 ```
 
+### Code Quality Checks (MUST run before committing)
+```bash
+bundle exec rubocop                             # Ruby linting
+bundle exec rubocop -a                          # Auto-fix Ruby issues
+bundle exec yard stats --list-undoc             # YARD documentation check
+yarn lint                                       # JavaScript linting
+yarn lint:fix                                   # Auto-fix JavaScript issues
+bash build-scripts/lint.sh                      # Run all lint checks
+```
+
 ## Code Style Guidelines
 
 ### Ruby/Rails Conventions
