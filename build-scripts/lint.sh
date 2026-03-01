@@ -11,7 +11,7 @@ echo "Running RuboCop..."
 bundle exec rubocop --parallel
 
 echo "Running YARD documentation check..."
-bundle exec yard --list --no-save --protected --private
+bundle exec yard stats --list-undoc
 
 echo "Running ESLint..."
 yarn lint

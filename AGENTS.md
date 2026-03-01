@@ -124,7 +124,7 @@ rufo app/ spec/ lib/                           # Format Ruby files (single quote
 ```bash
 bundle exec rubocop                             # Ruby linting
 bundle exec rubocop -a                          # Auto-fix Ruby issues
-bundle exec yard --list --no-save               # YARD documentation check
+bundle exec yard stats --list-undoc             # YARD documentation check
 yarn lint                                       # JavaScript linting
 yarn lint:fix                                   # Auto-fix JavaScript issues
 bash build-scripts/lint.sh                      # Run all lint checks
