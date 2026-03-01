@@ -33,8 +33,21 @@ jobs:
       - name: Lint
         run: bash -x ./build-scripts/lint.sh
 
-  build:
+  super-linter:
     needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run Super-Linter
+        uses: github/super-linter@v4
+        env:
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VALIDATE_JAVASCRIPT_ES: true
+          VALIDATE_RUBY: true
+
+  build:
+    needs: super-linter
     runs-on: ubuntu-latest
     strategy:
       matrix:
