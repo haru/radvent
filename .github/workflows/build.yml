@@ -22,7 +22,19 @@ permissions:
 env:
   SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    container:
+      image: ruby:4.0
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install
+        run: bash -x ./build-scripts/install.sh
+      - name: Lint
+        run: bash -x ./build-scripts/lint.sh
+
   build:
+    needs: lint
     runs-on: ubuntu-latest
     strategy:
       matrix:

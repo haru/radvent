@@ -1,0 +1,25 @@
+inherit_from: .rubocop_todo.yml
+
+plugins:
+  - rubocop-rails
+  - rubocop-rspec
+
+AllCops:
+  NewCops: enable
+  Exclude:
+    - 'bin/**/*'
+    - 'config/environments/*'
+    - 'db/schema.rb'
+    - 'node_modules/**/*'
+    - 'tmp/**/*'
+    - 'vendor/**/*'
+
+# rufo と競合する Cop を無効化
+Style/StringLiterals:
+  Enabled: false
+
+Rails:
+  Enabled: true
+
+RSpec:
+  Enabled: true
