@@ -15,7 +15,7 @@
           = t("helpers.submit.preview")
         %div
           - if item.advent_calendar_item.published?
-            = link_to t("helpers.submit.cancel"), item_path(id: item.advent_calendar_item_id), class:"btn btn-default"
+            = link_to t("helpers.submit.cancel"), item_path(item), class:"btn btn-default"
           - else
             = link_to t("helpers.submit.cancel"), advent_calendar_item_path(id: item.advent_calendar_item_id), class:"btn btn-default"
           = f.submit t("helpers.submit.create"), class:"btn btn-primary btn-raised item-submit", data: {disable_with: false}
