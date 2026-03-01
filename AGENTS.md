@@ -32,7 +32,6 @@ This project uses **Git Flow** branching model (also known as A successful git b
 5. Merge PR into `develop` after review
 6. Never commit or push directly to `main` or `develop`
 
-### Example Commands
 ```bash
 git checkout develop
 git pull origin develop
@@ -42,12 +41,54 @@ git push -u origin bugfix/your-fix
 # Create PR from bugfix/your-fix to develop
 ```
 
+## Project Overview
+
+Radvent is a Qiita-style Advent Calendar web application (Japanese-focused). Users can create events, publish markdown articles on specific calendar dates, and interact via likes and comments. Built with Ruby on Rails and esbuild.
+
+### Tech Stack
+- **Backend**: Ruby (>= 3.0) / Rails 8.1, Puma, Devise (auth)
+- **Frontend**: esbuild, HAML templates, PostCSS, Bootstrap 5 (mdb-ui-kit), @hotwired/stimulus
+- **Markdown editor**: EasyMDE (easy-markdown-editor) with toolbar, side-by-side preview, image upload, and DOMPurify sanitization
+- **Markdown rendering**: Marked.js with highlight.js for syntax highlighting
+- **File uploads**: CarrierWave
+- **Database**: SQLite3 (dev default), MySQL 5.7+, or PostgreSQL (configurable via env vars)
+
+### Key Models and Relationships
+
+```
+Event ──< AdventCalendarItem >── User
+               │
+               └──1 Item ──< Comment
+                      └──< Like >── User
+```
+
+- `User` — Devise-based auth, has admin role, has many items/likes/comments
+- `Event` — Advent calendar event with start/end dates
+- `AdventCalendarItem` — Calendar "slot" (date × event × user). The `date` column is **Integer** (1–31), not a Date type
+- `Item` — Article with markdown body. `belongs_to :advent_calendar_item` (unique constraint)
+- `Comment` — Has **no `user_id` column**; stores `user_name` as a string only
+- `Like` — Belongs to user and item
+- `Attachment` — File uploads via CarrierWave, belongs to `AdventCalendarItem`
+
+### Key Files
+
+| Purpose | Path |
+|---|---|
+| Models | `app/models/` — `advent_calendar_item.rb`, `item.rb`, `event.rb`, `user.rb` |
+| Controllers | `app/controllers/application_controller.rb` |
+| Routing | `config/routes.rb` |
+| Schema | `db/schema.rb` |
+| Factories | `spec/factories/` |
+| i18n | `config/locales/` |
+| JS Controllers | `app/javascript/controllers/` — Stimulus controllers |
+| CSS Entry Point | `app/javascript/stylesheets/application.css` |
+
 ## Build, Lint, and Test Commands
 
 ### Setup
 ```bash
 bundle install && yarn install
-bundle exec rake radvent:generate_default_settings
+bundle exec rake radvent:generate_default_settings  # generates config/database.yml, config/secrets.yml, config/initializers/devise.yml
 bundle exec rake db:create db:migrate
 ```
 
@@ -64,46 +105,43 @@ bundle exec rspec spec/controllers/            # Controller specs
 bundle exec rspec spec/models/user_spec.rb     # Single file
 bundle exec rspec spec/models/user_spec.rb:42  # Specific test (line number)
 ```
-Coverage reports generated to `coverage/` (HTML and LCOV formats).
+Coverage reports are generated to `coverage/` (HTML and LCOV formats).
 
 ### Asset Build
 ```bash
 yarn build                                     # JS via esbuild
-    yarn build:css                                 # PostCSS compilation
+yarn build:css                                 # PostCSS compilation
 yarn copy:fonts                                # Copy font files
 bundle exec rake assets:precompile             # Production assets
 ```
 
 ### Code Formatting
 ```bash
-# Ruby - rufo with single quotes (configured in .rufo)
-rufo app/ spec/ lib/                           # Format Ruby files
+rufo app/ spec/ lib/                           # Format Ruby files (single quotes, configured in .rufo)
 ```
 
 ## Code Style Guidelines
 
 ### Ruby/Rails Conventions
 - **Quotes**: Use single quotes by default (rufo config)
-- **Strings**: No comments unless explicitly requested
 - **Indentation**: 2 spaces (Ruby standard)
-- **Method visibility**: Use `public`/`private`/`protected` keywords (see event.rb:19)
+- **Method visibility**: Use `public`/`private`/`protected` keywords explicitly
 - **Validation**: Place validations at top of model classes
 - **Custom validations**: Define as private methods with `validate :method_name`
-- **Model relationships**: Standard ActiveRecord associations
 - **Callbacks**: Use standard Rails patterns where needed
 
 ### Controllers
 - **Layouts**: Set with `layout 'admin'` or `layout 'application'`
 - **Filters**: Use `before_action` with `only`/`except` constraints
-- **Authorization**: 
+- **Authorization**:
   ```ruby
   before_action :authenticate_user!
-  admin_user!                              # ApplicationController helper
+  admin_user!                              # ApplicationController helper — renders 403 for non-admins
   ```
 - **Error rendering**: Use `render_404` or `render_403` from ApplicationController
-- **Params**: Strong params pattern: `params.require(:resource).permit(:field1, :field2)`
+- **Params**: Strong params pattern — `params.require(:resource).permit(:field1, :field2)`
 
-### Views (HAML Only - Never ERB)
+### Views (HAML Only — Never ERB)
 - **File extension**: `.html.haml`
 - **Pattern**:
   ```haml
@@ -113,11 +151,10 @@ rufo app/ spec/ lib/                           # Format Ruby files
   = t("views.events.show.some_key")
   ```
 - **Interpolation**: Use `#{}` for Ruby interpolation
-- **Nested content**: Indent properly within blocks
 - **i18n**: Always use `t()` for user-facing strings
 
 ### Frontend JavaScript (Stimulus)
-- **Framework**: @hotwired/stimulus — controllers in `app/javascript/controllers/`
+- **Framework**: @hotwired/stimulus — do NOT use jQuery
 - **Naming**: `{name}_controller.js` (snake_case files, kebab-case `data-controller` values)
 - **Registration**: `app/javascript/controllers/index.js` — add new controllers here
 - **Available controllers**:
@@ -127,32 +164,47 @@ rufo app/ spec/ lib/                           # Format Ruby files
   - `datatable` — initialises simple-datatables on a `<table>` element
   - `popover` — initialises MDB Popover
 - **Turbo guard**: For re-entrant `connect()`, check `this.element.dataset.rendered === 'true'` before re-processing
-- **CSS**: PostCSS pipeline (`yarn build:css`); source at `app/javascript/stylesheets/application.css`
+- **CSS**: PostCSS pipeline (`yarn build:css`); source at `app/javascript/stylesheets/application.css`. Do NOT use `.scss` files.
+
+```javascript
+// Adding a new controller — append to app/javascript/controllers/index.js:
+application.register('my-feature', MyFeatureController)
+```
+
+```haml
+/ HAML usage example
+%div{data: {controller: 'markdown', markdown_body_value: item.body}}
+```
 
 ### Naming Conventions
 - **Models**: Singular, PascalCase (e.g., `AdventCalendarItem`)
 - **Controllers**: Plural, PascalCase (e.g., `EventsController`)
 - **Tables**: Plural, snake_case (e.g., `advent_calendar_items`)
 - **Views**: Match controller/action (e.g., `events/show.html.haml`)
-- **Routes**: RESTful resources with custom routes as needed
 - **Private methods**: Snake_case (e.g., `find_event_by_name`)
+
+### Testing Patterns
+- **Framework**: RSpec + FactoryBot
+- **FactoryBot**: Call `create(:model)` or `build(:model)` directly (no prefix)
+- **Devise auth**: `sign_in @user` (auto-included via `Devise::Test::ControllerHelpers`)
+- **Setup**: Often use `Model.destroy_all` in `before` blocks
+- **Date mocking**: `allow(Time.zone).to receive(:today).and_return(Date.new(2015, 12, 2))`
+
+```ruby
+RSpec.describe ItemsController, type: :controller do
+  before do
+    @user = create(:user)
+    sign_in @user
+  end
+end
+```
 
 ### Error Handling
 - **404 errors**: Call `render_404` helper (ApplicationController)
 - **403 errors**: Call `render_403` or `admin_user!` helper
 - **Validation errors**: Use standard Rails validation with i18n keys
-- **Not found records**: Check and render 404 (see events_controller.rb:70)
 
-### Testing Patterns
-- **Framework**: RSpec + FactoryBot
-- **FactoryBot**: Call `create(:model)` or `build(:model)` directly (no prefix)
-- **Devise auth**: `sign_in @user` (auto-included in controller specs)
-- **Setup**: Often use `Model.destroy_all` in `before` blocks
-- **Date mocking**: `allow(Time.zone).to receive(:today).and_return(Date.new(2015, 12, 2))`
-- **Controller tests**: Use standard `get`/`post`/`put`/`delete` with params hash
-- **Model tests**: Use `describe` blocks with `it` or `before` hooks
-
-### Project-Specific Gotchas
+## Project-Specific Gotchas
 
 **Critical: Event routing uses name, not ID**
 ```ruby
@@ -165,7 +217,7 @@ event_path(event)  # This won't work!
 ```
 
 **AdventCalendarItem.date is Integer, not Date**
-- Column type: Integer (1-31), not Date/DateTime
+- Column type: Integer (1–31), not Date/DateTime
 - Query with `.where(date: date.day)` pattern
 
 **Comment model has no user_id**
@@ -174,28 +226,30 @@ event_path(event)  # This won't work!
 
 **Layout switching**
 - Admin pages: `layout 'admin'` in controller
-- EventsController#show overrides with `render layout: 'application'`
+- `EventsController#show` overrides with `render layout: 'application'`
 
-**i18n Configuration**
-- Default locale: `:ja` (Japanese)
-- Timezone: `Tokyo`
-- Auto-detect locale: `http_accept_language` gem
+**i18n / Timezone**
+- Default locale: `:ja` (Japanese), with English support via `http_accept_language` gem
+- Timezone: `Tokyo` (`config.time_zone = 'Tokyo'`)
+- App settings generated by `rake radvent:generate_default_settings` into `config/settings/`
+- Default admin login: `admin@example.com` / `adminadmin`
 
-**Generators Config**
-- Test framework: RSpec with controller specs only
+**Generator settings (config/application.rb)**
+- Controller specs: enabled
+- View / Helper / Routing / Request specs: disabled
 - Fixture replacement: FactoryBot in `spec/factories/`
-- View/helper/routing specs: Disabled in config
 
 ### Database
 - **Dev default**: SQLite3
-- **Production**: MySQL 5.7+ or PostgreSQL (via env vars)
-- **Env vars**: `DB`, `DB_NAME`, `DB_USERNAME`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT`
+- **Production**: MySQL 5.7+ or PostgreSQL
+- **Env vars**: `DB` (sqlite3/mysql/postgres), `DB_NAME`, `DB_USERNAME`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT`, `RADVENT_TITLE`
 
-### Generator Settings (config/application.rb)
-- Controller specs: enabled
-- View specs: disabled
-- Helper specs: disabled
-- Routing specs: disabled
-- Request specs: disabled
+## Docker / CI
+
+- `docker-compose.yml` at root runs PostgreSQL + Radvent
+- `.devcontainer/` provides VS Code dev container setup with Ruby 3.1 and PostgreSQL
+- **CI**: GitHub Actions matrix tests against Ruby 3.0 & 3.1 with SQLite3, MySQL, and PostgreSQL
+
+---
 
 When working on this codebase, follow these conventions to maintain consistency with existing code patterns.
