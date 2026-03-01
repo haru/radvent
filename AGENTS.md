@@ -69,7 +69,7 @@ Coverage reports generated to `coverage/` (HTML and LCOV formats).
 ### Asset Build
 ```bash
 yarn build                                     # JS via esbuild
-yarn build:css                                 # SCSS compilation
+    yarn build:css                                 # PostCSS compilation
 yarn copy:fonts                                # Copy font files
 bundle exec rake assets:precompile             # Production assets
 ```
@@ -115,6 +115,19 @@ rufo app/ spec/ lib/                           # Format Ruby files
 - **Interpolation**: Use `#{}` for Ruby interpolation
 - **Nested content**: Indent properly within blocks
 - **i18n**: Always use `t()` for user-facing strings
+
+### Frontend JavaScript (Stimulus)
+- **Framework**: @hotwired/stimulus — controllers in `app/javascript/controllers/`
+- **Naming**: `{name}_controller.js` (snake_case files, kebab-case `data-controller` values)
+- **Registration**: `app/javascript/controllers/index.js` — add new controllers here
+- **Available controllers**:
+  - `markdown` — renders `data-markdown-body-value` as Markdown via marked + DOMPurify
+  - `comment` — renders comment text content as Markdown (with `data-rendered` guard against Turbo double-render)
+  - `editor` — EasyMDE editor with image upload; values: `upload-path`, `upload-error`, `network-error`
+  - `datatable` — initialises simple-datatables on a `<table>` element
+  - `popover` — initialises MDB Popover
+- **Turbo guard**: For re-entrant `connect()`, check `this.element.dataset.rendered === 'true'` before re-processing
+- **CSS**: PostCSS pipeline (`yarn build:css`); source at `app/javascript/stylesheets/application.css`
 
 ### Naming Conventions
 - **Models**: Singular, PascalCase (e.g., `AdventCalendarItem`)

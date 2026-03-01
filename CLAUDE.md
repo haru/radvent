@@ -41,7 +41,7 @@ bundle exec rake assets:precompile
 
 ### Tech Stack
 - **Backend**: Ruby (>= 3.0) / Rails, Puma, Devise (auth)
-- **Frontend**: Webpacker 5, HAML templates, SCSS, Bootstrap 5 (mdb-ui-kit), jQuery
+- **Frontend**: esbuild, HAML templates, PostCSS, Bootstrap 5 (mdb-ui-kit), @hotwired/stimulus
 - **Markdown editor**: EasyMDE (easy-markdown-editor) with toolbar, side-by-side preview, image upload, and DOMPurify sanitization
 - **Markdown**: Marked.js with highlight.js for syntax highlighting
 - **File uploads**: CarrierWave
@@ -118,4 +118,4 @@ GitHub Actions matrix tests against Ruby 3.0 & 3.1 with SQLite3, MySQL, and Post
 - N/A（データベース変更なし） (001-remove-jquery-stimulus)
 
 ## Recent Changes
-- 001-remove-jquery-stimulus: Added Ruby 3.x / Rails 8.1 / Node.js（esbuild）
+- 001-remove-jquery-stimulus: Replaced jQuery with @hotwired/stimulus; esbuild replaces Webpacker; PostCSS replaces Sass/SCSS; simple-datatables replaces datatables.net-bs5
