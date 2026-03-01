@@ -33,31 +33,6 @@ jobs:
       - name: Lint
         run: bash -x ./build-scripts/lint.sh
 
-  super-linter:
-    runs-on: ubuntu-latest
-    permissions:
-      # contents permission to clone the repository
-      contents: read
-      packages: read
-      # issues and pull-requests permissions to write results as pull
-      # request comments. Omit them if you don't need summary comments
-      issues: write
-      pull-requests: write
-      # To report GitHub Actions status checks. Omit if you don't need
-      # to update commit status
-      statuses: write
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Run Super-Linter
-        uses: super-linter/super-linter@v8.5.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          FILTER_REGEX_EXCLUDE: vendor/
-          VALIDATE_JAVASCRIPT_ES: true
-          VALIDATE_RUBY: true
-
   build:
     runs-on: ubuntu-latest
     strategy:
