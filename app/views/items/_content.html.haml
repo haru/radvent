@@ -28,5 +28,5 @@
   = render "navigation", date: item.advent_calendar_item.date, advent_calendar_item_prev: advent_calendar_item_prev, advent_calendar_item_next: advent_calendar_item_next, item: item
   %div.card
     %div.card-body
-      %div.markdown#item-show{data: {controller: 'markdown', markdown_body_value: item.body.to_json}}
+      %div.markdown#item-show{data: {controller: 'markdown', markdown_body_value: item.body}}
   = render "navigation", date: item.advent_calendar_item.date, advent_calendar_item_prev: advent_calendar_item_prev, advent_calendar_item_next: advent_calendar_item_next, item: item
