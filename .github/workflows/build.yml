@@ -34,7 +34,6 @@ jobs:
         run: bash -x ./build-scripts/lint.sh
 
   super-linter:
-    needs: lint
     runs-on: ubuntu-latest
     permissions:
       # contents permission to clone the repository
@@ -59,7 +58,6 @@ jobs:
           VALIDATE_RUBY: true
 
   build:
-    needs: super-linter
     runs-on: ubuntu-latest
     strategy:
       matrix:
