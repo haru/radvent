@@ -47,6 +47,7 @@ ja:
       item:
         title: タイトル
         title_empty: 無題
+        body: 本文
       event:
         advent_calendar_items: Adventカレンダーアイテム  #g
         created_by: :activerecord.models.created_by  #g
@@ -114,24 +115,6 @@ ja:
         date_short: "%{month}月%{day}日"
         link_edit: 記事を編集する
         liked_person: いいねした人
-      _form:
-        item_header_preview: プレビュー
-      _form_attachment:
-        select_image: 画像を選択
-        paset_from_clipboard: 画像はクリップボードから貼り付けることもできます。
-      _form_markdown_help_modal:
-        title: Markdownの書き方
-        output: 表示
-        header: 見出し
-        strong_emphasis: 強調(太字)
-        emphasis: 強調(斜体)
-        unordered_list: リスト
-        ordered_list: 番号付きリスト
-        blockquote: 引用
-        code_block: codeブロック
-        inline_code: 埋め込み
-        link: リンク
-        horizontal_rule: 水平線
       _navigation:
         title: "この投稿は%{title}の%{date}日目の記事です。"
       edit:

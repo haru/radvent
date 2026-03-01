@@ -31,3 +31,6 @@
 
 en:
   hello: "Hello world"
+  items:
+    upload_error: 'Upload failed'
+    network_error: 'A network error occurred'
