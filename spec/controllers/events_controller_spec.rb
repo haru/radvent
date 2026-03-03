@@ -19,6 +19,12 @@ RSpec.describe EventsController, type: :controller do
       get :new
       expect(response).to have_http_status(:success)
     end
+
+    it 'assigns @event' do
+      get :new
+      expect(assigns(:event)).to be_a(Event)
+      expect(assigns(:event)).to be_new_record
+    end
   end
 
   describe 'POST #create' do

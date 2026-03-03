@@ -33,7 +33,7 @@ class EventsController < ApplicationController
   #
   # @return [void]
   def new
-    @new ||= Event.new
+    @event ||= Event.new
   end
 
   # Displays a form to edit an event.

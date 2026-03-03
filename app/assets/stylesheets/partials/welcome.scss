@@ -81,10 +81,13 @@ body#advent_calendar_body {
     border-radius: 0;
     margin-bottom: 0;
     min-height: 20px;
-    a {
+    a:not(.dropdown-item) {
       color: #FFFFFF;
       padding-top: 5px;
       padding-bottom: 5px;
+    }
+    .dropdown-item {
+      color: #212529 !important;
     }
     .navbar-collapse.collapse {
       min-height: 20px;

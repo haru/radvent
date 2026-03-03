@@ -25,11 +25,13 @@
               = link_to  events_list_path, class: "nav-item nav-link" do
                 %i.fa.fa-cog
                 = t('menu.settings')
-            %div.nav-item.dropdown
-              %a.nav-link.dropdown-toggle{"href" => "#", "data-mdb-toggle" => "dropdown", "aria-expanded" => "false"}
+            %div.nav-item.dropdown{"data-controller" => "navbar-dropdown"}
+              %a.nav-link.dropdown-toggle{"href" => "#", "aria-expanded" => "false",
+                                          "data-navbar-dropdown-target" => "toggle",
+                                          "data-action" => "click->navbar-dropdown#toggle"}
                 %i.fa.fa-user
                 = current_user.name
-              %ul.dropdown-menu.dropdown-menu-end
+              %ul.dropdown-menu.dropdown-menu-end{"data-navbar-dropdown-target" => "menu"}
                 %li= link_to t('menu.my_page'), edit_user_registration_path, class: 'dropdown-item'
                 %li= link_to t('menu.board_management'), boards_path, class: 'dropdown-item'
                 %li

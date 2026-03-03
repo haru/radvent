@@ -23,7 +23,7 @@
   %div.mb-3
     = f.label :visibility, t('boards.form.visibility'), class: 'form-label'
     %div
-      - %i[public, :protected, :private].each do |vis|
+      - %i[public protected private].each do |vis|
         %div.form-check
           = f.radio_button :visibility, vis, class: 'form-check-input'
           = f.label "visibility_#{vis}", class: 'form-check-label' do

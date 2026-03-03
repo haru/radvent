@@ -13,7 +13,7 @@
     %hr
 
     - if Event.creatable_on?(@board, current_user)
-      = link_to t('boards.show.create_event'), new_event_path, class: 'btn btn-success mb-3'
+      = link_to t('boards.show.create_event'), new_event_path, class: 'btn btn-success text-white mb-3'
 
     %div.row
       - @events.each do |event|

@@ -41,6 +41,22 @@ RSpec.describe BoardsController, type: :controller do
         get :new
         expect(response).to have_http_status(:success)
       end
+
+      context 'with rendered views' do
+        render_views
+
+        it 'renders visibility radio buttons for all three options' do
+          get :new
+          expect(response.body).to include('value="public"')
+          expect(response.body).to include('value="protected"')
+          expect(response.body).to include('value="private"')
+        end
+
+        it 'renders visibility labels without translation missing errors' do
+          get :new
+          expect(response.body).not_to include('translation missing')
+        end
+      end
     end
   end
 
