@@ -68,4 +68,54 @@ RSpec.describe EventsController, type: :controller do
       expect(response).to have_http_status(:success)
     end
   end
+
+  describe 'GET #list' do
+    it 'returns http success' do
+      get :list
+      expect(response).to have_http_status(:success)
+    end
+  end
+
+  describe 'POST #create failure' do
+    it 'renders new with unprocessable content on invalid event' do
+      post :create, params: { event: { title: '', start_date: '', end_date: '', name: '', description: '' } }
+      expect(response).to have_http_status(:unprocessable_content)
+    end
+  end
+
+  describe 'PUT #update failure' do
+    it 'renders edit with unprocessable content on invalid update' do
+      put :update, params: { id: event.id, event: { title: '' } }
+      expect(response).to have_http_status(:unprocessable_content)
+    end
+  end
+
+  describe 'POST #create on UserBoard' do
+    let(:board_owner) { create(:user) }
+    let(:public_board) { create(:board, :public_user, owner: board_owner) }
+    let(:protected_board) { create(:board, :protected_user, owner: board_owner) }
+
+    context 'when user is authenticated on a Public Board' do
+      it 'allows authenticated non-member to create event' do
+        non_member = create(:user)
+        sign_in non_member
+        post :create, params: {
+          event: { title: 'public-event', start_date: '2017-12-01', end_date: '2017-12-25',
+                   name: 'public-evt', description: 'desc', board_id: public_board.id }
+        }
+        expect(response).to have_http_status(:redirect)
+      end
+    end
+
+    context 'when user is not a member of a Protected Board' do
+      it 'returns 403' do
+        sign_in create(:user)
+        post :create, params: {
+          event: { title: 'protected-event', start_date: '2017-12-01', end_date: '2017-12-25',
+                   name: 'protected-evt', description: 'desc', board_id: protected_board.id }
+        }
+        expect(response).to have_http_status(403)
+      end
+    end
+  end
 end

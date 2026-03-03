@@ -1,0 +1,67 @@
+# frozen_string_literal: true
+
+# Manages board member management.
+#
+# Handles adding and removing members from UserBoards.
+class BoardMembershipsController < ApplicationController
+  before_action :require_authentication
+  before_action :find_board, only: %i[index create]
+  before_action :check_editability, only: %i[index create]
+  before_action :find_membership, only: [:destroy]
+  before_action :check_membership_deletability, only: [:destroy]
+
+  def index
+    @memberships = @board.board_memberships.includes(:user)
+  end
+
+  def create
+    user = User.find_by(email: params[:member_query]) || User.find_by(name: params[:member_query])
+
+    unless user
+      flash.now[:alert] = t('board_memberships.errors.user_not_found')
+      @memberships = @board.board_memberships.includes(:user)
+      return render :index, status: :unprocessable_content
+    end
+
+    membership = BoardMembership.new(board: @board, user: user)
+    if membership.save
+      redirect_to board_board_memberships_path(@board.board_id), notice: t('board_memberships.member_added')
+    else
+      flash.now[:alert] = t('board_memberships.errors.already_member')
+      @memberships = @board.board_memberships.includes(:user)
+      render :index, status: :unprocessable_content
+    end
+  end
+
+  def destroy
+    @membership.destroy
+    redirect_to board_board_memberships_path(@membership.board.board_id), status: :see_other,
+                                                                           notice: t('board_memberships.member_removed')
+  end
+
+  private
+
+  def require_authentication
+    return if user_signed_in?
+
+    redirect_to new_user_session_path
+  end
+
+  def find_board
+    @board = Board.find_by(board_id: params[:board_board_id])
+    render_not_found unless @board
+  end
+
+  def check_editability
+    render_forbidden unless @board&.editable?(current_user)
+  end
+
+  def find_membership
+    @membership = BoardMembership.find_by(id: params[:id])
+    render_not_found unless @membership
+  end
+
+  def check_membership_deletability
+    render_forbidden unless @membership&.board&.editable?(current_user)
+  end
+end

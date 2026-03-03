@@ -4,6 +4,8 @@
 #
 # Items contain the markdown content (body) that users publish on specific dates.
 class Item < ApplicationRecord
+  include Permissionable
+
   belongs_to :advent_calendar_item
   has_many :comments, -> { order(:id) }, dependent: :destroy, inverse_of: :item
   has_many :likes, dependent: :destroy
@@ -29,5 +31,19 @@ class Item < ApplicationRecord
     return false unless user
 
     likes.find_by(user_id: user.id) != nil
+  end
+
+  # --- Permissionable implementation ---
+
+  def visible?(user)
+    advent_calendar_item.visible?(user)
+  end
+
+  def editable?(user)
+    advent_calendar_item.editable?(user)
+  end
+
+  def deletable?(user)
+    advent_calendar_item.deletable?(user)
   end
 end

@@ -1,0 +1,22 @@
+- content_for(:content) do
+  %div.container.mt-4
+    %h1= t('boards.edit.title')
+    %hr
+
+    = render 'form', board: @board
+
+    %hr
+    %h4= t('boards.edit.danger_zone')
+
+    - if @board.editable?(current_user)
+      = link_to t('board_memberships.index.title'), board_board_memberships_path(@board.board_id), class: 'btn btn-outline-secondary mb-3'
+
+    - if @board.deletable?(current_user)
+      %div.card.border-danger.mt-3
+        %div.card-body
+          %h5.card-title.text-danger= t('boards.edit.delete_board')
+          %p= t('boards.edit.confirm_delete')
+          = button_to board_path(@board.board_id), method: :delete,
+                      class: 'btn btn-danger',
+                      data: { "turbo-confirm": t('boards.edit.delete_warning') } do
+            = t('boards.edit.delete_board')

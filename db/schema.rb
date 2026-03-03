@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_01_000000) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_03_000003) do
   create_table "advent_calendar_items", force: :cascade do |t|
     t.string "comment"
     t.datetime "created_at", precision: nil
@@ -29,7 +29,29 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_01_000000) do
     t.index ["advent_calendar_item_id"], name: "index_attachments_on_advent_calendar_item_id"
   end
 
-  create_table "comments", id: :integer, force: :cascade do |t|
+  create_table "board_memberships", force: :cascade do |t|
+    t.integer "board_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["board_id", "user_id"], name: "index_board_memberships_on_board_id_and_user_id", unique: true
+    t.index ["user_id"], name: "index_board_memberships_on_user_id"
+  end
+
+  create_table "boards", force: :cascade do |t|
+    t.string "board_id", limit: 64
+    t.integer "board_type", default: 1, null: false
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.string "name", null: false
+    t.integer "owner_id"
+    t.datetime "updated_at", null: false
+    t.integer "visibility"
+    t.index ["board_id"], name: "index_boards_on_board_id", unique: true
+    t.index ["owner_id"], name: "index_boards_on_owner_id"
+  end
+
+  create_table "comments", id: :integer, default: nil, force: :cascade do |t|
     t.text "body"
     t.datetime "created_at", precision: nil
     t.integer "item_id"
@@ -38,7 +60,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_01_000000) do
     t.index ["item_id"], name: "index_comments_on_item_id"
   end
 
-  create_table "events", id: :integer, force: :cascade do |t|
+  create_table "events", force: :cascade do |t|
+    t.integer "board_id", null: false
     t.datetime "created_at", precision: nil, null: false
     t.integer "created_by_id"
     t.text "description"
@@ -49,11 +72,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_01_000000) do
     t.datetime "updated_at", precision: nil, null: false
     t.integer "updated_by_id"
     t.integer "version"
+    t.index ["board_id"], name: "index_events_on_board_id"
     t.index ["name"], name: "index_events_on_name", unique: true
     t.index ["title"], name: "index_events_on_title", unique: true
   end
 
-  create_table "items", id: :integer, force: :cascade do |t|
+  create_table "items", id: :integer, default: nil, force: :cascade do |t|
     t.integer "advent_calendar_item_id"
     t.text "body"
     t.integer "comments_count", default: 0, null: false
@@ -97,4 +121,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_01_000000) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
+
+  add_foreign_key "board_memberships", "boards"
+  add_foreign_key "board_memberships", "users"
+  add_foreign_key "boards", "users", column: "owner_id"
+  add_foreign_key "events", "boards"
 end

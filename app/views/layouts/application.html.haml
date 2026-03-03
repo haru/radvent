@@ -25,12 +25,16 @@
               = link_to  events_list_path, class: "nav-item nav-link" do
                 %i.fa.fa-cog
                 = t('menu.settings')
-            = link_to  edit_user_registration_path, class: "nav-item nav-link" do
-              %i.fa.fa-user
-              = "#{current_user.name}"
-            = link_to destroy_user_session_path, class: "nav-item nav-link", data: { "turbo-method": :delete } do
-              %i.fa.fa-sign-out-alt
-              = t('menu.sign_out')
+            %div.nav-item.dropdown
+              %a.nav-link.dropdown-toggle{"href" => "#", "data-mdb-toggle" => "dropdown", "aria-expanded" => "false"}
+                %i.fa.fa-user
+                = current_user.name
+              %ul.dropdown-menu.dropdown-menu-end
+                %li= link_to t('menu.my_page'), edit_user_registration_path, class: 'dropdown-item'
+                %li= link_to t('menu.board_management'), boards_path, class: 'dropdown-item'
+                %li
+                  %hr.dropdown-divider
+                %li= link_to t('menu.sign_out'), destroy_user_session_path, class: 'dropdown-item', data: { "turbo-method": :delete }
           - else
             = link_to new_user_registration_path, class: "nav-item nav-link" do
               %i.fa.fa-user-plus

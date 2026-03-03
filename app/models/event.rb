@@ -4,12 +4,46 @@
 #
 # Events have a title, name, start and end dates, and contain multiple advent calendar items.
 class Event < ApplicationRecord
+  include Permissionable
+
+  belongs_to :board
   has_many :advent_calendar_items, dependent: :destroy
   belongs_to :created_by, class_name: 'User'
   belongs_to :updated_by, class_name: 'User'
   validates :title, presence: true, uniqueness: true
   validates :name, presence: true, uniqueness: true, format: { with: /\A[-_a-z0-9]+\z/ }
   validate :start_and_end_dates_must_be_same_month
+
+  # Returns true if the given user can create an event on the given board.
+  #
+  # @param board [Board] the target board
+  # @param user [User, nil]
+  # @return [Boolean]
+  def self.creatable_on?(board, user)
+    return false if user.nil?
+    return true if user.admin?
+    return false if board.board_type_top?
+    return true if board.visibility_public?
+
+    board.owner?(user) || board.member?(user)
+  end
+
+  # --- Permissionable implementation ---
+
+  def visible?(user)
+    board.visible?(user)
+  end
+
+  def editable?(user)
+    return true if user&.admin?
+    return false if user.nil?
+
+    board.board_type_top? ? false : board.owner?(user) || board.member?(user)
+  end
+
+  def deletable?(user)
+    editable?(user)
+  end
 
   private
 

@@ -24,6 +24,12 @@ Rails.application.routes.draw do
   resources :attachments
   resources :comments
 
+  resources :boards, param: :board_id,
+                     constraints: { board_id: /[a-z0-9_\-]+/ } do
+    resources :board_memberships, only: %i[index create]
+  end
+  resources :board_memberships, only: [:destroy]
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

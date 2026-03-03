@@ -15,5 +15,6 @@ FactoryBot.define do
     end_date { '2017-11-07 17:49:53' }
     association :created_by, factory: :user
     association :updated_by, factory: :user
+    board { Board.find_or_create_by!(board_type: :top) { |b| b.name = 'TOP' } }
   end
 end
