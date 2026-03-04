@@ -13,3 +13,8 @@ Rails.application.config.assets.version = "1.0"
 # folder are already added.
 # Rails.application.config.assets.precompile += %w[ admin.js admin.css ]
 Rails.application.config.assets.precompile += %w[application_pack.css]
+
+# Disable the SassC CSS compressor. The MDB library CSS (built by PostCSS/cssbundling-rails)
+# contains empty custom property values (e.g. `font-family: ;`) which are valid CSS but crash
+# SassC when it tries to parse them as SCSS for compression. PostCSS handles minification.
+Rails.application.config.assets.css_compressor = nil
