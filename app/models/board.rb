@@ -13,6 +13,7 @@ class Board < ApplicationRecord
     sign_up password confirmation unlock rails assets
   ].freeze
 
+  attribute :board_type, :integer, default: 1
   enum :board_type, { top: 0, user: 1 }, prefix: true
   enum :visibility, { public: 0, protected: 1, private: 2 }, prefix: :visibility
 
