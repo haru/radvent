@@ -14,6 +14,10 @@
 - Do not automatically generate or suggest commit messages
 - Ask user for commit message before running `git commit`
 
+**ALWAYS run lint after modifying code**
+- After any code change, run `sh build-scripts/lint.sh` and verify it passes
+- Do NOT consider a task complete until lint passes
+
 **ALWAYS follow Test-Driven Development (TDD)**
 - Write tests BEFORE writing implementation code
 - Red → Green → Refactor cycle must be followed strictly

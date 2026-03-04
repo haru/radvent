@@ -6,6 +6,7 @@
 class Board < ApplicationRecord
   include Permissionable
 
+  # Board IDs that cannot be used by user-created boards to avoid routing conflicts.
   RESERVED_IDS = %w[
     boards admin users events items likes comments attachments
     advent_calendar_items user welcome new edit sign_in sign_out

@@ -10,10 +10,14 @@ class BoardMembershipsController < ApplicationController
   before_action :find_membership, only: [:destroy]
   before_action :check_membership_deletability, only: [:destroy]
 
+  # Lists all members of the board.
+  # @return [void]
   def index
     @memberships = @board.board_memberships.includes(:user)
   end
 
+  # Adds a new member to the board by email or name.
+  # @return [void]
   def create
     user = find_user_by_query(params[:member_query])
     return handle_user_not_found unless user
@@ -22,6 +26,8 @@ class BoardMembershipsController < ApplicationController
     save_membership(membership)
   end
 
+  # Removes a member from the board.
+  # @return [void]
   def destroy
     @membership.destroy
     redirect_to board_board_memberships_path(@membership.board.board_id), status: :see_other,

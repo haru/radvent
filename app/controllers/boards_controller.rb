@@ -10,20 +10,30 @@ class BoardsController < ApplicationController
   before_action :check_editability, only: %i[edit update]
   before_action :check_deletability, only: [:destroy]
 
+  # Lists boards owned by the current user (or all user boards for admins).
+  # @return [void]
   def index
     @boards = current_user.admin? ? Board.where(board_type: :user) : Board.where(owner: current_user)
   end
 
+  # Displays a board and its events.
+  # @return [void]
   def show
     @events = @board.events.order(start_date: :desc)
   end
 
+  # Renders the form to create a new board.
+  # @return [void]
   def new
     @board = Board.new
   end
 
+  # Renders the form to edit an existing board.
+  # @return [void]
   def edit; end
 
+  # Creates a new board owned by the current user.
+  # @return [void]
   def create
     @board = Board.new(board_params)
     @board.owner = current_user
@@ -34,6 +44,8 @@ class BoardsController < ApplicationController
     end
   end
 
+  # Updates an existing board.
+  # @return [void]
   def update
     if @board.update(board_params)
       redirect_to board_path(@board.board_id), notice: t('boards.updated')
@@ -42,6 +54,8 @@ class BoardsController < ApplicationController
     end
   end
 
+  # Deletes a board and redirects to the boards list.
+  # @return [void]
   def destroy
     @board.destroy
     redirect_to boards_path, status: :see_other, notice: t('boards.deleted')
