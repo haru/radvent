@@ -16,6 +16,7 @@
   %body#advent_calendar_body
     %nav#top-menu.navbar.navbar-light.navbar-expand-lg.px-3
       = link_to "TOP", root_path, class: "navbar-brand"
+      = yield(:navbar_breadcrumb) if content_for?(:navbar_breadcrumb)
       %button.navbar-toggler{type:"button", "data-mdb-toggle": "collapse", "data-mdb-target": "#navTopMenu", "aria-controls": "navTopMenu", "aria-expanded": "false", "aria-label": "Toggle navigation"}
         %span.navbar-toggler-icon
       %div#navTopMenu.collapse.navbar-collapse
