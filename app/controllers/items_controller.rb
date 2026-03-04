@@ -7,6 +7,7 @@ class ItemsController < ApplicationController
   before_action :authenticate_user!, only: %i[new create edit update preview]
   before_action :find_item, only: %i[show edit update]
   before_action :edit_permission?, only: %i[edit update]
+  before_action :find_board
 
   # Shows an item (article).
   #
@@ -93,5 +94,10 @@ class ItemsController < ApplicationController
     return true if current_user.admin?
 
     render_forbidden unless @item.editable_by? current_user
+  end
+
+  def find_board
+    aci = @item&.advent_calendar_item || AdventCalendarItem.find_by(id: params[:id])
+    @board = aci&.event&.board
   end
 end

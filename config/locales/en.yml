@@ -34,3 +34,61 @@ en:
   items:
     upload_error: 'Upload failed'
     network_error: 'A network error occurred'
+  menu:
+    settings: 'Settings'
+    sign_out: 'Sign Out'
+    sign_in: 'Sign In'
+    sign_up: 'Sign Up'
+    my_page: 'My Page'
+    board_management: 'Manage Boards'
+  breadcrumb:
+    top: 'TOP'
+  boards:
+    index:
+      title: 'Board Management'
+      new_board: 'Create New Board'
+      no_boards: 'No boards yet'
+    show:
+      title: '%{name}'
+      create_event: 'Create Event'
+    new:
+      title: 'Create Board'
+    edit:
+      title: 'Board Settings'
+      danger_zone: 'Danger Zone'
+      delete_board: 'Delete Board'
+      delete_warning: 'Are you sure you want to delete this board? This action cannot be undone.'
+      visibility_warning: 'Changing visibility may affect existing member access.'
+      confirm_delete: 'Enter the board ID to confirm deletion'
+    form:
+      board_id: 'Board ID'
+      board_id_hint: 'Allowed characters: lowercase letters, numbers, hyphens, underscores (max 64 chars)'
+      name: 'Board Name'
+      description: 'Description'
+      visibility: 'Visibility'
+      visibility_public: 'Public'
+      visibility_protected: 'Protected'
+      visibility_private: 'Private'
+      visibility_public_desc: 'Anyone can view and post'
+      visibility_protected_desc: 'Anyone can view, but only members can post'
+      visibility_private_desc: 'Only members can view and post'
+    errors:
+      board_id_reserved: 'That board ID is reserved'
+      board_id_invalid: 'Only lowercase letters, numbers, hyphens, and underscores are allowed'
+    created: 'Board created successfully'
+    updated: 'Board updated successfully'
+    deleted: 'Board deleted successfully'
+  board_memberships:
+    index:
+      title: 'Member Management'
+      add_member: 'Add Member'
+      member_placeholder: 'Username or email address'
+      no_members: 'No members yet'
+    member_added: 'Member added successfully'
+    member_removed: 'Member removed'
+    remove: 'Remove'
+    remove_confirm: 'Are you sure you want to remove this member?'
+    errors:
+      user_not_found: 'User not found'
+      already_member: 'Already a member'
+

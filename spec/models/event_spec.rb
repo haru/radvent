@@ -61,4 +61,109 @@ describe Event do
       expect(event.entry_percent).to eq(100)
     end
   end
+
+  describe '.creatable_on?' do
+    let(:admin) { create(:user, admin: true) }
+    let(:owner) { create(:user) }
+    let(:member_user) { create(:user) }
+    let(:stranger) { create(:user) }
+    let(:top_board) { Board.find_or_create_by!(board_type: :top) { |b| b.name = 'TOP' } }
+    let(:public_board) { create(:board, :public_user, owner: owner) }
+    let(:protected_board) { create(:board, :protected_user, owner: owner) }
+    let(:private_board) { create(:board, :private_user, owner: owner) }
+
+    before do
+      create(:board_membership, board: public_board, user: member_user)
+      create(:board_membership, board: protected_board, user: member_user)
+      create(:board_membership, board: private_board, user: member_user)
+    end
+
+    context 'when the board is a top board' do
+      it 'allows admin' do
+        expect(described_class.creatable_on?(top_board, admin)).to be true
+      end
+
+      it 'denies unauthenticated' do
+        expect(described_class.creatable_on?(top_board, nil)).to be false
+      end
+
+      it 'denies owner (non-admin)' do
+        expect(described_class.creatable_on?(top_board, owner)).to be false
+      end
+
+      it 'denies member' do
+        expect(described_class.creatable_on?(top_board, member_user)).to be false
+      end
+
+      it 'denies stranger' do
+        expect(described_class.creatable_on?(top_board, stranger)).to be false
+      end
+    end
+
+    context 'when the board is a public UserBoard' do
+      it 'allows admin' do
+        expect(described_class.creatable_on?(public_board, admin)).to be true
+      end
+
+      it 'denies unauthenticated' do
+        expect(described_class.creatable_on?(public_board, nil)).to be false
+      end
+
+      it 'allows any authenticated user (stranger)' do
+        expect(described_class.creatable_on?(public_board, stranger)).to be true
+      end
+
+      it 'allows member' do
+        expect(described_class.creatable_on?(public_board, member_user)).to be true
+      end
+
+      it 'allows owner' do
+        expect(described_class.creatable_on?(public_board, owner)).to be true
+      end
+    end
+
+    context 'when the board is a protected UserBoard' do
+      it 'allows admin' do
+        expect(described_class.creatable_on?(protected_board, admin)).to be true
+      end
+
+      it 'denies unauthenticated' do
+        expect(described_class.creatable_on?(protected_board, nil)).to be false
+      end
+
+      it 'denies stranger (authenticated non-member)' do
+        expect(described_class.creatable_on?(protected_board, stranger)).to be false
+      end
+
+      it 'allows member' do
+        expect(described_class.creatable_on?(protected_board, member_user)).to be true
+      end
+
+      it 'allows owner' do
+        expect(described_class.creatable_on?(protected_board, owner)).to be true
+      end
+    end
+
+    context 'when the board is a private UserBoard' do
+      it 'allows admin' do
+        expect(described_class.creatable_on?(private_board, admin)).to be true
+      end
+
+      it 'denies unauthenticated' do
+        expect(described_class.creatable_on?(private_board, nil)).to be false
+      end
+
+      it 'denies stranger' do
+        expect(described_class.creatable_on?(private_board, stranger)).to be false
+      end
+
+      it 'allows member' do
+        expect(described_class.creatable_on?(private_board, member_user)).to be true
+      end
+
+      it 'allows owner' do
+        expect(described_class.creatable_on?(private_board, owner)).to be true
+      end
+    end
+  end
 end

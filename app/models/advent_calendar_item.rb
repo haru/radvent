@@ -5,6 +5,8 @@
 # This model associates a user with a specific date (1-31) in an advent calendar event.
 # It contains the actual article content through the has_one :item relationship.
 class AdventCalendarItem < ApplicationRecord
+  include Permissionable
+
   belongs_to :user
   belongs_to :event
   has_one :item, dependent: :destroy
@@ -41,4 +43,12 @@ class AdventCalendarItem < ApplicationRecord
   def month
     event.start_date.month
   end
+
+  # --- Permissionable implementation ---
+
+  delegate :visible?, to: :event
+
+  delegate :editable?, to: :event
+
+  delegate :deletable?, to: :event
 end

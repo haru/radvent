@@ -6,9 +6,11 @@
 class EventsController < ApplicationController
   layout 'admin'
   before_action :set_events_menu
-  before_action :admin_user!, except: [:show]
+  before_action :admin_user!, except: %i[show new create]
+  before_action :check_event_creation_authorization, only: %i[new create]
   before_action :find_event, except: %i[index new create list show]
   before_action :find_event_by_name, only: [:show]
+  before_action :find_board
 
   # Lists all events (public view).
   #
@@ -32,7 +34,10 @@ class EventsController < ApplicationController
   #
   # @return [void]
   def new
-    @new ||= Event.new
+    board_id = params[:board_id] || params.dig(:event, :board_id)
+    @board = Board.find_by(id: board_id) || Board.find_by(board_type: :top)
+    @event ||= Event.new
+    @event.board = @board
   end
 
   # Displays a form to edit an event.
@@ -44,10 +49,8 @@ class EventsController < ApplicationController
   #
   # @return [void]
   def create
-    @event = Event.new
-    @event.attributes = params.expect(event: %i[title start_date end_date name description])
-    @event.created_by = current_user
-    @event.updated_by = current_user
+    @event = build_event
+    @board = @event.board
     if @event.save
       redirect_to events_list_path
     else
@@ -92,6 +95,28 @@ class EventsController < ApplicationController
     @menu = :events
   end
 
+  def check_event_creation_authorization
+    board_id_param = params[:board_id] || params.dig(:event, :board_id)
+    target_board = if board_id_param.present?
+                     Board.find_by(id: board_id_param)
+                   else
+                     Board.find_by!(board_type: :top)
+                   end
+
+    return render_not_found unless target_board
+    return if Event.creatable_on?(target_board, current_user)
+
+    render_forbidden
+  end
+
+  def build_event
+    event = Event.new(params.expect(event: %i[title start_date end_date name description board_id]))
+    event.created_by = current_user
+    event.updated_by = current_user
+    event.board ||= Board.find_by!(board_type: :top)
+    event
+  end
+
   def find_event
     return if params[:id].blank?
 
@@ -118,5 +143,11 @@ class EventsController < ApplicationController
       end
     end
     weeks
+  end
+
+  def find_board
+    return unless @event
+
+    @board = @event.board
   end
 end

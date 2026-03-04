@@ -201,6 +201,63 @@ ja:
   items:
     upload_error: 'アップロードに失敗しました'
     network_error: 'ネットワークエラーが発生しました'
+  menu:
+    settings: '設定'
+    sign_out: 'ログアウト'
+    sign_in: 'ログイン'
+    sign_up: '新規登録'
+    my_page: 'マイページ'
+    board_management: 'ボード管理'
+  breadcrumb:
+    top: 'TOP'
+  boards:
+    index:
+      title: 'ボード管理'
+      new_board: '新しいボードを作成'
+      no_boards: 'ボードがまだありません'
+    show:
+      title: '%{name}'
+      create_event: 'イベントを作成'
+    new:
+      title: 'ボードを作成'
+    edit:
+      title: 'ボード設定'
+      danger_zone: '危険な操作'
+      delete_board: 'ボードを削除'
+      delete_warning: '本当にこのボードを削除しますか？この操作は取り消せません。'
+      visibility_warning: '公開設定を変更すると、既存のメンバーのアクセス権に影響する場合があります。'
+      confirm_delete: '削除するにはボードIDを入力してください'
+    form:
+      board_id: 'ボードID'
+      board_id_hint: '使用できる文字: 英小文字、数字、ハイフン、アンダースコア（最大64文字）'
+      name: 'ボード名'
+      description: '説明'
+      visibility: '公開設定'
+      visibility_public: '公開'
+      visibility_protected: '限定公開'
+      visibility_private: '非公開'
+      visibility_public_desc: '誰でも閲覧・投稿できます'
+      visibility_protected_desc: '誰でも閲覧できますが、投稿はメンバーのみ'
+      visibility_private_desc: 'メンバーのみ閲覧・投稿できます'
+    errors:
+      board_id_reserved: 'そのボードIDは使用できません'
+      board_id_invalid: '英小文字、数字、ハイフン、アンダースコアのみ使用できます'
+    created: 'ボードを作成しました'
+    updated: 'ボードを更新しました'
+    deleted: 'ボードを削除しました'
+  board_memberships:
+    index:
+      title: 'メンバー管理'
+      add_member: 'メンバーを追加'
+      member_placeholder: 'ユーザー名またはメールアドレス'
+      no_members: 'メンバーがいません'
+    member_added: 'メンバーを追加しました'
+    member_removed: 'メンバーを削除しました'
+    remove: '削除'
+    remove_confirm: 'このメンバーを削除しますか？'
+    errors:
+      user_not_found: 'ユーザーが見つかりません'
+      already_member: 'すでにメンバーです'
   devise:
     sessions:
       signed_in: ""

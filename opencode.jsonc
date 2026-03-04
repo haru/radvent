@@ -61,5 +61,6 @@
         "glob": "allow",
         "grep": "allow",
         "list": "allow"
-    }
+    },
+    "autoupdate": true
 }

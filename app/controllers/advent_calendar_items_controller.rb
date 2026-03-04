@@ -7,6 +7,7 @@ class AdventCalendarItemsController < ApplicationController
   before_action :authenticate_user!, only: %i[new create edit update destroy]
   before_action :find_calendar_item, only: %i[show edit update destroy]
   before_action :edit_permission?, only: %i[edit update destroy]
+  before_action :find_board
 
   # Shows an advent calendar item.
   #
@@ -67,6 +68,11 @@ class AdventCalendarItemsController < ApplicationController
   def find_calendar_item
     @advent_calendar_item = AdventCalendarItem.find_by(id: params[:id])
     render_not_found unless @advent_calendar_item
+  end
+
+  def find_board
+    event = @advent_calendar_item&.event || Event.find_by(id: params[:event_id])
+    @board = event&.board
   end
 
   def edit_permission?

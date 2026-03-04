@@ -8,6 +8,8 @@ class WelcomeController < ApplicationController
   #
   # @return [void]
   def index
-    @events = Event.order(start_date: :desc)
+    @board = Board.find_or_create_by!(board_type: :top) { |b| b.name = 'TOP' }
+    @events = @board.events.order(start_date: :desc)
+    render 'boards/show'
   end
 end

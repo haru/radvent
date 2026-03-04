@@ -13,3 +13,5 @@ if User.none?
     confirmed_at: Time.zone.now
   )
 end
+
+Board.find_or_create_by!(board_type: :top) { |b| b.name = 'TOP' }
