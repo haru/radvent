@@ -20,9 +20,13 @@ RSpec.describe EventsController, type: :controller do
       expect(response).to have_http_status(:success)
     end
 
-    it 'assigns @event' do
+    it 'assigns @event as a new Event' do
       get :new
       expect(assigns(:event)).to be_a(Event)
+    end
+
+    it 'assigns @event as a new record' do
+      get :new
       expect(assigns(:event)).to be_new_record
     end
   end
@@ -100,11 +104,12 @@ RSpec.describe EventsController, type: :controller do
     let(:board_owner) { create(:user) }
     let(:public_board) { create(:board, :public_user, owner: board_owner) }
     let(:protected_board) { create(:board, :protected_user, owner: board_owner) }
+    let(:non_member) { create(:user) }
 
     context 'when user is authenticated on a Public Board' do
+      before { sign_in non_member }
+
       it 'allows authenticated non-member to create event' do
-        non_member = create(:user)
-        sign_in non_member
         post :create, params: {
           event: { title: 'public-event', start_date: '2017-12-01', end_date: '2017-12-25',
                    name: 'public-evt', description: 'desc', board_id: public_board.id }
@@ -114,8 +119,9 @@ RSpec.describe EventsController, type: :controller do
     end
 
     context 'when user is not a member of a Protected Board' do
+      before { sign_in non_member }
+
       it 'returns 403' do
-        sign_in create(:user)
         post :create, params: {
           event: { title: 'protected-event', start_date: '2017-12-01', end_date: '2017-12-25',
                    name: 'protected-evt', description: 'desc', board_id: protected_board.id }

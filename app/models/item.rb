@@ -35,15 +35,9 @@ class Item < ApplicationRecord
 
   # --- Permissionable implementation ---
 
-  def visible?(user)
-    advent_calendar_item.visible?(user)
-  end
+  delegate :visible?, to: :advent_calendar_item
 
-  def editable?(user)
-    advent_calendar_item.editable?(user)
-  end
+  delegate :editable?, to: :advent_calendar_item
 
-  def deletable?(user)
-    advent_calendar_item.deletable?(user)
-  end
+  delegate :deletable?, to: :advent_calendar_item
 end

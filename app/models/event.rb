@@ -30,9 +30,7 @@ class Event < ApplicationRecord
 
   # --- Permissionable implementation ---
 
-  def visible?(user)
-    board.visible?(user)
-  end
+  delegate :visible?, to: :board
 
   def editable?(user)
     return true if user&.admin?

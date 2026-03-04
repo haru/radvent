@@ -9,8 +9,7 @@ RSpec.describe 'boards/show', type: :view do
   before do
     assign(:board, board)
     assign(:events, [])
-    allow(view).to receive(:current_user).and_return(nil)
-    allow(view).to receive(:user_signed_in?).and_return(false)
+    allow(view).to receive_messages(current_user: nil, user_signed_in?: false)
   end
 
   it 'renders the board name' do

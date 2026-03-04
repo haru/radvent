@@ -21,79 +21,82 @@ RSpec.describe Board, type: :model do
       end
     end
 
-    context 'when board_type is user' do
-      describe 'board_id format' do
-        it 'is valid with lowercase alphanumeric and hyphens' do
-          board = build(:board, board_id: 'my-board-2024')
-          expect(board).to be_valid
-        end
+    describe 'board_id format' do
+      it 'is valid with lowercase alphanumeric and hyphens' do
+        board = build(:board, board_id: 'my-board-2024')
+        expect(board).to be_valid
+      end
 
-        it 'normalizes uppercase to lowercase and becomes valid' do
-          board = build(:board, board_id: 'MyBoard')
-          expect(board).to be_valid
-          expect(board.board_id).to eq('myboard')
-        end
+      it 'normalizes uppercase to lowercase and becomes valid' do
+        board = build(:board, board_id: 'MyBoard')
+        expect(board).to be_valid
+      end
 
-        it 'is invalid with spaces' do
-          board = build(:board, board_id: 'my board')
-          expect(board).not_to be_valid
-        end
+      it 'normalizes the board_id to lowercase' do
+        board = build(:board, board_id: 'MyBoard')
+        board.valid?
+        expect(board.board_id).to eq('myboard')
+      end
 
-        it 'is invalid when blank' do
-          board = build(:board, board_id: '')
-          expect(board).not_to be_valid
-        end
+      it 'is invalid with spaces' do
+        board = build(:board, board_id: 'my board')
+        expect(board).not_to be_valid
+      end
 
-        it 'is invalid when longer than 64 characters' do
-          board = build(:board, board_id: 'a' * 65)
-          expect(board).not_to be_valid
-        end
+      it 'is invalid when blank' do
+        board = build(:board, board_id: '')
+        expect(board).not_to be_valid
+      end
 
-        it 'is valid when exactly 64 characters' do
-          board = build(:board, board_id: 'a' * 64)
-          expect(board).to be_valid
-        end
+      it 'is invalid when longer than 64 characters' do
+        board = build(:board, board_id: 'a' * 65)
+        expect(board).not_to be_valid
+      end
 
-        it 'is invalid with reserved words' do
-          Board::RESERVED_IDS.each do |reserved|
-            board = build(:board, board_id: reserved)
-            expect(board).not_to be_valid, "expected #{reserved} to be invalid"
-          end
-        end
+      it 'is valid when exactly 64 characters' do
+        board = build(:board, board_id: 'a' * 64)
+        expect(board).to be_valid
+      end
 
-        it 'normalizes uppercase input to lowercase before validation' do
-          board = build(:board, board_id: 'MyBoard')
-          board.valid?
-          expect(board.board_id).to eq('myboard')
-        end
-
-        it 'strips whitespace before validation' do
-          board = build(:board, board_id: '  myboard  ')
-          board.valid?
-          expect(board.board_id).to eq('myboard')
+      it 'is invalid with reserved words' do
+        Board::RESERVED_IDS.each do |reserved|
+          board = build(:board, board_id: reserved)
+          expect(board).not_to be_valid, "expected #{reserved} to be invalid"
         end
       end
 
-      describe 'board_id uniqueness' do
-        it 'is invalid with a duplicate board_id' do
-          create(:board, board_id: 'unique-board')
-          board = build(:board, board_id: 'unique-board')
-          expect(board).not_to be_valid
-        end
+      it 'normalizes uppercase input to lowercase before validation' do
+        board = build(:board, board_id: 'MyBoard')
+        board.valid?
+        expect(board.board_id).to eq('myboard')
       end
 
-      describe 'visibility' do
-        it 'is invalid without visibility' do
-          board = build(:board, visibility: nil)
-          expect(board).not_to be_valid
-        end
+      it 'strips whitespace before validation' do
+        board = build(:board, board_id: '  myboard  ')
+        board.valid?
+        expect(board.board_id).to eq('myboard')
       end
+    end
 
-      describe 'owner_id' do
-        it 'is invalid without owner' do
-          board = build(:board, owner: nil)
-          expect(board).not_to be_valid
-        end
+    describe 'board_id uniqueness' do
+      it 'is invalid with a duplicate board_id' do
+        create(:board, board_id: 'unique-board')
+        board = build(:board, board_id: 'unique-board')
+        expect(board).not_to be_valid
+      end
+    end
+
+    describe 'visibility' do
+      it 'is invalid without visibility' do
+        board = build(:board, visibility: nil)
+        expect(board).not_to be_valid
+      end
+    end
+
+    describe 'owner_id' do
+      it 'is invalid without owner' do
+        board = build(:board, owner: nil)
+        expect(board).not_to be_valid
       end
     end
 

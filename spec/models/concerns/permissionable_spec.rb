@@ -5,10 +5,10 @@ require 'rails_helper'
 # Shared example for the Permissionable concern.
 # Each model including Permissionable must verify the full truth table.
 RSpec.shared_examples 'permissionable' do |subject_name|
+  subject { send(subject_name) }
+
   let(:admin) { create(:user, admin: true) }
   let(:stranger) { create(:user) }
-
-  subject { send(subject_name) }
 
   describe '#visible?' do
     context 'when board is TopBoard' do

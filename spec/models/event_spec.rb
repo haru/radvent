@@ -78,91 +78,91 @@ describe Event do
       create(:board_membership, board: private_board, user: member_user)
     end
 
-    context 'TopBoard' do
+    context 'when the board is a top board' do
       it 'allows admin' do
-        expect(Event.creatable_on?(top_board, admin)).to be true
+        expect(described_class.creatable_on?(top_board, admin)).to be true
       end
 
       it 'denies unauthenticated' do
-        expect(Event.creatable_on?(top_board, nil)).to be false
+        expect(described_class.creatable_on?(top_board, nil)).to be false
       end
 
       it 'denies owner (non-admin)' do
-        expect(Event.creatable_on?(top_board, owner)).to be false
+        expect(described_class.creatable_on?(top_board, owner)).to be false
       end
 
       it 'denies member' do
-        expect(Event.creatable_on?(top_board, member_user)).to be false
+        expect(described_class.creatable_on?(top_board, member_user)).to be false
       end
 
       it 'denies stranger' do
-        expect(Event.creatable_on?(top_board, stranger)).to be false
+        expect(described_class.creatable_on?(top_board, stranger)).to be false
       end
     end
 
-    context 'Public UserBoard' do
+    context 'when the board is a public UserBoard' do
       it 'allows admin' do
-        expect(Event.creatable_on?(public_board, admin)).to be true
+        expect(described_class.creatable_on?(public_board, admin)).to be true
       end
 
       it 'denies unauthenticated' do
-        expect(Event.creatable_on?(public_board, nil)).to be false
+        expect(described_class.creatable_on?(public_board, nil)).to be false
       end
 
       it 'allows any authenticated user (stranger)' do
-        expect(Event.creatable_on?(public_board, stranger)).to be true
+        expect(described_class.creatable_on?(public_board, stranger)).to be true
       end
 
       it 'allows member' do
-        expect(Event.creatable_on?(public_board, member_user)).to be true
+        expect(described_class.creatable_on?(public_board, member_user)).to be true
       end
 
       it 'allows owner' do
-        expect(Event.creatable_on?(public_board, owner)).to be true
+        expect(described_class.creatable_on?(public_board, owner)).to be true
       end
     end
 
-    context 'Protected UserBoard' do
+    context 'when the board is a protected UserBoard' do
       it 'allows admin' do
-        expect(Event.creatable_on?(protected_board, admin)).to be true
+        expect(described_class.creatable_on?(protected_board, admin)).to be true
       end
 
       it 'denies unauthenticated' do
-        expect(Event.creatable_on?(protected_board, nil)).to be false
+        expect(described_class.creatable_on?(protected_board, nil)).to be false
       end
 
       it 'denies stranger (authenticated non-member)' do
-        expect(Event.creatable_on?(protected_board, stranger)).to be false
+        expect(described_class.creatable_on?(protected_board, stranger)).to be false
       end
 
       it 'allows member' do
-        expect(Event.creatable_on?(protected_board, member_user)).to be true
+        expect(described_class.creatable_on?(protected_board, member_user)).to be true
       end
 
       it 'allows owner' do
-        expect(Event.creatable_on?(protected_board, owner)).to be true
+        expect(described_class.creatable_on?(protected_board, owner)).to be true
       end
     end
 
-    context 'Private UserBoard' do
+    context 'when the board is a private UserBoard' do
       it 'allows admin' do
-        expect(Event.creatable_on?(private_board, admin)).to be true
+        expect(described_class.creatable_on?(private_board, admin)).to be true
       end
 
       it 'denies unauthenticated' do
-        expect(Event.creatable_on?(private_board, nil)).to be false
+        expect(described_class.creatable_on?(private_board, nil)).to be false
       end
 
       it 'denies stranger' do
-        expect(Event.creatable_on?(private_board, stranger)).to be false
+        expect(described_class.creatable_on?(private_board, stranger)).to be false
       end
 
       it 'allows member' do
-        expect(Event.creatable_on?(private_board, member_user)).to be true
+        expect(described_class.creatable_on?(private_board, member_user)).to be true
       end
 
       it 'allows owner' do
-        expect(Event.creatable_on?(private_board, owner)).to be true
+        expect(described_class.creatable_on?(private_board, owner)).to be true
       end
     end
   end

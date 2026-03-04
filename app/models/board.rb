@@ -86,7 +86,7 @@ class Board < ApplicationRecord
   private
 
   def normalize_board_id
-    return unless board_id.present?
+    return if board_id.blank?
 
     self.board_id = board_id.downcase.strip
   end

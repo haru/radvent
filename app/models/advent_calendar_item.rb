@@ -46,15 +46,9 @@ class AdventCalendarItem < ApplicationRecord
 
   # --- Permissionable implementation ---
 
-  def visible?(user)
-    event.visible?(user)
-  end
+  delegate :visible?, to: :event
 
-  def editable?(user)
-    event.editable?(user)
-  end
+  delegate :editable?, to: :event
 
-  def deletable?(user)
-    event.deletable?(user)
-  end
+  delegate :deletable?, to: :event
 end

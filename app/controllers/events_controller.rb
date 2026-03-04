@@ -48,11 +48,7 @@ class EventsController < ApplicationController
   #
   # @return [void]
   def create
-    @event = Event.new
-    @event.attributes = params.expect(event: %i[title start_date end_date name description board_id])
-    @event.created_by = current_user
-    @event.updated_by = current_user
-    @event.board ||= Board.find_by!(board_type: :top)
+    @event = build_event
     @board = @event.board
     if @event.save
       redirect_to events_list_path
@@ -110,6 +106,14 @@ class EventsController < ApplicationController
     return if Event.creatable_on?(target_board, current_user)
 
     render_forbidden
+  end
+
+  def build_event
+    event = Event.new(params.expect(event: %i[title start_date end_date name description board_id]))
+    event.created_by = current_user
+    event.updated_by = current_user
+    event.board ||= Board.find_by!(board_type: :top)
+    event
   end
 
   def find_event

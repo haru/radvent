@@ -35,6 +35,7 @@ RSpec.describe BoardsController, type: :controller do
     end
 
     context 'when authenticated' do
+      render_views
       before { sign_in owner }
 
       it 'returns http success' do
@@ -42,20 +43,24 @@ RSpec.describe BoardsController, type: :controller do
         expect(response).to have_http_status(:success)
       end
 
-      context 'with rendered views' do
-        render_views
+      it 'renders public visibility radio button' do
+        get :new
+        expect(response.body).to include('value="public"')
+      end
 
-        it 'renders visibility radio buttons for all three options' do
-          get :new
-          expect(response.body).to include('value="public"')
-          expect(response.body).to include('value="protected"')
-          expect(response.body).to include('value="private"')
-        end
+      it 'renders protected visibility radio button' do
+        get :new
+        expect(response.body).to include('value="protected"')
+      end
 
-        it 'renders visibility labels without translation missing errors' do
-          get :new
-          expect(response.body).not_to include('translation missing')
-        end
+      it 'renders private visibility radio button' do
+        get :new
+        expect(response.body).to include('value="private"')
+      end
+
+      it 'renders visibility labels without translation missing errors' do
+        get :new
+        expect(response.body).not_to include('translation missing')
       end
     end
   end
@@ -71,9 +76,13 @@ RSpec.describe BoardsController, type: :controller do
     context 'when authenticated' do
       before { sign_in owner }
 
-      it 'creates a board and redirects' do
+      it 'redirects after creating a board' do
         post :create, params: { board: { board_id: 'my-new-board', name: 'My Board', visibility: 'public' } }
         expect(response).to have_http_status(:redirect)
+      end
+
+      it 'creates a board' do
+        post :create, params: { board: { board_id: 'my-new-board', name: 'My Board', visibility: 'public' } }
         expect(Board.find_by(board_id: 'my-new-board')).to be_present
       end
 
@@ -91,7 +100,7 @@ RSpec.describe BoardsController, type: :controller do
   end
 
   describe 'GET #show' do
-    context 'Public Board' do
+    context 'when the board is a public board' do
       let(:board) { create(:board, :public_user, owner: owner) }
 
       it 'returns http success for unauthenticated user' do
@@ -106,7 +115,7 @@ RSpec.describe BoardsController, type: :controller do
       end
     end
 
-    context 'Protected Board' do
+    context 'when the board is a protected board' do
       let(:board) { create(:board, :protected_user, owner: owner) }
 
       it 'returns http success for unauthenticated user' do
@@ -115,7 +124,7 @@ RSpec.describe BoardsController, type: :controller do
       end
     end
 
-    context 'Private Board' do
+    context 'when the board is a private board' do
       let(:board) { create(:board, :private_user, owner: owner) }
 
       it 'returns 404 for unauthenticated user' do
@@ -196,9 +205,13 @@ RSpec.describe BoardsController, type: :controller do
     context 'when authenticated as owner' do
       before { sign_in owner }
 
-      it 'updates and redirects' do
+      it 'redirects after update' do
         patch :update, params: { board_id: board.board_id, board: { name: 'Updated Name' } }
         expect(response).to have_http_status(:redirect)
+      end
+
+      it 'updates the board' do
+        patch :update, params: { board_id: board.board_id, board: { name: 'Updated Name' } }
         expect(board.reload.name).to eq('Updated Name')
       end
     end
@@ -217,9 +230,13 @@ RSpec.describe BoardsController, type: :controller do
     context 'when authenticated as owner' do
       before { sign_in owner }
 
-      it 'deletes the board and redirects' do
+      it 'redirects after deleting the board' do
         delete :destroy, params: { board_id: board.board_id }
         expect(response).to have_http_status(:redirect)
+      end
+
+      it 'deletes the board' do
+        delete :destroy, params: { board_id: board.board_id }
         expect(Board.find_by(board_id: board.board_id)).to be_nil
       end
     end

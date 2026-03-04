@@ -7,8 +7,6 @@ class BoardMembership < ApplicationRecord
   belongs_to :board
   belongs_to :user
 
-  validates :board_id, presence: true
-  validates :user_id, presence: true
   validates :user_id, uniqueness: { scope: :board_id }
 
   validate :board_must_be_user_type

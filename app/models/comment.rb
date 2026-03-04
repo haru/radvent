@@ -10,9 +10,7 @@ class Comment < ApplicationRecord
 
   # --- Permissionable implementation ---
 
-  def visible?(user)
-    item.visible?(user)
-  end
+  delegate :visible?, to: :item
 
   def editable?(_user)
     false

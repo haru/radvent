@@ -35,6 +35,10 @@ Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'
 
+Metrics/BlockLength:
+  Exclude:
+    - 'config/routes.rb'
+
 # マイグレーション内での update_attribute 使用は許容
 Rails/SkipsModelValidations:
   Exclude:
@@ -56,4 +60,4 @@ RSpec/AnyInstance:
 
 # テスト対象によっては多くの let が必要になる
 RSpec/MultipleMemoizedHelpers:
-  Max: 7
+  Max: 9

@@ -14,9 +14,15 @@ class BoardsController < ApplicationController
     @boards = current_user.admin? ? Board.where(board_type: :user) : Board.where(owner: current_user)
   end
 
+  def show
+    @events = @board.events.order(start_date: :desc)
+  end
+
   def new
     @board = Board.new
   end
+
+  def edit; end
 
   def create
     @board = Board.new(board_params)
@@ -27,12 +33,6 @@ class BoardsController < ApplicationController
       render :new, status: :unprocessable_content
     end
   end
-
-  def show
-    @events = @board.events.order(start_date: :desc)
-  end
-
-  def edit; end
 
   def update
     if @board.update(board_params)
@@ -73,6 +73,6 @@ class BoardsController < ApplicationController
   end
 
   def board_params
-    params.require(:board).permit(:board_id, :name, :description, :visibility)
+    params.expect(board: %i[board_id name description visibility])
   end
 end

@@ -11,7 +11,7 @@ class AddBoardToEvents < ActiveRecord::Migration[8.1]
         top_board_id = select_value('SELECT id FROM boards WHERE board_type = 0 LIMIT 1')
 
         if top_board_id.nil?
-          execute(<<~SQL)
+          execute(<<~SQL.squish)
             INSERT INTO boards (board_type, name, created_at, updated_at)
             VALUES (0, 'TOP', datetime('now'), datetime('now'))
           SQL

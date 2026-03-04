@@ -15,28 +15,17 @@ class BoardMembershipsController < ApplicationController
   end
 
   def create
-    user = User.find_by(email: params[:member_query]) || User.find_by(name: params[:member_query])
-
-    unless user
-      flash.now[:alert] = t('board_memberships.errors.user_not_found')
-      @memberships = @board.board_memberships.includes(:user)
-      return render :index, status: :unprocessable_content
-    end
+    user = find_user_by_query(params[:member_query])
+    return handle_user_not_found unless user
 
     membership = BoardMembership.new(board: @board, user: user)
-    if membership.save
-      redirect_to board_board_memberships_path(@board.board_id), notice: t('board_memberships.member_added')
-    else
-      flash.now[:alert] = t('board_memberships.errors.already_member')
-      @memberships = @board.board_memberships.includes(:user)
-      render :index, status: :unprocessable_content
-    end
+    save_membership(membership)
   end
 
   def destroy
     @membership.destroy
     redirect_to board_board_memberships_path(@membership.board.board_id), status: :see_other,
-                                                                           notice: t('board_memberships.member_removed')
+                                                                          notice: t('board_memberships.member_removed')
   end
 
   private
@@ -63,5 +52,25 @@ class BoardMembershipsController < ApplicationController
 
   def check_membership_deletability
     render_forbidden unless @membership&.board&.editable?(current_user)
+  end
+
+  def find_user_by_query(query)
+    User.find_by(email: query) || User.find_by(name: query)
+  end
+
+  def handle_user_not_found
+    flash.now[:alert] = t('board_memberships.errors.user_not_found')
+    @memberships = @board.board_memberships.includes(:user)
+    render :index, status: :unprocessable_content
+  end
+
+  def save_membership(membership)
+    if membership.save
+      redirect_to board_board_memberships_path(@board.board_id), notice: t('board_memberships.member_added')
+    else
+      flash.now[:alert] = t('board_memberships.errors.already_member')
+      @memberships = @board.board_memberships.includes(:user)
+      render :index, status: :unprocessable_content
+    end
   end
 end

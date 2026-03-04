@@ -48,15 +48,23 @@ RSpec.describe BoardMembershipsController, type: :controller do
     context 'when authenticated as owner' do
       before { sign_in owner }
 
-      it 'adds member by email and redirects' do
+      it 'redirects after adding member by email' do
         post :create, params: { board_board_id: board.board_id, member_query: other_user.email }
         expect(response).to have_http_status(:redirect)
+      end
+
+      it 'adds member by email' do
+        post :create, params: { board_board_id: board.board_id, member_query: other_user.email }
         expect(board.members.reload).to include(other_user)
       end
 
-      it 'adds member by name and redirects' do
+      it 'redirects after adding member by name' do
         post :create, params: { board_board_id: board.board_id, member_query: other_user.name }
         expect(response).to have_http_status(:redirect)
+      end
+
+      it 'adds member by name' do
+        post :create, params: { board_board_id: board.board_id, member_query: other_user.name }
         expect(board.members.reload).to include(other_user)
       end
 
@@ -88,9 +96,13 @@ RSpec.describe BoardMembershipsController, type: :controller do
     context 'when authenticated as owner' do
       before { sign_in owner }
 
-      it 'removes member and redirects' do
+      it 'redirects after removing member' do
         delete :destroy, params: { id: membership.id }
         expect(response).to have_http_status(:redirect)
+      end
+
+      it 'removes the membership' do
+        delete :destroy, params: { id: membership.id }
         expect(BoardMembership.find_by(id: membership.id)).to be_nil
       end
     end
