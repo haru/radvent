@@ -1,10 +1,6 @@
 - if @board.board_type_user? && @board.visibility_private?
   - content_for(:head) { tag.meta(name: 'robots', content: 'noindex') }
 
-- if @board.board_type_user?
-  - content_for(:navbar_breadcrumb) do
-    %span.navbar-brand > #{link_to @board.name, board_path(@board.board_id)}
-
 - content_for(:jumbotron) do
   %div#event-header.jumbotron.container-fluid.p-5
     %div.container

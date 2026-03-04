@@ -10,6 +10,7 @@ class EventsController < ApplicationController
   before_action :check_event_creation_authorization, only: %i[new create]
   before_action :find_event, except: %i[index new create list show]
   before_action :find_event_by_name, only: [:show]
+  before_action :find_board
 
   # Lists all events (public view).
   #
@@ -33,7 +34,9 @@ class EventsController < ApplicationController
   #
   # @return [void]
   def new
+    @board = Board.find_by(id: params.dig(:event, :board_id)) || Board.find_by(board_type: :top)
     @event ||= Event.new
+    @event.board = @board
   end
 
   # Displays a form to edit an event.
@@ -50,6 +53,7 @@ class EventsController < ApplicationController
     @event.created_by = current_user
     @event.updated_by = current_user
     @event.board ||= Board.find_by!(board_type: :top)
+    @board = @event.board
     if @event.save
       redirect_to events_list_path
     else
@@ -134,5 +138,11 @@ class EventsController < ApplicationController
       end
     end
     weeks
+  end
+
+  def find_board
+    return unless @event
+
+    @board = @event.board
   end
 end

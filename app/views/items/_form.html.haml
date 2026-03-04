@@ -14,7 +14,7 @@
         %button.btn.btn-success.btn-raised#preview-button{type: "button", data: {action: 'click->editor#submitPreview', editor_target: 'previewButton', preview_url: (item.new_record? ? preview_items_path : preview_item_path(item))}}
           = t("helpers.submit.preview")
         %div
-          - if item.advent_calendar_item.published?
+          - if !item.new_record? && item.advent_calendar_item.published?
             = link_to t("helpers.submit.cancel"), item_path(item), class:"btn btn-default"
           - else
             = link_to t("helpers.submit.cancel"), advent_calendar_item_path(id: item.advent_calendar_item_id), class:"btn btn-default"
