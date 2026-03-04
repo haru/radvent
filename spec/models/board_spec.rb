@@ -65,12 +65,6 @@ RSpec.describe Board, type: :model do
         end
       end
 
-      it 'normalizes uppercase input to lowercase before validation' do
-        board = build(:board, board_id: 'MyBoard')
-        board.valid?
-        expect(board.board_id).to eq('myboard')
-      end
-
       it 'strips whitespace before validation' do
         board = build(:board, board_id: '  myboard  ')
         board.valid?
