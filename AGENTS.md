@@ -265,6 +265,13 @@ event_path(event)  # This won't work!
 - **Production**: MySQL 5.7+ or PostgreSQL
 - **Env vars**: `DB` (sqlite3/mysql/postgres), `DB_NAME`, `DB_USERNAME`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT`, `RADVENT_TITLE`
 
+**NEVER write migration files by hand** — always generate them with `rails generate migration`:
+```bash
+bundle exec rails generate migration AddColumnToTable column:type
+bundle exec rails generate migration CreateTableName field:type
+```
+Reason: Manually written migrations tend to use DBMS-specific SQL (e.g. `datetime('now')` for SQLite, `NOW()` for PostgreSQL/MySQL). The generator produces portable ActiveRecord DSL that works across all supported databases. If raw SQL is unavoidable, use `CURRENT_TIMESTAMP` (standard SQL) and test against all three DB backends.
+
 ## Docker / CI
 
 - `docker-compose.yml` at root runs PostgreSQL + Radvent
