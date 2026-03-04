@@ -34,7 +34,8 @@ class EventsController < ApplicationController
   #
   # @return [void]
   def new
-    @board = Board.find_by(id: params.dig(:event, :board_id)) || Board.find_by(board_type: :top)
+    board_id = params[:board_id] || params.dig(:event, :board_id)
+    @board = Board.find_by(id: board_id) || Board.find_by(board_type: :top)
     @event ||= Event.new
     @event.board = @board
   end
@@ -95,7 +96,7 @@ class EventsController < ApplicationController
   end
 
   def check_event_creation_authorization
-    board_id_param = params.dig(:event, :board_id)
+    board_id_param = params[:board_id] || params.dig(:event, :board_id)
     target_board = if board_id_param.present?
                      Board.find_by(id: board_id_param)
                    else

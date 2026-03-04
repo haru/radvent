@@ -75,6 +75,9 @@ en:
     errors:
       board_id_reserved: 'That board ID is reserved'
       board_id_invalid: 'Only lowercase letters, numbers, hyphens, and underscores are allowed'
+    created: 'Board created successfully'
+    updated: 'Board updated successfully'
+    deleted: 'Board deleted successfully'
   board_memberships:
     index:
       title: 'Member Management'
@@ -88,7 +91,4 @@ en:
     errors:
       user_not_found: 'User not found'
       already_member: 'Already a member'
-  boards:
-    created: 'Board created successfully'
-    updated: 'Board updated successfully'
-    deleted: 'Board deleted successfully'
+

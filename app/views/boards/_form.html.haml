@@ -1,12 +1,12 @@
-= form_with model: @board, url: @board.new_record? ? boards_path : board_path(@board.board_id),
-             method: @board.new_record? ? :post : :patch do |f|
-  - if @board.errors.any?
+= form_with model: board, url: board.new_record? ? boards_path : board_path(board.board_id),
+             method: board.new_record? ? :post : :patch do |f|
+  - if board.errors.any?
     %div.alert.alert-danger
       %ul
-        - @board.errors.full_messages.each do |msg|
+        - board.errors.full_messages.each do |msg|
           %li= msg
 
-  - if @board.new_record?
+  - if board.new_record?
     %div.mb-3
       = f.label :board_id, t('boards.form.board_id'), class: 'form-label'
       = f.text_field :board_id, class: 'form-control', placeholder: 'my-board'

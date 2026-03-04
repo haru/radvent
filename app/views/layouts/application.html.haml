@@ -16,7 +16,9 @@
     %nav#top-menu.navbar.navbar-light.navbar-expand-lg.px-3
       = link_to "TOP", root_path, class: "navbar-brand"
       - if @board&.board_type_user? && @board.board_id.present?
-        %span.navbar-brand > #{link_to @board.name, board_path(@board.board_id)}
+        %span.navbar-brand
+          = " > "
+          = link_to @board.name, board_path(@board.board_id)
       %button.navbar-toggler{type:"button", "data-mdb-toggle": "collapse", "data-mdb-target": "#navTopMenu", "aria-controls": "navTopMenu", "aria-expanded": "false", "aria-label": "Toggle navigation"}
         %span.navbar-toggler-icon
       %div#navTopMenu.collapse.navbar-collapse

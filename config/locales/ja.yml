@@ -242,6 +242,9 @@ ja:
     errors:
       board_id_reserved: 'そのボードIDは使用できません'
       board_id_invalid: '英小文字、数字、ハイフン、アンダースコアのみ使用できます'
+    created: 'ボードを作成しました'
+    updated: 'ボードを更新しました'
+    deleted: 'ボードを削除しました'
   board_memberships:
     index:
       title: 'メンバー管理'
@@ -255,10 +258,6 @@ ja:
     errors:
       user_not_found: 'ユーザーが見つかりません'
       already_member: 'すでにメンバーです'
-  boards:
-    created: 'ボードを作成しました'
-    updated: 'ボードを更新しました'
-    deleted: 'ボードを削除しました'
   devise:
     sessions:
       signed_in: ""
