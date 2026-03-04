@@ -30,10 +30,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_03_000003) do
   end
 
   create_table "board_memberships", force: :cascade do |t|
-    t.integer "board_id", null: false
+    t.bigint "board_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.index ["board_id", "user_id"], name: "index_board_memberships_on_board_id_and_user_id", unique: true
     t.index ["user_id"], name: "index_board_memberships_on_user_id"
   end
@@ -61,7 +61,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_03_000003) do
   end
 
   create_table "events", force: :cascade do |t|
-    t.integer "board_id", null: false
+    t.bigint "board_id", null: false
     t.datetime "created_at", precision: nil, null: false
     t.integer "created_by_id"
     t.text "description"

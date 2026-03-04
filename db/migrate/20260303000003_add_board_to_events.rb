@@ -2,7 +2,7 @@
 
 class AddBoardToEvents < ActiveRecord::Migration[8.1]
   def change
-    add_column :events, :board_id, :integer
+    add_column :events, :board_id, :bigint
     add_index :events, :board_id
 
     reversible do |dir|

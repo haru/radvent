@@ -3,8 +3,8 @@
 class CreateBoardMemberships < ActiveRecord::Migration[8.1]
   def change
     create_table :board_memberships do |t|
-      t.integer :board_id, null: false
-      t.integer :user_id, null: false
+      t.bigint :board_id, null: false
+      t.bigint :user_id, null: false
 
       t.timestamps
     end
