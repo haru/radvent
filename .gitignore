@@ -68,3 +68,4 @@ docker-compose.override.yml
 specs/
 .yardoc/
 doc/
+db/schema.rb
