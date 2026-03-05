@@ -48,7 +48,6 @@
             = link_to new_user_session_path, class: "nav-item nav-link" do
               %i.fa.fa-sign-in-alt
               = t("menu.sign_in")
-    = content_for?(:header_bar) ? yield(:header_bar) : ''
     = content_for?(:jumbotron) ? yield(:jumbotron) : ''
     %div.container
       - if flash[:notice].present?
