@@ -1,61 +1,92 @@
+# frozen_string_literal: true
+
+# Manages advent calendar events.
+#
+# Handles creating, reading, updating, and deleting events, as well as displaying the calendar view.
 class EventsController < ApplicationController
   layout 'admin'
   before_action :set_events_menu
-  before_action :admin_user!, except: [:show]
-  before_action :find_event, except: [:index, :new, :create, :list, :show]
+  before_action :admin_user!, except: %i[show new create]
+  before_action :check_event_creation_authorization, only: %i[new create]
+  before_action :find_event, except: %i[index new create list show]
   before_action :find_event_by_name, only: [:show]
+  before_action :find_board
 
-  def new
-    @event ||= Event.new
-  end
-
-  def create
-    @event = Event.new
-    @event.attributes = params.require(:event).permit(:title, :start_date, :end_date, :name, :description)
-    @event.created_by = current_user
-    @event.updated_by = current_user
-    if @event.save
-      redirect_to events_list_path
-    else
-      render :new, status: :unprocessable_entity
-    end
-  end
-
-  def update
-    @event.attributes = params.require(:event).permit(:title, :start_date, :end_date, :name, :description)
-    @event.updated_by = current_user
-    if @event.save
-      redirect_to edit_event_path(@event.id)
-    else
-      render :edit, status: :unprocessable_entity
-    end
-  end
-
-  def edit
-  end
-
-  def destroy
-    if @event.destroy
-      redirect_to events_list_path, status: :see_other
-    else
-      render :edit, status: :unprocessable_entity
-    end
-  end
-
+  # Lists all events (public view).
+  #
+  # @return [void]
   def index
-    @events = Event.order('start_date desc')
+    @events = Event.order(start_date: :desc)
   end
 
-  def list
-    @events = Event.order('start_date desc')
-  end
-
+  # Shows an event with its calendar view.
+  #
+  # @return [void]
   def show
     from_date = @event.start_date.beginning_of_week(:sunday)
     to_date = @event.end_date.end_of_week(:sunday)
     @calendar_data = split_week(from_date.upto(to_date))
     @advent_calendar_items = AdventCalendarItem.where(event_id: @event.id)
-    render :layout => 'application'
+    render layout: 'application'
+  end
+
+  # Displays a form to create a new event.
+  #
+  # @return [void]
+  def new
+    board_id = params[:board_id] || params.dig(:event, :board_id)
+    @board = Board.find_by(id: board_id) || Board.find_by(board_type: :top)
+    @event ||= Event.new
+    @event.board = @board
+  end
+
+  # Displays a form to edit an event.
+  #
+  # @return [void]
+  def edit; end
+
+  # Creates a new event.
+  #
+  # @return [void]
+  def create
+    @event = build_event
+    @board = @event.board
+    if @event.save
+      redirect_to events_list_path
+    else
+      render :new, status: :unprocessable_content
+    end
+  end
+
+  # Updates an existing event.
+  #
+  # @return [void]
+  def update
+    @event.attributes = params.expect(event: %i[title start_date end_date name description])
+    @event.updated_by = current_user
+    if @event.save
+      redirect_to edit_event_path(@event.id)
+    else
+      render :edit, status: :unprocessable_content
+    end
+  end
+
+  # Deletes an event.
+  #
+  # @return [void]
+  def destroy
+    if @event.destroy
+      redirect_to events_list_path, status: :see_other
+    else
+      render :edit, status: :unprocessable_content
+    end
+  end
+
+  # Lists all events (admin view).
+  #
+  # @return [void]
+  def list
+    @events = Event.order(start_date: :desc)
   end
 
   private
@@ -64,16 +95,40 @@ class EventsController < ApplicationController
     @menu = :events
   end
 
+  def check_event_creation_authorization
+    board_id_param = params[:board_id] || params.dig(:event, :board_id)
+    target_board = if board_id_param.present?
+                     Board.find_by(id: board_id_param)
+                   else
+                     Board.find_by!(board_type: :top)
+                   end
+
+    return render_not_found unless target_board
+    return if Event.creatable_on?(target_board, current_user)
+
+    render_forbidden
+  end
+
+  def build_event
+    event = Event.new(params.expect(event: %i[title start_date end_date name description board_id]))
+    event.created_by = current_user
+    event.updated_by = current_user
+    event.board ||= Board.find_by!(board_type: :top)
+    event
+  end
+
   def find_event
     return if params[:id].blank?
-    @event = Event.find_by_id(params[:id])
-    render_404 unless @event
+
+    @event = Event.find_by(id: params[:id])
+    render_not_found unless @event
   end
 
   def find_event_by_name
     return if params[:name].blank?
-    @event = Event.find_by_name(params[:name])
-    render_404 unless @event
+
+    @event = Event.find_by(name: params[:name])
+    render_not_found unless @event
   end
 
   def split_week(range)
@@ -88,5 +143,11 @@ class EventsController < ApplicationController
       end
     end
     weeks
+  end
+
+  def find_board
+    return unless @event
+
+    @board = @event.board
   end
 end

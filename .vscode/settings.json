@@ -4,5 +4,6 @@
         "ss": true,
         "netstat": true
     },
-    "gitflow.autoBumpVersion": false
+    "gitflow.autoBumpVersion": false,
+    "git.autofetch": false
 }

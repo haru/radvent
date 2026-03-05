@@ -1,0 +1,22 @@
+- content_for(:content) do
+  %div.container.mt-4
+    %h1= t('boards.index.title')
+    %hr
+    = link_to t('boards.index.new_board'), new_board_path, class: 'btn btn-primary mb-3'
+    - if @boards.any?
+      %table.table.table-striped
+        %thead
+          %tr
+            %th= t('activerecord.attributes.board.board_id')
+            %th= t('activerecord.attributes.board.name')
+            %th= t('activerecord.attributes.board.visibility')
+            %th
+        %tbody
+          - @boards.each do |board|
+            %tr
+              %td= link_to board.board_id, board_path(board.board_id)
+              %td= board.name
+              %td= t("boards.form.visibility_#{board.visibility}")
+              %td= link_to t('boards.edit.title'), edit_board_path(board.board_id), class: 'btn btn-sm btn-outline-secondary'
+    - else
+      %p.text-muted= t('boards.index.no_boards')

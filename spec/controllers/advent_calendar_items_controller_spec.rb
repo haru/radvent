@@ -1,18 +1,21 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe AdventCalendarItemsController, :type => :controller do
+RSpec.describe AdventCalendarItemsController, type: :controller do
+  let(:user) { create(:user, admin: false) }
+
   before do
     Item.destroy_all
     AdventCalendarItem.destroy_all
     Event.destroy_all
     User.destroy_all
-    @user = create(:user, admin: false)
-    sign_in @user
+    sign_in user
   end
 
   describe 'GET #show' do
     it 'assigns the requested advent_calendar_item to @advent_calendar_item' do
-      advent_calendar_item = create(:advent_calendar_item, user: @user)
+      advent_calendar_item = create(:advent_calendar_item, user: user)
       get :show, params: { id: advent_calendar_item }
       expect(assigns(:advent_calendar_item)).to eq advent_calendar_item
     end
@@ -49,7 +52,7 @@ RSpec.describe AdventCalendarItemsController, :type => :controller do
     end
 
     it 'renders the :edit template' do
-      advent_calendar_item = create(:advent_calendar_item, user: @user)
+      advent_calendar_item = create(:advent_calendar_item, user: user)
       get :edit, params: { id: advent_calendar_item }
       expect(response).to render_template :edit
     end
@@ -58,59 +61,57 @@ RSpec.describe AdventCalendarItemsController, :type => :controller do
   describe 'POST #create' do
     it 'saves the new advent_calendar_item in the database' do
       event = create(:event)
-      expect {
-        post :create, params: { advent_calendar_item: build(
-                   :advent_calendar_item, event: event
-        ).attributes }
-      }.to change(AdventCalendarItem, :count).by(1)
+      params = { advent_calendar_item: build(:advent_calendar_item, event: event).attributes }
+      expect { post :create, params: params }.to change(AdventCalendarItem, :count).by(1)
     end
 
     it 'redirects to advent_calendar_items#show' do
       event = create(:event)
-      post :create, params: { advent_calendar_item: build(
-                 :advent_calendar_item, event: event
-      ).attributes }
-      items = AdventCalendarItem.all
-      expect(response).to redirect_to advent_calendar_item_path(
-                    id: items[0].id,
-                  )
+      params = { advent_calendar_item: build(:advent_calendar_item, event: event).attributes }
+      post :create, params: params
+      expect(response).to redirect_to advent_calendar_item_path(id: AdventCalendarItem.first.id)
     end
   end
 
   describe 'PATCH #update' do
-    before :each do
-      @advent_calendar_item = create(:advent_calendar_item, user: @user)
-    end
+    let(:advent_calendar_item) { create(:advent_calendar_item, user: user) }
 
     it 'locates the requested @advent_calendar_item' do
-      patch :update, params: { id: @advent_calendar_item,
-                              advent_calendar_item: attributes_for(:advent_calendar_item) }
-      expect(assigns(:advent_calendar_item)).to eq(@advent_calendar_item)
+      patch :update, params: { id: advent_calendar_item,
+                               advent_calendar_item: attributes_for(:advent_calendar_item) }
+      expect(assigns(:advent_calendar_item)).to eq(advent_calendar_item)
     end
 
-    it "changes @advent_calendar_item's attributes" do
-      patch :update, params: { id: @advent_calendar_item,
-                              advent_calendar_item: attributes_for(:advent_calendar_item,
-                                                                   user_name: 'user_name_updated', comment: 'comment_updated') }
-      @advent_calendar_item.reload
-      expect(@advent_calendar_item.user_name).to eq('user_name_updated')
-      expect(@advent_calendar_item.comment).to eq('comment_updated')
+    context 'when changing attributes' do
+      before do
+        patch :update, params: {
+          id: advent_calendar_item,
+          advent_calendar_item: attributes_for(:advent_calendar_item,
+                                               user_name: 'user_name_updated', comment: 'comment_updated')
+        }
+        advent_calendar_item.reload
+      end
+
+      it 'updates user_name' do
+        expect(advent_calendar_item.user_name).to eq('user_name_updated')
+      end
+
+      it 'updates comment' do
+        expect(advent_calendar_item.comment).to eq('comment_updated')
+      end
     end
 
     it 'renders the :edit if the advent_calendar_item is not updated' do
-      allow_any_instance_of(AdventCalendarItem).to receive(:save)
-                                                     .and_return(false)
-      patch :update, params: { id: @advent_calendar_item,
-                              advent_calendar_item: attributes_for(:advent_calendar_item) }
+      allow_any_instance_of(AdventCalendarItem).to receive(:save).and_return(false)
+      patch :update, params: { id: advent_calendar_item,
+                               advent_calendar_item: attributes_for(:advent_calendar_item) }
       expect(response).to render_template :edit
     end
 
     it 'redirects to advent_calendar_item#show if the advent_calendar_item is updated' do
-      patch :update, params: { id: @advent_calendar_item,
-                              advent_calendar_item: attributes_for(:advent_calendar_item) }
-      expect(response).to redirect_to advent_calendar_item_path(
-                    @advent_calendar_item
-                  )
+      patch :update, params: { id: advent_calendar_item,
+                               advent_calendar_item: attributes_for(:advent_calendar_item) }
+      expect(response).to redirect_to advent_calendar_item_path(advent_calendar_item)
     end
   end
 end

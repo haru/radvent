@@ -1,3 +1,8 @@
+# frozen_string_literal: true
+
+# Uploader for image files using CarrierWave.
+#
+# Handles storage of image attachments for advent calendar items.
 class ImageUploader < CarrierWave::Uploader::Base
   # Include RMagick or MiniMagick support:
   # include CarrierWave::RMagick

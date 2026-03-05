@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :user do
     sequence :email do |n|
@@ -8,6 +10,6 @@ FactoryBot.define do
       "person#{n}"
     end
 
-    password {'hogehoge'}
+    password { 'hogehoge' }
   end
 end

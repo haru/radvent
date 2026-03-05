@@ -60,3 +60,12 @@ config/database.yml
 /public/uploads/*
 radvent.sqlite3_test
 .playwright-mcp/
+# Docker and CI/CD related
+.env
+.env.*
+!.env.example
+docker-compose.override.yml
+specs/
+.yardoc/
+doc/
+db/schema.rb
