@@ -56,12 +56,96 @@ RSpec.describe EventsController, type: :controller do
                              description: 'description' } }
       expect(response).to have_http_status(:redirect)
     end
+
+    it 'redirects to event view after successful update' do
+      put :update,
+          params: { id: event.id,
+                    event: { title: 'updated', start_date: '2017-12-01', end_date: '2017-12-25', name: 'aaa',
+                             description: 'description' } }
+      expect(response).to redirect_to(show_event_path('aaa'))
+    end
+  end
+
+  describe 'check_edit_permission' do
+    let(:event_owner) { create(:user) }
+    let(:admin_user) { create(:user, admin: true) }
+    let(:other_user) { create(:user) }
+    let(:owned_event) do
+      create(:event, name: 'owned-event', title: 'Owned Event', start_date: '2016-12-01', end_date: '2016-12-25',
+                     created_by: event_owner, updated_by: event_owner)
+    end
+
+    before do
+      owned_event
+    end
+
+    context 'when user is event owner' do
+      before { sign_in event_owner }
+
+      it 'allows access to edit action' do
+        get :edit, params: { id: owned_event.id }
+        expect(response).not_to have_http_status(403)
+      end
+
+      it 'allows access to update action' do
+        put :update, params: { id: owned_event.id, event: { title: 'test' } }
+        expect(response).not_to have_http_status(403)
+      end
+
+      it 'allows access to destroy action' do
+        delete :destroy, params: { id: owned_event.id }
+        expect(response).not_to have_http_status(403)
+      end
+    end
+
+    context 'when user is admin' do
+      before { sign_in admin_user }
+
+      it 'allows access to edit action' do
+        get :edit, params: { id: owned_event.id }
+        expect(response).not_to have_http_status(403)
+      end
+
+      it 'allows access to update action' do
+        put :update, params: { id: owned_event.id, event: { title: 'test' } }
+        expect(response).not_to have_http_status(403)
+      end
+
+      it 'allows access to destroy action' do
+        delete :destroy, params: { id: owned_event.id }
+        expect(response).not_to have_http_status(403)
+      end
+    end
+
+    context 'when user is not event owner and not admin' do
+      before { sign_in other_user }
+
+      it 'denies access to edit action' do
+        get :edit, params: { id: owned_event.id }
+        expect(response).to have_http_status(403)
+      end
+
+      it 'denies access to update action' do
+        put :update, params: { id: owned_event.id, event: { title: 'test' } }
+        expect(response).to have_http_status(403)
+      end
+
+      it 'denies access to destroy action' do
+        delete :destroy, params: { id: owned_event.id }
+        expect(response).to have_http_status(403)
+      end
+    end
   end
 
   describe 'DELETE #destroy' do
     it 'returns http success' do
       delete :destroy, params: { id: event.id }
       expect(response).to have_http_status(:redirect)
+    end
+
+    it 'redirects to board page after successful destroy' do
+      delete :destroy, params: { id: event.id }
+      expect(response).to redirect_to(root_path)
     end
   end
 

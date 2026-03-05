@@ -10,5 +10,5 @@
   - if params[:board_id].present?
     = f.hidden_field :board_id, value: params[:board_id]
 
-  = link_to t('helpers.submit.cancel'), events_list_path, class: "btn btn-outline-success text-success"
+  = link_to t('helpers.submit.cancel'), boards_path, class: "btn btn-outline-success text-success"
   = f.submit t('helpers.submit.create'), class: "btn btn-primary btn-raised"

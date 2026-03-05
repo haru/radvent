@@ -24,14 +24,10 @@
       %div#navTopMenu.collapse.navbar-collapse
         %div.navbar-nav.ms-auto
           - if user_signed_in?
-            - if current_user.admin?
-              = link_to  events_list_path, class: "nav-item nav-link" do
-                %i.fa.fa-cog
-                = t('menu.settings')
             %div.nav-item.dropdown{"data-controller" => "navbar-dropdown"}
               %a.nav-link.dropdown-toggle{"href" => "#", "aria-expanded" => "false",
-                                          "data-navbar-dropdown-target" => "toggle",
-                                          "data-action" => "click->navbar-dropdown#toggle"}
+                                         "data-navbar-dropdown-target" => "toggle",
+                                         "data-action" => "click->navbar-dropdown#toggle"}
                 %i.fa.fa-user
                 = current_user.name
               %ul.dropdown-menu.dropdown-menu-end{"data-navbar-dropdown-target" => "menu"}

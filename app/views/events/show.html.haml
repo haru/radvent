@@ -1,8 +1,14 @@
 - content_for(:jumbotron) do
   %div#event-header.jumbotron.container-fluid.p-5
     %div.container
-      %h1= @event.title
-      =@event.description
+      %div.row
+        %div.col
+          %h1= @event.title
+          =@event.description
+        - if current_user && (current_user.admin? || @event.created_by_id == current_user.id)
+          %div.col-auto.d-flex.align-items-center
+            = link_to edit_event_path(@event.name), class: 'btn btn-light btn-sm' do
+              %i.fas.fa-pencil-alt
 
 %div
   %div.advent-calendar-description

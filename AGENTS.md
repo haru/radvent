@@ -281,3 +281,10 @@ Reason: Manually written migrations tend to use DBMS-specific SQL (e.g. `datetim
 ---
 
 When working on this codebase, follow these conventions to maintain consistency with existing code patterns.
+
+## Active Technologies
+- Ruby 3.0+ / Rails 8.1 + Devise (認証), esbuild (JSビルド), HAML (テンプレート), Bootstrap 5 (CSS), Stimulus (JavaScriptコントローラー), CarrierWave (ファイルアップロード), SimpleCov (テストカバレッジ) (001-event-edit-ux)
+- SQLite3 (開発環境), MySQL 5.7+ または PostgreSQL (本番環境) (001-event-edit-ux)
+
+## Recent Changes
+- 001-event-edit-ux: Added Ruby 3.0+ / Rails 8.1 + Devise (認証), esbuild (JSビルド), HAML (テンプレート), Bootstrap 5 (CSS), Stimulus (JavaScriptコントローラー), CarrierWave (ファイルアップロード), SimpleCov (テストカバレッジ)

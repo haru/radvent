@@ -4,12 +4,15 @@
 #
 # Handles creating, reading, updating, and deleting events, as well as displaying the calendar view.
 class EventsController < ApplicationController
+  include EventsHelper
+
   layout 'admin'
   before_action :set_events_menu
-  before_action :admin_user!, except: %i[show new create]
+  before_action :admin_user!, except: %i[show new create edit update destroy]
   before_action :check_event_creation_authorization, only: %i[new create]
   before_action :find_event, except: %i[index new create list show]
   before_action :find_event_by_name, only: [:show]
+  before_action :check_edit_permission, only: %i[edit update destroy]
   before_action :find_board
 
   # Lists all events (public view).
@@ -65,7 +68,7 @@ class EventsController < ApplicationController
     @event.attributes = params.expect(event: %i[title start_date end_date name description])
     @event.updated_by = current_user
     if @event.save
-      redirect_to edit_event_path(@event.id)
+      redirect_to show_event_path(@event.name)
     else
       render :edit, status: :unprocessable_content
     end
@@ -76,7 +79,7 @@ class EventsController < ApplicationController
   # @return [void]
   def destroy
     if @event.destroy
-      redirect_to events_list_path, status: :see_other
+      redirect_to root_path, status: :see_other
     else
       render :edit, status: :unprocessable_content
     end
@@ -131,23 +134,18 @@ class EventsController < ApplicationController
     render_not_found unless @event
   end
 
-  def split_week(range)
-    weeks = []
-    week = []
-
-    range.each do |date|
-      week << date
-      if date.wday == 6
-        weeks << week
-        week = []
-      end
-    end
-    weeks
-  end
-
   def find_board
     return unless @event
 
     @board = @event.board
+  end
+
+  def check_edit_permission
+    return unless current_user
+
+    return if current_user.admin? || (@event && @event.created_by_id == current_user.id)
+
+    render_forbidden
+    nil
   end
 end
