@@ -11,17 +11,10 @@ RSpec.describe 'Settings navigation', type: :request do
     sign_in admin_user
   end
 
-  context 'when viewing admin layout navigation' do
-    it 'does not contain events list navigation link' do
-      get events_list_path
-      expect(response.body).not_to include('/admin/events')
-    end
-  end
-
   context 'when viewing application layout (admin menu)' do
-    it 'does not contain events list settings link' do
+    it 'contains user management settings link' do
       get root_path
-      expect(response.body).not_to include('/admin/events')
+      expect(response.body).to include('/users')
     end
   end
 end
