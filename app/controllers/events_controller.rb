@@ -58,7 +58,7 @@ class EventsController < ApplicationController
     @event.attributes = params.expect(event: %i[title start_date end_date name description])
     @event.updated_by = current_user
     if @event.save
-      redirect_to show_event_path(@event.name)
+      redirect_to show_event_path(@event.name), status: :see_other, notice: t('events.updated')
     else
       render :edit, status: :unprocessable_content
     end

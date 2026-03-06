@@ -1,3 +1,5 @@
+- content_for(:head) { tag.meta(name: 'turbo-cache-control', content: 'no-cache') }
+
 - content_for :header_bar do
   %div.advent-calendar-breadcrumb
     %div.container-fluid

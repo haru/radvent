@@ -43,6 +43,8 @@ en:
     board_management: 'Manage Boards'
   breadcrumb:
     top: 'TOP'
+  events:
+    updated: 'Event updated successfully'
   boards:
     index:
       title: 'Board Management'
