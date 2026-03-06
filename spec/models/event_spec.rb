@@ -16,16 +16,10 @@ describe Event do
     let(:other_board) { create(:board) }
 
     describe 'title uniqueness' do
-      it 'is invalid when the same title exists on the same board' do
+      it 'is invalid when the same title exists on the same board' do # rubocop:disable RSpec/MultipleExpectations
         create(:event, board: board, title: 'My Event')
         duplicate = build(:event, board: board, title: 'My Event')
         expect(duplicate).not_to be_valid
-      end
-
-      it 'adds error to title when the same title exists on the same board' do
-        create(:event, board: board, title: 'My Event')
-        duplicate = build(:event, board: board, title: 'My Event')
-        duplicate.valid?
         expect(duplicate.errors[:title]).to be_present
       end
 

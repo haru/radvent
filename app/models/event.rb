@@ -4,6 +4,8 @@
 #
 # Events have a title, name, start and end dates, and contain multiple advent calendar items.
 class Event < ApplicationRecord
+  # Regex for valid event names: lowercase letters, digits, hyphens, underscores;
+  # must contain at least one letter; cannot start or end with a hyphen or underscore.
   NAME_FORMAT = /\A(?=[a-z0-9_-]*[a-z])[a-z0-9]([a-z0-9_-]*[a-z0-9])?\z/
   include Permissionable
 
