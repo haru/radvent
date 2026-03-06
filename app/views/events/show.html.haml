@@ -5,7 +5,7 @@
         %div.col
           %h1= @event.title
           =@event.description
-        - if current_user && (current_user.admin? || @event.created_by_id == current_user.id)
+        - if @event.editable?(current_user)
           %div.col-auto.d-flex.align-items-center
             = link_to edit_event_path(@event.name), class: 'btn btn-light btn-sm' do
               %i.fas.fa-pencil-alt

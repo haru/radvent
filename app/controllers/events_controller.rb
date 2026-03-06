@@ -128,11 +128,6 @@ class EventsController < ApplicationController
   end
 
   def check_edit_permission
-    return unless current_user
-
-    return if current_user.admin? || (@event && @event.created_by_id == current_user.id)
-
-    render_forbidden
-    nil
+    render_forbidden unless @event&.editable?(current_user)
   end
 end

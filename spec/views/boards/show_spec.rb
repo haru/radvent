@@ -14,19 +14,7 @@ RSpec.describe 'boards/show', type: :view do
 
   it 'renders the board name' do
     render
-    combined = rendered + view.content_for(:content).to_s + view.content_for(:header_bar).to_s
+    combined = rendered + view.content_for(:content).to_s + view.content_for(:jumbotron).to_s
     expect(combined).to include(board.name)
-  end
-
-  it 'renders the breadcrumb with TOP link' do
-    render
-    breadcrumb = view.content_for(:header_bar).to_s
-    expect(breadcrumb).to include(I18n.t('breadcrumb.top'))
-  end
-
-  it 'renders the board name in breadcrumb' do
-    render
-    breadcrumb = view.content_for(:header_bar).to_s
-    expect(breadcrumb).to include(board.name)
   end
 end

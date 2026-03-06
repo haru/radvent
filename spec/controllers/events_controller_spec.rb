@@ -54,7 +54,7 @@ RSpec.describe EventsController, type: :controller do
           params: { name: event.name,
                     event: { title: 'test', start_date: '2017-12-01', end_date: '2017-12-25', name: 'aaa',
                              description: 'description' } }
-      expect(response).to have_http_status(:redirect)
+      expect(response).to have_http_status(:see_other)
     end
 
     it 'redirects to event view after successful update' do
