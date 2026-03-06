@@ -4,14 +4,15 @@
 #
 # Events have a title, name, start and end dates, and contain multiple advent calendar items.
 class Event < ApplicationRecord
+  NAME_FORMAT = /\A(?=[a-z0-9_-]*[a-z])[a-z0-9]([a-z0-9_-]*[a-z0-9])?\z/
   include Permissionable
 
   belongs_to :board
   has_many :advent_calendar_items, dependent: :destroy
   belongs_to :created_by, class_name: 'User'
   belongs_to :updated_by, class_name: 'User'
-  validates :title, presence: true, uniqueness: true
-  validates :name, presence: true, uniqueness: true, format: { with: /\A[-_a-z0-9]+\z/ }
+  validates :title, presence: true, uniqueness: { scope: :board_id }
+  validates :name, presence: true, uniqueness: { scope: :board_id }, format: { with: NAME_FORMAT }
   validate :start_and_end_dates_must_be_same_month
 
   # Returns true if the given user can create an event on the given board.

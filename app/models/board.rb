@@ -30,7 +30,7 @@ class Board < ApplicationRecord
   with_options if: :board_type_user? do
     validates :board_id, presence: true,
                          length: { maximum: 64 },
-                         format: { with: /\A[a-z0-9_-]+\z/ },
+                         format: { with: /\A(?=[a-z0-9_-]*[a-z])[a-z0-9]([a-z0-9_-]*[a-z0-9])?\z/ },
                          exclusion: { in: RESERVED_IDS },
                          uniqueness: true
     validates :visibility, presence: true

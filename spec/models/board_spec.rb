@@ -70,6 +70,35 @@ RSpec.describe Board, type: :model do
         board.valid?
         expect(board.board_id).to eq('myboard')
       end
+
+      it 'is invalid when containing only numbers' do
+        expect(build(:board, board_id: '123')).not_to be_valid
+      end
+
+      it 'is invalid when containing only symbols' do
+        expect(build(:board, board_id: '-_-')).not_to be_valid
+      end
+
+      it 'is invalid when starting with a hyphen' do
+        expect(build(:board, board_id: '-myboard')).not_to be_valid
+      end
+
+      it 'is invalid when ending with a hyphen' do
+        expect(build(:board, board_id: 'myboard-')).not_to be_valid
+      end
+
+      it 'is invalid when starting with an underscore' do
+        expect(build(:board, board_id: '_myboard')).not_to be_valid
+      end
+
+      it 'is invalid when ending with an underscore' do
+        expect(build(:board, board_id: 'myboard_')).not_to be_valid
+      end
+
+      it 'is valid with an underscore in the middle' do
+        board = build(:board, board_id: 'my_board')
+        expect(board).to be_valid
+      end
     end
 
     describe 'board_id uniqueness' do

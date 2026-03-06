@@ -11,6 +11,87 @@ describe Event do
     user
   end
 
+  describe 'validations' do
+    let(:board) { create(:board) }
+    let(:other_board) { create(:board) }
+
+    describe 'title uniqueness' do
+      it 'is invalid when the same title exists on the same board' do
+        create(:event, board: board, title: 'My Event')
+        duplicate = build(:event, board: board, title: 'My Event')
+        expect(duplicate).not_to be_valid
+        expect(duplicate.errors[:title]).to be_present
+      end
+
+      it 'is valid when the same title exists on a different board' do
+        create(:event, board: board, title: 'My Event')
+        other = build(:event, board: other_board, title: 'My Event')
+        expect(other).to be_valid
+      end
+    end
+
+    describe 'name format' do
+      it 'is invalid when containing only numbers' do
+        expect(build(:event, name: '123')).not_to be_valid
+      end
+
+      it 'is invalid when containing only symbols' do
+        expect(build(:event, name: '-_-')).not_to be_valid
+      end
+
+      it 'is invalid when starting with a hyphen' do
+        expect(build(:event, name: '-abc')).not_to be_valid
+      end
+
+      it 'is invalid when ending with a hyphen' do
+        expect(build(:event, name: 'abc-')).not_to be_valid
+      end
+
+      it 'is invalid when starting with an underscore' do
+        expect(build(:event, name: '_abc')).not_to be_valid
+      end
+
+      it 'is invalid when ending with an underscore' do
+        expect(build(:event, name: 'abc_')).not_to be_valid
+      end
+
+      it 'is valid with a single letter' do
+        event = build(:event, name: 'a')
+        expect(event).to be_valid
+      end
+
+      it 'is valid with letters and numbers' do
+        event = build(:event, name: 'advent2024')
+        expect(event).to be_valid
+      end
+
+      it 'is valid with a hyphen in the middle' do
+        event = build(:event, name: 'my-event')
+        expect(event).to be_valid
+      end
+
+      it 'is valid with an underscore in the middle' do
+        event = build(:event, name: 'my_event')
+        expect(event).to be_valid
+      end
+    end
+
+    describe 'name uniqueness' do
+      it 'is invalid when the same name exists on the same board' do
+        create(:event, board: board, name: 'my-event')
+        duplicate = build(:event, board: board, name: 'my-event')
+        expect(duplicate).not_to be_valid
+        expect(duplicate.errors[:name]).to be_present
+      end
+
+      it 'is valid when the same name exists on a different board' do
+        create(:event, board: board, name: 'my-event')
+        other = build(:event, board: other_board, name: 'my-event')
+        expect(other).to be_valid
+      end
+    end
+  end
+
   it 'returns 5 days from start_date to end_date' do
     event = build(:event, start_date: Date.parse('2019-12-01'), end_date: Date.parse('2019-12-05'))
     expect(event.day_count).to eq(5)
