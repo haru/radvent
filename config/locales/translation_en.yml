@@ -149,6 +149,7 @@ en:
         name_help: "Alphanumeric characters, -, and _ are allowed. This will be part of the event's URL."
       edit:
         title: Event
+        name_help: "Alphanumeric characters, -, and _ are allowed. This will be part of the event's URL."
       delete:
         title: Delete Event
         confirm: "Are you sure to delete %{event}?"

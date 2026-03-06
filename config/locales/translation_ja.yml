@@ -151,6 +151,7 @@ ja:
         name_help: "英数字, -, _を使用可能です。イベントのURLの一部になります。"
       edit:
         title: イベント
+        name_help: "英数字, -, _を使用可能です。イベントのURLの一部になります。"
       delete:
         title: イベント削除
         confirm: "%{event} を削除します。よろしいですか?"
