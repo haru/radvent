@@ -69,3 +69,4 @@ specs/
 .yardoc/
 doc/
 db/schema.rb
+.claude/settings.json
