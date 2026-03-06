@@ -4,8 +4,6 @@
 #
 # Handles creating, reading, updating, and deleting events, as well as displaying the calendar view.
 class EventsController < ApplicationController
-  include EventsHelper
-
   before_action :set_events_menu
   before_action :check_event_creation_authorization, only: %i[new create]
   before_action :find_event, except: %i[new create show]
@@ -129,5 +127,19 @@ class EventsController < ApplicationController
 
   def check_edit_permission
     render_forbidden unless @event&.editable?(current_user)
+  end
+
+  def split_week(range)
+    weeks = []
+    week = []
+
+    range.each do |date|
+      week << date
+      if date.wday == 6
+        weeks << week
+        week = []
+      end
+    end
+    weeks
   end
 end
