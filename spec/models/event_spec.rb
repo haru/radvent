@@ -20,6 +20,12 @@ describe Event do
         create(:event, board: board, title: 'My Event')
         duplicate = build(:event, board: board, title: 'My Event')
         expect(duplicate).not_to be_valid
+      end
+
+      it 'adds error to title when the same title exists on the same board' do
+        create(:event, board: board, title: 'My Event')
+        duplicate = build(:event, board: board, title: 'My Event')
+        duplicate.valid?
         expect(duplicate.errors[:title]).to be_present
       end
 
@@ -81,6 +87,12 @@ describe Event do
         create(:event, board: board, name: 'my-event')
         duplicate = build(:event, board: board, name: 'my-event')
         expect(duplicate).not_to be_valid
+      end
+
+      it 'adds error to name when the same name exists on the same board' do
+        create(:event, board: board, name: 'my-event')
+        duplicate = build(:event, board: board, name: 'my-event')
+        duplicate.valid?
         expect(duplicate.errors[:name]).to be_present
       end
 
