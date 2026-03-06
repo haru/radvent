@@ -245,6 +245,8 @@ ja:
     created: 'ボードを作成しました'
     updated: 'ボードを更新しました'
     deleted: 'ボードを削除しました'
+  events:
+    updated: 'イベントを更新しました'
   board_memberships:
     index:
       title: 'メンバー管理'

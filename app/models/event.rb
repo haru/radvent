@@ -33,10 +33,10 @@ class Event < ApplicationRecord
   delegate :visible?, to: :board
 
   def editable?(user)
-    return true if user&.admin?
     return false if user.nil?
+    return true if user.admin?
 
-    board.board_type_top? ? false : board.owner?(user) || board.member?(user)
+    created_by_id == user.id
   end
 
   def deletable?(user)

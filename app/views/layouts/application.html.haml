@@ -15,24 +15,24 @@
     = content_for(:head) if content_for?(:head)
   %body#advent_calendar_body
     %nav#top-menu.navbar.navbar-light.navbar-expand-lg.px-3
-      = link_to "TOP", root_path, class: "navbar-brand"
-      - if @board&.board_type_user? && @board.board_id.present?
-        %span.navbar-brand
-          = " > "
-          = link_to @board.name, board_path(@board.board_id)
+      %div.d-flex.align-items-center
+        = link_to "TOP", root_path, class: "navbar-brand me-0"
+        - if @board&.board_type_user? && @board.board_id.present?
+          %span.px-2 /
+          = link_to @board.name, board_path(@board.board_id), class: "navbar-brand ms-0"
       %button.navbar-toggler{type:"button", "data-mdb-toggle": "collapse", "data-mdb-target": "#navTopMenu", "aria-controls": "navTopMenu", "aria-expanded": "false", "aria-label": "Toggle navigation"}
         %span.navbar-toggler-icon
       %div#navTopMenu.collapse.navbar-collapse
         %div.navbar-nav.ms-auto
           - if user_signed_in?
             - if current_user.admin?
-              = link_to  events_list_path, class: "nav-item nav-link" do
+              = link_to users_path, class: "nav-item nav-link" do
                 %i.fa.fa-cog
                 = t('menu.settings')
             %div.nav-item.dropdown{"data-controller" => "navbar-dropdown"}
               %a.nav-link.dropdown-toggle{"href" => "#", "aria-expanded" => "false",
-                                          "data-navbar-dropdown-target" => "toggle",
-                                          "data-action" => "click->navbar-dropdown#toggle"}
+                                         "data-navbar-dropdown-target" => "toggle",
+                                         "data-action" => "click->navbar-dropdown#toggle"}
                 %i.fa.fa-user
                 = current_user.name
               %ul.dropdown-menu.dropdown-menu-end{"data-navbar-dropdown-target" => "menu"}
@@ -48,17 +48,14 @@
             = link_to new_user_session_path, class: "nav-item nav-link" do
               %i.fa.fa-sign-in-alt
               = t("menu.sign_in")
-    = content_for?(:header_bar) ? yield(:header_bar) : ''
     = content_for?(:jumbotron) ? yield(:jumbotron) : ''
     %div.container
       - if flash[:notice].present?
-        %div.alert.alert-success.alert-dismissible.fade.show{role: "alert"}
+        %div.alert.alert-success{role: "alert"}
           = flash[:notice]
-          %button.btn-close{type: "button", "data-mdb-dismiss": "alert", "aria-label": "Close"}
       - if flash[:alert].present?
-        %div.alert.alert-danger.alert-dismissible.fade.show{role: "alert"}
+        %div.alert.alert-danger{role: "alert"}
           = flash[:alert]
-          %button.btn-close{type: "button", "data-mdb-dismiss": "alert", "aria-label": "Close"}
       = content_for?(:content) ? yield(:content) : yield
 
 %footer.welcome-footer

@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  resources :events, except: [:show]
+  resources :events, param: :name, except: %i[show index]
   get 'events/:name' => 'events#show', as: :show_event
-  get 'admin/events' => 'events#list', as: :events_list
   delete 'users/delete/:id' => 'users#destroy', as: :delete_user
   get 'user/:id/edit' => 'users#edit_info', as: :edit_user
   put 'user/:id/update' => 'users#update_info', as: :update_user

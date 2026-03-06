@@ -70,16 +70,13 @@ yarn install
 #    config/database.yml / config/secrets.yml / config/initializers/devise.rb が作成される
 bundle exec rake radvent:generate_default_settings
 
-# 3. データベース作成 & マイグレーション
-bundle exec rake db:create db:migrate
-
-# 4. （任意）サンプルデータの投入
-bundle exec rake db:seed
+# 3. データベース作成 & マイグレーション & 初期データ投入
+bundle exec rake db:create db:migrate db:seed
 ```
 
 ### 初期管理者ユーザー
 
-マイグレーション後、以下の管理者アカウントが利用できます。**ログイン後、必ずパスワードを変更してください。**
+シード実行後（`db:seed`）、以下の管理者アカウントが利用できます。**ログイン後、必ずパスワードを変更してください。**
 
 | 項目 | 値 |
 |------|----|

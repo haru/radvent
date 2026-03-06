@@ -48,7 +48,7 @@ class BoardsController < ApplicationController
   # @return [void]
   def update
     if @board.update(board_params)
-      redirect_to board_path(@board.board_id), notice: t('boards.updated')
+      redirect_to board_path(@board.board_id), status: :see_other, notice: t('boards.updated')
     else
       render :edit, status: :unprocessable_content
     end

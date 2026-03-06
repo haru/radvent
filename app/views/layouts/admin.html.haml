@@ -2,8 +2,6 @@
   %div.container
     %ul#admin-menu.nav.nav-tabs
       %li.nav-item{role: "presentation"}
-        = link_to t('views.event.list.title'), events_list_path, class: @menu == :events ? 'nav-link active' : 'nav-link'
-      %li.nav-item{role: "presentation"}
         = link_to t('views.user.index.title'), users_path, class: @menu == :users ? 'nav-link active' : 'nav-link'
 
   %div.container.admin-card-container
