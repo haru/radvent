@@ -6,21 +6,12 @@
 class EventsController < ApplicationController
   include EventsHelper
 
-  layout 'admin'
   before_action :set_events_menu
-  before_action :admin_user!, except: %i[show new create edit update destroy]
   before_action :check_event_creation_authorization, only: %i[new create]
-  before_action :find_event, except: %i[index new create list show]
+  before_action :find_event, except: %i[new create show]
   before_action :find_event_by_name, only: [:show]
   before_action :check_edit_permission, only: %i[edit update destroy]
   before_action :find_board
-
-  # Lists all events (public view).
-  #
-  # @return [void]
-  def index
-    @events = Event.order(start_date: :desc)
-  end
 
   # Shows an event with its calendar view.
   #
@@ -30,7 +21,6 @@ class EventsController < ApplicationController
     to_date = @event.end_date.end_of_week(:sunday)
     @calendar_data = split_week(from_date.upto(to_date))
     @advent_calendar_items = AdventCalendarItem.where(event_id: @event.id)
-    render layout: 'application'
   end
 
   # Displays a form to create a new event.
@@ -55,7 +45,7 @@ class EventsController < ApplicationController
     @event = build_event
     @board = @event.board
     if @event.save
-      redirect_to events_list_path
+      redirect_to board_redirect_path(@board)
     else
       render :new, status: :unprocessable_content
     end
@@ -79,20 +69,17 @@ class EventsController < ApplicationController
   # @return [void]
   def destroy
     if @event.destroy
-      redirect_to root_path, status: :see_other
+      redirect_to board_redirect_path(@board), status: :see_other
     else
       render :edit, status: :unprocessable_content
     end
   end
 
-  # Lists all events (admin view).
-  #
-  # @return [void]
-  def list
-    @events = Event.order(start_date: :desc)
-  end
-
   private
+
+  def board_redirect_path(board)
+    board.board_type_top? ? root_path : board_path(board.board_id)
+  end
 
   def set_events_menu
     @menu = :events
@@ -121,9 +108,9 @@ class EventsController < ApplicationController
   end
 
   def find_event
-    return if params[:id].blank?
+    return if params[:name].blank?
 
-    @event = Event.find_by(id: params[:id])
+    @event = Event.find_by(name: params[:name])
     render_not_found unless @event
   end
 
