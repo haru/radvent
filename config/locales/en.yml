@@ -90,7 +90,7 @@ en:
         admin: Administrator
         created_at: Created at
         confirmation_sent_at: Password confirmation sent at
-        confirmation_token: Password confirmaion token
+        confirmation_token: Password confirmation token
         confirmed_at: Password confirmed at
         current_sign_in_at: current sign in
         current_sign_in_ip: current sign in ip address
