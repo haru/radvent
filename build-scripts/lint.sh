@@ -12,9 +12,11 @@ bundle exec rubocop --parallel
 
 echo "Running YARD documentation check..."
 set +e
-bundle exec yard stats --list-undoc --no-save | grep "100.00%" > /dev/null
+yard_output=$(bundle exec yard stats --list-undoc --no-save 2>&1)
+echo "$yard_output" | grep "100.00%" > /dev/null
 if [ $? -ne 0 ]; then
-  echo "YARD documentation coverage is below 100%. See report above." >&2
+  echo "$yard_output" >&2
+  echo "YARD documentation coverage is below 100%." >&2
   exit 1
 fi
 set -e
