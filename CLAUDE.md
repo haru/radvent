@@ -287,6 +287,8 @@ When working on this codebase, follow these conventions to maintain consistency 
 - SQLite3 (開発環境), MySQL 5.7+ または PostgreSQL (本番環境) (001-event-edit-ux)
 - Ruby 3.2+ / Rails 8.1 + Rails i18n, RSpec (001-merge-locale-files)
 - ファイルシステム（YAMLファイル） (001-merge-locale-files)
+- Ruby 3.0+ / Rails 8.1、JavaScript (ES2020+) + @hotwired/stimulus、simple-datatables（既存） (001-board-member-datatables)
+- N/A（UIのみの変更） (001-board-member-datatables)
 
 ## Recent Changes
 - 001-event-edit-ux: Added Ruby 3.0+ / Rails 8.1 + Devise (認証), esbuild (JSビルド), HAML (テンプレート), Bootstrap 5 (CSS), Stimulus (JavaScriptコントローラー), CarrierWave (ファイルアップロード), SimpleCov (テストカバレッジ)

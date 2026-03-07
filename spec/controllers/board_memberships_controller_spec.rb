@@ -26,11 +26,17 @@ RSpec.describe BoardMembershipsController, type: :controller do
     end
 
     context 'when authenticated as owner' do
+      render_views
       before { sign_in owner }
 
       it 'returns http success' do
         get :index, params: { board_board_id: board.board_id }
         expect(response).to have_http_status(:success)
+      end
+
+      it 'renders datatable controller on the memberships table' do
+        get :index, params: { board_board_id: board.board_id }
+        expect(response.body).to include('data-controller="datatable"')
       end
     end
 
