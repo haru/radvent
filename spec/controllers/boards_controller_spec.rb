@@ -17,11 +17,17 @@ RSpec.describe BoardsController, type: :controller do
     end
 
     context 'when authenticated' do
+      render_views
       before { sign_in owner }
 
       it 'returns http success' do
         get :index
         expect(response).to have_http_status(:success)
+      end
+
+      it 'renders datatable controller on the boards table' do
+        get :index
+        expect(response.body).to include('data-controller="datatable"')
       end
     end
   end

@@ -1,5 +1,5 @@
 - content_for(:content) do
-  %div.container.mt-4
+  %div.container.mt-4{data: {controller: 'datatable'}}
     %h1= t('board_memberships.index.title')
     %p= link_to @board.name, board_path(@board.board_id)
     %hr
