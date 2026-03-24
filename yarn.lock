@@ -660,10 +660,10 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/retry/-/retry-0.4.3.tgz#c2b9d2e374ee62c586d3adbea87199b1d7a7a6ba"
   integrity sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==
 
-"@rails/actioncable@>=7.0", "@rails/actioncable@^8.1.0":
-  version "8.1.200"
-  resolved "https://registry.npmjs.org/@rails/actioncable/-/actioncable-8.1.200.tgz"
-  integrity sha512-on0DSb7AFUkq1ocxivDNQhhGW/RQpY91zvRVyyaEWP4gOOZWy33P/UyxjQk74IENWNrTqs8+zOGHwTjiiFruRw==
+"@rails/actioncable@>=7.0", "@rails/actioncable@^8.1.201":
+  version "8.1.201"
+  resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-8.1.201.tgz#12f51ea07cdb2ada6c33a227a9992d53e959a329"
+  integrity sha512-j4O7jn9jX3GtkVOO7KQDIRlBENwQiPNBAcaaa/FNMk7fPZjMUijGs+vk0PsB/VgZNDU2Y3C2hqVrXeLKy3iZ9g==
 
 "@rails/activestorage@^8.1.0":
   version "8.1.200"
