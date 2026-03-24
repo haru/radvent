@@ -9,7 +9,7 @@
     "@hotwired/turbo-rails": "^8.0.0",
     "@rails/actioncable": "^8.1.201",
     "@rails/activestorage": "^8.1.201",
-    "dompurify": "^3.3.1",
+    "dompurify": "^3.3.3",
     "easymde": "^2.20.0",
     "esbuild": "^0.27.4",
     "marked": "^17.0.5",
