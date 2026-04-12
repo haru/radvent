@@ -12,7 +12,7 @@
     "dompurify": "^3.3.3",
     "easymde": "^2.20.0",
     "esbuild": "^0.28.0",
-    "marked": "^17.0.6",
+    "marked": "^18.0.0",
     "mdb-ui-kit": "^9.3.0",
     "simple-datatables": "^10.2.0"
   },
