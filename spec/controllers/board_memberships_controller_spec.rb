@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe BoardMembershipsController, type: :controller do
+RSpec.describe BoardMembershipsController do
   let(:owner) { create(:user) }
   let(:other_user) { create(:user) }
   let(:admin) { create(:user, admin: true) }

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe LikesController, type: :controller do
+RSpec.describe LikesController do
   let(:user) { create(:user, admin: false) }
   let(:event) do
     create(:event, name: 'hogehoge', title: 'foobar', start_date: '2016-12-01', end_date: '2016-12-30',

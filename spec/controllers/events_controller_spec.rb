@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe EventsController, type: :controller do
+RSpec.describe EventsController do
   let(:user) { create(:user, admin: true) }
   let(:event) do
     create(:event, name: 'hogehoge', title: 'foobar', start_date: '2016-12-01', end_date: '2016-12-30',
@@ -44,7 +44,7 @@ RSpec.describe EventsController, type: :controller do
       post :create,
            params: { event: { title: 'test2', start_date: '2017-12-01', end_date: '2017-12-25', name: 'bbb',
                               description: 'description' } }
-      expect(response).to have_http_status(403)
+      expect(response).to have_http_status(:forbidden)
     end
   end
 
@@ -84,17 +84,17 @@ RSpec.describe EventsController, type: :controller do
 
       it 'allows access to edit action' do
         get :edit, params: { name: owned_event.name }
-        expect(response).not_to have_http_status(403)
+        expect(response).not_to have_http_status(:forbidden)
       end
 
       it 'allows access to update action' do
         put :update, params: { name: owned_event.name, event: { title: 'test' } }
-        expect(response).not_to have_http_status(403)
+        expect(response).not_to have_http_status(:forbidden)
       end
 
       it 'allows access to destroy action' do
         delete :destroy, params: { name: owned_event.name }
-        expect(response).not_to have_http_status(403)
+        expect(response).not_to have_http_status(:forbidden)
       end
     end
 
@@ -103,17 +103,17 @@ RSpec.describe EventsController, type: :controller do
 
       it 'allows access to edit action' do
         get :edit, params: { name: owned_event.name }
-        expect(response).not_to have_http_status(403)
+        expect(response).not_to have_http_status(:forbidden)
       end
 
       it 'allows access to update action' do
         put :update, params: { name: owned_event.name, event: { title: 'test' } }
-        expect(response).not_to have_http_status(403)
+        expect(response).not_to have_http_status(:forbidden)
       end
 
       it 'allows access to destroy action' do
         delete :destroy, params: { name: owned_event.name }
-        expect(response).not_to have_http_status(403)
+        expect(response).not_to have_http_status(:forbidden)
       end
     end
 
@@ -122,17 +122,17 @@ RSpec.describe EventsController, type: :controller do
 
       it 'denies access to edit action' do
         get :edit, params: { name: owned_event.name }
-        expect(response).to have_http_status(403)
+        expect(response).to have_http_status(:forbidden)
       end
 
       it 'denies access to update action' do
         put :update, params: { name: owned_event.name, event: { title: 'test' } }
-        expect(response).to have_http_status(403)
+        expect(response).to have_http_status(:forbidden)
       end
 
       it 'denies access to destroy action' do
         delete :destroy, params: { name: owned_event.name }
-        expect(response).to have_http_status(403)
+        expect(response).to have_http_status(:forbidden)
       end
     end
   end
@@ -196,7 +196,7 @@ RSpec.describe EventsController, type: :controller do
           event: { title: 'protected-event', start_date: '2017-12-01', end_date: '2017-12-25',
                    name: 'protected-evt', description: 'desc', board_id: protected_board.id }
         }
-        expect(response).to have_http_status(403)
+        expect(response).to have_http_status(:forbidden)
       end
     end
   end

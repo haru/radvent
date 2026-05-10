@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe BoardMembership, type: :model do
+RSpec.describe BoardMembership do
   let(:user_board) { create(:board, :public_user) }
   let(:user) { create(:user) }
 

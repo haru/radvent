@@ -7,7 +7,7 @@ FactoryBot.define do
     description { 'A test board' }
     board_type { :user }
     visibility { :public }
-    association :owner, factory: :user
+    owner factory: %i[user]
 
     trait :top do
       board_type { :top }

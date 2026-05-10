@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'layouts/application', type: :view do
+RSpec.describe 'layouts/application' do
   let(:admin) { create(:user, admin: true) }
   let(:regular_user) { create(:user) }
 

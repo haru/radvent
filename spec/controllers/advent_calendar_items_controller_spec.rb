@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe AdventCalendarItemsController, type: :controller do
+RSpec.describe AdventCalendarItemsController do
   let(:user) { create(:user, admin: false) }
 
   before do

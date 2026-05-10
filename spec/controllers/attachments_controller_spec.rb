@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe AttachmentsController, type: :controller do
+RSpec.describe AttachmentsController do
   describe 'POST #create' do
     let(:user) { create(:user) }
     let(:event) { create(:event) }

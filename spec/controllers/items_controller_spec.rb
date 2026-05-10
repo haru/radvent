@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ItemsController, type: :controller do
+RSpec.describe ItemsController do
   let(:user) { create(:user) }
   let(:event) do
     create(:event, name: 'test', title: 'test', start_date: '2015-12-01', end_date: '2015-12-30',

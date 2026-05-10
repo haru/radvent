@@ -6,8 +6,8 @@ FactoryBot.define do
     comment { 'comment' }
     created_at { Time.zone.now }
     updated_at { Time.zone.now }
-    association :user
-    association :event
+    user
+    event
     date { 1 }
   end
 end
