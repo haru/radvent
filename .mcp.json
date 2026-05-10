@@ -34,6 +34,13 @@
                 "ws://browserless:3000"
             ],
             "env": {}
+        },
+        "github": {
+            "type": "http",
+            "url": "https://api.githubcopilot.com/mcp",
+            "headers": {
+                "Authorization": "Bearer ${GITHUB_PERSONAL_ACCESS_TOKEN}"
+            }
         }
     }
 }
