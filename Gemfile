@@ -49,6 +49,9 @@ group :development do
   # Display performance information such as SQL time and flame graphs for each request in your browser.
   gem 'listen', '~> 3.3'
   gem 'rack-mini-profiler', '~> 4.0'
+  gem 'rubocop-capybara', require: false
+  gem 'rubocop-factory_bot', require: false
+  gem 'rubocop-rspec_rails', require: false
 end
 
 group :test do

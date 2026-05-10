@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe WelcomeController, type: :controller do
+RSpec.describe WelcomeController do
   let!(:top_board) { Board.find_or_create_by!(board_type: :top) { |b| b.name = 'TOP' } }
 
   describe 'GET #index' do

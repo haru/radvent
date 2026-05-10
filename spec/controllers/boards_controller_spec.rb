@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe BoardsController, type: :controller do
+RSpec.describe BoardsController do
   let(:admin) { create(:user, admin: true) }
   let(:owner) { create(:user) }
   let(:other_user) { create(:user) }

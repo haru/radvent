@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Board, type: :model do
+RSpec.describe Board do
   let(:owner) { create(:user) }
 
   # --- Validations ---

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'boards/show', type: :view do
+RSpec.describe 'boards/show' do
   let(:owner) { create(:user) }
   let(:board) { create(:board, :public_user, owner: owner) }
 
