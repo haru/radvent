@@ -9,7 +9,7 @@
     "@hotwired/turbo-rails": "^8.0.0",
     "@rails/actioncable": "^8.1.300",
     "@rails/activestorage": "^8.1.300",
-    "dompurify": "^3.4.2",
+    "dompurify": "^3.4.4",
     "easymde": "^2.21.0",
     "esbuild": "^0.28.0",
     "marked": "^18.0.3",
@@ -25,11 +25,11 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "eslint": "^10.3.0",
+    "eslint": "^10.4.0",
     "postcss": "^8.5.14",
     "postcss-cli": "^11.0.1",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-import": "^16.1.1",
-    "postcss-preset-env": "^11.2.1"
+    "postcss-preset-env": "^11.3.0"
   }
 }

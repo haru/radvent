@@ -64,6 +64,11 @@ jobs:
         DB_HOST: ${{ matrix.db }}
     steps:
       - uses: actions/checkout@v2
+      - name: Cache Bootsnap
+        uses: actions/cache@v4
+        with:
+          path: tmp/cache/bootsnap-compile-cache
+          key: bootsnap-${{ matrix.ruby_version }}-${{ matrix.db }}-${{ hashFiles('Gemfile.lock') }}
       - name: Install
         run: bash -x ./build-scripts/install.sh
       - name: Build
@@ -74,7 +79,7 @@ jobs:
       #     CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
       - name: Slack Notification on Failure
         uses: rtCamp/action-slack-notify@v2.0.2
-        if: failure()
+        if: failure() && env.SLACK_WEBHOOK != ''
         env:
           SLACK_CHANNEL: general
           SLACK_TITLE: Test Failure
