@@ -82,7 +82,7 @@ GEM
     bcrypt (3.1.22)
     bigdecimal (4.1.2)
     bindex (0.8.1)
-    bootsnap (1.24.3)
+    bootsnap (1.24.4)
       msgpack (~> 1.2)
     bootstrap_form (5.6.1)
       actionpack (>= 7.2)
@@ -331,7 +331,7 @@ GEM
       rspec-mocks (>= 3.13.0, < 5.0.0)
       rspec-support (>= 3.13.0, < 5.0.0)
     rspec-support (3.13.7)
-    rubocop (1.86.1)
+    rubocop (1.86.2)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -368,7 +368,7 @@ GEM
     ruby-vips (2.3.0)
       ffi (~> 1.12)
       logger
-    rubyzip (3.2.2)
+    rubyzip (3.3.0)
     sassc (2.4.0)
       ffi (~> 1.9)
     sassc-rails (2.1.2)
@@ -378,7 +378,7 @@ GEM
       sprockets-rails
       tilt
     securerandom (0.4.1)
-    selenium-webdriver (4.43.0)
+    selenium-webdriver (4.44.0)
       base64 (~> 0.2)
       logger (~> 1.4)
       rexml (~> 3.2, >= 3.2.5)
@@ -484,7 +484,7 @@ DEPENDENCIES
   rubocop-rspec (~> 3.2)
   rubocop-rspec_rails
   sassc-rails (~> 2.1)
-  selenium-webdriver (~> 4.43)
+  selenium-webdriver (~> 4.44)
   simplecov (~> 0.22)
   simplecov-lcov (~> 0.9)
   sprockets-rails (~> 3.5)
