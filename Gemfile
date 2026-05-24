@@ -69,7 +69,7 @@ end
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
 gem 'bootstrap_form', '~> 5.6'
-gem 'carrierwave', '~> 3.0'
+gem 'carrierwave', '~> 3.1'
 gem 'devise', '~> 5.0'
 gem 'devise-bootstrap-views', '~> 1.1'
 gem 'devise-i18n', '~> 1.16'
