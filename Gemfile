@@ -68,7 +68,7 @@ gem 'devise-bootstrap-views', '~> 1.1'
 gem 'bootstrap_form', '~> 5.6'
 gem 'http_accept_language', '~> 2.1'
 gem 'i18n_generators', '~> 2.2'
-gem 'carrierwave', '~> 3.0'
+gem 'carrierwave', '~> 3.1'
 
 # if you don't need mysql, use "--without mysql" option.
 group :mysql do
