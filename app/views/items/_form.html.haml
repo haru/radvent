@@ -1,4 +1,16 @@
-- editor_data = { controller: 'editor', editor_upload_path_value: attachments_path, editor_upload_error_value: t('items.upload_error'), editor_network_error_value: t('items.network_error'), editor_image_too_large_message_value: t('items.image_too_large'), editor_image_not_supported_message_value: t('items.unsupported_format'), editor_image_texts_sb_init_value: t('items.image_texts_sb_init'), editor_image_texts_sb_on_drag_enter_value: t('items.image_texts_sb_on_drag_enter'), editor_image_texts_sb_on_drop_value: t('items.image_texts_sb_on_drop'), editor_image_texts_sb_progress_value: t('items.image_texts_sb_progress'), editor_image_texts_sb_on_uploaded_value: t('items.image_texts_sb_on_uploaded') }
+- editor_data = {
+    controller: 'editor',
+    editor_upload_path_value: attachments_path,
+    editor_upload_error_value: t('items.upload_error'),
+    editor_network_error_value: t('items.network_error'),
+    editor_image_too_large_message_value: t('items.image_too_large'),
+    editor_image_not_supported_message_value: t('items.unsupported_format'),
+    editor_image_texts_sb_init_value: t('items.image_texts_sb_init'),
+    editor_image_texts_sb_on_drag_enter_value: t('items.image_texts_sb_on_drag_enter'),
+    editor_image_texts_sb_on_drop_value: t('items.image_texts_sb_on_drop'),
+    editor_image_texts_sb_progress_value: t('items.image_texts_sb_progress'),
+    editor_image_texts_sb_on_uploaded_value: t('items.image_texts_sb_on_uploaded')
+  }
 %div.form-container{data: editor_data}
   = form_for item do |f|
     %fieldset

@@ -17,7 +17,7 @@ RSpec.describe ImageUploader do
     file = Tempfile.new(['large', '.jpg'])
     file.write('x' * (10.megabytes + 1))
     file.rewind
-    Rack::Test::UploadedFile.new(file.path, 'image/jpeg')
+    Rack::Test::UploadedFile.new(file.path, 'image/jpeg').tap { file.close(true) }
   end
 
   describe 'extension_allowlist' do

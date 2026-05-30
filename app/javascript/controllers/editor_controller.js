@@ -130,12 +130,14 @@ export default class EditorController extends Controller {
 
   _uploadImage(file, onSuccess, onError, uploadPath, uploadErrorMsg, networkErrorMsg) {
     const allowedTypes = ['image/png', 'image/jpeg', 'image/gif', 'image/webp']
+    const notSupportedMsg = this.imageNotSupportedMessageValue || 'Unsupported format (JPEG/PNG/GIF/WebP only)'
     if (!allowedTypes.includes(file.type)) {
-      onError(this.imageNotSupportedMessageValue)
+      onError(notSupportedMsg)
       return
     }
+    const tooLargeMsg = this.imageTooLargeMessageValue || 'Image file is too large (max 10MB)'
     if (file.size > 10485760) {
-      onError(this.imageTooLargeMessageValue)
+      onError(tooLargeMsg)
       return
     }
 
@@ -154,7 +156,16 @@ export default class EditorController extends Controller {
       headers: { 'X-CSRF-Token': csrfMeta ? csrfMeta.content : '' },
       body: formData
     })
-      .then(function(r) { if (!r.ok) { throw new Error('HTTP ' + r.status) } return r.json() })
+      .then(function(r) {
+        if (r.ok) return r.json()
+        return r.json().then(function(data) {
+          var err = new Error(data.error || uploadErrorMsg)
+          err.serverMessage = data.error
+          throw err
+        }, function() {
+          throw new Error('HTTP ' + r.status)
+        })
+      })
       .then(function(data) {
         if (data.success && data.image_url) {
           onSuccess(data.image_url)
@@ -162,6 +173,6 @@ export default class EditorController extends Controller {
           onError(data.error || uploadErrorMsg)
         }
       })
-      .catch(function() { onError(networkErrorMsg) })
+      .catch(function(e) { onError(e.serverMessage || e.message || networkErrorMsg) })
   }
 }

@@ -25,14 +25,16 @@ class AttachmentsController < ApplicationController
 
   def set_advent_calendar_item
     @advent_calendar_item = AdventCalendarItem.find_by(id: params.dig(:attachment, :advent_calendar_item_id))
-    render_not_found and return unless @advent_calendar_item
+    return if @advent_calendar_item
+
+    render json: { success: false, error: 'Advent calendar item not found' }, status: :not_found
   end
 
   def authorize_editor!
     return if current_user.admin? || @advent_calendar_item.editable_by?(current_user)
 
     Rails.logger.warn("Unauthorized upload attempt: user_id=#{current_user.id} item_id=#{@advent_calendar_item.id}")
-    render_forbidden
+    render json: { success: false, error: 'You are not authorized to upload images' }, status: :forbidden
   end
 
   # CarrierWave url starts with /, so only prepend root_path for subpath mounts
