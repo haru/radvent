@@ -143,7 +143,6 @@ export default class EditorController extends Controller {
     formData.append('attachment[image]', file)
     const aciField = this.element.querySelector('[name="item[advent_calendar_item_id]"]')
     if (!aciField) {
-      console.error('[EditorController] advent_calendar_item_id field not found — upload aborted')
       onError(uploadErrorMsg)
       return
     }
