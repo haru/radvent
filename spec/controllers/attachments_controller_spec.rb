@@ -89,7 +89,7 @@ RSpec.describe AttachmentsController do
       end
 
       it 'returns success false in json' do
-        expect(response.parsed_body['success']).to eq(false)
+        expect(response.parsed_body['success']).to be(false)
       end
 
       it 'returns error message in json' do

@@ -10,7 +10,12 @@ export default class EditorController extends Controller {
     uploadError: String,
     networkError: String,
     imageTooLargeMessage: String,
-    imageNotSupportedMessage: String
+    imageNotSupportedMessage: String,
+    imageTextsSbInit: String,
+    imageTextsSbOnDragEnter: String,
+    imageTextsSbOnDrop: String,
+    imageTextsSbProgress: String,
+    imageTextsSbOnUploaded: String
   }
 
   connect() {
@@ -49,6 +54,13 @@ export default class EditorController extends Controller {
       errorMessages: {
         fileTooLarge: this.imageTooLargeMessageValue || 'Image file is too large (max 10MB)',
         typeNotAllowed: this.imageNotSupportedMessageValue || 'Unsupported format (JPEG/PNG/GIF/WebP only)'
+      },
+      imageTexts: {
+        sbInit: this.imageTextsSbInitValue || 'Attach files by drag and dropping or pasting from clipboard.',
+        sbOnDragEnter: this.imageTextsSbOnDragEnterValue || 'Drop image to upload it.',
+        sbOnDrop: this.imageTextsSbOnDropValue || 'Uploading image #images_names#...',
+        sbProgress: this.imageTextsSbProgressValue || 'Uploading #file_name#: #progress#%',
+        sbOnUploaded: this.imageTextsSbOnUploadedValue || 'Uploaded #image_name#'
       },
       imageUploadFunction: (file, onSuccess, onError) => {
         this._uploadImage(file, onSuccess, onError, uploadPath, uploadErrorMsg, networkErrorMsg)
