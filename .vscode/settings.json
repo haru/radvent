@@ -2,8 +2,17 @@
     "chat.tools.terminal.autoApprove": {
         "nslookup": true,
         "ss": true,
-        "netstat": true
+        "netstat": true,
+        ".specify/scripts/bash/": true,
+        ".specify/scripts/powershell/": true
     },
     "gitflow.autoBumpVersion": false,
-    "git.autofetch": false
+    "git.autofetch": false,
+    "chat.promptFilesRecommendations": {
+        "speckit.constitution": true,
+        "speckit.specify": true,
+        "speckit.plan": true,
+        "speckit.tasks": true,
+        "speckit.implement": true
+    }
 }

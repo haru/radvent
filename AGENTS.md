@@ -288,3 +288,8 @@ When working on this codebase, follow these conventions to maintain consistency 
 
 ## Recent Changes
 - 001-event-edit-ux: Added Ruby 3.0+ / Rails 8.1 + Devise (認証), esbuild (JSビルド), HAML (テンプレート), Bootstrap 5 (CSS), Stimulus (JavaScriptコントローラー), CarrierWave (ファイルアップロード), SimpleCov (テストカバレッジ)
+
+<!-- SPECKIT START -->
+For additional context about technologies to be used, project structure,
+shell commands, and other important information, read the current plan
+<!-- SPECKIT END -->
