@@ -1,0 +1,1 @@
+../../.specify/extensions/review/.specify-dev/agent-commands/copilot/speckit.review.simplify.agent.md
