@@ -1,4 +1,12 @@
-%div.form-container{data: {controller: 'editor', editor_upload_path_value: attachments_path, editor_upload_error_value: t('items.upload_error'), editor_network_error_value: t('items.network_error')}}
+- editor_data = {
+-   controller: 'editor',
+-   editor_upload_path_value: attachments_path,
+-   editor_upload_error_value: t('items.upload_error'),
+-   editor_network_error_value: t('items.network_error'),
+-   editor_image_too_large_message_value: t('items.image_too_large'),
+-   editor_image_not_supported_message_value: t('items.unsupported_format')
+- }
+%div.form-container{data: editor_data}
   = form_for item do |f|
     %fieldset
       %div.form-group

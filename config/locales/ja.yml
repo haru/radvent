@@ -331,6 +331,8 @@ ja:
   items:
     upload_error: 'アップロードに失敗しました'
     network_error: 'ネットワークエラーが発生しました'
+    image_too_large: '画像ファイルが大きすぎます（最大10MB）'
+    unsupported_format: '非対応の形式です（JPEG/PNG/GIF/WebPのみ）'
   menu:
     settings: '設定'
     sign_out: 'ログアウト'

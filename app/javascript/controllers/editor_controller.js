@@ -8,7 +8,9 @@ export default class EditorController extends Controller {
   static values = {
     uploadPath: String,
     uploadError: String,
-    networkError: String
+    networkError: String,
+    imageTooLargeMessage: String,
+    imageNotSupportedMessage: String
   }
 
   connect() {
@@ -29,6 +31,7 @@ export default class EditorController extends Controller {
         'bold', 'italic', 'heading', '|',
         'quote', 'unordered-list', 'ordered-list', '|',
         'link', 'code', '|',
+        'upload-image', '|',
         'preview', 'side-by-side', 'fullscreen', 'guide'
       ],
       renderingConfig: {
@@ -41,10 +44,18 @@ export default class EditorController extends Controller {
         return DOMPurify.sanitize(marked(plainText))
       },
       uploadImage: true,
+      imageAccept: 'image/png, image/jpeg, image/gif, image/webp',
+      imageMaxSize: 10485760,
+      errorMessages: {
+        fileTooLarge: this.imageTooLargeMessageValue || 'Image file is too large (max 10MB)',
+        typeNotAllowed: this.imageNotSupportedMessageValue || 'Unsupported format (JPEG/PNG/GIF/WebP only)'
+      },
       imageUploadFunction: (file, onSuccess, onError) => {
         this._uploadImage(file, onSuccess, onError, uploadPath, uploadErrorMsg, networkErrorMsg)
       }
     })
+
+    this._setupUploadButtonSpinner()
   }
 
   disconnect() {
@@ -90,13 +101,42 @@ export default class EditorController extends Controller {
     document.body.removeChild(previewForm)
   }
 
+  _setupUploadButtonSpinner() {
+    // Patch imageUploadFunction to add spinner state on the toolbar button
+    const original = this.easyMDE.options.imageUploadFunction
+    this.easyMDE.options.imageUploadFunction = (file, onSuccess, onError) => {
+      const btn = this.element.querySelector('.editor-toolbar button.upload-image')
+      if (btn) { btn.classList.add('loading'); btn.disabled = true }
+
+      const resetBtn = () => {
+        if (btn) { btn.classList.remove('loading'); btn.disabled = false }
+      }
+
+      original(file, (url) => { resetBtn(); onSuccess(url) }, (msg) => { resetBtn(); onError(msg) })
+    }
+  }
+
   _uploadImage(file, onSuccess, onError, uploadPath, uploadErrorMsg, networkErrorMsg) {
+    const allowedTypes = ['image/png', 'image/jpeg', 'image/gif', 'image/webp']
+    if (!allowedTypes.includes(file.type)) {
+      onError(this.imageNotSupportedMessageValue)
+      return
+    }
+    if (file.size > 10485760) {
+      onError(this.imageTooLargeMessageValue)
+      return
+    }
+
     const formData = new FormData()
     formData.append('attachment[image]', file)
     const aciField = this.element.querySelector('[name="item[advent_calendar_item_id]"]')
-    if (aciField) {
-      formData.append('attachment[advent_calendar_item_id]', aciField.value)
+    if (!aciField) {
+      console.error('[EditorController] advent_calendar_item_id field not found — upload aborted')
+      onError(uploadErrorMsg)
+      return
     }
+    formData.append('attachment[advent_calendar_item_id]', aciField.value)
+
     const csrfMeta = document.querySelector('meta[name="csrf-token"]')
     fetch(uploadPath, {
       method: 'POST',
@@ -105,10 +145,10 @@ export default class EditorController extends Controller {
     })
       .then(function(r) { if (!r.ok) { throw new Error('HTTP ' + r.status) } return r.json() })
       .then(function(data) {
-        if (data.image_url) {
+        if (data.success && data.image_url) {
           onSuccess(data.image_url)
         } else {
-          onError(data.image_name || uploadErrorMsg)
+          onError(data.error || uploadErrorMsg)
         }
       })
       .catch(function() { onError(networkErrorMsg) })

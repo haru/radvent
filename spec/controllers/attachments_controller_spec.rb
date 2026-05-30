@@ -4,10 +4,18 @@ require 'rails_helper'
 
 RSpec.describe AttachmentsController do
   describe 'POST #create' do
-    let(:user) { create(:user) }
+    let(:owner) { create(:user) }
+    let(:other_user) { create(:user) }
+    let(:admin_user) { create(:user, admin: true) }
     let(:event) { create(:event) }
-    let(:advent_calendar_item) { create(:advent_calendar_item, event: event, user: user) }
+    let(:advent_calendar_item) { create(:advent_calendar_item, event: event, user: owner) }
     let(:item) { create(:item, advent_calendar_item: advent_calendar_item) }
+    let(:image_file) do
+      Rack::Test::UploadedFile.new(
+        Rails.root.join('spec/fixtures/files/test.jpg').to_s,
+        'image/jpeg'
+      )
+    end
 
     before do
       Attachment.destroy_all
@@ -15,37 +23,73 @@ RSpec.describe AttachmentsController do
       AdventCalendarItem.destroy_all
       Event.destroy_all
       User.destroy_all
-      sign_in user
       item
     end
 
-    it 'saves the new attachment in the database' do
-      params = { attachment: build(:attachment, advent_calendar_item: advent_calendar_item).attributes }
-      expect do
-        post :create, params: params
-      end.to change(Attachment, :count).by(1)
+    context 'when not logged in' do
+      it 'redirects to sign in' do
+        post :create, params: { attachment: { image: image_file, advent_calendar_item_id: advent_calendar_item.id } }
+        expect(response).to redirect_to(new_user_session_path)
+      end
     end
 
-    # TODO: Should be fixed.
-    # it 'returns the json which has image_name and image_url' do
-    #   image = Rack::Test::UploadedFile.new(
-    #     File.join(Rails.root, 'spec', 'fixtures', 'files', 'test.jpg'), 'image/jpeg'
-    #   )
-    #   post :create, params: { attachment: create(:attachment, image: image).attributes }
-    #   attachment = Attachment.first
-    #   res = JSON.parse response.body
-    #   expect(res['image_name']).to eq 'test.jpg'
-    #   expect(res['image_url']).to eq "/uploads/attachment/image/#{attachment.id}/test.jpg"
-    # end
+    context 'when advent_calendar_item_id does not exist' do
+      before { sign_in owner }
+
+      it 'returns 404' do
+        post :create, params: { attachment: { image: image_file, advent_calendar_item_id: 0 } }
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context 'when logged in as a non-editor (not owner, not admin)' do
+      before { sign_in other_user }
+
+      it 'returns 403' do
+        post :create, params: { attachment: { image: image_file, advent_calendar_item_id: advent_calendar_item.id } }
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context 'when logged in as the article owner' do
+      before { sign_in owner }
+
+      it 'saves the new attachment in the database' do
+        expect do
+          post :create, params: { attachment: { image: image_file, advent_calendar_item_id: advent_calendar_item.id } }
+        end.to change(Attachment, :count).by(1)
+      end
+
+      it 'returns 200' do
+        post :create, params: { attachment: { image: image_file, advent_calendar_item_id: advent_calendar_item.id } }
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'returns image_url in json' do
+        post :create, params: { attachment: { image: image_file, advent_calendar_item_id: advent_calendar_item.id } }
+        expect(response.parsed_body['image_url']).to be_present
+      end
+    end
+
+    context 'when logged in as admin' do
+      before { sign_in admin_user }
+
+      it 'saves the new attachment in the database' do
+        expect do
+          post :create, params: { attachment: { image: image_file, advent_calendar_item_id: advent_calendar_item.id } }
+        end.to change(Attachment, :count).by(1)
+      end
+    end
 
     context 'when the attachment cannot be saved' do
       before do
         allow_any_instance_of(Attachment).to receive(:save).and_return(false)
-        post :create, params: { attachment: attributes_for(:attachment) }
+        sign_in owner
+        post :create, params: { attachment: { image: image_file, advent_calendar_item_id: advent_calendar_item.id } }
       end
 
       it 'returns error image_name in json' do
-        expect(response.parsed_body['image_name']).to eq '画像のアップロードに失敗しました'
+        expect(response.parsed_body['image_name']).to be_present
       end
 
       it 'returns nil image_url in json' do

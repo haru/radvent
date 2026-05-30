@@ -177,6 +177,8 @@ en:
   items:
     upload_error: 'Upload failed'
     network_error: 'A network error occurred'
+    image_too_large: 'Image file is too large (max 10MB)'
+    unsupported_format: 'Unsupported format (JPEG/PNG/GIF/WebP only)'
   menu:
     settings: 'Settings'
     sign_out: 'Sign Out'
