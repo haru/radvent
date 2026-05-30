@@ -88,12 +88,12 @@ RSpec.describe AttachmentsController do
         post :create, params: { attachment: { image: image_file, advent_calendar_item_id: advent_calendar_item.id } }
       end
 
-      it 'returns error image_name in json' do
-        expect(response.parsed_body['image_name']).to be_present
+      it 'returns success false in json' do
+        expect(response.parsed_body['success']).to eq(false)
       end
 
-      it 'returns nil image_url in json' do
-        expect(response.parsed_body['image_url']).to be_nil
+      it 'returns error message in json' do
+        expect(response.parsed_body['error']).to be_present
       end
     end
   end
