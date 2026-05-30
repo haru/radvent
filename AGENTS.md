@@ -25,6 +25,37 @@
 - Run `bundle exec rspec spec` to verify tests pass after implementation
 - **Maintain test coverage at 90% or above** — check `coverage/` report after running tests
 
+## Development Principles
+
+- **Follow KISS, DRY, YAGNI**
+- **Documentation reference**: Documentation lives under `docs/`. Consult it when needed and judge relevance by filename. When adding new docs, give them clear, descriptive filenames.
+- **ADR (Architecture Decision Records)**:
+  - Write ADRs under `docs/adr/`
+  - Always write an ADR when making an important design decision
+  - When unsure whether to write one, ask the user
+  - Append-only: never modify the contents of past ADRs
+  - Add a reference to each ADR document in `docs/adr/README.md`
+- **Use the git-flow branching strategy**:
+  - `main`
+  - `develop`
+  - `feature/~`
+  - `bugfix/~`
+  - `release/~`
+  - `hotfix/~`
+
+## Additional Rules and References
+
+Workflow rules for AI coding agents live under [.claude/rules/](.claude/rules/):
+
+| File | Purpose |
+|------|---------|
+| [git-workflow.md](.claude/rules/git-workflow.md) | Commit message format, PR workflow |
+| [development-workflow.md](.claude/rules/development-workflow.md) | Research → plan → TDD → review pipeline |
+| [agents.md](.claude/rules/agents.md) | When to invoke planner / tdd-guide / code-reviewer agents |
+| [performance.md](.claude/rules/performance.md) | Model selection (Haiku / Sonnet / Opus) and context management |
+
+Consult these in addition to this document when working on tasks that match their scope.
+
 ## Git Flow (Branching Model)
 
 This project uses **Git Flow** branching model (also known as A successful git branching model).
@@ -80,6 +111,8 @@ Event ──< AdventCalendarItem >── User
 - `Comment` — Has **no `user_id` column**; stores `user_name` as a string only
 - `Like` — Belongs to user and item
 - `Attachment` — File uploads via CarrierWave, belongs to `AdventCalendarItem`
+- `Board` — Container for events. Two types: `top` (system-level) and `user` (user-created, `board_id` slug). Includes `Permissionable` concern with `visibility` enum
+- `BoardMembership` — Join table between `Board` and `User`
 
 ### Key Files
 
@@ -159,7 +192,7 @@ bash build-scripts/lint.sh                      # Run all lint checks
   before_action :authenticate_user!
   admin_user!                              # ApplicationController helper — renders 403 for non-admins
   ```
-- **Error rendering**: Use `render_404` or `render_403` from ApplicationController
+- **Error rendering**: Use `render_not_found` or `render_forbidden` from ApplicationController
 - **Params**: Strong params pattern — `params.require(:resource).permit(:field1, :field2)`
 
 ### Views (HAML Only — Never ERB)
@@ -184,6 +217,7 @@ bash build-scripts/lint.sh                      # Run all lint checks
   - `editor` — EasyMDE editor with image upload; values: `upload-path`, `upload-error`, `network-error`
   - `datatable` — initialises simple-datatables on a `<table>` element
   - `popover` — initialises MDB Popover
+  - `navbar-dropdown` — handles navbar dropdown interactions
 - **Turbo guard**: For re-entrant `connect()`, check `this.element.dataset.rendered === 'true'` before re-processing
 - **CSS**: PostCSS pipeline (`yarn build:css`); source at `app/javascript/stylesheets/application.css`. Do NOT use `.scss` files.
 
@@ -221,8 +255,8 @@ end
 ```
 
 ### Error Handling
-- **404 errors**: Call `render_404` helper (ApplicationController)
-- **403 errors**: Call `render_403` or `admin_user!` helper
+- **404 errors**: Call `render_not_found` helper (ApplicationController)
+- **403 errors**: Call `render_forbidden` or `admin_user!` helper
 - **Validation errors**: Use standard Rails validation with i18n keys
 
 ## Project-Specific Gotchas
@@ -235,6 +269,12 @@ show_event_path(event.name)  # Use event.name, not event.id
 
 # INCORRECT
 event_path(event)  # This won't work!
+```
+
+**Board routing uses board_id (slug), not numeric ID**
+```ruby
+resources :boards, param: :board_id, constraints: { board_id: /[a-z0-9_-]+/ }
+# Use board_path(board.board_id), not board_path(board)
 ```
 
 **AdventCalendarItem.date is Integer, not Date**
@@ -281,13 +321,6 @@ Reason: Manually written migrations tend to use DBMS-specific SQL (e.g. `datetim
 ---
 
 When working on this codebase, follow these conventions to maintain consistency with existing code patterns.
-
-## Active Technologies
-- Ruby 3.0+ / Rails 8.1 + Devise (認証), esbuild (JSビルド), HAML (テンプレート), Bootstrap 5 (CSS), Stimulus (JavaScriptコントローラー), CarrierWave (ファイルアップロード), SimpleCov (テストカバレッジ) (001-event-edit-ux)
-- SQLite3 (開発環境), MySQL 5.7+ または PostgreSQL (本番環境) (001-event-edit-ux)
-
-## Recent Changes
-- 001-event-edit-ux: Added Ruby 3.0+ / Rails 8.1 + Devise (認証), esbuild (JSビルド), HAML (テンプレート), Bootstrap 5 (CSS), Stimulus (JavaScriptコントローラー), CarrierWave (ファイルアップロード), SimpleCov (テストカバレッジ)
 
 <!-- SPECKIT START -->
 For additional context about technologies to be used, project structure,
