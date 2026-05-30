@@ -1,0 +1,1 @@
+../../.specify/extensions/review/.specify-dev/agent-commands/opencode/speckit.review.tests.md

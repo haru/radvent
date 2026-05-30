@@ -177,6 +177,13 @@ en:
   items:
     upload_error: 'Upload failed'
     network_error: 'A network error occurred'
+    image_too_large: 'Image file is too large (max 10MB)'
+    unsupported_format: 'Unsupported format (JPEG/PNG/GIF/WebP only)'
+    image_texts_sb_init: 'Attach image files by drag and dropping or pasting from clipboard.'
+    image_texts_sb_on_drag_enter: 'Drop image to upload it.'
+    image_texts_sb_on_drop: 'Uploading image #images_names#...'
+    image_texts_sb_progress: 'Uploading #file_name#: #progress#%'
+    image_texts_sb_on_uploaded: 'Uploaded #image_name#'
   menu:
     settings: 'Settings'
     sign_out: 'Sign Out'

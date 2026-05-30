@@ -1,0 +1,1 @@
+../../.specify/extensions/branch-convention/.specify-dev/agent-commands/opencode/speckit.branch-convention.configure.md

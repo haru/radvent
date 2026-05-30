@@ -331,6 +331,13 @@ ja:
   items:
     upload_error: 'アップロードに失敗しました'
     network_error: 'ネットワークエラーが発生しました'
+    image_too_large: '画像ファイルが大きすぎます（最大10MB）'
+    unsupported_format: '非対応の形式です（JPEG/PNG/GIF/WebPのみ）'
+    image_texts_sb_init: '画像ファイルをドラッグ＆ドロップするか、クリップボードから貼り付けてください。'
+    image_texts_sb_on_drag_enter: '画像をドロップしてアップロード'
+    image_texts_sb_on_drop: '画像 #images_names# をアップロード中...'
+    image_texts_sb_progress: '#file_name# をアップロード中: #progress#%'
+    image_texts_sb_on_uploaded: '#image_name# をアップロードしました'
   menu:
     settings: '設定'
     sign_out: 'ログアウト'

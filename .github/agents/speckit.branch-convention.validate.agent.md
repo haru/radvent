@@ -1,0 +1,1 @@
+../../.specify/extensions/branch-convention/.specify-dev/agent-commands/copilot/speckit.branch-convention.validate.agent.md
