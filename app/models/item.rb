@@ -17,10 +17,6 @@ class Item < ApplicationRecord
     self[:title].presence || I18n.t('activerecord.attributes.item.title_empty')
   end
 
-  # Checks if the item can be edited by the given author.
-  #
-  # @param author [User, nil] the user to check
-  # @return [Boolean] true if the item can be edited by the author
   delegate :editable_by?, to: :advent_calendar_item
 
   # Checks if the item has been liked by the given user.

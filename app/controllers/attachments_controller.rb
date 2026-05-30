@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
+# Handles image file uploads attached to {AdventCalendarItem} entries.
 class AttachmentsController < ApplicationController
   before_action :authenticate_user!, only: [:create]
   before_action :set_advent_calendar_item, only: [:create]
   before_action :authorize_editor!, only: [:create]
 
+  # Saves the uploaded image and returns its URL as JSON.
+  # Responds with 422 if validation or CarrierWave integrity checks fail.
   def create
     attachment = Attachment.new(attachment_params)
 
