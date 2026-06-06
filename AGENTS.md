@@ -27,6 +27,7 @@
 
 ## Development Principles
 
+- **No easy fallbacks**: Do not silently swallow errors or paper over failures with fallback values. Treat errors as errors — surface, raise, or log them explicitly rather than hiding them behind defaults that mask the real problem.
 - **Follow KISS, DRY, YAGNI**
 - **Documentation reference**: Documentation lives under `docs/`. Consult it when needed and judge relevance by filename. When adding new docs, give them clear, descriptive filenames.
 - **ADR (Architecture Decision Records)**:

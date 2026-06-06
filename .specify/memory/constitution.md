@@ -1,25 +1,30 @@
 <!--
 Sync Impact Report
 ==================
-Version Change: 1.0.0 → 1.1.0
+Version Change: 1.1.0 → 1.2.0
 
-Modified Principles: None renamed
+Modified Principles:
+- III. Git Flow Discipline — expanded to define the full git-flow branch set
+  (main, develop, feature/*, bugfix/*, release/*, hotfix/*)
 
 Added Sections:
-- Principle VI: Test-Driven Development (TDD)
+- Principle VII: Simplicity (KISS, DRY, YAGNI)
+- Principle VIII: Documentation & Architecture Decision Records (ADR)
+- Principle IX: Explicit Error Handling (No Silent Fallbacks)
 
 Updated Sections:
-- Code Review & Quality Gates: added TDD compliance to PR checklist
+- Code Review & Quality Gates: added ADR + simplicity + fail-loud checks to PR checklist
 
 Removed Sections: None
 
 Templates Requiring Updates:
-✅ .specify/templates/tasks-template.md - Updated: test tasks are now mandatory (TDD, not optional)
-✅ .specify/templates/plan-template.md - reviewed, Constitution Check section compatible
+✅ .specify/templates/tasks-template.md - Updated: added ADR task to Polish phase
+✅ .specify/templates/plan-template.md - reviewed, Constitution Check section is generic and compatible
 ✅ .specify/templates/spec-template.md - reviewed, no changes required
-✅ AGENTS.md - already contains TDD guidelines (added in prior commit)
+✅ AGENTS.md - reviewed, git-flow / docs conventions consistent
 
-Follow-up TODOs: None
+Follow-up TODOs:
+- docs/ and docs/adr/ directories do not yet exist; create docs/adr/README.md when the first ADR is written.
 -->
 
 # Radvent Constitution
@@ -46,13 +51,22 @@ where necessary.
 onboarding. Following Rails conventions leverages framework wisdom.
 
 ### III. Git Flow Discipline
-Strict Git Flow branching model MUST be followed: `feature/*` and `bugfix/*` branches from `develop`,
-NEVER commit directly to `main` or `develop`. PRs MUST go from feature branch to `develop`. Explicit
-user permission REQUIRED before ANY commit, push, or PR creation. Git operations MUST wait for user
-approval and user-provided commit messages.
+The git-flow branching model MUST be followed. The branch set is fixed:
 
-**Rationale**: Branching discipline prevents accidental production code changes. Explicit approval
-ensures user maintains control over commits and deployment decisions.
+- `main`: production-ready, released code only.
+- `develop`: integration branch for the next release.
+- `feature/*`: new features, branched from and merged back into `develop`.
+- `bugfix/*`: non-urgent fixes, branched from and merged back into `develop`.
+- `release/*`: release stabilization, branched from `develop`, merged into both `main` and `develop`.
+- `hotfix/*`: urgent production fixes, branched from `main`, merged into both `main` and `develop`.
+
+Direct commits to `main` or `develop` are PROHIBITED. Explicit user permission is REQUIRED before ANY
+commit, push, or PR creation. Git operations MUST wait for user approval and user-provided commit
+messages.
+
+**Rationale**: Branching discipline prevents accidental production code changes and gives every change a
+clear path to production. Explicit approval ensures the user maintains control over commits and
+deployment decisions.
 
 ### IV. Internationalization
 All user-facing strings MUST use i18n with `t()` helper methods. Default locale is Japanese (`:ja`)
@@ -87,6 +101,52 @@ to the Green phase.
 over-engineering, and guarantees test coverage for all new code by design. It also serves as a design
 tool, encouraging smaller and more focused units of code.
 
+### VII. Simplicity (KISS, DRY, YAGNI)
+Code and design MUST favor simplicity:
+
+- **KISS** (Keep It Simple, Stupid): Prefer the simplest solution that satisfies the requirement.
+  Avoid clever or speculative complexity.
+- **DRY** (Don't Repeat Yourself): Extract shared logic instead of duplicating it. Knowledge MUST have
+  a single, authoritative representation.
+- **YAGNI** (You Aren't Gonna Need It): Implement only what current requirements demand. Do NOT build
+  features, abstractions, or configuration for anticipated future needs.
+
+Any complexity beyond the simplest viable approach MUST be justified with concrete, present-day
+reasoning (see Complexity Tracking in the plan template).
+
+**Rationale**: Simpler code is easier to read, test, and change. Premature abstraction and duplication
+are leading sources of defects and maintenance cost.
+
+### VIII. Documentation & Architecture Decision Records (ADR)
+Project documentation lives under `docs/`. Before implementing, the relevant documents under `docs/`
+MUST be consulted; identify them by filename. When adding documentation, the filename MUST clearly
+describe its contents.
+
+Significant design decisions MUST be recorded as ADRs under `docs/adr/`:
+
+- An ADR MUST be written whenever an important architectural or design decision is made. When unsure
+  whether a decision warrants an ADR, ASK the user.
+- ADRs are **append-only**: once written, existing ADR content MUST NOT be modified. Superseding a
+  decision is done by adding a new ADR that references the old one.
+- `docs/adr/README.md` MUST list and link every ADR document, kept up to date as ADRs are added.
+
+**Rationale**: A discoverable, well-named documentation set plus an immutable decision log preserves the
+reasoning behind the system, prevents repeated debates, and lets new contributors understand *why*, not
+just *what*.
+
+### IX. Explicit Error Handling (No Silent Fallbacks)
+Errors MUST be treated as errors. Convenient fallbacks that mask failures are PROHIBITED:
+
+- Do NOT swallow exceptions or substitute default/placeholder values to keep execution going when an
+  operation has genuinely failed.
+- Do NOT silently catch-and-continue. Failures MUST surface — raise, return an explicit error, or fail
+  the request — so the problem is visible.
+- Fallback behavior is permitted ONLY when it is a deliberate, documented part of the design, not a
+  shortcut to avoid handling an error.
+
+**Rationale**: Silent fallbacks hide bugs, corrupt data, and turn simple failures into hard-to-diagnose
+incidents. Loud, explicit failures keep the system honest and debuggable.
+
 ## Security & Access Control
 
 Devise authentication is REQUIRED for user access. Admin actions protected with `admin_user!` helper.
@@ -110,8 +170,10 @@ in AGENTS.md. Database migrations MUST be tested and reversible. Asset precompil
 production (`bundle exec rake assets:precompile RAILS_ENV=production`).
 
 Before creating a PR, verify: Tests pass locally, Code is formatted per rufo, New functionality has
-test coverage written via TDD (failing tests written before implementation code), Database migrations
-are safe, No hardcoded secrets or credentials.
+test coverage written via TDD (failing tests written before implementation code), Code follows KISS/
+DRY/YAGNI (no unjustified complexity or duplication), Significant design decisions are captured as
+append-only ADRs under `docs/adr/` (and linked from `docs/adr/README.md`), No silent fallbacks mask
+failures, Database migrations are safe, No hardcoded secrets or credentials.
 
 **Rationale**: Quality gates prevent broken code from reaching production. Automated checks catch
 common issues early.
@@ -128,4 +190,4 @@ For runtime development guidance, refer to AGENTS.md which contains detailed con
 procedures, and project-specific gotchas. AGENTS.md is the authoritative reference for implementation
 details and should be consulted before making changes.
 
-**Version**: 1.1.0 | **Ratified**: 2026-02-27 | **Last Amended**: 2026-03-01
+**Version**: 1.2.0 | **Ratified**: 2026-02-27 | **Last Amended**: 2026-06-06
