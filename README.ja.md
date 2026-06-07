@@ -4,7 +4,7 @@
 [![build](https://github.com/haru/radvent/actions/workflows/build.yml/badge.svg)](https://github.com/haru/radvent/actions/workflows/build.yml)
 [![Maintainability](https://qlty.sh/gh/haru/projects/radvent/maintainability.svg)](https://qlty.sh/gh/haru/projects/radvent)
 [![codecov](https://codecov.io/gh/haru/radvent/branch/main/graph/badge.svg?token=MM74F6ZLL6)](https://codecov.io/gh/haru/radvent)
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/haru/redmine_ai_helper)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/haru/radvent)
 
 
 アドベントカレンダー形式のブログWebアプリです。Markdown で記事を執筆し、指定日を過ぎると自動的に公開されます。
