@@ -1,41 +1,256 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 describe Event do
+  let(:user) { create(:user) }
+
   before do
-    Event.destroy_all
+    described_class.destroy_all
     AdventCalendarItem.destroy_all
-    @user = create(:user)
+    user
   end
 
-  it 'retuns days from start_date to end_date' do
+  describe 'validations' do
+    let(:board) { create(:board) }
+    let(:other_board) { create(:board) }
+
+    describe 'title uniqueness' do
+      it 'is invalid when the same title exists on the same board' do # rubocop:disable RSpec/MultipleExpectations
+        create(:event, board: board, title: 'My Event')
+        duplicate = build(:event, board: board, title: 'My Event')
+        expect(duplicate).not_to be_valid
+        expect(duplicate.errors[:title]).to be_present
+      end
+
+      it 'is valid when the same title exists on a different board' do
+        create(:event, board: board, title: 'My Event')
+        other = build(:event, board: other_board, title: 'My Event')
+        expect(other).to be_valid
+      end
+    end
+
+    describe 'name format' do
+      it 'is invalid when containing only numbers' do
+        expect(build(:event, name: '123')).not_to be_valid
+      end
+
+      it 'is invalid when containing only symbols' do
+        expect(build(:event, name: '-_-')).not_to be_valid
+      end
+
+      it 'is invalid when starting with a hyphen' do
+        expect(build(:event, name: '-abc')).not_to be_valid
+      end
+
+      it 'is invalid when ending with a hyphen' do
+        expect(build(:event, name: 'abc-')).not_to be_valid
+      end
+
+      it 'is invalid when starting with an underscore' do
+        expect(build(:event, name: '_abc')).not_to be_valid
+      end
+
+      it 'is invalid when ending with an underscore' do
+        expect(build(:event, name: 'abc_')).not_to be_valid
+      end
+
+      it 'is valid with a single letter' do
+        event = build(:event, name: 'a')
+        expect(event).to be_valid
+      end
+
+      it 'is valid with letters and numbers' do
+        event = build(:event, name: 'advent2024')
+        expect(event).to be_valid
+      end
+
+      it 'is valid with a hyphen in the middle' do
+        event = build(:event, name: 'my-event')
+        expect(event).to be_valid
+      end
+
+      it 'is valid with an underscore in the middle' do
+        event = build(:event, name: 'my_event')
+        expect(event).to be_valid
+      end
+    end
+
+    describe 'name uniqueness' do
+      it 'is invalid when the same name exists on the same board' do
+        create(:event, board: board, name: 'my-event')
+        duplicate = build(:event, board: board, name: 'my-event')
+        expect(duplicate).not_to be_valid
+      end
+
+      it 'adds error to name when the same name exists on the same board' do
+        create(:event, board: board, name: 'my-event')
+        duplicate = build(:event, board: board, name: 'my-event')
+        duplicate.valid?
+        expect(duplicate.errors[:name]).to be_present
+      end
+
+      it 'is valid when the same name exists on a different board' do
+        create(:event, board: board, name: 'my-event')
+        other = build(:event, board: other_board, name: 'my-event')
+        expect(other).to be_valid
+      end
+    end
+  end
+
+  it 'returns 5 days from start_date to end_date' do
     event = build(:event, start_date: Date.parse('2019-12-01'), end_date: Date.parse('2019-12-05'))
     expect(event.day_count).to eq(5)
+  end
+
+  it 'returns 1 day for a single-day event' do
     event = build(:event, start_date: Date.parse('2019-12-01'), end_date: Date.parse('2019-12-01'))
     expect(event.day_count).to eq(1)
   end
 
-  it 'retuns entry_count' do
-    event = create(:event)
-    expect(event.entry_count).to eq(0)
-    create(:advent_calendar_item, event: event)
-    event.reload
-    expect(event.entry_count).to eq(1)
-    create(:advent_calendar_item, event: event)
-    event.reload
-    expect(event.entry_count).to eq(2)
+  describe '#entry_count' do
+    let(:event) { create(:event) }
+
+    it 'returns 0 with no entries' do
+      expect(event.entry_count).to eq(0)
+    end
+
+    it 'returns 1 after one entry is added' do
+      create(:advent_calendar_item, event: event)
+      event.reload
+      expect(event.entry_count).to eq(1)
+    end
+
+    it 'returns 2 after two entries are added' do
+      create(:advent_calendar_item, event: event)
+      create(:advent_calendar_item, event: event)
+      event.reload
+      expect(event.entry_count).to eq(2)
+    end
   end
 
-  it 'returns entry_percent' do
-    event = create(:event, start_date: Date.parse('2019-12-01'), end_date: Date.parse('2019-12-05'))
-    expect(event.entry_percent).to eq(0)
-    create(:advent_calendar_item, event: event)
-    event.reload
-    expect(event.entry_percent).to eq(20)
-    create(:advent_calendar_item, event: event)
-    create(:advent_calendar_item, event: event)
-    create(:advent_calendar_item, event: event)
-    create(:advent_calendar_item, event: event)
-    event.reload
-    expect(event.entry_percent).to eq(100)
+  describe '#entry_percent' do
+    let(:event) { create(:event, start_date: Date.parse('2019-12-01'), end_date: Date.parse('2019-12-05')) }
+
+    it 'returns 0 with no entries' do
+      expect(event.entry_percent).to eq(0)
+    end
+
+    it 'returns 20 with one entry out of five days' do
+      create(:advent_calendar_item, event: event)
+      event.reload
+      expect(event.entry_percent).to eq(20)
+    end
+
+    it 'returns 100 when all days are filled' do
+      5.times { create(:advent_calendar_item, event: event) }
+      event.reload
+      expect(event.entry_percent).to eq(100)
+    end
+  end
+
+  describe '.creatable_on?' do
+    let(:admin) { create(:user, admin: true) }
+    let(:owner) { create(:user) }
+    let(:member_user) { create(:user) }
+    let(:stranger) { create(:user) }
+    let(:top_board) { Board.find_or_create_by!(board_type: :top) { |b| b.name = 'TOP' } }
+    let(:public_board) { create(:board, :public_user, owner: owner) }
+    let(:protected_board) { create(:board, :protected_user, owner: owner) }
+    let(:private_board) { create(:board, :private_user, owner: owner) }
+
+    before do
+      create(:board_membership, board: public_board, user: member_user)
+      create(:board_membership, board: protected_board, user: member_user)
+      create(:board_membership, board: private_board, user: member_user)
+    end
+
+    context 'when the board is a top board' do
+      it 'allows admin' do
+        expect(described_class.creatable_on?(top_board, admin)).to be true
+      end
+
+      it 'denies unauthenticated' do
+        expect(described_class.creatable_on?(top_board, nil)).to be false
+      end
+
+      it 'denies owner (non-admin)' do
+        expect(described_class.creatable_on?(top_board, owner)).to be false
+      end
+
+      it 'denies member' do
+        expect(described_class.creatable_on?(top_board, member_user)).to be false
+      end
+
+      it 'denies stranger' do
+        expect(described_class.creatable_on?(top_board, stranger)).to be false
+      end
+    end
+
+    context 'when the board is a public UserBoard' do
+      it 'allows admin' do
+        expect(described_class.creatable_on?(public_board, admin)).to be true
+      end
+
+      it 'denies unauthenticated' do
+        expect(described_class.creatable_on?(public_board, nil)).to be false
+      end
+
+      it 'allows any authenticated user (stranger)' do
+        expect(described_class.creatable_on?(public_board, stranger)).to be true
+      end
+
+      it 'allows member' do
+        expect(described_class.creatable_on?(public_board, member_user)).to be true
+      end
+
+      it 'allows owner' do
+        expect(described_class.creatable_on?(public_board, owner)).to be true
+      end
+    end
+
+    context 'when the board is a protected UserBoard' do
+      it 'allows admin' do
+        expect(described_class.creatable_on?(protected_board, admin)).to be true
+      end
+
+      it 'denies unauthenticated' do
+        expect(described_class.creatable_on?(protected_board, nil)).to be false
+      end
+
+      it 'denies stranger (authenticated non-member)' do
+        expect(described_class.creatable_on?(protected_board, stranger)).to be false
+      end
+
+      it 'allows member' do
+        expect(described_class.creatable_on?(protected_board, member_user)).to be true
+      end
+
+      it 'allows owner' do
+        expect(described_class.creatable_on?(protected_board, owner)).to be true
+      end
+    end
+
+    context 'when the board is a private UserBoard' do
+      it 'allows admin' do
+        expect(described_class.creatable_on?(private_board, admin)).to be true
+      end
+
+      it 'denies unauthenticated' do
+        expect(described_class.creatable_on?(private_board, nil)).to be false
+      end
+
+      it 'denies stranger' do
+        expect(described_class.creatable_on?(private_board, stranger)).to be false
+      end
+
+      it 'allows member' do
+        expect(described_class.creatable_on?(private_board, member_user)).to be true
+      end
+
+      it 'allows owner' do
+        expect(described_class.creatable_on?(private_board, owner)).to be true
+      end
+    end
   end
 end

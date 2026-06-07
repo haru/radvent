@@ -30,4 +30,216 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  date:
+    abbr_day_names:
+    - Sun
+    - Mon
+    - Tue
+    - Wed
+    - Thu
+    - Fri
+    - Sat
+  helpers:
+    submit:
+      create: Create
+      submit: Save
+      update: Update
+      preview: Preview
+      cancel: Cancel
+    button:
+      delete: Delete
+    placeholder:
+      name: Enter your name
+      comment: Leave a comment
+  activerecord:
+    models:
+      item: Entry
+      comment: Comment
+      event: Event
+      user: User
+      like: like
+    errors:
+      models:
+        event:
+          attributes:
+            end_date:
+              different_month: must be in the same month as start date
+    attributes:
+      advent_calendar_item:
+        user_name: Name
+        comment: Comment
+      item:
+        title: Title
+        title_empty: No title
+        body: Body
+      event:
+        advent_calendar_items: Advent Calendar Items
+        created_by: :activerecord.models.created_by
+        description: Description
+        end_date: End date
+        name: Name
+        start_date: Start date
+        title: title
+        updated_by: :activerecord.models.updated_by
+        version: version
+      board:
+        board_id: Board ID
+        name: Name
+        visibility: Visibility
+      user:
+        admin: Administrator
+        created_at: Created at
+        confirmation_sent_at: Password confirmation sent at
+        confirmation_token: Password confirmation token
+        confirmed_at: Password confirmed at
+        current_sign_in_at: current sign in
+        current_sign_in_ip: current sign in ip address
+        email: E-mail
+        encrypted_password: Encrypted password
+        failed_attempts: Failed attempts
+        last_sign_in_at: Last sign in
+        last_sign_in_ip: Last sign in ip address
+        locked_at: Locked at
+        name: Name
+        remember_created_at: Remember created
+        reset_password_sent_at: Reset password sent
+        reset_password_token: Reset password token
+        unconfirmed_email: Unconfirmed email
+        unlock_token: Unlock token
+  controllers:
+    attachments:
+      create:
+        fail_upload: Upload failed.
+  views:
+    common:
+      alert_save_failed: "Could not be saved due to the following errors:"
+    courtesy_title: ""
+    day_format: "Day %{date}"
+    advent_calendar_items:
+      comment: Comment(will be displayed in the calendar)
+      edit:
+        title: "Advent Calendar Day %{date}(%{date}/%{month})"
+      new:
+        title: "Register Advent Calendar Day %{date}(%{date}/%{month})"
+      show:
+        title: "Advent Calendar Day %{date}(%{date}/%{month})"
+        button_edit_advent_calendar_item: Edit Info
+        item_title: Entry
+        button_edit_item: Edit
+        button_create_item: Register
+        item_not_created: You haven't registered yet
+        item_created: You have already registered
+        delete_advent_calendar_item: Remove entry
+        confirm_delete_entry: Are you sure to remove entry?
+    comments:
+      _comment:
+        confirm_delete: Are you sure to delete comment?
+      _form:
+        title: Add a comment
+        button_create: Comment
+    items:
+      _content:
+        date_short: "%{day}/%{month}"
+        link_edit: Edit this entry
+        liked_person: Liked by
+      _navigation:
+        title: "%{title} Day %{date}"
+      edit:
+        title: Edit Advent Calendar Entry
+      new:
+        title: Register Advent Calendar Entry
+      preview:
+        header_preview: Preview
+    welcome:
+      _detail:
+        button_edit: Edit
+        button_create: Register
+      index:
+        description_title: About Advent Calendar
+        description: Advent calendar is a special calendar used to count or celebrate the days in anticipation of Christmas. Let's enjoy coming Christmas with special entries everyday!
+        entries: "Entries: %{entries}/%{days}"
+    user:
+      index:
+        title: Users
+      edit:
+        title: User
+      delete:
+        confirm: "Are you sure to delete %{user}?"
+    event:
+      new:
+        title: Create Event
+        name_help: "Alphanumeric characters, -, and _ are allowed. This will be part of the event's URL."
+      edit:
+        title: Event
+        name_help: "Alphanumeric characters, -, and _ are allowed. This will be part of the event's URL."
+      delete:
+        confirm: "Are you sure to delete %{event}?"
+  items:
+    upload_error: 'Upload failed'
+    network_error: 'A network error occurred'
+    image_too_large: 'Image file is too large (max 10MB)'
+    unsupported_format: 'Unsupported format (JPEG/PNG/GIF/WebP only)'
+    image_texts_sb_init: 'Attach image files by drag and dropping or pasting from clipboard.'
+    image_texts_sb_on_drag_enter: 'Drop image to upload it.'
+    image_texts_sb_on_drop: 'Uploading image #images_names#...'
+    image_texts_sb_progress: 'Uploading #file_name#: #progress#%'
+    image_texts_sb_on_uploaded: 'Uploaded #image_name#'
+  menu:
+    settings: 'Settings'
+    sign_out: 'Sign Out'
+    sign_in: 'Sign In'
+    sign_up: 'Sign Up'
+    my_page: 'My Page'
+    board_management: 'Manage Boards'
+  breadcrumb:
+    top: 'TOP'
+  events:
+    updated: 'Event updated successfully'
+  boards:
+    index:
+      title: 'Board Management'
+      new_board: 'Create New Board'
+      no_boards: 'No boards yet'
+    show:
+      title: '%{name}'
+      create_event: 'Create Event'
+    new:
+      title: 'Create Board'
+    edit:
+      title: 'Board Settings'
+      danger_zone: 'Danger Zone'
+      delete_board: 'Delete Board'
+      delete_warning: 'Are you sure you want to delete this board? This action cannot be undone.'
+      visibility_warning: 'Changing visibility may affect existing member access.'
+      confirm_delete: 'Enter the board ID to confirm deletion'
+    form:
+      board_id: 'Board ID'
+      board_id_hint: 'Allowed characters: lowercase letters, numbers, hyphens, underscores (max 64 chars)'
+      name: 'Board Name'
+      description: 'Description'
+      visibility: 'Visibility'
+      visibility_public: 'Public'
+      visibility_protected: 'Protected'
+      visibility_private: 'Private'
+      visibility_public_desc: 'Anyone can view and post'
+      visibility_protected_desc: 'Anyone can view, but only members can post'
+      visibility_private_desc: 'Only members can view and post'
+    errors:
+      board_id_reserved: 'That board ID is reserved'
+      board_id_invalid: 'Only lowercase letters, numbers, hyphens, and underscores are allowed'
+    created: 'Board created successfully'
+    updated: 'Board updated successfully'
+    deleted: 'Board deleted successfully'
+  board_memberships:
+    index:
+      title: 'Member Management'
+      add_member: 'Add Member'
+      member_placeholder: 'Username or email address'
+      no_members: 'No members yet'
+    member_added: 'Member added successfully'
+    member_removed: 'Member removed'
+    remove: 'Remove'
+    remove_confirm: 'Are you sure you want to remove this member?'
+    errors:
+      user_not_found: 'User not found'
+      already_member: 'Already a member'

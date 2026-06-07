@@ -1,0 +1,1 @@
+../../../.specify/extensions/branch-convention/.specify-dev/agent-commands/claude/speckit-branch-convention-validate/SKILL.md

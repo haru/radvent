@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateAdventCalendarItems < ActiveRecord::Migration[4.2]
   def change
     create_table :advent_calendar_items do |t|

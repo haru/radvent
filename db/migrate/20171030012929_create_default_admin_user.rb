@@ -1,9 +1,10 @@
+# frozen_string_literal: true
+
 class CreateDefaultAdminUser < ActiveRecord::Migration[4.2]
   def up
     User.create!(email: 'admin@example.com', name: 'admin', admin: true,
-                 password: 'adminadmin', password_confirmation: 'adminadmin', confirmed_at: Time.now)
+                 password: 'adminadmin', password_confirmation: 'adminadmin', confirmed_at: Time.zone.now)
   end
 
-  def down
-  end
+  def down; end
 end

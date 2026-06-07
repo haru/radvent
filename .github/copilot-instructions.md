@@ -1,89 +1,34 @@
-# Copilot Instructions
+# Copilot Instructions for Radvent
 
-Radvent は Qiita風アドベントカレンダーアプリ。Ruby on Rails 8.1 / Ruby 3.0+。
+> Full conventions, architecture, and gotchas are documented in [AGENTS.md](../AGENTS.md). Read it before making changes.
 
-## Build & Test
+## Critical Rules
 
-```bash
-bundle install && yarn install
-bundle exec rake radvent:generate_default_settings
-bundle exec rake db:create db:migrate
-bundle exec rails s
+- **Never commit/push** without explicit user permission
+- **Always run lint** after code changes: `sh build-scripts/lint.sh`
+- **TDD**: Write failing tests first, then implement (90%+ coverage required)
+- **Views**: HAML only (`.html.haml`) — never ERB
+- **JS**: Stimulus only — never jQuery
+- **Migrations**: Generate with `rails generate migration`, never write by hand
 
-# テスト
-bundle exec rspec spec                          # 全テスト
-bundle exec rspec spec/models/user_spec.rb:42   # 行指定
-```
+## Quick Reference
 
-## Architecture
+| Task | Command |
+|------|---------|
+| Run all tests | `bundle exec rspec spec` |
+| Lint | `sh build-scripts/lint.sh` |
+| Setup DB | `bundle exec rake db:create db:migrate` |
+| Build assets | `yarn build && yarn build:css` |
 
-```
-Event ──< AdventCalendarItem >── User
-               │
-               └──1 Item ──< Comment
-                      └──< Like >── User
-```
+## Key Gotchas
 
-- `AdventCalendarItem` はカレンダーの「枠」（日付×イベント×ユーザー）。`date` カラムは **Integer**（1〜31）であり Date 型ではない
-- `Item` が実記事。`belongs_to :advent_calendar_item`（unique）
-- `Comment` に `user_id` カラムは**ない**。`user_name` 文字列のみ保存
-- Event の show ルートは名前ベース → `show_event_path(event.name)`（`event_path(event)` は誤り）
+- `render_not_found` / `render_forbidden` — not `render_404`/`render_403`
+- Events routed by `name`, not `id`: `show_event_path(event.name)`
+- Boards routed by `board_id` (slug): `board_path(board.board_id)`
+- `AdventCalendarItem.date` is Integer (1–31), not a Date
+- `Comment` has no `user_id` — stores `user_name` string only
 
-## Code Style
-
-- ビューはすべて **HAML**（`.html.haml`）。ERB は使わない
-- Ruby は シングルクォート優先（rufo で整形）
-- i18n: デフォルトロケール `:ja`、タイムゾーン `Tokyo`
-- レイアウト: 管理画面は `layouts/admin`、公開側は `layouts/application`
-  - `EventsController` は `layout 'admin'` だが `show` のみ `render layout: 'application'`
-
-## Project Conventions
-
-**権限チェック:**
-```ruby
-before_action :authenticate_user!
-admin_user!              # ApplicationController: 管理者以外は render_403
-render_404 / render_403  # ApplicationController のヘルパー
-current_user.admin?      # 管理者判定
-```
-
-**Eventのルーティング:**
-```ruby
-get 'events/:name' => 'events#show', as: :show_event
-# Items にはpreview（collection + member）とlikesが入れ子
-```
-
-**HAMLの典型パターン:**
-```haml
-- content_for(:jumbotron) do
-  %div.jumbotron= @event.title
-= render "partial", item: @item
-= t("views.events.show.some_key")
-```
-
-## Testing
-
-- RSpec + FactoryBot（`create/build` を直接呼べる）
-- Devise: `sign_in @user`（`Devise::Test::ControllerHelpers` 自動include）
-- 日付モック: `allow(Time.zone).to receive(:today).and_return(Date.new(2015, 12, 2))`
-- テスト冒頭で `Model.destroy_all` を呼ぶ慣習あり
-
-```ruby
-RSpec.describe ItemsController, type: :controller do
-  before do
-    @user = create(:user)
-    sign_in @user
-  end
-end
-```
-
-## Key Files
-
-| 目的 | パス |
-|---|---|
-| モデル | `app/models/` — `advent_calendar_item.rb`, `item.rb`, `event.rb`, `user.rb` |
-| コントローラー | `app/controllers/application_controller.rb` |
-| ルーティング | `config/routes.rb` |
-| スキーマ | `db/schema.rb` |
-| ファクトリ | `spec/factories/` |
-| i18n | `config/locales/` |
+<!-- SPECKIT START -->
+For additional context about technologies to be used, project structure,
+shell commands, and other important information, read the current plan
+<!-- SPECKIT END -->

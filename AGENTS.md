@@ -1,188 +1,108 @@
-# AGENTS.md - Guidelines for Agentic Coding in Radvent
+# AGENTS.md — Radvent
 
-## ABSOLUTE RULES (CRITICAL)
+## Absolute Rules
 
-**NEVER commit or push changes without explicit user permission**
-- Do NOT run `git commit` under any circumstances
-- Do NOT run `git push` under any circumstances
-- Do NOT create pull requests under any circumstances
-- Only show changes with `git diff` after user approves
-- Wait for explicit user confirmation before ANY git operations
+- **NEVER commit, push, or create PRs** without explicit user permission.
+- **NEVER decide commit messages** — ask the user.
+- **Language**: All commit messages and source code comments must be written in **English**.
+- **TDD is mandatory**: Write tests before implementation. Red → Green → Refactor.
+- **Lint must pass** before a task is considered complete: `sh build-scripts/lint.sh`.
+- **Test coverage ≥ 90%** — reports at `coverage/`.
 
-**NEVER decide commit message without user approval**
-- Let user write the commit message
-- Do not automatically generate or suggest commit messages
-- Ask user for commit message before running `git commit`
+## Commands
 
-## Git Flow (Branching Model)
-
-This project uses **Git Flow** branching model (also known as A successful git branching model).
-
-### Branch Structure
-- `main`: Production-ready code. Never commit directly to main.
-- `develop`: Integration branch. Never commit directly to develop.
-- `bugfix/*`: Feature branches for bug fixes.
-- `feature/*`: Feature branches for new features.
-
-### Development Workflow
-1. Create a `bugfix/` or `feature/` branch from `develop`
-2. Make changes, test, and commit to your branch
-3. Push branch to remote: `git push -u origin branch-name`
-4. Create pull request from your branch to `develop`
-5. Merge PR into `develop` after review
-6. Never commit or push directly to `main` or `develop`
-
-### Example Commands
 ```bash
-git checkout develop
-git pull origin develop
-git checkout -b bugfix/your-fix
-# Make changes, test, commit
-git push -u origin bugfix/your-fix
-# Create PR from bugfix/your-fix to develop
-```
-
-## Build, Lint, and Test Commands
-
-### Setup
-```bash
+# Setup (first time)
 bundle install && yarn install
-bundle exec rake radvent:generate_default_settings
+bundle exec rake radvent:generate_default_settings   # generates config/database.yml, secrets, devise
 bundle exec rake db:create db:migrate
-```
 
-### Development Server
-```bash
+# Dev server
 bundle exec rails s
+
+# Test
+bundle exec rspec spec                              # all tests
+bundle exec rspec spec/models/user_spec.rb           # single file
+bundle exec rspec spec/models/user_spec.rb:42        # specific test line
+
+# Lint (run ALL before completing any task)
+sh build-scripts/lint.sh                             # rubocop + YARD 100% + eslint
+bundle exec rubocop -a                               # auto-fix Ruby
+yarn lint:fix                                       # auto-fix JS
+
+# Format
+rufo app/ spec/ lib/                                 # Ruby formatter (single quotes enforced)
+
+# Asset build
+yarn build                                           # JS (esbuild)
+yarn build:css                                       # CSS (PostCSS)
 ```
 
-### Testing
-```bash
-bundle exec rspec spec                         # All tests
-bundle exec rspec spec/models/                 # Model specs
-bundle exec rspec spec/controllers/            # Controller specs
-bundle exec rspec spec/models/user_spec.rb     # Single file
-bundle exec rspec spec/models/user_spec.rb:42  # Specific test (line number)
-```
-Coverage reports generated to `coverage/` (HTML and LCOV formats).
+## Architecture
 
-### Asset Build
-```bash
-yarn build                                     # JS via esbuild
-yarn build:css                                 # SCSS compilation
-yarn copy:fonts                                # Copy font files
-bundle exec rake assets:precompile             # Production assets
+Ruby on Rails 8.1 + esbuild + Stimulus. Japanese-focused Advent Calendar app (Qiita-style).
+
+**Key model relationships:**
+```
+Event ──< AdventCalendarItem >── User
+               │
+               └──1 Item ──< Comment
+                      └──< Like >── User
 ```
 
-### Code Formatting
-```bash
-# Ruby - rufo with single quotes (configured in .rufo)
-rufo app/ spec/ lib/                           # Format Ruby files
-```
+- `AdventCalendarItem` — calendar slot. `date` column is **Integer (1–31)**, not Date.
+- `Comment` — stores `user_name` as string only; **no `user_id`** column.
+- `Board` — two types: `top` (system) and `user` (slug-based). Has `Permissionable` concern with `visibility` enum.
 
-## Code Style Guidelines
+## Gotchas (non-obvious, agent will likely get wrong)
 
-### Ruby/Rails Conventions
-- **Quotes**: Use single quotes by default (rufo config)
-- **Strings**: No comments unless explicitly requested
-- **Indentation**: 2 spaces (Ruby standard)
-- **Method visibility**: Use `public`/`private`/`protected` keywords (see event.rb:19)
-- **Validation**: Place validations at top of model classes
-- **Custom validations**: Define as private methods with `validate :method_name`
-- **Model relationships**: Standard ActiveRecord associations
-- **Callbacks**: Use standard Rails patterns where needed
+| Gotcha | Detail |
+|--------|--------|
+| **Event routing uses `name`, not ID** | `show_event_path(event.name)` — never `event_path(event)` |
+| **Board routing uses `board_id` slug** | `resources :boards, param: :board_id` — use `board_path(board.board_id)` |
+| **AdventCalendarItem.date is Integer** | Query with `.where(date: date.day)` |
+| **Comment has no user_id** | Stores `user_name` as string only |
+| **Views are HAML only** | Never create `.erb` files. Use `.html.haml`. |
+| **JS framework is Stimulus** | Do NOT use jQuery. Register controllers in `app/javascript/controllers/index.js`. |
+| **CSS is PostCSS only** | Source: `app/javascript/stylesheets/application.css`. No `.scss` files. |
+| **Stimulus Turbo guard** | In `connect()`, check `this.element.dataset.rendered === 'true'` before re-processing. |
+| **Layout switching** | Admin: `layout 'admin'`. `EventsController#show` overrides with `render layout: 'application'`. |
+| **Migrations: always generate** | `rails generate migration ...` — never write by hand (cross-DB portability). If raw SQL needed, use `CURRENT_TIMESTAMP`. |
+| **i18n** | Default locale `:ja`, timezone `Tokyo`. Always use `t()` for user-facing strings. |
+| **Generator settings** | Controller specs enabled; view/helper/routing/request specs disabled. FactoryBot only. |
+| **Lint includes YARD 100%** | `build-scripts/lint.sh` fails if YARD docs are not 100%. Document all public methods. |
+| **Lint sets RAILS_ENV=test** | `build-scripts/env.sh` exports `RAILS_ENV=test`. |
+| **CI runs assets:precompile** | `build-scripts/build.sh` precompiles assets before tests — controller specs may need compiled assets. |
+| **No easy fallbacks** | Surface errors explicitly — never silently swallow them behind defaults. |
 
-### Controllers
-- **Layouts**: Set with `layout 'admin'` or `layout 'application'`
-- **Filters**: Use `before_action` with `only`/`except` constraints
-- **Authorization**: 
-  ```ruby
-  before_action :authenticate_user!
-  admin_user!                              # ApplicationController helper
-  ```
-- **Error rendering**: Use `render_404` or `render_403` from ApplicationController
-- **Params**: Strong params pattern: `params.require(:resource).permit(:field1, :field2)`
+## Style
 
-### Views (HAML Only - Never ERB)
-- **File extension**: `.html.haml`
-- **Pattern**:
-  ```haml
-  - content_for(:jumbotron) do
-    %div.jumbotron= @event.title
-  = render "partial", item: @item
-  = t("views.events.show.some_key")
-  ```
-- **Interpolation**: Use `#{}` for Ruby interpolation
-- **Nested content**: Indent properly within blocks
-- **i18n**: Always use `t()` for user-facing strings
+- **Ruby**: Single quotes (rufo), 2-space indent, explicit `public`/`private`/`protected`.
+- **FactoryBot**: `create(:model)` / `build(:model)` directly (no prefix).
+- **Devise auth in tests**: `sign_in @user` (auto-included via `Devise::Test::ControllerHelpers`).
+- **Date mocking**: `allow(Time.zone).to receive(:today).and_return(Date.new(2015, 12, 2))`.
+- **Error handling**: `render_not_found` / `render_forbidden` / `admin_user!` from ApplicationController.
+- **Commit messages**: Conventional commits format (`feat:`, `fix:`, `refactor:`, etc.). English only.
 
-### Naming Conventions
-- **Models**: Singular, PascalCase (e.g., `AdventCalendarItem`)
-- **Controllers**: Plural, PascalCase (e.g., `EventsController`)
-- **Tables**: Plural, snake_case (e.g., `advent_calendar_items`)
-- **Views**: Match controller/action (e.g., `events/show.html.haml`)
-- **Routes**: RESTful resources with custom routes as needed
-- **Private methods**: Snake_case (e.g., `find_event_by_name`)
+## Git Flow
 
-### Error Handling
-- **404 errors**: Call `render_404` helper (ApplicationController)
-- **403 errors**: Call `render_403` or `admin_user!` helper
-- **Validation errors**: Use standard Rails validation with i18n keys
-- **Not found records**: Check and render 404 (see events_controller.rb:70)
+- Branches: `main` (production), `develop` (integration), `feature/*`, `bugfix/*`.
+- Never commit directly to `main` or `develop`.
+- Create PRs from feature/bugfix branches into `develop`.
 
-### Testing Patterns
-- **Framework**: RSpec + FactoryBot
-- **FactoryBot**: Call `create(:model)` or `build(:model)` directly (no prefix)
-- **Devise auth**: `sign_in @user` (auto-included in controller specs)
-- **Setup**: Often use `Model.destroy_all` in `before` blocks
-- **Date mocking**: `allow(Time.zone).to receive(:today).and_return(Date.new(2015, 12, 2))`
-- **Controller tests**: Use standard `get`/`post`/`put`/`delete` with params hash
-- **Model tests**: Use `describe` blocks with `it` or `before` hooks
+## Database
 
-### Project-Specific Gotchas
+- Dev: SQLite3. Production: MySQL 5.7+ or PostgreSQL.
+- Env vars: `DB`, `DB_NAME`, `DB_USERNAME`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT`.
+- CI matrix: Ruby 3.2–4.0 × sqlite3/mysql/postgres.
 
-**Critical: Event routing uses name, not ID**
-```ruby
-# CORRECT
-get 'events/:name' => 'events#show', as: :show_event
-show_event_path(event.name)  # Use event.name, not event.id
+## Extended Agent Rules
 
-# INCORRECT
-event_path(event)  # This won't work!
-```
+Detailed workflow rules live in `.claude/rules/`:
+- [development-workflow.md](.claude/rules/development-workflow.md) — Research → plan → TDD → review pipeline
+- [git-workflow.md](.claude/rules/git-workflow.md) — Commit message format, PR workflow
 
-**AdventCalendarItem.date is Integer, not Date**
-- Column type: Integer (1-31), not Date/DateTime
-- Query with `.where(date: date.day)` pattern
-
-**Comment model has no user_id**
-- Stores `user_name` as string only
-- No relationship to User model
-
-**Layout switching**
-- Admin pages: `layout 'admin'` in controller
-- EventsController#show overrides with `render layout: 'application'`
-
-**i18n Configuration**
-- Default locale: `:ja` (Japanese)
-- Timezone: `Tokyo`
-- Auto-detect locale: `http_accept_language` gem
-
-**Generators Config**
-- Test framework: RSpec with controller specs only
-- Fixture replacement: FactoryBot in `spec/factories/`
-- View/helper/routing specs: Disabled in config
-
-### Database
-- **Dev default**: SQLite3
-- **Production**: MySQL 5.7+ or PostgreSQL (via env vars)
-- **Env vars**: `DB`, `DB_NAME`, `DB_USERNAME`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT`
-
-### Generator Settings (config/application.rb)
-- Controller specs: enabled
-- View specs: disabled
-- Helper specs: disabled
-- Routing specs: disabled
-- Request specs: disabled
-
-When working on this codebase, follow these conventions to maintain consistency with existing code patterns.
+<!-- SPECKIT START -->
+For additional context about technologies to be used, project structure,
+shell commands, and other important information, read the current plan
+<!-- SPECKIT END -->

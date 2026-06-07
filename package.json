@@ -1,22 +1,35 @@
 {
   "name": "radvent",
   "private": true,
+  "type": "module",
   "version": "3.0.0",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^7.2.0",
+    "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo-rails": "^8.0.0",
-    "@rails/actioncable": "^8.1.0",
-    "@rails/activestorage": "^8.1.0",
-    "datatables.net-bs5": "^2.3.7",
-    "esbuild": "^0.27.3",
-    "jquery": "^4.0.0",
-    "marked": "^17.0.3",
+    "@rails/actioncable": "^8.1.300",
+    "@rails/activestorage": "^8.1.300",
+    "dompurify": "^3.4.7",
+    "easymde": "^2.21.0",
+    "esbuild": "^0.28.0",
+    "marked": "^18.0.4",
     "mdb-ui-kit": "^9.3.0",
-    "sass": "^1.97.3"
+    "simple-datatables": "^10.2.0"
   },
   "scripts": {
     "build": "node esbuild.config.mjs",
-    "build:css": "sass ./app/javascript/stylesheets/application.scss:./app/assets/builds/application_pack.css --no-source-map --load-path=node_modules --quiet-deps",
-    "copy:fonts": "cp -r node_modules/@fortawesome/fontawesome-free/webfonts public/assets/webfonts"
+    "build:css": "postcss ./app/javascript/stylesheets/application.css -o ./app/assets/builds/application_pack.css",
+    "copy:fonts": "cp -r node_modules/@fortawesome/fontawesome-free/webfonts public/assets/webfonts",
+    "lint": "eslint app/javascript/**/*.js",
+    "lint:fix": "eslint app/javascript/**/*.js --fix"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.4.1",
+    "postcss": "^8.5.15",
+    "postcss-cli": "^11.0.1",
+    "postcss-flexbugs-fixes": "^5.0.2",
+    "postcss-import": "^16.1.1",
+    "postcss-preset-env": "^11.3.0"
   }
 }

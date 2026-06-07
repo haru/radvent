@@ -1,0 +1,34 @@
+= form_with model: board, url: board.new_record? ? boards_path : board_path(board.board_id),
+             method: board.new_record? ? :post : :patch do |f|
+  - if board.errors.any?
+    %div.alert.alert-danger
+      %ul
+        - board.errors.full_messages.each do |msg|
+          %li= msg
+
+  - if board.new_record?
+    %div.mb-3
+      = f.label :board_id, t('boards.form.board_id'), class: 'form-label'
+      = f.text_field :board_id, class: 'form-control', placeholder: 'my-board'
+      %small.form-text.text-muted= t('boards.form.board_id_hint')
+
+  %div.mb-3
+    = f.label :name, t('boards.form.name'), class: 'form-label'
+    = f.text_field :name, class: 'form-control'
+    %small.form-text.text-muted= t('boards.form.board_id_hint')
+
+  %div.mb-3
+    = f.label :description, t('boards.form.description'), class: 'form-label'
+    = f.text_area :description, class: 'form-control', rows: 3
+
+  %div.mb-3
+    = f.label :visibility, t('boards.form.visibility'), class: 'form-label'
+    %div
+      - %i[public protected private].each do |vis|
+        %div.form-check
+          = f.radio_button :visibility, vis, class: 'form-check-input'
+          = f.label "visibility_#{vis}", class: 'form-check-label' do
+            %strong= t("boards.form.visibility_#{vis}")
+            = " — #{t("boards.form.visibility_#{vis}_desc")}"
+
+  = f.submit class: 'btn btn-primary'

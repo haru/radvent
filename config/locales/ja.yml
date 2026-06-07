@@ -7,6 +7,61 @@ ja:
         restrict_dependent_destroy:
           has_one: "%{record}が存在しているので削除できません"
           has_many: "%{record}が存在しているので削除できません"
+      models:
+        event:
+          attributes:
+            end_date:
+              different_month: は開始日と同じ月にしてください
+          format:
+            end_date: "%{message}"
+    models:
+      item: 記事
+      comment: コメント
+      event: イベント
+      user: ユーザ
+      like: いいね
+    attributes:
+      advent_calendar_item:
+        user_name: お名前
+        comment: コメント
+      item:
+        title: タイトル
+        title_empty: 無題
+        body: 本文
+      event:
+        advent_calendar_items: Adventカレンダーアイテム
+        created_by: :activerecord.models.created_by
+        description: 説明
+        end_date: 終了日
+        name: 名
+        start_date: 開始日
+        title: タイトル
+        updated_by: :activerecord.models.updated_by
+        version: バージョン
+      board:
+        board_id: ボードID
+        name: 名前
+        visibility: 公開設定
+      user:
+        admin: 管理者
+        created_at: 作成日時
+        confirmation_sent_at: パスワード確認送信時刻
+        confirmation_token: パスワード確認用トークン
+        confirmed_at: パスワード確認時刻
+        current_sign_in_at: 現在のログイン時刻
+        current_sign_in_ip: 現在のログインIPアドレス
+        email: メールアドレス
+        encrypted_password: 暗号化パスワード
+        failed_attempts: 失敗したログイン試行回数
+        last_sign_in_at: 最終ログイン日時
+        last_sign_in_ip: 最終ログインIPアドレス
+        locked_at: ロック時刻
+        name: 名前
+        remember_created_at: ログイン記憶時刻
+        reset_password_sent_at: パスワードリセット送信時刻
+        reset_password_token: パスワードトークンをリセットする
+        unconfirmed_email: 未確認Eメール
+        unlock_token: トークンのロックを解除する
   date:
     abbr_day_names:
     - 日
@@ -17,7 +72,7 @@ ja:
     - 金
     - 土
     abbr_month_names:
-    - 
+    -
     - 1月
     - 2月
     - 3月
@@ -43,7 +98,7 @@ ja:
       long: "%Y年%m月%d日(%a)"
       short: "%m/%d"
     month_names:
-    - 
+    -
     - 1月
     - 2月
     - 3月
@@ -145,6 +200,13 @@ ja:
       create: 登録する
       submit: 保存する
       update: 更新する
+      preview: プレビュー
+      cancel: キャンセル
+    button:
+      delete: 削除
+    placeholder:
+      name: お名前を入力してください
+      comment: コメントを入力してください
   number:
     currency:
       format:
@@ -198,6 +260,143 @@ ja:
       last_word_connector: "、"
       two_words_connector: "、"
       words_connector: "、"
+  controllers:
+    attachments:
+      create:
+        fail_upload: 画像のアップロードに失敗しました
+  views:
+    common:
+      alert_save_failed: "以下のエラーにより保存できませんでした："
+    courtesy_title: さん
+    day_format: "%{date}日目"
+    advent_calendar_items:
+      comment: コメント(カレンダーに表示されます)
+      edit:
+        title: "%{date}日目(%{month}/%{date})のAdventCalendar情報編集"
+      new:
+        title: "%{date}日目(%{month}/%{date})のAdventCalendarに参加登録しますか？"
+      show:
+        title: "%{date}日目(%{month}/%{date})のAdventCalendar情報"
+        button_edit_advent_calendar_item: 名前とコメントを編集する
+        item_title: 記事の登録
+        button_edit_item: 投稿記事を編集する
+        button_create_item: 記事を登録する
+        item_not_created: 記事が登録されていません
+        item_created: 記事が登録されています
+        delete_advent_calendar_item: エントリの削除
+        confirm_delete_entry: エントリーを削除します。よろしいですか？
+    comments:
+      _comment:
+        confirm_delete: コメントを削除しますか
+      _form:
+        title: コメントを投稿する
+        button_create: 投稿する
+    items:
+      _content:
+        date_short: "%{month}月%{day}日"
+        link_edit: 記事を編集する
+        liked_person: いいねした人
+      _navigation:
+        title: "この投稿は%{title}の%{date}日目の記事です。"
+      edit:
+        title: AdventCalendar記事編集
+      new:
+        title: AdventCalendar記事登録
+      preview:
+        header_preview: プレビュー
+    welcome:
+      _detail:
+        button_edit: 編集
+        button_create: 参加登録
+      index:
+        description_title: AdventCalendarとは
+        description: AdventCalendarとはクリスマスまでの期間をより楽しく過ごすため、12月1日から25日まで1日に1つ、みんなで記事を投稿するイベントです。
+        entries: エントリ %{entries}/%{days}
+    user:
+      index:
+        title: ユーザー
+      edit:
+        title: ユーザー
+      delete:
+        confirm: "%{user} を削除します。よろしいですか?"
+    event:
+      new:
+        title: イベント作成
+        name_help: "英数字, -, _を使用可能です。イベントのURLの一部になります。"
+      edit:
+        title: イベント
+        name_help: "英数字, -, _を使用可能です。イベントのURLの一部になります。"
+      delete:
+        confirm: "%{event} を削除します。よろしいですか?"
+  items:
+    upload_error: 'アップロードに失敗しました'
+    network_error: 'ネットワークエラーが発生しました'
+    image_too_large: '画像ファイルが大きすぎます（最大10MB）'
+    unsupported_format: '非対応の形式です（JPEG/PNG/GIF/WebPのみ）'
+    image_texts_sb_init: '画像ファイルをドラッグ＆ドロップするか、クリップボードから貼り付けてください。'
+    image_texts_sb_on_drag_enter: '画像をドロップしてアップロード'
+    image_texts_sb_on_drop: '画像 #images_names# をアップロード中...'
+    image_texts_sb_progress: '#file_name# をアップロード中: #progress#%'
+    image_texts_sb_on_uploaded: '#image_name# をアップロードしました'
+  menu:
+    settings: '設定'
+    sign_out: 'ログアウト'
+    sign_in: 'ログイン'
+    sign_up: '新規登録'
+    my_page: 'マイページ'
+    board_management: 'ボード管理'
+  breadcrumb:
+    top: 'TOP'
+  boards:
+    index:
+      title: 'ボード管理'
+      new_board: '新しいボードを作成'
+      no_boards: 'ボードがまだありません'
+    show:
+      title: '%{name}'
+      create_event: 'イベントを作成'
+    new:
+      title: 'ボードを作成'
+    edit:
+      title: 'ボード設定'
+      danger_zone: '危険な操作'
+      delete_board: 'ボードを削除'
+      delete_warning: '本当にこのボードを削除しますか？この操作は取り消せません。'
+      visibility_warning: '公開設定を変更すると、既存のメンバーのアクセス権に影響する場合があります。'
+      confirm_delete: '削除するにはボードIDを入力してください'
+    form:
+      board_id: 'ボードID'
+      board_id_hint: '使用できる文字: 英小文字、数字、ハイフン、アンダースコア（最大64文字）'
+      name: 'ボード名'
+      description: '説明'
+      visibility: '公開設定'
+      visibility_public: '公開'
+      visibility_protected: '限定公開'
+      visibility_private: '非公開'
+      visibility_public_desc: '誰でも閲覧・投稿できます'
+      visibility_protected_desc: '誰でも閲覧できますが、投稿はメンバーのみ'
+      visibility_private_desc: 'メンバーのみ閲覧・投稿できます'
+    errors:
+      board_id_reserved: 'そのボードIDは使用できません'
+      board_id_invalid: '英小文字、数字、ハイフン、アンダースコアのみ使用できます'
+    created: 'ボードを作成しました'
+    updated: 'ボードを更新しました'
+    deleted: 'ボードを削除しました'
+  events:
+    updated: 'イベントを更新しました'
+  board_memberships:
+    index:
+      title: 'メンバー管理'
+      add_member: 'メンバーを追加'
+      member_placeholder: 'ユーザー名またはメールアドレス'
+      no_members: 'メンバーがいません'
+    member_added: 'メンバーを追加しました'
+    member_removed: 'メンバーを削除しました'
+    remove: '削除'
+    remove_confirm: 'このメンバーを削除しますか？'
+    errors:
+      user_not_found: 'ユーザーが見つかりません'
+      already_member: 'すでにメンバーです'
   devise:
     sessions:
       signed_in: ""

@@ -1,0 +1,29 @@
+- content_for(:content) do
+  %div.container.mt-4{data: {controller: 'datatable'}}
+    %h1= t('board_memberships.index.title')
+    %p= link_to @board.name, board_path(@board.board_id)
+    %hr
+
+    = form_with url: board_board_memberships_path(@board.board_id), method: :post do |f|
+      %div.input-group.mb-3
+        = f.text_field :member_query, class: 'form-control', placeholder: t('board_memberships.index.member_placeholder')
+        %button.btn.btn-outline-primary{type: "submit"}= t('board_memberships.index.add_member')
+
+    - if @memberships.any?
+      %table.table.table-striped
+        %thead
+          %tr
+            %th= t('activerecord.attributes.user.name')
+            %th= t('activerecord.attributes.user.email')
+            %th
+        %tbody
+          - @memberships.each do |membership|
+            %tr
+              %td= membership.user.name
+              %td= membership.user.email
+              %td
+                = button_to t('board_memberships.remove'), board_membership_path(membership),
+                             method: :delete, class: 'btn btn-sm btn-outline-danger',
+                             data: { "turbo-confirm": t('board_memberships.remove_confirm') }
+    - else
+      %p.text-muted= t('board_memberships.index.no_members')
