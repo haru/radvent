@@ -7,11 +7,12 @@
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/haru/redmine_ai_helper)
 
 
-Qiita風のアドベントカレンダー Webアプリです。Markdown で記事を執筆し、指定日を過ぎると自動的に公開されます。
+アドベントカレンダー形式のブログWebアプリです。Markdown で記事を執筆し、指定日を過ぎると自動的に公開されます。
 
 [nanonanomachine/radvent](https://github.com/nanonanomachine/radvent) を元に以下の機能を追加・改造しています。
 
 - ユーザー認証（Devise）
+- ユーザーごとのイベント追加（複数のボードでイベントを管理。公開／限定公開／非公開の可視性とメンバー管理に対応）
 - 複数のアドベントカレンダーイベント対応
 - いいね・コメント機能
 - ファイル添付（CarrierWave）
@@ -55,7 +56,7 @@ Markdown エディタに [EasyMDE](https://github.com/Ionaru/easy-markdown-edito
 
 ### 前提条件
 
-- Ruby >= 3.0
+- Ruby >= 3.2
 - Node.js / Yarn
 - SQLite3（デフォルト）
 
@@ -138,8 +139,10 @@ open coverage/index.html
 |---|---|
 | `spec/models/` | モデルスペック |
 | `spec/controllers/` | コントローラースペック |
-| `spec/factories/` | FactoryBot ファクトリ定義 |
 | `spec/helpers/` | ヘルパースペック |
+| `spec/uploaders/` | アップローダースペック |
+| `spec/views/` | ビュースペック |
+| `spec/factories/` | FactoryBot ファクトリ定義 |
 
 ---
 
@@ -246,16 +249,18 @@ services:
 ### モデル関連図
 
 ```
-Event ──< AdventCalendarItem >── User
-               │
-               └── Item ──< Comment
-                      └──< Like >── User
+Board ──< Event ──< AdventCalendarItem >── User
+  │                       │
+  └──< BoardMembership    └── Item ──< Comment
+         >── User                └──< Like >── User
 ```
 
 | モデル | 概要 |
 |--------|------|
 | `User` | Devise認証ユーザー。管理者フラグあり |
-| `Event` | アドベントカレンダーイベント |
+| `Board` | イベントのコンテナ。`top`（システム全体）と `user`（ユーザー作成）の2種類があり、`public` / `protected` / `private` の可視性を持つ |
+| `BoardMembership` | `Board` と `User` の中間テーブル（メンバー管理） |
+| `Event` | アドベントカレンダーイベント。`Board` に紐付く |
 | `AdventCalendarItem` | イベントの日付枠（date は Integer 1〜31） |
 | `Item` | Markdown 記事。`AdventCalendarItem` に 1対1 で紐付く |
 | `Like` | 記事へのいいね |
