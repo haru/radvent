@@ -4,158 +4,162 @@
 [![build](https://github.com/haru/radvent/actions/workflows/build.yml/badge.svg)](https://github.com/haru/radvent/actions/workflows/build.yml)
 [![Maintainability](https://qlty.sh/gh/haru/projects/radvent/maintainability.svg)](https://qlty.sh/gh/haru/projects/radvent)
 [![codecov](https://codecov.io/gh/haru/radvent/branch/main/graph/badge.svg?token=MM74F6ZLL6)](https://codecov.io/gh/haru/radvent)
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/haru/redmine_ai_helper)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/haru/radvent)
 
+**[Japansese/日本語](README.ja.md)**
 
-Qiita風のアドベントカレンダー Webアプリです。Markdown で記事を執筆し、指定日を過ぎると自動的に公開されます。
+An Advent Calendar-style blog web application. Write articles in Markdown and they are automatically published on their scheduled date.
 
-[nanonanomachine/radvent](https://github.com/nanonanomachine/radvent) を元に以下の機能を追加・改造しています。
+This is a fork of [nanonanomachine/radvent](https://github.com/nanonanomachine/radvent) with the following additions and enhancements:
 
-- ユーザー認証（Devise）
-- 複数のアドベントカレンダーイベント対応
-- いいね・コメント機能
-- ファイル添付（CarrierWave）
+- User authentication (Devise)
+- Per-user event management (multiple boards with public / protected / private visibility and membership control)
+- Multiple Advent Calendar events
+- Likes and comments
+- File attachments (CarrierWave)
 
-Markdown エディタに [EasyMDE](https://github.com/Ionaru/easy-markdown-editor)、Markdown パーサーに [marked](https://github.com/markedjs/marked)、シンタックスハイライトに [highlight.js](https://github.com/highlightjs/highlight.js) を使用しています。
+The Markdown editor uses [EasyMDE](https://github.com/Ionaru/easy-markdown-editor), the Markdown parser uses [marked](https://github.com/markedjs/marked), and syntax highlighting uses [highlight.js](https://github.com/highlightjs/highlight.js).
 
 ---
 
-## 目次
+## Table of Contents
 
-- [技術スタック](#技術スタック)
-- [開発環境のセットアップ](#開発環境のセットアップ)
-- [アプリの起動](#アプリの起動)
-- [テスト](#テスト)
-- [本番環境へのデプロイ](#本番環境へのデプロイ)
+- [Tech Stack](#tech-stack)
+- [Development Setup](#development-setup)
+- [Starting the App](#starting-the-app)
+- [Testing](#testing)
+- [Production Deployment](#production-deployment)
 - [Docker](#docker)
-- [アーキテクチャ](#アーキテクチャ)
-- [環境変数一覧](#環境変数一覧)
-- [ライセンス](#ライセンス)
+- [Architecture](#architecture)
+- [Environment Variables](#environment-variables)
+- [License](#license)
 
 ---
 
-## 技術スタック
+## Tech Stack
 
-| 種別 | 技術 |
-|------|------|
-| 言語 | Ruby >= 3.2 |
-| フレームワーク | Ruby on Rails 8.1 |
-| フロントエンド | esbuild / PostCSS (Bootstrap 5 / mdb-ui-kit) / @hotwired/stimulus |
-| Markdown エディタ | EasyMDE (easy-markdown-editor) |
-| テンプレート | HAML |
-| 認証 | Devise |
-| DB（開発） | SQLite3 |
-| DB（本番） | SQLite3 / MySQL 5.7+ / PostgreSQL |
-| テスト | RSpec / FactoryBot / SimpleCov |
+| Category | Technology |
+|----------|------------|
+| Language | Ruby >= 3.2 |
+| Framework | Ruby on Rails 8.1 |
+| Frontend | esbuild / PostCSS (Bootstrap 5 / mdb-ui-kit) / @hotwired/stimulus |
+| Markdown Editor | EasyMDE (easy-markdown-editor) |
+| Templates | HAML |
+| Authentication | Devise |
+| DB (development) | SQLite3 |
+| DB (production) | SQLite3 / MySQL 5.7+ / PostgreSQL |
+| Testing | RSpec / FactoryBot / SimpleCov |
 | CI | GitHub Actions |
 
 ---
 
-## 開発環境のセットアップ
+## Development Setup
 
-### 前提条件
+### Prerequisites
 
-- Ruby >= 3.0
+- Ruby >= 3.2
 - Node.js / Yarn
-- SQLite3（デフォルト）
+- SQLite3 (default)
 
-### 手順
+### Steps
 
 ```bash
-# 1. 依存ライブラリのインストール
+# 1. Install dependencies
 bundle install
 yarn install
 
-# 2. デフォルト設定ファイルを生成
-#    config/database.yml / config/secrets.yml / config/initializers/devise.rb が作成される
+# 2. Generate default config files
+#    Creates config/database.yml / config/secrets.yml / config/initializers/devise.rb
 bundle exec rake radvent:generate_default_settings
 
-# 3. データベース作成 & マイグレーション & 初期データ投入
+# 3. Create database, run migrations, and seed data
 bundle exec rake db:create db:migrate db:seed
 ```
 
-### 初期管理者ユーザー
+### Default Admin User
 
-シード実行後（`db:seed`）、以下の管理者アカウントが利用できます。**ログイン後、必ずパスワードを変更してください。**
+After seeding (`db:seed`), the following admin account is available. **Please change the password after your first login.**
 
-| 項目 | 値 |
-|------|----|
-| メールアドレス | admin@example.com |
-| パスワード | adminadmin |
+| Field | Value |
+|-------|-------|
+| Email | admin@example.com |
+| Password | adminadmin |
 
 ---
 
-## アプリの起動
+## Starting the App
 
 ```bash
 bundle exec rails s
 ```
 
-`http://localhost:3000` でアクセスできます。
+Access the app at `http://localhost:3000`.
 
-日本語と英語のロケールに対応しており、ブラウザの言語設定に応じて自動切り替えされます。
+The app supports Japanese and English locales, and automatically switches based on your browser's language settings.
 
 ---
 
-## テスト
+## Testing
 
-テストフレームワークには **RSpec** を使用しています。
+The test framework used is **RSpec**.
 
-### 全テストの実行
+### Run All Tests
 
 ```bash
 bundle exec rspec spec
 ```
 
-### ディレクトリ・ファイル指定
+### Run Specific Tests
 
 ```bash
-# モデルスペックのみ
+# Model specs only
 bundle exec rspec spec/models
 
-# コントローラースペックのみ
+# Controller specs only
 bundle exec rspec spec/controllers
 
-# 特定ファイルのみ
+# Single file
 bundle exec rspec spec/models/user_spec.rb
 
-# ファイルの特定行のみ
+# Specific line in a file
 bundle exec rspec spec/models/user_spec.rb:42
 ```
 
-### カバレッジレポート
+### Coverage Report
 
-テスト実行後、`coverage/index.html` にカバレッジレポートが生成されます（SimpleCov / LCOV 形式）。
+After running tests, a coverage report is generated at `coverage/index.html` (SimpleCov / LCOV format).
 
 ```bash
 bundle exec rspec spec
 open coverage/index.html
 ```
 
-### テスト構成
+### Test Structure
 
-| ディレクトリ | 内容 |
-|---|---|
-| `spec/models/` | モデルスペック |
-| `spec/controllers/` | コントローラースペック |
-| `spec/factories/` | FactoryBot ファクトリ定義 |
-| `spec/helpers/` | ヘルパースペック |
+| Directory | Contents |
+|-----------|----------|
+| `spec/models/` | Model specs |
+| `spec/controllers/` | Controller specs |
+| `spec/helpers/` | Helper specs |
+| `spec/uploaders/` | Uploader specs |
+| `spec/views/` | View specs |
+| `spec/factories/` | FactoryBot factory definitions |
 
 ---
 
-## 本番環境へのデプロイ
+## Production Deployment
 
 ```bash
-# 1. 設定ファイル生成
+# 1. Generate config files
 bundle exec rake radvent:generate_default_settings
 
-# 2. アセットのプリコンパイル
+# 2. Precompile assets
 bundle exec rake assets:precompile RAILS_ENV=production
 
-# 3. DBマイグレーション
+# 3. Run database migrations
 bundle exec rake db:migrate RAILS_ENV=production
 
-# 4. シークレットキーを設定して起動
+# 4. Set secret key and start
 export SECRET_KEY_BASE=$(bundle exec rails secret)
 bundle exec rails s -e production
 ```
@@ -164,13 +168,13 @@ bundle exec rails s -e production
 
 ## Docker
 
-### docker run での起動
+### Running with docker run
 
 ```bash
 docker run -d -p 3000:3000 -v /host/data/directory:/var/radvent_data haru/radvent
 ```
 
-### docker-compose の例（MySQL）
+### docker-compose Example (MySQL)
 
 ```yaml
 services:
@@ -199,7 +203,7 @@ services:
       - "./docker/mysql:/var/lib/mysql"
 ```
 
-### docker-compose の例（PostgreSQL）
+### docker-compose Example (PostgreSQL)
 
 ```yaml
 services:
@@ -226,52 +230,53 @@ services:
       - "./docker/postgres:/var/lib/postgresql"
 ```
 
-### 環境変数一覧
+### Environment Variables
 
-| キー | 値 | デフォルト |
-|------|----|------------|
+| Key | Value | Default |
+|-----|-------|---------|
 | `DB` | `sqlite3` / `mysql` / `postgres` | `sqlite3` |
-| `DB_NAME` | データベース名 | `radvent` |
-| `DB_USERNAME` | DBユーザー名 | — |
-| `DB_PASSWORD` | DBパスワード | — |
-| `DB_HOST` | DBホスト名 | — |
-| `DB_PORT` | DBポート番号 | MySQL: `3306` / PostgreSQL: `5432` |
-| `DB_CREATE_ON_START` | `true` にすると起動時に `db:create` を実行 | `false` |
-| `RADVENT_TITLE` | ヘッダーに表示するサイト名 | `Advent Calendar` |
+| `DB_NAME` | Database name | `radvent` |
+| `DB_USERNAME` | DB username | — |
+| `DB_PASSWORD` | DB password | — |
+| `DB_HOST` | DB hostname | — |
+| `DB_PORT` | DB port number | MySQL: `3306` / PostgreSQL: `5432` |
+| `DB_CREATE_ON_START` | Set to `true` to run `db:create` on startup | `false` |
+| `RADVENT_TITLE` | Site name displayed in the header | `Advent Calendar` |
 
 ---
 
-## アーキテクチャ
+## Architecture
 
-### モデル関連図
+### Entity Relationship Diagram
 
 ```
-Event ──< AdventCalendarItem >── User
-               │
-               └── Item ──< Comment
-                      └──< Like >── User
+Board ──< Event ──< AdventCalendarItem >── User
+  │                       │
+  └──< BoardMembership    └── Item ──< Comment
+         >── User                └──< Like >── User
 ```
 
-| モデル | 概要 |
-|--------|------|
-| `User` | Devise認証ユーザー。管理者フラグあり |
-| `Event` | アドベントカレンダーイベント |
-| `AdventCalendarItem` | イベントの日付枠（date は Integer 1〜31） |
-| `Item` | Markdown 記事。`AdventCalendarItem` に 1対1 で紐付く |
-| `Like` | 記事へのいいね |
-| `Comment` | 記事へのコメント（`user_name` 文字列のみ保持） |
-| `Attachment` | CarrierWave によるファイル添付 |
-
+| Model | Description |
+|-------|-------------|
+| `User` | Devise-authenticated user. Has admin flag |
+| `Board` | Container for events. Two types: `top` (system-wide) and `user` (user-created), with `public` / `protected` / `private` visibility |
+| `BoardMembership` | Join table between `Board` and `User` (membership management) |
+| `Event` | Advent Calendar event. Belongs to a `Board` |
+| `AdventCalendarItem` | Calendar date slot (`date` is Integer 1–31) |
+| `Item` | Markdown article. Has a one-to-one relationship with `AdventCalendarItem` |
+| `Like` | Like on an article |
+| `Comment` | Comment on an article (stores `user_name` as a string only) |
+| `Attachment` | File attachment via CarrierWave |
 
 ---
 
-## ライセンス
+## License
 
 [MIT](LICENSE)
 
 ---
 
-## クレジット
+## Credits
 
 - Original radvent: [Yohei Koyama](https://github.com/nanonanomachine)
 - Maintainer: [haru](https://github.com/haru)
