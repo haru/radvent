@@ -11,7 +11,7 @@
     "@rails/activestorage": "^8.1.300",
     "dompurify": "^3.4.7",
     "easymde": "^2.21.0",
-    "esbuild": "^0.28.0",
+    "esbuild": "^0.28.1",
     "marked": "^18.0.4",
     "mdb-ui-kit": "^9.3.0",
     "simple-datatables": "^10.2.0"
