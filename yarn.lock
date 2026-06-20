@@ -434,15 +434,15 @@
   resolved "https://registry.npmjs.org/@esbuild/aix-ppc64/-/aix-ppc64-0.28.0.tgz"
   integrity sha512-lhRUCeuOyJQURhTxl4WkpFTjIsbDayJHih5kZC1giwE+MhIzAb7mEsQMqMf18rHLsrb5qI1tafG20mLxEWcWlA==
 
-"@esbuild/android-arm@0.28.0":
-  version "0.28.0"
-  resolved "https://registry.npmjs.org/@esbuild/android-arm/-/android-arm-0.28.0.tgz"
-  integrity sha512-wqh0ByljabXLKHeWXYLqoJ5jKC4XBaw6Hk08OfMrCRd2nP2ZQ5eleDZC41XHyCNgktBGYMbqnrJKq/K/lzPMSQ==
-
 "@esbuild/android-arm64@0.28.0":
   version "0.28.0"
   resolved "https://registry.npmjs.org/@esbuild/android-arm64/-/android-arm64-0.28.0.tgz"
   integrity sha512-+WzIXQOSaGs33tLEgYPYe/yQHf0WTU0X42Jca3y8NWMbUVhp7rUnw+vAsRC/QiDrdD31IszMrZy+qwPOPjd+rw==
+
+"@esbuild/android-arm@0.28.0":
+  version "0.28.0"
+  resolved "https://registry.npmjs.org/@esbuild/android-arm/-/android-arm-0.28.0.tgz"
+  integrity sha512-wqh0ByljabXLKHeWXYLqoJ5jKC4XBaw6Hk08OfMrCRd2nP2ZQ5eleDZC41XHyCNgktBGYMbqnrJKq/K/lzPMSQ==
 
 "@esbuild/android-x64@0.28.0":
   version "0.28.0"
@@ -469,15 +469,15 @@
   resolved "https://registry.npmjs.org/@esbuild/freebsd-x64/-/freebsd-x64-0.28.0.tgz"
   integrity sha512-BXoQai/A0wPO6Es3yFJ7APCiKGc1tdAEOgeTNy3SsB491S3aHn4S4r3e976eUnPdU+NbdtmBuLncYir2tMU9Nw==
 
-"@esbuild/linux-arm@0.28.0":
-  version "0.28.0"
-  resolved "https://registry.npmjs.org/@esbuild/linux-arm/-/linux-arm-0.28.0.tgz"
-  integrity sha512-CjaaREJagqJp7iTaNQjjidaNbCKYcd4IDkzbwwxtSvjI7NZm79qiHc8HqciMddQ6CKvJT6aBd8lO9kN/ZudLlw==
-
 "@esbuild/linux-arm64@0.28.0":
   version "0.28.0"
   resolved "https://registry.npmjs.org/@esbuild/linux-arm64/-/linux-arm64-0.28.0.tgz"
   integrity sha512-RVyzfb3FWsGA55n6WY0MEIEPURL1FcbhFE6BffZEMEekfCzCIMtB5yyDcFnVbTnwk+CLAgTujmV/Lgvih56W+A==
+
+"@esbuild/linux-arm@0.28.0":
+  version "0.28.0"
+  resolved "https://registry.npmjs.org/@esbuild/linux-arm/-/linux-arm-0.28.0.tgz"
+  integrity sha512-CjaaREJagqJp7iTaNQjjidaNbCKYcd4IDkzbwwxtSvjI7NZm79qiHc8HqciMddQ6CKvJT6aBd8lO9kN/ZudLlw==
 
 "@esbuild/linux-ia32@0.28.0":
   version "0.28.0"
@@ -658,7 +658,7 @@
   resolved "https://registry.npmjs.org/@humanwhocodes/retry/-/retry-0.4.3.tgz"
   integrity sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==
 
-"@rails/actioncable@^8.1.300", "@rails/actioncable@>=7.0":
+"@rails/actioncable@>=7.0", "@rails/actioncable@^8.1.300":
   version "8.1.300"
   resolved "https://registry.npmjs.org/@rails/actioncable/-/actioncable-8.1.300.tgz"
   integrity sha512-zOENQsq3NM2jyBY6Z2qtZa3V/R/6OEqA+LGKixQbBMl7kk/J3FXDRcszPe74LsHNgB01jCl/DXu/xA8sHt4I/g==
@@ -714,7 +714,7 @@ acorn-jsx@^5.3.2:
   resolved "https://registry.npmjs.org/acorn-jsx/-/acorn-jsx-5.3.2.tgz"
   integrity sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==
 
-"acorn@^6.0.0 || ^7.0.0 || ^8.0.0", acorn@^8.16.0:
+acorn@^8.16.0:
   version "8.16.0"
   resolved "https://registry.npmjs.org/acorn/-/acorn-8.16.0.tgz"
   integrity sha512-UVJyE9MttOsBQIDKw1skb9nAwQuR5wuGD3+82K6JgJlm/Y+KI92oNsMNGZCYdDsVtRHSak0pcV5Dno5+4jh9sw==
@@ -789,7 +789,7 @@ braces@~3.0.2:
   dependencies:
     fill-range "^7.1.1"
 
-browserslist@^4.28.1, browserslist@^4.28.2, "browserslist@>= 4.21.0":
+browserslist@^4.28.1, browserslist@^4.28.2:
   version "4.28.2"
   resolved "https://registry.npmjs.org/browserslist/-/browserslist-4.28.2.tgz"
   integrity sha512-48xSriZYYg+8qXna9kwqjIVzuQxi+KYWp2+5nCYnYKPTr0LvD89Jqk2Or5ogxz0NUMfIjhh2lIUX/LyX9B4oIg==
@@ -920,10 +920,10 @@ diff-dom@5.2.1:
   resolved "https://registry.npmjs.org/diff-dom/-/diff-dom-5.2.1.tgz"
   integrity sha512-G6WquwIa/XOxiYDYRMxfJj+c+a6LXMv7zgXoAQ3eRjTYkc8Lc4Aq97krTu/B15r243FR7dyeSxDenzKtO6sbfA==
 
-dompurify@^3.4.7:
-  version "3.4.7"
-  resolved "https://registry.npmjs.org/dompurify/-/dompurify-3.4.7.tgz"
-  integrity sha512-2jBxDJY4RR06tQNy4w5FlFH7kfxsQZlufd0sbv+chfHCxeJwrFw2baUDsSwvBISD4K4RDbd0PTfy3uNXsR6siA==
+dompurify@^3.4.11:
+  version "3.4.11"
+  resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-3.4.11.tgz#29c8ba496475f279ef4015784068452fb14a0680"
+  integrity sha512-zhlUV12GsaRzMsf9q5M254YhA4+VuF0fG+QFqu6aYpoGlKtz+w8//jBcGVYBgQkR5GHjUomejY84AV+/uPbWdw==
   optionalDependencies:
     "@types/trusted-types" "^2.0.7"
 
@@ -1010,7 +1010,7 @@ eslint-visitor-keys@^5.0.1:
   resolved "https://registry.npmjs.org/eslint-visitor-keys/-/eslint-visitor-keys-5.0.1.tgz"
   integrity sha512-tD40eHxA35h0PEIZNeIjkHoDR4YjjJp34biM0mDvplBe//mB+IHCqHDGV7pxF+7MklTvighcCPPZC7ynWyjdTA==
 
-eslint@^10.0.0, eslint@^10.4.1, "eslint@^6.0.0 || ^7.0.0 || >=8.0.0":
+eslint@^10.4.1:
   version "10.4.1"
   resolved "https://registry.npmjs.org/eslint/-/eslint-10.4.1.tgz"
   integrity sha512-AyIKhnOBuOAdueD7RB3xB+YeAWScb9jHsJBgH2Hcde8InP5JYhqrRR6iTMHyTEwgENK54Cp44e4v8BwNhsuHuw==
@@ -1384,17 +1384,12 @@ picocolors@^1.0.0, picocolors@^1.1.1:
   resolved "https://registry.npmjs.org/picocolors/-/picocolors-1.1.1.tgz"
   integrity sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==
 
-picomatch@^2.0.4:
+picomatch@^2.0.4, picomatch@^2.2.1:
   version "2.3.2"
   resolved "https://registry.npmjs.org/picomatch/-/picomatch-2.3.2.tgz"
   integrity sha512-V7+vQEJ06Z+c5tSye8S+nHUfI51xoXIXjHQ99cQtKUkQqqO1kO/KCJUfZXuB47h/YBlDhah2H3hdUGXn8ie0oA==
 
-picomatch@^2.2.1:
-  version "2.3.2"
-  resolved "https://registry.npmjs.org/picomatch/-/picomatch-2.3.2.tgz"
-  integrity sha512-V7+vQEJ06Z+c5tSye8S+nHUfI51xoXIXjHQ99cQtKUkQqqO1kO/KCJUfZXuB47h/YBlDhah2H3hdUGXn8ie0oA==
-
-"picomatch@^3 || ^4", picomatch@^4.0.3:
+picomatch@^4.0.3:
   version "4.0.3"
   resolved "https://registry.npmjs.org/picomatch/-/picomatch-4.0.3.tgz"
   integrity sha512-5gTmgEY/sqK6gFXLIsQNH19lWb4ebPDLA4SdLP7dsWkIXHWlG66oPuVvXSGFPppYZz8ZDZq0dYYrbHfBCVUb1Q==
@@ -1735,7 +1730,7 @@ postcss-value-parser@^4.0.0, postcss-value-parser@^4.2.0:
   resolved "https://registry.npmjs.org/postcss-value-parser/-/postcss-value-parser-4.2.0.tgz"
   integrity sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==
 
-postcss@^8, postcss@^8.0.0, postcss@^8.0.3, postcss@^8.1.0, postcss@^8.1.4, postcss@^8.4, postcss@^8.4.6, postcss@^8.5.15, postcss@>=8.0.9:
+postcss@^8.5.15:
   version "8.5.15"
   resolved "https://registry.npmjs.org/postcss/-/postcss-8.5.15.tgz"
   integrity sha512-FfR8sjd4em2T6fb3I2MwAJU7HWVMr9zba+enmQeeWFfCbm+UOC/0X4DS8XtpUTMwWMGbjKYP7xjfNekzyGmB3A==
