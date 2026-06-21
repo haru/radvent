@@ -30,6 +30,6 @@
     "postcss-cli": "^11.0.1",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-import": "^16.1.1",
-    "postcss-preset-env": "^11.3.0"
+    "postcss-preset-env": "^11.3.1"
   }
 }
