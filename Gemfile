@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '>= 3.2.0'
+ruby '>= 3.3.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem 'rails', '~> 8.1.3'
@@ -37,9 +37,9 @@ gem 'sassc-rails', '~> 2.1'
 
 group :development, :test do
   gem 'debug', '~> 1.11', platforms: %i[mri mingw x64_mingw]
-  gem 'rubocop', '~> 1.87', require: false
+  gem 'rubocop', '~> 1.88', require: false
   gem 'rubocop-rails', '~> 2.35', require: false
-  gem 'rubocop-rspec', '~> 3.2', require: false
+  gem 'rubocop-rspec', '~> 3.10', require: false
   gem 'yard', '~> 0.9', require: false
 end
 
@@ -60,7 +60,7 @@ group :test do
   gem 'factory_bot_rails', '~> 6.5'
   gem 'rails-controller-testing', '~> 1.0'
   gem 'rspec-rails', '~> 8.0'
-  gem 'selenium-webdriver', '~> 4.44'
+  gem 'selenium-webdriver', '~> 4.45'
   gem 'simplecov', '~> 0.22'
   gem 'simplecov-lcov', '~> 0.9'
 end
