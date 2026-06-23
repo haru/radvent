@@ -39,7 +39,7 @@ Markdown エディタに [EasyMDE](https://github.com/Ionaru/easy-markdown-edito
 
 | 種別 | 技術 |
 |------|------|
-| 言語 | Ruby >= 3.2 |
+| 言語 | Ruby >= 3.3 |
 | フレームワーク | Ruby on Rails 8.1 |
 | フロントエンド | esbuild / PostCSS (Bootstrap 5 / mdb-ui-kit) / @hotwired/stimulus |
 | Markdown エディタ | EasyMDE (easy-markdown-editor) |
@@ -56,7 +56,7 @@ Markdown エディタに [EasyMDE](https://github.com/Ionaru/easy-markdown-edito
 
 ### 前提条件
 
-- Ruby >= 3.2
+- Ruby >= 3.3
 - Node.js / Yarn
 - SQLite3（デフォルト）
 

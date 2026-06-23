@@ -40,7 +40,7 @@ The Markdown editor uses [EasyMDE](https://github.com/Ionaru/easy-markdown-edito
 
 | Category | Technology |
 |----------|------------|
-| Language | Ruby >= 3.2 |
+| Language | Ruby >= 3.3 |
 | Framework | Ruby on Rails 8.1 |
 | Frontend | esbuild / PostCSS (Bootstrap 5 / mdb-ui-kit) / @hotwired/stimulus |
 | Markdown Editor | EasyMDE (easy-markdown-editor) |
@@ -57,7 +57,7 @@ The Markdown editor uses [EasyMDE](https://github.com/Ionaru/easy-markdown-edito
 
 ### Prerequisites
 
-- Ruby >= 3.2
+- Ruby >= 3.3
 - Node.js / Yarn
 - SQLite3 (default)
 
