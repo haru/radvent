@@ -94,7 +94,7 @@ Event ──< AdventCalendarItem >── User
 
 - Dev: SQLite3. Production: MySQL 5.7+ or PostgreSQL.
 - Env vars: `DB`, `DB_NAME`, `DB_USERNAME`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT`.
-- CI matrix: Ruby 3.2–4.0 × sqlite3/mysql/postgres.
+- CI matrix: Ruby 3.3–4.0 × sqlite3/mysql/postgres.
 
 ## Extended Agent Rules
 
