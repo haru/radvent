@@ -5,7 +5,7 @@ module Radvent
   # Module for version information.
   module Version
     # The current version of Radvent.
-    VERSION = '4.1.1'
+    VERSION = '4.1.0'
 
     # Returns the current version string.
     #

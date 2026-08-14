@@ -38,7 +38,7 @@ gem 'sassc-rails', '~> 2.1'
 group :development, :test do
   gem 'debug', '~> 1.11', platforms: %i[mri mingw x64_mingw]
   gem 'rubocop', '~> 1.88', require: false
-  gem 'rubocop-rails', '~> 2.36', require: false
+  gem 'rubocop-rails', '~> 2.35', require: false
   gem 'rubocop-rspec', '~> 3.10', require: false
   gem 'yard', '~> 0.9', require: false
 end
@@ -60,8 +60,8 @@ group :test do
   gem 'factory_bot_rails', '~> 6.5'
   gem 'rails-controller-testing', '~> 1.0'
   gem 'rspec-rails', '~> 8.0'
-  gem 'selenium-webdriver', '~> 4.46'
-  gem 'simplecov', '~> 1.0'
+  gem 'selenium-webdriver', '~> 4.45'
+  gem 'simplecov', '~> 0.22'
   gem 'simplecov-lcov', '~> 0.9'
 end
 
@@ -74,7 +74,7 @@ gem 'devise', '~> 5.0'
 gem 'devise-bootstrap-views', '~> 1.1'
 gem 'devise-i18n', '~> 1.16'
 gem 'devise-i18n-views', '~> 0.3'
-gem 'haml-rails', '~> 3.1'
+gem 'haml-rails', '~> 3.0'
 gem 'http_accept_language', '~> 2.1'
 gem 'i18n_generators', '~> 2.2'
 gem 'marked-rails', '~> 9.1'
