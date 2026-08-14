@@ -11,22 +11,6 @@
             "enabled": true,
             "environment": {}
         },
-        "serena": {
-            "type": "local",
-            "command": [
-                "uvx",
-                "--from",
-                "git+https://github.com/oraios/serena",
-                "serena",
-                "start-mcp-server",
-                "--context",
-                "ide-assistant",
-                "--project",
-                "/workspaces/radvent"
-            ],
-            "enabled": true,
-            "environment": {}
-        },
         "playwright": {
             "type": "local",
             "command": [

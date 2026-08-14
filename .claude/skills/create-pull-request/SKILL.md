@@ -1,6 +1,6 @@
 ---
 name: "create-pull-request"
-description: "Create a GitHub Pull Request for the current branch. Release branches (releases/*) target main with a version-based title; all other branches target develop with a title and body derived from the spec kit spec.md or the branch diff, plus an appropriate label."
+description: "Create a GitHub Pull Request for the current branch. Release branches (release/*) target main with a version-based title; all other branches target develop with a title and body derived from the spec kit spec.md or the branch diff, plus an appropriate label."
 argument-hint: "(no arguments) — run on the branch you want to open a PR for"
 compatibility: "Requires gh CLI authenticated, a clone with main/develop branches, and (optionally) spec-kit structure under specs/"
 metadata:
@@ -38,12 +38,12 @@ CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
 Decide the path:
 
-- If `CURRENT_BRANCH` matches `releases/*` → **Release PR path** (Step A).
+- If `CURRENT_BRANCH` matches `release/*` → **Release PR path** (Step A).
 - Otherwise → **Feature PR path** (Step B).
 
 ---
 
-## Step A: Release PR path (branch matches `releases/*`)
+## Step A: Release PR path (branch matches `release/*`)
 
 **Base branch:** `main`
 
@@ -157,7 +157,7 @@ gh pr create --base develop --head "$CURRENT_BRANCH" \
 
 | Current branch | Base | Title | Body | Label |
 |----------------|------|-------|------|-------|
-| `releases/*`   | `main`    | `Release <version>` (from `lib/radvent/version.rb`) | same as title | none |
+| `release/*`    | `main`    | `Release <version>` (from `lib/radvent/version.rb`) | same as title | none |
 | other (spec exists) | `develop` | summary of `specs/<slug>/spec.md` | bullet summary of changes | `enhancement` / `bug` / `other` |
 | other (no spec)     | `develop` | auto-generated from branch diff | bullet summary of changes | `enhancement` / `bug` / `other` |
 
