@@ -1,53 +1,10 @@
 {
   "permissions": {
-    "allow": [
-      "Bash(gh run:*)",
-      "Bash(bundle exec:*)",
-      "Bash(gh secret *)",
-      "Bash(git -C /workspaces/radvent branch -a)",
-      "Bash(git -C /workspaces/radvent branch)",
-      "Bash(git -C /workspaces/radvent branch --list)",
-      "Bash(git -C /workspaces/radvent checkout -b feature/003-image-file-upload)",
-      "Bash(mkdir -p /workspaces/radvent/specs/003-image-file-upload/checklists)",
-      "Bash(sh .specify/scripts/bash/check-prerequisites.sh --json --paths-only)",
-      "Bash(SPECIFY_FEATURE=003-image-file-upload .specify/scripts/bash/setup-plan.sh --json)",
-      "Bash(awk '/create_table \"attachments\"/,/end/' db/schema.rb)",
-      "Bash(SPECIFY_FEATURE=003-image-file-upload .specify/scripts/bash/check-prerequisites.sh --json --require-tasks --include-tasks)",
-      "Bash(echo \"---exit:$?---\")",
-      "Bash(bash .specify/scripts/bash/setup-tasks.sh --json)",
-      "Bash(sh .specify/scripts/bash/check-prerequisites.sh --json --require-tasks --include-tasks)",
-      "Bash(bash .specify/scripts/bash/check-prerequisites.sh --json --require-tasks --include-tasks --skip-branch-check)",
-      "Bash(bash .specify/scripts/bash/check-prerequisites.sh --help)",
-      "Bash(bash .specify/scripts/bash/check-prerequisites.sh --paths-only)",
-      "Bash(bash /workspaces/radvent/.specify/scripts/bash/detect-changed-files.sh --json)",
-      "Bash(git -C /workspaces/radvent diff --name-only main...HEAD)",
-      "Bash(git -C /workspaces/radvent diff --name-only HEAD)",
-      "Bash(git -C /workspaces/radvent diff --name-only --cached)",
-      "Bash(bash /workspaces/radvent/.specify/extensions/review/scripts/bash/detect-changed-files.sh --json)",
-      "Bash(git -C /workspaces/radvent diff HEAD -- app/controllers/attachments_controller.rb app/uploaders/image_uploader.rb app/javascript/controllers/editor_controller.js app/views/items/_form.html.haml config/locales/en.yml config/locales/ja.yml spec/controllers/attachments_controller_spec.rb)",
-      "Bash(git -C /workspaces/radvent diff --cached -- app/controllers/attachments_controller.rb app/uploaders/image_uploader.rb app/javascript/controllers/editor_controller.js app/views/items/_form.html.haml config/locales/en.yml config/locales/ja.yml spec/controllers/attachments_controller_spec.rb)",
-      "Bash(netstat -tlnp)",
-      "Bash(cat /etc/hosts | grep -v \"^#\" && ps aux | grep \"rails\\\\|puma\" | grep -v grep)",
-      "Read(//etc/**)",
-      "Bash(curl -s http://localhost:3000/users/sign_in)",
-      "Bash(git -C /workspaces/radvent log --oneline -20 --name-only --pretty=format:\"%H|%s|%ad\" --date=short)",
-      "Bash(mkdir -p /workspaces/radvent/.claude/skills/playwright-screen-access)",
-      "Edit(/.claude/skills/playwright-screen-access/**)",
-      "Bash(docker version *)",
-      "Bash(docker manifest *)",
-      "Bash(gh label *)",
-      "Edit(/.claude/skills/create-pull-request/**)",
-      "Bash(git fetch *)",
-      "Bash(git push *)"
-    ],
-    "additionalDirectories": [
-      "/workspaces/radvent/specs/003-image-file-upload",
-      "/workspaces/radvent/.claude/skills"
-    ]
+    "allow": [],
   },
   "enabledPlugins": {
     "context7@claude-plugins-official": true,
     "everything-claude-code@everything-claude-code": true,
-    "skill-creator@claude-plugins-official": true
+    "skill-creator@claude-plugins-official": false
   }
 }
