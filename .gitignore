@@ -70,3 +70,4 @@ specs/
 doc/
 db/schema.rb
 .claude/settings.json
+.devcontainer/devcontainer-lock.json
