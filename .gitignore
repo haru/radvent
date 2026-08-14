@@ -69,5 +69,5 @@ specs/
 .yardoc/
 doc/
 db/schema.rb
-.claude/settings.json
+.claude/settings.local.json
 .devcontainer/devcontainer-lock.json
