@@ -1,0 +1,22 @@
+{
+$schema: "https://docs.renovatebot.com/renovate-schema.json",
+extends: [
+        "config:recommended"
+    ],
+baseBranchPatterns: [
+        "develop"
+    ],
+packageRules: [
+        {
+description: "Disable updates for MySQL and PostgreSQL (pinned to Redmine supported versions)",
+matchDatasources: [
+                "docker"
+            ],
+matchPackageNames: [
+                "mysql",
+                "postgres"
+            ],
+enabled: false
+        }
+    ]
+}
