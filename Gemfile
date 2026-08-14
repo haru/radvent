@@ -37,7 +37,7 @@ gem 'sassc-rails', '~> 2.1'
 
 group :development, :test do
   gem 'debug', '~> 1.11', platforms: %i[mri mingw x64_mingw]
-  gem 'rubocop', '~> 1.88', require: false
+  gem 'rubocop', '~> 1.89', require: false
   gem 'rubocop-rails', '~> 2.36', require: false
   gem 'rubocop-rspec', '~> 3.10', require: false
   gem 'yard', '~> 0.9', require: false
