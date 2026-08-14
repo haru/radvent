@@ -1,7 +1,7 @@
 ---
 title: Docker Deployment
 type: howto
-sources: [S001]
+sources: [S001, S007]
 updated: 2026-08-14
 ---
 
@@ -57,6 +57,11 @@ docker-compose (PostgreSQL) follows the same shape with `DB: postgres` and a
 | `DB_PORT` | DB port number | MySQL: `3306` / PostgreSQL: `5432` |
 | `DB_CREATE_ON_START` | Set to `true` to run `db:create` on startup | `false` |
 | `RADVENT_TITLE` | Site name displayed in the header | `Advent Calendar` |
+
+These are radvent's own app-level variables. Rails-standard production
+variables (`RAILS_MASTER_KEY`, `SECRET_KEY_BASE`, `RAILS_SERVE_STATIC_FILES`,
+`RAILS_LOG_TO_STDOUT`) are documented in [Configuration](./configuration.md)
+(S007).
 
 ## Manual production deployment (non-Docker) (S001)
 

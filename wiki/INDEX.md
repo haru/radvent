@@ -7,9 +7,16 @@ page files, not here.
 ## component
 - [Tech Stack](pages/tech-stack.md) — languages, frameworks, and tooling the app is built on
 - [Domain Model](pages/domain-model.md) — core models and their relationships (Board, Event, Item, etc.)
+- [Controllers and Routing](pages/controllers-and-routing.md) — routing conventions, layouts, and authorization filters
+- [Views and Frontend](pages/views-and-frontend.md) — HAML templating, Stimulus/Turbo, styling, and the Markdown editor UI
+- [Configuration](pages/configuration.md) — Rails env vars, initializers, and per-environment settings
+- [JavaScript and CSS Asset Pipeline](pages/javascript-asset-pipeline.md) — JS entry point, Stimulus controller registry, MDB/Turbo lifecycle, image upload flow
 
 ## decision
 - [Project Origin](pages/project-origin.md) — fork of nanonanomachine/radvent and what was added
+- [User Boards & Multi-Event Support](pages/user-boards-feature.md) — design spec for user-created boards, board-type access rules, and the object-level permission interface
+- [EasyMDE Editor Migration](pages/easymde-editor-migration.md) — planned removal of the custom preview pane/help modal/file-select UI in favor of EasyMDE's built-ins
+- [Toolbar Image Upload — UX and Access Control](pages/image-upload-toolbar-button.md) — spinner/disable UX, edit-permission upload gate, and the deliberate lack of view-time access control
 
 ## howto
 - [Development Setup](pages/development-setup.md) — local install, running, and testing
