@@ -511,7 +511,7 @@
 
 "@esbuild/linux-x64@0.28.2":
   version "0.28.2"
-  resolved "https://registry.yarnpkg.com/@esbuild/linux-x64/-/linux-x64-0.28.2.tgz#268b36211c146ca54f8fe12c578a8d6ef8979485"
+  resolved "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.28.2.tgz"
   integrity sha512-4xTZr1FUmSoQW4XIWmit3tzQrUTZM+N3P0XV8xROKYF50XfI7xeO90+1bZvNwxIufQ9hDQVRJH5YhgPVF8A/HQ==
 
 "@esbuild/netbsd-arm64@0.28.2":
@@ -658,14 +658,14 @@
   resolved "https://registry.npmjs.org/@humanwhocodes/retry/-/retry-0.4.3.tgz"
   integrity sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==
 
-"@rails/actioncable@>=7.0", "@rails/actioncable@^8.1.300":
-  version "8.1.300"
-  resolved "https://registry.npmjs.org/@rails/actioncable/-/actioncable-8.1.300.tgz"
-  integrity sha512-zOENQsq3NM2jyBY6Z2qtZa3V/R/6OEqA+LGKixQbBMl7kk/J3FXDRcszPe74LsHNgB01jCl/DXu/xA8sHt4I/g==
+"@rails/actioncable@>=7.0", "@rails/actioncable@^8.1.301":
+  version "8.1.301"
+  resolved "https://registry.npmjs.org/@rails/actioncable/-/actioncable-8.1.301.tgz"
+  integrity sha512-n4Q6DfnqnZ604xgqeqURNyUmk6JtPoKf++UeV9agvecIkV3AcpgJs5D08Kx8WnZNgM7u4av9ezfIXv+CgdV94A==
 
 "@rails/activestorage@^8.1.301":
   version "8.1.301"
-  resolved "https://registry.yarnpkg.com/@rails/activestorage/-/activestorage-8.1.301.tgz#3d5e4204fb106bb30277f025058dbcc36dc475cb"
+  resolved "https://registry.npmjs.org/@rails/activestorage/-/activestorage-8.1.301.tgz"
   integrity sha512-o+gxhV96Wa/NpVdTWib9iR9RWlqWjjsylPv16muSFUjIhI6usZJBjM1y93h9cjwWfuW/FxI5QONeH3EFv3+cbg==
   dependencies:
     spark-md5 "^3.0.1"
@@ -895,7 +895,7 @@ cssesc@^3.0.0:
 
 dayjs@^1.11.21:
   version "1.11.21"
-  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.21.tgz#57f87562e62de76f3c704bd2b8d522fc33068eb2"
+  resolved "https://registry.npmjs.org/dayjs/-/dayjs-1.11.21.tgz"
   integrity sha512-98IT+HOahAisibz/yjKbzuOBwYcjJ7BCLPzARyHiyEBmRz4fatF+KPJszEHXsGYjUG234aH/cOjW1wwTbKUZlA==
 
 debug@^4.3.1, debug@^4.3.2:
@@ -948,9 +948,9 @@ emoji-regex@^8.0.0:
   resolved "https://registry.npmjs.org/emoji-regex/-/emoji-regex-8.0.0.tgz"
   integrity sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==
 
-esbuild@^0.28.2:
+esbuild@^0.28.1:
   version "0.28.2"
-  resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.28.2.tgz#0f43bd1bad955b72d24e2261e3abe5957ccf0816"
+  resolved "https://registry.npmjs.org/esbuild/-/esbuild-0.28.2.tgz"
   integrity sha512-HKVLS8dvII+xoKW9kmqxbRKrnWEXfJJr/FZhhJmiqIB0e053QNYFqOBouTMO/k5sID4MvCiUCvv8b9M4h32wIA==
   optionalDependencies:
     "@esbuild/aix-ppc64" "0.28.2"
@@ -1796,7 +1796,7 @@ shebang-regex@^3.0.0:
 
 simple-datatables@^10.3.0:
   version "10.3.0"
-  resolved "https://registry.yarnpkg.com/simple-datatables/-/simple-datatables-10.3.0.tgz#04ccc95ff3c684b8c7f642ec2e748944d0df384b"
+  resolved "https://registry.npmjs.org/simple-datatables/-/simple-datatables-10.3.0.tgz"
   integrity sha512-/9XcZ/AzZWYNMTTwUcUqsNhZXD1KIHg4tWCUhRx5qPDOnRVG2gNdRDR1euNTCbQxfAypu78ucgWc/BOMFfuxAQ==
   dependencies:
     dayjs "^1.11.21"
