@@ -893,10 +893,10 @@ cssesc@^3.0.0:
   resolved "https://registry.npmjs.org/cssesc/-/cssesc-3.0.0.tgz"
   integrity sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==
 
-dayjs@^1.11.10:
-  version "1.11.19"
-  resolved "https://registry.npmjs.org/dayjs/-/dayjs-1.11.19.tgz"
-  integrity sha512-t5EcLVS6QPBNqM2z8fakk/NKel+Xzshgt8FFKAn+qwlD1pzZWxh0nVCrvFK7ZDb6XucZeF9z8C7CBWTRIVApAw==
+dayjs@^1.11.21:
+  version "1.11.21"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.21.tgz#57f87562e62de76f3c704bd2b8d522fc33068eb2"
+  integrity sha512-98IT+HOahAisibz/yjKbzuOBwYcjJ7BCLPzARyHiyEBmRz4fatF+KPJszEHXsGYjUG234aH/cOjW1wwTbKUZlA==
 
 debug@^4.3.1, debug@^4.3.2:
   version "4.4.3"
@@ -1794,12 +1794,12 @@ shebang-regex@^3.0.0:
   resolved "https://registry.npmjs.org/shebang-regex/-/shebang-regex-3.0.0.tgz"
   integrity sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==
 
-simple-datatables@^10.2.0:
-  version "10.2.0"
-  resolved "https://registry.npmjs.org/simple-datatables/-/simple-datatables-10.2.0.tgz"
-  integrity sha512-Lq3k5JZ4WXT0G0dhIAUfYc3M+GRs9y8U15wfbF7i67/rPm8wa43Iyrac+yP+lXQVTy1MPCPvxvZ44P9N4k0OhQ==
+simple-datatables@^10.3.0:
+  version "10.3.0"
+  resolved "https://registry.yarnpkg.com/simple-datatables/-/simple-datatables-10.3.0.tgz#04ccc95ff3c684b8c7f642ec2e748944d0df384b"
+  integrity sha512-/9XcZ/AzZWYNMTTwUcUqsNhZXD1KIHg4tWCUhRx5qPDOnRVG2gNdRDR1euNTCbQxfAypu78ucgWc/BOMFfuxAQ==
   dependencies:
-    dayjs "^1.11.10"
+    dayjs "^1.11.21"
     diff-dom "5.2.1"
 
 slash@^5.0.0:
