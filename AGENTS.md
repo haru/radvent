@@ -5,9 +5,11 @@
 - **NEVER commit, push, or create PRs** without explicit user permission.
 - **NEVER decide commit messages** — ask the user.
 - **Language**: All commit messages and source code comments must be written in **English**.
+- **KISS, DRY, YAGNI**: Keep implementations simple, avoid duplicating logic, and don't build for hypothetical future requirements.
 - **TDD is mandatory**: Write tests before implementation. Red → Green → Refactor.
 - **Lint must pass** before a task is considered complete: `sh build-scripts/lint.sh`.
-- **Test coverage ≥ 90%** — reports at `coverage/`.
+- **Test coverage ≥ 90% (C0 / statement coverage)** — reports at `coverage/`.
+- **No easy fallbacks**: treat errors as errors — never silently swallow or paper over them with a default.
 
 ## Commands
 
@@ -84,11 +86,21 @@ Event ──< AdventCalendarItem >── User
 - **Error handling**: `render_not_found` / `render_forbidden` / `admin_user!` from ApplicationController.
 - **Commit messages**: Conventional commits format (`feat:`, `fix:`, `refactor:`, etc.). English only.
 
+## Documentation
+
+- **`docs/`** — project documentation. Check for a relevant file by name before starting work that might already be documented. When adding a new doc, give it a clear, descriptive filename.
+- **ADRs (`docs/adr/`)** — record every architecturally significant decision as an Architecture Decision Record.
+  - **Append-only**: never edit or delete a past ADR. A change of direction gets a new ADR that supersedes the old one, not an edit to it.
+  - Every ADR must be linked from `docs/adr/README.md`.
+  - If it's unclear whether a decision warrants an ADR, ask the user.
+
 ## Git Flow
 
-- Branches: `main` (production), `develop` (integration), `feature/*`, `bugfix/*`.
+- Branches: `main` (production), `develop` (integration), `feature/*`, `bugfix/*`, `release/*`, `hotfix/*`.
 - Never commit directly to `main` or `develop`.
-- Create PRs from feature/bugfix branches into `develop`.
+- `feature/*`, `bugfix/*` — branch from `develop`, PR back into `develop`.
+- `release/*` — branch from `develop`, PR into `main` (see `create-release-branch` / `create-pull-request` skills).
+- `hotfix/*` — branch from `main`, PR into both `main` and `develop`.
 
 ## Database
 
