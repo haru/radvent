@@ -71,7 +71,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Cache Bootsnap
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: tmp/cache/bootsnap-compile-cache
           key: bootsnap-${{ matrix.ruby_version }}-${{ matrix.db }}-${{ hashFiles('Gemfile.lock') }}
