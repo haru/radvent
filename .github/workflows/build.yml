@@ -33,7 +33,7 @@ jobs:
     container:
       image: ruby:4.0
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v7
       - name: Install
         run: bash -x ./build-scripts/install.sh
       - name: Lint
@@ -69,7 +69,7 @@ jobs:
         DB_PASSWORD: dbpassword
         DB_HOST: ${{ matrix.db }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v7
       - name: Cache Bootsnap
         uses: actions/cache@v6
         with:
