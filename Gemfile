@@ -60,7 +60,7 @@ group :test do
   gem 'factory_bot_rails', '~> 6.5'
   gem 'rails-controller-testing', '~> 1.0'
   gem 'rspec-rails', '~> 8.0'
-  gem 'selenium-webdriver', '~> 4.46'
+  gem 'selenium-webdriver', '~> 4.47'
   gem 'simplecov', '~> 1.0'
   gem 'simplecov-lcov', '~> 0.9'
 end
