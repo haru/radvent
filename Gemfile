@@ -37,7 +37,7 @@ gem 'sassc-rails', '~> 2.1'
 
 group :development, :test do
   gem 'debug', '~> 1.11', platforms: %i[mri mingw x64_mingw]
-  gem 'rubocop', '~> 1.88', require: false
+  gem 'rubocop', '~> 1.89', require: false
   gem 'rubocop-rails', '~> 2.36', require: false
   gem 'rubocop-rspec', '~> 3.10', require: false
   gem 'yard', '~> 0.9', require: false
@@ -61,7 +61,7 @@ group :test do
   gem 'rails-controller-testing', '~> 1.0'
   gem 'rspec-rails', '~> 8.0'
   gem 'selenium-webdriver', '~> 4.46'
-  gem 'simplecov', '~> 1.0'
+  gem 'simplecov', '~> 1.1'
   gem 'simplecov-lcov', '~> 0.9'
 end
 
