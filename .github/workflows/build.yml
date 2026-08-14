@@ -84,7 +84,7 @@ jobs:
       #   env:
       #     CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
       - name: Slack Notification on Failure
-        uses: rtCamp/action-slack-notify@v2.0.2
+        uses: rtCamp/action-slack-notify@v2.4.0
         if: failure() && env.SLACK_WEBHOOK != ''
         env:
           SLACK_CHANNEL: general
