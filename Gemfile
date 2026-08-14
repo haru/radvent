@@ -61,7 +61,7 @@ group :test do
   gem 'rails-controller-testing', '~> 1.0'
   gem 'rspec-rails', '~> 8.0'
   gem 'selenium-webdriver', '~> 4.46'
-  gem 'simplecov', '~> 1.0'
+  gem 'simplecov', '~> 1.1'
   gem 'simplecov-lcov', '~> 0.9'
 end
 
