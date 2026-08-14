@@ -14,7 +14,7 @@
     "esbuild": "^0.28.1",
     "marked": "^18.0.7",
     "mdb-ui-kit": "^9.3.0",
-    "simple-datatables": "^10.2.0"
+    "simple-datatables": "^10.3.0"
   },
   "scripts": {
     "build": "node esbuild.config.mjs",
