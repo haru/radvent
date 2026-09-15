@@ -34,6 +34,22 @@
       }
     },
     {
+      "name": "Rails server(postgres)",
+      "type": "rdbg",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "command": "${workspaceRoot}/bin/rails",
+      "script": "server",
+      "useBundler": true,
+      "env": {
+        "SECRET_KEY_BASE": "XXXXXXXXXXXXXXXXXXXXXX",
+        "DB_USERNAME": "postgres",
+        "DB_PASSWORD": "postgres",
+        "DB_HOST": "db",
+        "DB": "postgres"
+      }
+    },
+    {
       "name": "RSpec - all",
       "type": "rdbg",
       "request": "launch",
