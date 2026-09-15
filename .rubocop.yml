@@ -64,3 +64,15 @@ RSpec/AnyInstance:
 # テスト対象によっては多くの let が必要になる
 RSpec/MultipleMemoizedHelpers:
   Max: 9
+
+# Migration specs have no described class, same as spec/requests etc.
+# NOTE: rubocop-rspec's built-in Exclude list isn't merged with this one, so
+# its defaults are listed here explicitly too.
+RSpec/DescribeClass:
+  Exclude:
+    - '**/spec/features/**/*'
+    - '**/spec/requests/**/*'
+    - '**/spec/routing/**/*'
+    - '**/spec/system/**/*'
+    - '**/spec/views/**/*'
+    - 'spec/db/**/*'

@@ -5,9 +5,11 @@
 - **NEVER commit, push, or create PRs** without explicit user permission.
 - **NEVER decide commit messages** — ask the user.
 - **Language**: All commit messages and source code comments must be written in **English**.
+- **KISS, DRY, YAGNI**: Keep implementations simple, avoid duplicating logic, and don't build for hypothetical future requirements.
 - **TDD is mandatory**: Write tests before implementation. Red → Green → Refactor.
 - **Lint must pass** before a task is considered complete: `sh build-scripts/lint.sh`.
-- **Test coverage ≥ 90%** — reports at `coverage/`.
+- **Test coverage ≥ 90% (C0 / statement coverage)** — reports at `coverage/`.
+- **No easy fallbacks**: treat errors as errors — never silently swallow or paper over them with a default.
 
 ## Commands
 
@@ -15,7 +17,7 @@
 # Setup (first time)
 bundle install && yarn install
 bundle exec rake radvent:generate_default_settings   # generates config/database.yml, secrets, devise
-bundle exec rake db:create db:migrate
+bundle exec rake db:create db:migrate db:seed         # seed creates default admin (admin@example.com / adminadmin)
 
 # Dev server
 bundle exec rails s
@@ -64,9 +66,9 @@ Event ──< AdventCalendarItem >── User
 | **Comment has no user_id** | Stores `user_name` as string only |
 | **Views are HAML only** | Never create `.erb` files. Use `.html.haml`. |
 | **JS framework is Stimulus** | Do NOT use jQuery. Register controllers in `app/javascript/controllers/index.js`. |
-| **CSS is PostCSS only** | Source: `app/javascript/stylesheets/application.css`. No `.scss` files. |
+| **Two CSS pipelines** | App styles are SCSS via Sprockets+sassc-rails (`app/assets/stylesheets/application.scss`, `@import "partials/*"`). Vendor CSS (mdb-ui-kit/easymde/simple-datatables) is bundled by PostCSS (`app/javascript/stylesheets/application.css` → `app/assets/builds/application_pack.css`, run `yarn build:css`). SassC compressor is **disabled** (`assets.css_compressor = nil`) because MDB crashes it — don't re-enable. |
 | **Stimulus Turbo guard** | In `connect()`, check `this.element.dataset.rendered === 'true'` before re-processing. |
-| **Layout switching** | Admin: `layout 'admin'`. `EventsController#show` overrides with `render layout: 'application'`. |
+| **Layout switching** | No class-level `layout`. Admin views render per-action with `render layout: 'admin'` (see `UsersController#index`, `#edit_info`). |
 | **Migrations: always generate** | `rails generate migration ...` — never write by hand (cross-DB portability). If raw SQL needed, use `CURRENT_TIMESTAMP`. |
 | **i18n** | Default locale `:ja`, timezone `Tokyo`. Always use `t()` for user-facing strings. |
 | **Generator settings** | Controller specs enabled; view/helper/routing/request specs disabled. FactoryBot only. |
@@ -84,11 +86,22 @@ Event ──< AdventCalendarItem >── User
 - **Error handling**: `render_not_found` / `render_forbidden` / `admin_user!` from ApplicationController.
 - **Commit messages**: Conventional commits format (`feat:`, `fix:`, `refactor:`, etc.). English only.
 
+## Documentation
+
+- **`wiki/INDEX.md`** — LLM Wiki catalog of component/decision/howto pages (one-line summary each). Consult it first when checking existing specifications or design decisions to avoid re-deriving known context. Query with `/speckit.wiki.query`.
+- **`docs/`** — project documentation. Check for a relevant file by name before starting work that might already be documented. When adding a new doc, give it a clear, descriptive filename.
+- **ADRs (`docs/adr/`)** — record every architecturally significant decision as an Architecture Decision Record.
+  - **Append-only**: never edit or delete a past ADR. A change of direction gets a new ADR that supersedes the old one, not an edit to it.
+  - Every ADR must be linked from `docs/adr/README.md`.
+  - If it's unclear whether a decision warrants an ADR, ask the user.
+
 ## Git Flow
 
-- Branches: `main` (production), `develop` (integration), `feature/*`, `bugfix/*`.
+- Branches: `main` (production), `develop` (integration), `feature/*`, `bugfix/*`, `release/*`, `hotfix/*`.
 - Never commit directly to `main` or `develop`.
-- Create PRs from feature/bugfix branches into `develop`.
+- `feature/*`, `bugfix/*` — branch from `develop`, PR back into `develop`.
+- `release/*` — branch from `develop`, PR into `main` (see `create-release-branch` / `create-pull-request` skills).
+- `hotfix/*` — branch from `main`, PR into both `main` and `develop`.
 
 ## Database
 

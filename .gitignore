@@ -50,6 +50,9 @@ pickle-email-*.html
 yarn-debug.log*
 .yarn-integrity
 
+# yarn is the project's package manager; npm's lockfile isn't used (see docs/adr/0001-use-yarn-not-npm.md)
+/package-lock.json
+
 config/initializers/secret_token.rb
 # project specific
 /vendor/bundle

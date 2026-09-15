@@ -5,17 +5,23 @@ on:
       - ".devcontainer/**"
       - ".serena/**"
       - ".vscode/**"
+      - ".specify/**"
       - "lib/radvent/version.rb"
+      - "AGENTS.md"
       - "CLAUDE.md"
       - "README.md"
+      - "wiki/**"
   pull_request:
     paths-ignore:
       - ".devcontainer/**"
       - ".serena/**"
       - ".vscode/**"
+      - ".specify/**"
       - "lib/radvent/version.rb"
+      - "AGENTS.md"
       - "CLAUDE.md"
       - "README.md"
+      - "wiki/**"
   workflow_dispatch:
 permissions:
   contents: read
@@ -27,7 +33,7 @@ jobs:
     container:
       image: ruby:4.0
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v7
       - name: Install
         run: bash -x ./build-scripts/install.sh
       - name: Lint
@@ -41,12 +47,12 @@ jobs:
         ruby_version: ["3.3", "3.4", "4.0"]
     services:
       mysql:
-        image: mysql:8
+        image: mysql:26
         options: --health-cmd "mysqladmin ping -h localhost" --health-interval 20s --health-timeout 10s --health-retries 10
         env:
           MYSQL_ROOT_PASSWORD: dbpassword
       postgres:
-        image: postgres:14
+        image: postgres:18
         env:
           POSTGRES_USER: root
           POSTGRES_PASSWORD: dbpassword
@@ -63,9 +69,9 @@ jobs:
         DB_PASSWORD: dbpassword
         DB_HOST: ${{ matrix.db }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v7
       - name: Cache Bootsnap
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: tmp/cache/bootsnap-compile-cache
           key: bootsnap-${{ matrix.ruby_version }}-${{ matrix.db }}-${{ hashFiles('Gemfile.lock') }}
@@ -73,12 +79,12 @@ jobs:
         run: bash -x ./build-scripts/install.sh
       - name: Build
         run: bash -x ./build-scripts/build.sh
-      - uses: codecov/codecov-action@v2
+      - uses: codecov/codecov-action@v7
       # - uses: paambaati/codeclimate-action@v2.7.5
       #   env:
       #     CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
       - name: Slack Notification on Failure
-        uses: rtCamp/action-slack-notify@v2.0.2
+        uses: rtCamp/action-slack-notify@v2.4.0
         if: failure() && env.SLACK_WEBHOOK != ''
         env:
           SLACK_CHANNEL: general
