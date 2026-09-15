@@ -103,6 +103,25 @@ RSpec.describe ItemsController do
       get :new
       expect(response).to render_template :new
     end
+
+    context 'when rendering the view' do
+      render_views
+
+      it 'returns http success' do
+        aci = create(:advent_calendar_item, date: 8, event: event, user: user)
+        get :new, params: { id: aci.id, date: aci.date }
+        expect(response).to have_http_status(:success)
+      end
+    end
+
+    context 'when rendering the view without an advent_calendar_item id' do
+      render_views
+
+      it 'returns http success' do
+        get :new
+        expect(response).to have_http_status(:success)
+      end
+    end
   end
 
   describe 'GET #edit' do
@@ -124,6 +143,16 @@ RSpec.describe ItemsController do
       get :edit, params: { use_route: :radvent, id: non_existent_id }
       expect(response).to have_http_status(:not_found)
     end
+
+    context 'when rendering the view' do
+      render_views
+
+      it 'returns http success' do
+        item = advent_calendar_item.item
+        get :edit, params: { use_route: :radvent, id: item }
+        expect(response).to have_http_status(:success)
+      end
+    end
   end
 
   describe 'POST #create' do
@@ -138,6 +167,17 @@ RSpec.describe ItemsController do
       allow_any_instance_of(Item).to receive(:save).and_return(false)
       post :create, params: { item: attributes_for(:item) }
       expect(response).to render_template :new
+    end
+
+    context 'when rendering the view after a failed save' do
+      render_views
+
+      it 'returns http success' do
+        aci = create(:advent_calendar_item, date: 8, event: event, user: user)
+        allow_any_instance_of(Item).to receive(:save).and_return(false)
+        post :create, params: { item: attributes_for(:item, advent_calendar_item_id: aci.id) }
+        expect(response).to have_http_status(:success)
+      end
     end
 
     it 'redirects to advent_calendar_items#show if the new item is saved' do
@@ -175,6 +215,16 @@ RSpec.describe ItemsController do
       allow_any_instance_of(Item).to receive(:save).and_return(false)
       patch :update, params: { id: item, item: attributes_for(:item) }
       expect(response).to render_template :edit
+    end
+
+    context 'when rendering the view after a failed save' do
+      render_views
+
+      it 'returns http success' do
+        allow_any_instance_of(Item).to receive(:save).and_return(false)
+        patch :update, params: { id: item, item: attributes_for(:item) }
+        expect(response).to have_http_status(:success)
+      end
     end
 
     it 'redirects to advent_calendar_items#show if the item is updated' do
