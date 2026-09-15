@@ -1,4 +1,4 @@
-= render "shared/header_fluid", id: @item.advent_calendar_item_id, date: @date, event: @item.advent_calendar_item.event
+= render "shared/header_fluid", id: @item.advent_calendar_item_id, date: @date, event: @item.advent_calendar_item&.event
 %div.container-fluid
   %h2 #{t "views.items.new.title"}
   %hr

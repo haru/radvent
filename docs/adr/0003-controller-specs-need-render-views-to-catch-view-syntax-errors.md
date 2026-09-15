@@ -16,7 +16,7 @@ The existing `GET #edit` controller spec still passed, because RSpec
 controller specs stub view rendering by default: `render_template :edit`
 only asserts which template was selected and never compiles or evaluates it.
 The broken template therefore slipped through the whole test suite
-(`bundle exec rspec spec`, 294 examples green) and was only discovered when
+(`bundle exec rspec spec`, all examples green) and was only discovered when
 the screen was opened for real (see `specs/005-haml-render-smoke-test`).
 
 ## Decision
