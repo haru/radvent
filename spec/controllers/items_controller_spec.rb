@@ -113,6 +113,15 @@ RSpec.describe ItemsController do
         expect(response).to have_http_status(:success)
       end
     end
+
+    context 'when rendering the view without an advent_calendar_item id' do
+      render_views
+
+      it 'returns http success' do
+        get :new
+        expect(response).to have_http_status(:success)
+      end
+    end
   end
 
   describe 'GET #edit' do
