@@ -65,8 +65,9 @@ RSpec/AnyInstance:
 RSpec/MultipleMemoizedHelpers:
   Max: 9
 
-# マイグレーションスペックは対象クラスを持たない（spec/requests等と同様の扱い）
-# NOTE: rubocop-rspecのデフォルトExcludeとマージされないため、既定値もここに明記する
+# Migration specs have no described class, same as spec/requests etc.
+# NOTE: rubocop-rspec's built-in Exclude list isn't merged with this one, so
+# its defaults are listed here explicitly too.
 RSpec/DescribeClass:
   Exclude:
     - '**/spec/features/**/*'

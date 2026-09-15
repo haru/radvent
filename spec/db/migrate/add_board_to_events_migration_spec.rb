@@ -10,17 +10,31 @@ RSpec.describe 'AddBoardToEvents migration' do
   # transaction semantics.
   self.use_transactional_tests = false
 
-  before do
+  # The shared test schema already includes migrations that run after this one
+  # (composite unique indexes on [:board_id, :title] and [:board_id, :name]),
+  # and those indexes reference :board_id too. All of them must be dropped
+  # before :board_id itself, and all of them must be put back afterwards, or
+  # this group corrupts the schema every other spec file relies on.
+  around do |example|
     connection = ActiveRecord::Base.connection
-    connection.remove_index :events, :board_id if connection.index_exists?(:events, :board_id)
+    board_id_indexes = connection.indexes(:events).select { |index| index.columns.include?('board_id') }
+
+    board_id_indexes.each { |index| connection.remove_index :events, name: index.name }
     connection.remove_column :events, :board_id
     Event.reset_column_information
-  end
 
-  after do
+    example.run
+
     Event.delete_all
     Board.delete_all
     User.delete_all
+
+    connection.remove_index :events, :board_id if connection.index_exists?(:events, :board_id)
+    connection.remove_column :events, :board_id if connection.column_exists?(:events, :board_id)
+    connection.add_column :events, :board_id, :integer, null: false
+    board_id_indexes.each do |index|
+      connection.add_index :events, index.columns, unique: index.unique, name: index.name
+    end
     Event.reset_column_information
     Board.reset_column_information
   end
@@ -32,16 +46,19 @@ RSpec.describe 'AddBoardToEvents migration' do
     Board.reset_column_information
   end
 
-  # events.board_id が存在しない状態を再現しているため、`belongs_to :board` の
-  # association writer（内部で board_id への書き込みを試みる）を経由すると
-  # ActiveModel::MissingAttributeError になる。マイグレーション適用前の実データを
-  # 模すため、board を一切介さない生SQLで events 行を直接挿入する。
+  # :board_id doesn't exist on events at this point in the test, so going
+  # through the `belongs_to :board` association writer (which touches
+  # board_id internally) would raise ActiveModel::MissingAttributeError.
+  # Insert legacy event rows via raw SQL, bypassing Board entirely, to
+  # reproduce the pre-migration production data this migration must handle.
   def insert_legacy_event!(user)
     connection = ActiveRecord::Base.connection
     unique = SecureRandom.hex(4)
+    title = connection.quote("Legacy Event #{unique}")
+    name = connection.quote("legacy-event-#{unique}")
     connection.execute(<<~SQL.squish)
       INSERT INTO events (title, name, version, created_by_id, updated_by_id, created_at, updated_at)
-      VALUES (#{connection.quote("Legacy Event #{unique}")}, #{connection.quote("legacy-event-#{unique}")}, 1, #{user.id}, #{user.id}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+      VALUES (#{title}, #{name}, 1, #{user.id}, #{user.id}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
     SQL
   end
 

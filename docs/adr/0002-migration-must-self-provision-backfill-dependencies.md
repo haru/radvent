@@ -22,10 +22,15 @@ is not part of `rake db:migrate` and is not guaranteed to have run before it.
 On any environment that already had `events` rows and had not yet run
 `db:seed`, the subquery returned `NULL`, `events.board_id` stayed `NULL` for
 every row, and the following `change_column_null :events, :board_id, false`
-failed with a NOT NULL violation. Because Rails runs migrations inside a
-transaction, the failure rolled back the whole migration, so it could never
-be recorded as applied on such environments (see research.md Decision 1 for
-this feature, `specs/004-fix-board-migration/research.md`).
+failed with a NOT NULL violation.
+
+On transactional adapters (PostgreSQL, SQLite), Rails runs a migration inside
+a transaction, so this failure rolled back the whole migration and it was
+never recorded as applied. On MySQL, DDL statements (`add_column`,
+`add_index`) are not transactional and implicitly commit, so the column and
+index from the earlier steps stayed in place even though the migration
+failed and never got recorded — leaving the database in a partially-migrated
+state that a plain re-run of `db:migrate` could not cleanly recover from.
 
 ## Decision
 
