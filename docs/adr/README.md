@@ -8,3 +8,4 @@ unchanged.
 | ADR | Title | Status |
 |-----|-------|--------|
 | [0001](0001-use-yarn-not-npm.md) | Use Yarn as the sole JS package manager; drop package-lock.json | Accepted |
+| [0002](0002-migration-must-self-provision-backfill-dependencies.md) | Migrations must self-provision their backfill dependencies | Accepted |

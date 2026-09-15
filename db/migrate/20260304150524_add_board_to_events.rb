@@ -8,6 +8,12 @@ class AddBoardToEvents < ActiveRecord::Migration[8.1]
     reversible do |dir|
       dir.up do
         execute <<~SQL.squish
+          INSERT INTO boards (board_type, name, created_at, updated_at)
+          SELECT 0, 'TOP', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+          WHERE NOT EXISTS (SELECT 1 FROM boards WHERE board_type = 0)
+        SQL
+
+        execute <<~SQL.squish
           UPDATE events
           SET board_id = (SELECT id FROM boards WHERE board_type = 0 LIMIT 1)
           WHERE board_id IS NULL
