@@ -124,6 +124,16 @@ RSpec.describe ItemsController do
       get :edit, params: { use_route: :radvent, id: non_existent_id }
       expect(response).to have_http_status(:not_found)
     end
+
+    context 'when rendering the view' do
+      render_views
+
+      it 'returns http success' do
+        item = advent_calendar_item.item
+        get :edit, params: { use_route: :radvent, id: item }
+        expect(response).to have_http_status(:success)
+      end
+    end
   end
 
   describe 'POST #create' do

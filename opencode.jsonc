@@ -26,21 +26,11 @@
     },
     "permission": {
         "bash": {
-            "*": "ask",
-            "ls *": "allow",
-            "cat *": "allow",
-            "git status": "allow",
-            "git diff *": "allow",
-            "git log *": "allow",
+            "*": "allow",
             "git commit *": "ask",
-            "git push *": "deny",
-            "npm run *": "allow",
-            "npm test": "allow",
-            "cargo check": "allow"
+            "git push *": "deny"
         },
-        "edit": {
-            "*": "ask"
-        },
+        "edit": "allow",
         "read": "allow",
         "glob": "allow",
         "grep": "allow",
