@@ -64,3 +64,14 @@ RSpec/AnyInstance:
 # テスト対象によっては多くの let が必要になる
 RSpec/MultipleMemoizedHelpers:
   Max: 9
+
+# マイグレーションスペックは対象クラスを持たない（spec/requests等と同様の扱い）
+# NOTE: rubocop-rspecのデフォルトExcludeとマージされないため、既定値もここに明記する
+RSpec/DescribeClass:
+  Exclude:
+    - '**/spec/features/**/*'
+    - '**/spec/requests/**/*'
+    - '**/spec/routing/**/*'
+    - '**/spec/system/**/*'
+    - '**/spec/views/**/*'
+    - 'spec/db/**/*'
