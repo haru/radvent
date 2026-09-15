@@ -3,6 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe 'AddBoardToEvents migration' do
+  # `remove_column`/`add_column` are DDL. On MySQL, DDL is not transactional and
+  # implicitly commits any open transaction, so relying on `use_transactional_fixtures`
+  # here would silently disable rollback (and leak rows into later specs) on that
+  # adapter. Isolate this group explicitly instead of depending on DB-specific
+  # transaction semantics.
+  self.use_transactional_tests = false
+
   before do
     connection = ActiveRecord::Base.connection
     connection.remove_index :events, :board_id if connection.index_exists?(:events, :board_id)
@@ -11,6 +18,9 @@ RSpec.describe 'AddBoardToEvents migration' do
   end
 
   after do
+    Event.delete_all
+    Board.delete_all
+    User.delete_all
     Event.reset_column_information
     Board.reset_column_information
   end
@@ -69,6 +79,31 @@ RSpec.describe 'AddBoardToEvents migration' do
       run_migration_up!
 
       expect(Board.where(board_type: :top).count).to eq(1)
+    end
+  end
+
+  context 'when a top board already exists before the migration runs' do
+    let!(:existing_top_board) { create(:board, :top) }
+
+    before do
+      user = create(:user)
+      2.times { insert_legacy_event!(user) }
+    end
+
+    it 'completes without raising an error' do
+      expect { run_migration_up! }.not_to raise_error
+    end
+
+    it 'does not create a duplicate top board' do
+      run_migration_up!
+
+      expect(Board.where(board_type: :top).count).to eq(1)
+    end
+
+    it 'backfills events onto the pre-existing top board instead of a new one' do
+      run_migration_up!
+
+      expect(Event.pluck(:board_id)).to all(eq(existing_top_board.id))
     end
   end
 end
