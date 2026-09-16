@@ -211,7 +211,8 @@ en:
       delete_board: 'Delete Board'
       delete_warning: 'Are you sure you want to delete this board? This action cannot be undone.'
       visibility_warning: 'Changing visibility may affect existing member access.'
-      confirm_delete: 'Enter the board ID to confirm deletion'
+      confirm_delete: 'Enter the board ID to confirm deletion. The board ID is %{board_id}.'
+      delete_id_mismatch: 'The board ID you entered does not match, so the board cannot be deleted.'
     form:
       board_id: 'Board ID'
       board_id_hint: 'Allowed characters: lowercase letters, numbers, hyphens, underscores (max 64 chars)'

@@ -59,6 +59,17 @@ class Board < ApplicationRecord
     owner_id == user.id
   end
 
+  # Returns true if the given input matches this board's normalized board_id.
+  #
+  # The input is normalized the same way as +normalize_board_id+ (stripped and
+  # downcased) before comparison, mirroring the existing board_id normalization.
+  #
+  # @param input [Object, nil] raw user input (e.g. +params[:confirm_board_id]+)
+  # @return [Boolean]
+  def board_id_match?(input)
+    input.to_s.strip.downcase == board_id
+  end
+
   # --- Permissionable implementation ---
 
   def visible?(user)

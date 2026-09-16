@@ -5,6 +5,7 @@ import EditorController from './editor_controller'
 import DatatableController from './datatable_controller'
 import PopoverController from './popover_controller'
 import NavbarDropdownController from './navbar_dropdown_controller'
+import BoardDeleteConfirmationController from './board_delete_confirmation_controller'
 
 application.register('markdown', MarkdownController)
 application.register('comment', CommentController)
@@ -12,5 +13,6 @@ application.register('editor', EditorController)
 application.register('datatable', DatatableController)
 application.register('popover', PopoverController)
 application.register('navbar-dropdown', NavbarDropdownController)
+application.register('board-delete-confirmation', BoardDeleteConfirmationController)
 
 export { application }
