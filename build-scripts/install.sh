@@ -29,6 +29,10 @@ bundle exec rake db:create
 bundle exec rake db:migrate
 bundle exec rake db:seed
 
+# db:seed above only verifies seeding itself does not raise; restore an
+# empty schema so seeded rows don't leak into the test suite that runs next.
+bundle exec rake db:schema:load
+
 
 
 

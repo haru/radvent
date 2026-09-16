@@ -81,7 +81,7 @@ controller-side callers of that interface or a separate mechanism.
 | Users | Admin-only account/profile management (S004) |
 | Comments / Likes | Social interaction on items; `Comment` has no `user_id` — stores `user_name` as a string (S004) |
 | Attachments | Image uploads via CarrierWave for the Markdown editor (S004) |
-| Themes | Single `update` action persisting `current_user.theme`; planned by feature `007-theme-switch` (S015) |
+| Themes | Single `update` action persisting `current_user.theme`; added by feature `007-theme-switch` (S015) |
 
 See [Domain Model](./domain-model.md) for the underlying entities and
 [Tech Stack](./tech-stack.md) for Devise and the locale-detection stack.

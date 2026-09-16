@@ -2,14 +2,19 @@ import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
   static targets = ['radio']
-  static values = { updateFailedMessage: String }
+  static values = { updateFailedMessage: String, path: String }
 
   change(event) {
+    const themeMeta = document.querySelector('meta[name="theme"]')
     const previousTheme = document.documentElement.dataset.theme
     const newTheme = event.target.value
     document.documentElement.dataset.theme = newTheme
+    if (themeMeta) themeMeta.content = newTheme
 
-    fetch('/theme', {
+    this.requestToken = {}
+    const requestToken = this.requestToken
+
+    fetch(this.pathValue, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -17,16 +22,19 @@ export default class extends Controller {
       },
       body: JSON.stringify({ theme: newTheme })
     }).then((response) => {
-      if (!response.ok) {
-        this._rollback(previousTheme)
+      if (requestToken !== this.requestToken) return
+      if (!response.ok || response.redirected) {
+        this._rollback(previousTheme, themeMeta)
       }
     }).catch(() => {
-      this._rollback(previousTheme)
+      if (requestToken !== this.requestToken) return
+      this._rollback(previousTheme, themeMeta)
     })
   }
 
-  _rollback(previousTheme) {
+  _rollback(previousTheme, themeMeta) {
     document.documentElement.dataset.theme = previousTheme
+    if (themeMeta) themeMeta.content = previousTheme
     this.radioTargets.forEach((radio) => {
       radio.checked = radio.value === previousTheme
     })

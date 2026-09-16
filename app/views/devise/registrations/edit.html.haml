@@ -25,14 +25,14 @@
         = f.password_field :current_password, class: 'form-control'
       = f.submit t('.update', default: 'Update'), class: 'btn btn-primary'
 
-.panel.panel-default.mb-4{ data: { controller: 'theme', theme_update_failed_message_value: t('theme.update_failed') } }
-  .panel-heading
-    %h4= t('theme.label')
-  .panel-body
-    - %w[light dark system].each do |theme_value|
-      .form-check.form-check-inline
-        = radio_button_tag :theme, theme_value, current_user.theme == theme_value, class: 'form-check-input', id: "theme_#{theme_value}", data: { theme_target: 'radio', action: 'change->theme#change' }
-        = label_tag "theme_#{theme_value}", t("theme.#{theme_value}"), class: 'form-check-label'
+.panel.panel-default.mb-4{ data: { controller: 'theme', theme_update_failed_message_value: t('theme.update_failed'), theme_path_value: theme_path } }
+  %fieldset
+    %legend.panel-heading= t('theme.label')
+    .panel-body
+      - %w[light dark system].each do |theme_value|
+        .form-check.form-check-inline
+          = radio_button_tag :theme, theme_value, current_user.theme == theme_value, class: 'form-check-input', id: "theme_#{theme_value}", data: { theme_target: 'radio', action: 'change->theme#change' }
+          = label_tag "theme_#{theme_value}", t("theme.#{theme_value}"), class: 'form-check-label'
 
 %p
   = "#{t('.unhappy', default: 'Unhappy')}? "

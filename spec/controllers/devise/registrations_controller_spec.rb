@@ -23,6 +23,16 @@ RSpec.describe Devise::RegistrationsController do
         system_radio = response.body[/<input[^>]*id="theme_system"[^>]*>/]
         expect(system_radio).to include('checked="checked"')
       end
+
+      it 'passes the theme update path as a Stimulus value instead of hardcoding it in JS' do
+        get :edit
+        expect(response.body).to include("data-theme-path-value=\"#{theme_path}\"")
+      end
+
+      it 'associates the theme radio group with its heading for assistive technology' do
+        get :edit
+        expect(response.body).to match(%r{<fieldset[^>]*>.*<legend[^>]*>.*</legend>.*theme_light.*</fieldset>}m)
+      end
     end
   end
 end

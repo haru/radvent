@@ -43,17 +43,14 @@ image-upload flow are in
 SCSS manifest at `app/assets/stylesheets/application.scss`, with
 component partials under `app/assets/stylesheets/partials/` (e.g.
 `items.scss`) (S005). Theming uses CSS custom properties (`--main-bg-color`,
-`--top-menu-bg-color`, etc.); dark mode switches automatically via a
-`prefers-color-scheme` media query — no separate stylesheet or JS toggle
-(S005).
-
-**Planned**: feature `007-theme-switch` reorganizes this around a
-`data-theme` attribute rendered server-side on `<html>`, adding a manual
-Light/Dark/System picker on My Page while keeping the System option
-behaviorally identical to today's automatic OS-driven switching. CSS
-variable values themselves are unchanged. See
-[Manual Theme Selection](./theme-switch.md) for the full decision record
-(S015).
+`--top-menu-bg-color`, etc.), switched via a `data-theme` attribute rendered
+server-side on `<html>` and updated instantly on selection by
+`theme_controller` (S005) (S015). A manual Light/Dark/System picker on My
+Page persists the choice on the user account; the System option keeps the
+`prefers-color-scheme` media query as its fallback, so it stays behaviorally
+identical to the previous automatic OS-driven switching. CSS variable values
+themselves are unchanged. See [Manual Theme Selection](./theme-switch.md)
+for the full decision record (S015).
 
 ## Item authoring UI
 

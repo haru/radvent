@@ -66,9 +66,10 @@ and should wait for `db:seed`.
 - `db/seeds.rb` remains the only place that must run after `db:migrate` for
   a fresh install to have a working default admin login
   (`bundle exec rake db:create db:migrate db:seed`, per `README.md`).
-  `build-scripts/install.sh` (used by CI) does not call `db:seed`; no
-  current test depends on the seeded admin existing, but this means CI
-  installs do not get that account today.
+  `build-scripts/install.sh` (used by CI) intentionally calls `db:seed`
+  after `db:migrate` too, to verify seeding itself does not raise; the test
+  database it seeds is restored to a clean, empty schema before the test
+  suite runs, so no test depends on the seeded admin/board rows existing.
 - Reviewers should flag any new migration that calls `.create!`/`.save!`
   (or similar) on an application model purely to provision default/seed
   data, rather than to backfill that migration's own schema change.
