@@ -13,7 +13,10 @@ class ThemesController < ApplicationController
       return
     end
 
-    current_user.update(theme: params[:theme])
-    render json: { theme: current_user.theme }
+    if current_user.update(theme: params[:theme])
+      render json: { theme: current_user.theme }
+    else
+      render json: { error: current_user.errors.full_messages }, status: :unprocessable_content
+    end
   end
 end

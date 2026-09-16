@@ -30,12 +30,24 @@ RSpec.describe ThemesController do
       end
     end
 
+    context 'when the save fails' do
+      before do
+        allow_any_instance_of(User).to receive(:update).and_return(false)
+      end
+
+      it 'does not respond with success' do # rubocop:disable RSpec/MultipleExpectations
+        patch :update, params: { theme: 'dark' }
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response.parsed_body).not_to eq('theme' => 'dark')
+      end
+    end
+
     context 'when not signed in' do
       before { sign_out user }
 
-      it 'is not authorized' do
+      it 'redirects instead of updating the theme' do
         patch :update, params: { theme: 'light' }
-        expect(response).not_to have_http_status(:ok)
+        expect(response).to have_http_status(:redirect)
       end
     end
   end
