@@ -68,6 +68,11 @@ RSpec.describe BoardsController do
         get :new
         expect(response.body).not_to include('translation missing')
       end
+
+      it 'does not render a placeholder on the board_id field' do
+        get :new
+        expect(response.body).not_to include('placeholder="my-board"')
+      end
     end
   end
 

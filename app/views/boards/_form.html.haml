@@ -9,7 +9,7 @@
   - if board.new_record?
     %div.mb-3
       = f.label :board_id, t('boards.form.board_id'), class: 'form-label'
-      = f.text_field :board_id, class: 'form-control', placeholder: 'my-board'
+      = f.text_field :board_id, class: 'form-control'
       %small.form-text.text-muted= t('boards.form.board_id_hint')
 
   %div.mb-3
