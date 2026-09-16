@@ -1,11 +1,16 @@
 ---
 name: speckit-wiki-init
-description: Create the project wiki skeleton (schema, index, source registry) — the three-layer LLM Wiki structure
+description: Create the project wiki skeleton (schema, index, source registry) — the
+  three-layer LLM Wiki structure
 compatibility: Requires spec-kit project structure with .specify/ directory
 metadata:
-  author: github-spec-kit
-  source: wiki:commands/speckit.wiki.init.md
+  author: formin
+  source: extension:wiki
+user-invocable: true
+disable-model-invocation: false
 ---
+
+# Wiki Init Skill
 
 # Initialize LLM Wiki
 

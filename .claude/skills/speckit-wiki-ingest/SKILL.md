@@ -1,11 +1,16 @@
 ---
 name: speckit-wiki-ingest
-description: Ingest a source (feature artifacts, file, or URL) and update the related wiki pages with citations
+description: Ingest a source (feature artifacts, file, or URL) and update the related
+  wiki pages with citations
 compatibility: Requires spec-kit project structure with .specify/ directory
 metadata:
-  author: github-spec-kit
-  source: wiki:commands/speckit.wiki.ingest.md
+  author: formin
+  source: extension:wiki
+user-invocable: true
+disable-model-invocation: false
 ---
+
+# Wiki Ingest Skill
 
 # Ingest a Source into the Wiki
 
