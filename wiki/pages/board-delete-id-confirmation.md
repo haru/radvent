@@ -63,5 +63,5 @@ so the client-side real-time disable/enable is verified by a manual
 `quickstart.md` walkthrough rather than automated tests — the server-side
 check is what carries the actual security guarantee (S013).
 
-See [Domain Model](./domain-model.md#authorization) for `Board#deletable?`
+See [Authorization](./authorization.md) for `Board#deletable?`
 and the authorization gate this feature builds on.

@@ -1,8 +1,8 @@
 ---
 title: Views and Frontend
 type: component
-sources: [S005, S010, S011]
-updated: 2026-08-14
+sources: [S005, S010, S011, S015]
+updated: 2026-09-16
 ---
 
 # Views and Frontend
@@ -46,6 +46,14 @@ component partials under `app/assets/stylesheets/partials/` (e.g.
 `--top-menu-bg-color`, etc.); dark mode switches automatically via a
 `prefers-color-scheme` media query — no separate stylesheet or JS toggle
 (S005).
+
+**Planned**: feature `007-theme-switch` reorganizes this around a
+`data-theme` attribute rendered server-side on `<html>`, adding a manual
+Light/Dark/System picker on My Page while keeping the System option
+behaviorally identical to today's automatic OS-driven switching. CSS
+variable values themselves are unchanged. See
+[Manual Theme Selection](./theme-switch.md) for the full decision record
+(S015).
 
 ## Item authoring UI
 
