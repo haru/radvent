@@ -2,7 +2,7 @@
 title: JavaScript and CSS Asset Pipeline
 type: component
 sources: [S010, S011, S012, S013]
-updated: 2026-08-14
+updated: 2026-09-16
 ---
 
 # JavaScript and CSS Asset Pipeline

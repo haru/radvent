@@ -2,7 +2,7 @@
 title: Domain Model
 type: component
 sources: [S001, S002, S003, S004, S006, S008, S009, S010, S012, S013]
-updated: 2026-08-14
+updated: 2026-09-16
 ---
 
 # Domain Model
@@ -80,8 +80,9 @@ authorization is out of scope there), which is a gap relative to S009's
 [Toolbar Image Upload — UX and Access Control](./image-upload-toolbar-button.md)
 (S012).
 
-Deleting a `Board` additionally requires typing the board's exact ID before
-the delete button activates, re-verified server-side via
+Deleting a `Board` additionally requires typing the board's normalized ID
+(case-insensitive, surrounding whitespace ignored) before the delete button
+activates, re-verified server-side via
 `Board#board_id_match?` — a defense-in-depth layer on top of the existing
 `deletable?` gate. Full design, including the reversed decision to keep the
 native browser confirm dialog alongside it, is in

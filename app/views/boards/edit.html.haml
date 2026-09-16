@@ -20,9 +20,10 @@
                       html: { data: { controller: 'board-delete-confirmation',
                                       'board-delete-confirmation-expected-id-value': @board.board_id,
                                       'turbo-confirm': t('boards.edit.delete_warning') } } do
+            = label_tag :confirm_board_id, t('boards.edit.confirm_board_id_label'), class: 'form-label'
             = text_field_tag :confirm_board_id, nil, class: 'form-control mb-2',
                              data: { 'board-delete-confirmation-target': 'input',
                                      action: 'input->board-delete-confirmation#check' }
             = button_tag t('boards.edit.delete_board'), type: 'submit',
-                         class: 'btn btn-danger', disabled: true,
+                         class: 'btn btn-danger',
                          data: { 'board-delete-confirmation-target': 'submit' }

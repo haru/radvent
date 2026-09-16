@@ -211,6 +211,16 @@ RSpec.describe BoardsController do
         get :edit, params: { board_id: board.board_id }
         expect(response.body).to include(%(data-turbo-confirm="#{I18n.t('boards.edit.delete_warning')}"))
       end
+
+      it 'renders a label associated with the confirm_board_id field' do
+        get :edit, params: { board_id: board.board_id }
+        expect(response.body).to include('for="confirm_board_id"')
+      end
+
+      it 'does not render the delete button disabled by default' do
+        get :edit, params: { board_id: board.board_id }
+        expect(response.body).not_to include('disabled="disabled"')
+      end
     end
 
     context 'when authenticated as admin' do
@@ -294,6 +304,11 @@ RSpec.describe BoardsController do
       it 'redirects back to edit' do
         delete :destroy, params: { board_id: board.board_id, confirm_board_id: 'wrong-id' }
         expect(response).to redirect_to(edit_board_path(board.board_id))
+      end
+
+      it 'responds with See Other when the board ID does not match' do
+        delete :destroy, params: { board_id: board.board_id, confirm_board_id: 'wrong-id' }
+        expect(response).to have_http_status(:see_other)
       end
 
       it 'sets a mismatch alert' do

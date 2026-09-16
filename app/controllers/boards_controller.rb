@@ -61,7 +61,7 @@ class BoardsController < ApplicationController
       @board.destroy
       redirect_to boards_path, status: :see_other, notice: t('boards.deleted')
     else
-      redirect_to edit_board_path(@board.board_id), alert: t('boards.edit.delete_id_mismatch')
+      redirect_to edit_board_path(@board.board_id), status: :see_other, alert: t('boards.edit.delete_id_mismatch')
     end
   end
 
