@@ -17,6 +17,7 @@ page files, not here.
 - [User Boards & Multi-Event Support](pages/user-boards-feature.md) — design spec for user-created boards, board-type access rules, and the object-level permission interface
 - [EasyMDE Editor Migration](pages/easymde-editor-migration.md) — planned removal of the custom preview pane/help modal/file-select UI in favor of EasyMDE's built-ins
 - [Toolbar Image Upload — UX and Access Control](pages/image-upload-toolbar-button.md) — spinner/disable UX, edit-permission upload gate, and the deliberate lack of view-time access control
+- [Board Deletion — ID Confirmation & Dialog](pages/board-delete-id-confirmation.md) — typed board-ID gate for deletion, server-side re-verification, and the reversed decision to keep the native confirm dialog too
 
 ## howto
 - [Development Setup](pages/development-setup.md) — local install, running, and testing

@@ -17,3 +17,5 @@ Sources are immutable inputs — the wiki never edits them.
 | S010 | https://deepwiki.com/haru/radvent/4.3-javascript-and-css-asset-pipeline | url | 2026-08-14 | 2026-08-14 | javascript-asset-pipeline.md, views-and-frontend.md, domain-model.md |
 | S011 | specs/002-easymde-editor/spec.md | feature-artifact | 2026-08-14 | 2026-08-14 | easymde-editor-migration.md, views-and-frontend.md, javascript-asset-pipeline.md |
 | S012 | specs/003-image-file-upload/spec.md | feature-artifact | 2026-08-14 | 2026-08-14 | image-upload-toolbar-button.md, javascript-asset-pipeline.md, domain-model.md, easymde-editor-migration.md |
+| S013 | specs/006-board-delete-id-confirm/research.md | feature-artifact | 2026-09-16 | 2026-09-16 | board-delete-id-confirmation.md, domain-model.md, controllers-and-routing.md, javascript-asset-pipeline.md |
+| S014 | specs/006-board-delete-id-confirm/plan.md (decision sections) | feature-artifact | 2026-09-16 | 2026-09-16 | board-delete-id-confirmation.md |
