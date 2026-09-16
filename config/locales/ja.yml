@@ -399,6 +399,12 @@ ja:
     errors:
       user_not_found: 'ユーザーが見つかりません'
       already_member: 'すでにメンバーです'
+  theme:
+    label: 'テーマ'
+    system: 'システム設定'
+    light: 'Light'
+    dark: 'Dark'
+    update_failed: 'テーマの保存に失敗しました'
   devise:
     sessions:
       signed_in: ""

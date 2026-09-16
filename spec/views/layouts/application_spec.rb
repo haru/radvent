@@ -36,6 +36,12 @@ RSpec.describe 'layouts/application' do
       render
       expect(rendered).to include(I18n.t('menu.board_management'))
     end
+
+    it "renders a theme meta tag with the user's theme" do
+      regular_user.update!(theme: 'dark')
+      render
+      expect(Capybara.string(rendered).find('meta[name="theme"]', visible: false)[:content]).to eq('dark')
+    end
   end
 
   context 'when user is not authenticated' do
@@ -56,6 +62,11 @@ RSpec.describe 'layouts/application' do
     it 'does not render マイページ link' do
       render
       expect(rendered).not_to include(I18n.t('menu.my_page'))
+    end
+
+    it 'renders a theme meta tag falling back to system' do
+      render
+      expect(Capybara.string(rendered).find('meta[name="theme"]', visible: false)[:content]).to eq('system')
     end
   end
 end

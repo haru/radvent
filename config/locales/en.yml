@@ -245,3 +245,9 @@ en:
     errors:
       user_not_found: 'User not found'
       already_member: 'Already a member'
+  theme:
+    label: 'Theme'
+    system: 'System'
+    light: 'Light'
+    dark: 'Dark'
+    update_failed: 'Failed to save theme'

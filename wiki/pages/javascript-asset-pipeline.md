@@ -1,7 +1,7 @@
 ---
 title: JavaScript and CSS Asset Pipeline
 type: component
-sources: [S010, S011, S012, S013]
+sources: [S010, S011, S012, S013, S015]
 updated: 2026-09-16
 ---
 
@@ -37,6 +37,7 @@ calls `new mdb.Input(el).init()` / `.update()`, bound to `turbo:load` and
 | `popover_controller` | MDB Popover lifecycle — init on `connect`, dispose on `disconnect` (S010) |
 | `navbar_dropdown_controller` | Mobile/desktop dropdown state; closes on outside click (S010) |
 | `board_delete_confirmation_controller` | Disables the board-delete submit button until the typed board ID matches the target board's ID in real time (S013) |
+| `theme_controller` | Feature `007-theme-switch`: applies the picked theme to `data-theme` immediately, `fetch`-PATCHes `theme_path`, and rolls back on failure — see [Manual Theme Selection](./theme-switch.md) (S015) |
 
 Controllers are auto-registered via a manifest rather than explicit imports —
 this cuts boilerplate but means a controller's filename/naming must follow
@@ -71,7 +72,7 @@ existing content untouched. See
 Feature `003-image-file-upload` specifies that button's behavior in detail:
 a spinner shown and the button disabled for the duration of the upload;
 upload gated by the same `edit_permission?` check used elsewhere (see
-[Domain Model](./domain-model.md#authorization)), while viewing an uploaded
+[Authorization](./authorization.md)), while viewing an uploaded
 image's URL remains unrestricted. Full decision record in
 [Toolbar Image Upload — UX and Access Control](./image-upload-toolbar-button.md)
 (S012).

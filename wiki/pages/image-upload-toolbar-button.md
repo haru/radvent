@@ -31,7 +31,7 @@ S012). Only one file per operation; multi-file selection is out of scope
   (FR-009) (S012).
 - **Upload authorization**: uploading is gated on the user having edit
   permission on the target item — the existing `edit_permission?` guard (see
-  [Domain Model](./domain-model.md#authorization)) — but **viewing** an
+  [Authorization](./authorization.md)) — but **viewing** an
   uploaded image's URL gets no new access control: anyone who knows the URL
   can view it, regardless of the item's public/protected/private state, same
   as existing clipboard-paste-uploaded images. View-time authorization is

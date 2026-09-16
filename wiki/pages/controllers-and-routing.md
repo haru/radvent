@@ -1,7 +1,7 @@
 ---
 title: Controllers and Routing
 type: component
-sources: [S004, S009, S013]
+sources: [S004, S009, S013, S015]
 updated: 2026-09-16
 ---
 
@@ -19,6 +19,11 @@ routes with slug-based access for the main entities (S004):
 - Admin routes: `delete 'users/delete/:id'`, `put 'user/:id/update'` (S004).
 - Items: both collection and member preview routes, to support live
   Markdown preview before persistence (S004).
+- Theme: `patch 'theme' => 'themes#update'` (feature `007-theme-switch`) — a
+  lightweight, `current_user`-only endpoint deliberately kept separate from
+  Devise's registration-update route so a theme change doesn't require
+  `current_password`; see
+  [Manual Theme Selection](./theme-switch.md) (S015).
 
 Slug-based routes for events/boards require careful route ordering to avoid
 conflicts with other resource routes (S004).
@@ -46,7 +51,7 @@ All controllers inherit from `ApplicationController`, which provides (S004):
 ## Authorization filters
 
 - `admin_user!` — renders 403 Forbidden unless the signed-in user has the
-  `admin` flag set (S004); see [Domain Model](./domain-model.md#authorization).
+  `admin` flag set (S004); see [Authorization](./authorization.md).
 - `check_visibility` (`BoardsController`) — restricts board access based on
   the `visibility` enum (`public` / `protected` / `private`) (S004).
 - `edit_permission?` (Items / AdventCalendarItems controllers) — allows edits
@@ -76,6 +81,7 @@ controller-side callers of that interface or a separate mechanism.
 | Users | Admin-only account/profile management (S004) |
 | Comments / Likes | Social interaction on items; `Comment` has no `user_id` — stores `user_name` as a string (S004) |
 | Attachments | Image uploads via CarrierWave for the Markdown editor (S004) |
+| Themes | Single `update` action persisting `current_user.theme`; added by feature `007-theme-switch` (S015) |
 
 See [Domain Model](./domain-model.md) for the underlying entities and
 [Tech Stack](./tech-stack.md) for Devise and the locale-detection stack.

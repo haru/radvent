@@ -1,7 +1,7 @@
 ---
 title: Domain Model
 type: component
-sources: [S001, S002, S003, S004, S006, S008, S009, S010, S012, S013]
+sources: [S001, S002, S003, S004, S006, S008, S009, S010, S012, S013, S015]
 updated: 2026-09-16
 ---
 
@@ -22,7 +22,7 @@ Board ──< Event ──< AdventCalendarItem >── User
 
 | Model | Description |
 |-------|-------------|
-| `User` | Devise-authenticated user. Requires `name` present. Has an `admin` boolean flag, checked via an `admin?` helper (S008) |
+| `User` | Devise-authenticated user. Requires `name` present. Has an `admin` boolean flag, checked via an `admin?` helper (S008). Feature `007-theme-switch` adds a `theme` enum (`system`/`light`/`dark`, string-backed, default `system`) controlling UI theme — see [Manual Theme Selection](./theme-switch.md) (S015) |
 | `Board` | Container for events. Two types: `top` (system-wide) and `user` (user-created), with `public` / `protected` / `private` visibility. Routed by slug via `board_id` (S003) |
 | `BoardMembership` | Join table between `Board` and `User` (membership management, owner-added only) |
 | `Event` | Advent Calendar event. Belongs to a `Board`. `name` doubles as the routing slug; `title` and `name` both have unique indexes (S003) |
@@ -48,45 +48,15 @@ elsewhere (S008; matches the testing-config note in
 [Development Setup](./development-setup.md)). The authentication key (email)
 is matched case-insensitively with whitespace stripped (S008). Devise
 handles authentication ("who you are"); the `admin` flag drives application
-authorization ("what you can do") — see Authorization below (S008).
+authorization ("what you can do") — see [Authorization](./authorization.md)
+(S008).
 
 ## Authorization
 
-`ApplicationController` enforces admin-only actions with an `admin_user!`
-filter that checks the `User#admin` boolean flag and renders 403 Forbidden
-otherwise (S002, S004). `UsersController` renders admin-facing user-management
-views through a separate admin layout from the public-facing templates
-(S002). `BoardsController` restricts access per-board via a `check_visibility`
-filter on the `visibility` enum, and Items/AdventCalendarItems controllers
-gate edits with an `edit_permission?` guard limited to the creator or an
-admin (S004). Full routing and controller breakdown in
-[Controllers and Routing](./controllers-and-routing.md).
-
-The design spec for user-created boards additionally calls for `Board`,
-`Event`, `AdventCalendarItem`, `Item`, `Attachment`, and `Comment` to each
-implement a `visible?(user)` / `editable?(user)` / `deletable?(user)`
-interface, with admins always authorized, so that access control is
-centralized per object rather than duplicated per controller (S009) — see
-[User Boards & Multi-Event Support](./user-boards-feature.md) for the full
-board-type rules and rationale.
-
-Uploading an `Attachment` (via the editor's image-upload button) is gated by
-the same `edit_permission?` check as the parent item, but *viewing* an
-uploaded image's URL currently has no access control at all — anyone who
-knows the URL can view it, independent of the item's visibility. Feature
-`003-image-file-upload` confirms this is intentional (view-time
-authorization is out of scope there), which is a gap relative to S009's
-`visible?(user)` target for `Attachment` — see
-[Toolbar Image Upload — UX and Access Control](./image-upload-toolbar-button.md)
-(S012).
-
-Deleting a `Board` additionally requires typing the board's normalized ID
-(case-insensitive, surrounding whitespace ignored) before the delete button
-activates, re-verified server-side via
-`Board#board_id_match?` — a defense-in-depth layer on top of the existing
-`deletable?` gate. Full design, including the reversed decision to keep the
-native browser confirm dialog alongside it, is in
-[Board Deletion — ID Confirmation & Dialog](./board-delete-id-confirmation.md)
-(S013).
+Devise handles authentication; a separate `admin` flag and a set of
+controller-level filters and object-level rules drive authorization — moved
+to its own page once this one passed the wiki's word-count split threshold.
+See [Authorization](./authorization.md) for admin filters, board visibility,
+edit/delete gating, and the image-upload access-control gap.
 
 Built with the stack in [Tech Stack](./tech-stack.md).
