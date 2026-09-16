@@ -1,5 +1,5 @@
 
-%html
+%html{ "data-theme" => current_user&.theme || 'system' }
   %head
     %title= system_title
     %meta{"http-equiv"=>"X-UA-Compatible", :content=>"IE=Edge"}

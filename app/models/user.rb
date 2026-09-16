@@ -12,6 +12,8 @@ class User < ApplicationRecord
          :timeoutable, :recoverable
   validates :name, presence: true
 
+  enum :theme, %w[system light dark].index_by(&:itself)
+
   # Checks if the user is an administrator.
   #
   # @return [Boolean] true if the user has admin privileges
