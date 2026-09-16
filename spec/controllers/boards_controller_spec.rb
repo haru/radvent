@@ -206,6 +206,11 @@ RSpec.describe BoardsController do
         get :edit, params: { board_id: board.board_id }
         expect(response.body).to include("ボードIDは #{board.board_id} です。")
       end
+
+      it 'renders a native turbo-confirm dialog on the delete form' do
+        get :edit, params: { board_id: board.board_id }
+        expect(response.body).to include(%(data-turbo-confirm="#{I18n.t('boards.edit.delete_warning')}"))
+      end
     end
 
     context 'when authenticated as admin' do
