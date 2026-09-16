@@ -4,12 +4,8 @@ description: Refresh the managed Spec Kit section in the coding agent context fi
 compatibility: Requires spec-kit project structure with .specify/ directory
 metadata:
   author: spec-kit-core
-  source: extension:agent-context
-user-invocable: true
-disable-model-invocation: false
+  source: agent-context:commands/speckit.agent-context.update.md
 ---
-
-# Agent Context Update Skill
 
 # Update Coding Agent Context
 

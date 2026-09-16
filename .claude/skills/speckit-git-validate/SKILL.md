@@ -4,12 +4,8 @@ description: Validate current branch follows feature branch naming conventions
 compatibility: Requires spec-kit project structure with .specify/ directory
 metadata:
   author: spec-kit-core
-  source: extension:git
-user-invocable: true
-disable-model-invocation: false
+  source: git:commands/speckit.git.validate.md
 ---
-
-# Git Validate Skill
 
 # Validate Feature Branch
 

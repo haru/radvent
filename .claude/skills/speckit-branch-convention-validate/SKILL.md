@@ -1,16 +1,11 @@
 ---
 name: speckit-branch-convention-validate
-description: Check all feature branches and spec folders against the configured naming
-  convention
+description: Check all feature branches and spec folders against the configured naming convention
 compatibility: Requires spec-kit project structure with .specify/ directory
 metadata:
   author: Quratulain-bilal
-  source: extension:branch-convention
-user-invocable: true
-disable-model-invocation: false
+  source: branch-convention:commands/speckit.branch-convention.validate.md
 ---
-
-# Branch Convention Validate Skill
 
 # Validate Branch Convention
 

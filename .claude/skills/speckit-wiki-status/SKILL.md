@@ -1,16 +1,11 @@
 ---
 name: speckit-wiki-status
-description: 'Compact wiki snapshot: counts, freshness, open lint issues, and one
-  recommended next action'
+description: 'Compact wiki snapshot: counts, freshness, open lint issues, and one recommended next action'
 compatibility: Requires spec-kit project structure with .specify/ directory
 metadata:
   author: formin
-  source: extension:wiki
-user-invocable: true
-disable-model-invocation: false
+  source: wiki:commands/speckit.wiki.status.md
 ---
-
-# Wiki Status Skill
 
 # Wiki Status
 

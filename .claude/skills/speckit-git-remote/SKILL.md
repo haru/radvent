@@ -4,12 +4,8 @@ description: Detect Git remote URL for GitHub integration
 compatibility: Requires spec-kit project structure with .specify/ directory
 metadata:
   author: spec-kit-core
-  source: extension:git
-user-invocable: true
-disable-model-invocation: false
+  source: git:commands/speckit.git.remote.md
 ---
-
-# Git Remote Skill
 
 # Detect Git Remote URL
 

@@ -1,16 +1,11 @@
 ---
 name: speckit-branch-convention-rename
-description: Rename non-compliant branches and spec folders to match the configured
-  convention
+description: Rename non-compliant branches and spec folders to match the configured convention
 compatibility: Requires spec-kit project structure with .specify/ directory
 metadata:
   author: Quratulain-bilal
-  source: extension:branch-convention
-user-invocable: true
-disable-model-invocation: false
+  source: branch-convention:commands/speckit.branch-convention.rename.md
 ---
-
-# Branch Convention Rename Skill
 
 # Rename to Convention
 
