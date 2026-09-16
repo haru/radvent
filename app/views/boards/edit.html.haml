@@ -15,8 +15,15 @@
       %div.card.border-danger.mt-3
         %div.card-body
           %h5.card-title.text-danger= t('boards.edit.delete_board')
-          %p= t('boards.edit.confirm_delete')
-          = button_to board_path(@board.board_id), method: :delete,
-                      class: 'btn btn-danger',
-                      data: { "turbo-confirm": t('boards.edit.delete_warning') } do
-            = t('boards.edit.delete_board')
+          %p= t('boards.edit.confirm_delete', board_id: @board.board_id)
+          = form_with url: board_path(@board.board_id), method: :delete,
+                      html: { data: { controller: 'board-delete-confirmation',
+                                      'board-delete-confirmation-expected-id-value': @board.board_id,
+                                      'turbo-confirm': t('boards.edit.delete_warning') } } do
+            = label_tag :confirm_board_id, t('boards.edit.confirm_board_id_label'), class: 'form-label'
+            = text_field_tag :confirm_board_id, nil, class: 'form-control mb-2',
+                             data: { 'board-delete-confirmation-target': 'input',
+                                     action: 'input->board-delete-confirmation#check' }
+            = button_tag t('boards.edit.delete_board'), type: 'submit',
+                         class: 'btn btn-danger',
+                         data: { 'board-delete-confirmation-target': 'submit' }

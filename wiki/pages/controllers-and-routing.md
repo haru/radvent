@@ -1,8 +1,8 @@
 ---
 title: Controllers and Routing
 type: component
-sources: [S004, S009]
-updated: 2026-08-14
+sources: [S004, S009, S013]
+updated: 2026-09-16
 ---
 
 # Controllers and Routing
@@ -51,6 +51,13 @@ All controllers inherit from `ApplicationController`, which provides (S004):
   the `visibility` enum (`public` / `protected` / `private`) (S004).
 - `edit_permission?` (Items / AdventCalendarItems controllers) — allows edits
   only for the content's creator or an admin (S004).
+- `check_deletability` (`BoardsController`) — gates `destroy` via
+  `Board#deletable?`. The action further requires the submitted
+  `confirm_board_id` param to match the board's actual ID
+  (`Board#board_id_match?`) before it will delete, independent of and after
+  this authorization check — see
+  [Board Deletion — ID Confirmation & Dialog](./board-delete-id-confirmation.md)
+  (S013).
 
 The user-boards design spec calls for a more general, object-level
 `visible?`/`editable?`/`deletable?` interface on the affected models rather

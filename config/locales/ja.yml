@@ -363,7 +363,9 @@ ja:
       delete_board: 'ボードを削除'
       delete_warning: '本当にこのボードを削除しますか？この操作は取り消せません。'
       visibility_warning: '公開設定を変更すると、既存のメンバーのアクセス権に影響する場合があります。'
-      confirm_delete: '削除するにはボードIDを入力してください'
+      confirm_delete: '削除するにはボードIDを入力してください。ボードIDは %{board_id} です。'
+      confirm_board_id_label: 'ボードID確認'
+      delete_id_mismatch: '入力されたボードIDが一致しないため削除できません'
     form:
       board_id: 'ボードID'
       board_id_hint: '使用できる文字: 英小文字、数字、ハイフン、アンダースコア（最大64文字）'

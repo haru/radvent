@@ -1,8 +1,8 @@
 ---
 title: JavaScript and CSS Asset Pipeline
 type: component
-sources: [S010, S011, S012]
-updated: 2026-08-14
+sources: [S010, S011, S012, S013]
+updated: 2026-09-16
 ---
 
 # JavaScript and CSS Asset Pipeline
@@ -36,6 +36,7 @@ calls `new mdb.Input(el).init()` / `.update()`, bound to `turbo:load` and
 | `datatable_controller` | Initializes `simple-datatables` for admin list views (search/sort) (S010) |
 | `popover_controller` | MDB Popover lifecycle — init on `connect`, dispose on `disconnect` (S010) |
 | `navbar_dropdown_controller` | Mobile/desktop dropdown state; closes on outside click (S010) |
+| `board_delete_confirmation_controller` | Disables the board-delete submit button until the typed board ID matches the target board's ID in real time (S013) |
 
 Controllers are auto-registered via a manifest rather than explicit imports —
 this cuts boilerplate but means a controller's filename/naming must follow

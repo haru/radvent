@@ -54,11 +54,15 @@ class BoardsController < ApplicationController
     end
   end
 
-  # Deletes a board and redirects to the boards list.
+  # Deletes a board after verifying the confirmation board ID and redirects to the boards list.
   # @return [void]
   def destroy
-    @board.destroy
-    redirect_to boards_path, status: :see_other, notice: t('boards.deleted')
+    if @board.board_id_match?(params[:confirm_board_id])
+      @board.destroy
+      redirect_to boards_path, status: :see_other, notice: t('boards.deleted')
+    else
+      redirect_to edit_board_path(@board.board_id), status: :see_other, alert: t('boards.edit.delete_id_mismatch')
+    end
   end
 
   private
