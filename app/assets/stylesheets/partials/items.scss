@@ -173,12 +173,12 @@ body#advent_calendar_body  {
     h6 {
       margin-top: 1.5em;
       font-size: 1em;
-      color: #777
+      color: var(--markdown-heading-color)
     }
     blockquote {
-      color: #555;
+      color: var(--markdown-quote-color);
       font-size: 1em;
-      border-left: solid 4px #ddd;
+      border-left: solid 4px var(--markdown-quote-border-color);
       padding: .8em;
       margin-top: 1em;
       margin-bottom: 1em;
@@ -189,7 +189,7 @@ body#advent_calendar_body  {
       h4,
       h5,
       h6 {
-        color: #555;
+        color: var(--markdown-quote-color);
       }
     }
     blockquote>*:first-child {
@@ -203,7 +203,7 @@ body#advent_calendar_body  {
       margin: 1em 0;
       border: 0;
       height: 2px;
-      background-color: #ccc;
+      background-color: var(--markdown-hr-color);
     }
     em {
       font-family: "Helvetica Neue", Helvetica, "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "游ゴシック", YuGothic, sans-serif;
@@ -238,20 +238,20 @@ body#advent_calendar_body  {
     }
     table {
       margin: 1em 0;
-      border-left: solid 1px #d9d9d9;
-      border-top: solid 1px #d9d9d9;
+      border-left: solid 1px var(--markdown-table-border-color);
+      border-top: solid 1px var(--markdown-table-border-color);
     }
     td,
     th {
-      border-bottom: solid 1px #ccc;
-      border-right: solid 1px #ccc;
+      border-bottom: solid 1px var(--markdown-table-cell-border-color);
+      border-right: solid 1px var(--markdown-table-cell-border-color);
       padding: 8px 10px;
       word-wrap: break-word;
     }
     thead td,
     th {
       font-weight: 900;
-      background-color: #fff;
+      background-color: var(--markdown-table-header-bg-color);
     }
     tbody tr:nth-child(odd) {
       background-color: rgba(0, 0, 0, 0.03);
