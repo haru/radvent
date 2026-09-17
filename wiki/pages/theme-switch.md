@@ -1,8 +1,8 @@
 ---
 title: Manual Theme Selection (Light/Dark/System)
 type: decision
-sources: [S015, S016]
-updated: 2026-09-16
+sources: [S015, S016, S017]
+updated: 2026-09-17
 ---
 
 # Manual Theme Selection (Light/Dark/System)
@@ -77,6 +77,11 @@ a holdover that violates the project's HAML-only view rule. Since this
 feature must edit that file anyway, it is converted to `edit.html.haml` as
 part of the change; the existing email/password/`current_password` fields and
 behavior are carried over unchanged, out of scope for this feature (S015).
+
+This conversion was later cited as precedent by `008-fix-dark-theme` to
+justify converting the *rest* of Devise's views the same way — see
+[Devise Auth Views: ERB → HAML + .panel → .card](./devise-views-format-conversion.md)
+for why that follow-up is flagged, not taken at face value (S017).
 
 ## Documentation requirement
 

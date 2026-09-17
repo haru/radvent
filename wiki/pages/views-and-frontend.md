@@ -1,8 +1,8 @@
 ---
 title: Views and Frontend
 type: component
-sources: [S005, S010, S011, S015]
-updated: 2026-09-16
+sources: [S005, S010, S011, S015, S017]
+updated: 2026-09-17
 ---
 
 # Views and Frontend
@@ -51,6 +51,11 @@ Page persists the choice on the user account; the System option keeps the
 identical to the previous automatic OS-driven switching. CSS variable values
 themselves are unchanged. See [Manual Theme Selection](./theme-switch.md)
 for the full decision record (S015).
+
+**Follow-up**: feature `008-fix-dark-theme` extends this same variable/mixin
+system to close remaining hardcoded-color gaps (tables, comments, footer,
+nav dropdown, Markdown rendering, EasyMDE) — see
+[Dark Theme — Full-App Color Coverage](./dark-theme-full-coverage.md) (S017).
 
 ## Item authoring UI
 
