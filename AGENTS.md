@@ -4,6 +4,7 @@
 
 - **NEVER commit, push, or create PRs** without explicit user permission.
 - **NEVER decide commit messages** — ask the user.
+- **NEVER delete or modify existing data** without explicit user approval. This applies to any real environment (development DB included): no `destroy_all` / `delete_all` / `update_all` / raw DELETE/UPDATE on existing records, no `db:reset` / re-seeding over existing data, and no file deletion — unless the exact command and its target have been shown to and approved by the user beforehand. Use throwaway/test data for verification instead.
 - **Language**: All commit messages and source code comments must be written in **English**.
 - **KISS, DRY, YAGNI**: Keep implementations simple, avoid duplicating logic, and don't build for hypothetical future requirements.
 - **TDD is mandatory**: Write tests before implementation. Red → Green → Refactor.
