@@ -28,6 +28,7 @@ Rails.application.routes.draw do
                      constraints: { board_id: /[a-z0-9_-]+/ } do
     resources :board_memberships, only: %i[index create]
   end
+  get 'boards/:board_ref_id/other_boards' => 'board_other_boards#index', as: :board_other_boards
   resources :board_memberships, only: [:destroy]
 
   root 'welcome#index'

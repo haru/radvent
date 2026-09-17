@@ -4,12 +4,15 @@
 #
 # Displays the list of events on the homepage.
 class WelcomeController < ApplicationController
+  include OtherBoardsListing
+
   # Displays the homepage with all events.
   #
   # @return [void]
   def index
     @board = Board.find_or_create_by!(board_type: :top) { |b| b.name = 'TOP' }
     @events = @board.events.order(start_date: :desc)
+    assign_other_boards(@board, current_user)
     render 'boards/show'
   end
 end

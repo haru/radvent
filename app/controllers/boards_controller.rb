@@ -4,6 +4,8 @@
 #
 # Handles creating, viewing, editing, and deleting UserBoards.
 class BoardsController < ApplicationController
+  include OtherBoardsListing
+
   before_action :require_authentication, only: %i[index new create edit update destroy]
   before_action :find_board, only: %i[show edit update destroy]
   before_action :check_visibility, only: [:show]
@@ -20,6 +22,7 @@ class BoardsController < ApplicationController
   # @return [void]
   def show
     @events = @board.events.order(start_date: :desc)
+    assign_other_boards(@board, current_user)
   end
 
   # Renders the form to create a new board.

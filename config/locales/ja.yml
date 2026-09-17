@@ -355,6 +355,9 @@ ja:
     show:
       title: '%{name}'
       create_event: 'イベントを作成'
+      other_boards:
+        title: '他のボード'
+        load_more: 'もっと見る'
     new:
       title: 'ボードを作成'
     edit:

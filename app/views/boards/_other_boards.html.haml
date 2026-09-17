@@ -1,0 +1,11 @@
+%ul.other-boards-list
+  - @other_boards.each do |board|
+    %li.other-boards-list-item
+      - if board.board_type_top?
+        = link_to system_title, root_path
+      - else
+        = link_to board.name, board_path(board.board_id)
+- if @other_boards_next_page
+  = turbo_frame_tag 'other-boards-list' do
+    = link_to t('boards.show.other_boards.load_more'),
+              board_other_boards_path(@board.id, page: @other_boards_next_page)

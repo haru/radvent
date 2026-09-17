@@ -203,6 +203,9 @@ en:
     show:
       title: '%{name}'
       create_event: 'Create Event'
+      other_boards:
+        title: 'Other Boards'
+        load_more: 'Load more'
     new:
       title: 'Create Board'
     edit:

@@ -38,3 +38,8 @@
             %div.progress-bar.bg-success{role: "progressbar", style: "width: #{event.entry_percent}%",
                               "aria-valuenow": event.entry_count,
                               "aria-valuemin": 0, "aria-valuemax": event.day_count}
+
+- if @other_boards.present?
+  %div#other-boards
+    %h2= t('boards.show.other_boards.title')
+    = render 'boards/other_boards'

@@ -111,6 +111,10 @@ RSpec.describe BoardsController do
   end
 
   describe 'GET #show' do
+    def create_boards(count, created_at: Time.zone.local(2015, 11, 1))
+      count.times.map { create(:board, :public_user, owner: owner, created_at: created_at) }
+    end
+
     context 'when the board is a public board' do
       let(:board) { create(:board, :public_user, owner: owner) }
 
@@ -167,6 +171,135 @@ RSpec.describe BoardsController do
         sign_in member
         get :show, params: { board_id: board.board_id }
         expect(response).to have_http_status(:success)
+      end
+    end
+
+    context 'when assembling @other_boards' do
+      let(:viewer_board) { create(:board, :public_user, owner: owner, created_at: Time.zone.local(2015, 10, 1)) }
+      let!(:no_item_board) do
+        create(:board, :public_user, owner: owner, created_at: Time.zone.local(2015, 11, 10))
+      end
+      let!(:unpublished_only_board) do
+        create_board_with_item(created_at: Time.zone.local(2015, 11, 15),
+                               item_created_at: Time.zone.local(2015, 12, 20, 0, 0, 0),
+                               item_date: 25)
+      end
+      let!(:published_board) do
+        create_board_with_item(created_at: Time.zone.local(2015, 11, 1),
+                               item_created_at: Time.zone.local(2015, 12, 1, 10, 0, 0),
+                               item_date: 2)
+      end
+      let!(:newer_board) do
+        create_board_with_item(created_at: Time.zone.local(2015, 12, 5),
+                               item_created_at: Time.zone.local(2015, 12, 1, 9, 0, 0))
+      end
+
+      before do
+        allow(Time.zone).to receive(:today).and_return(Date.new(2015, 12, 2))
+      end
+
+      def create_board_with_item(created_at:, item_created_at: nil, item_date: 1)
+        other = create(:board, :public_user, owner: owner, created_at: created_at)
+        if item_created_at
+          event = create(:event, board: other, start_date: '2015-12-01', end_date: '2015-12-25',
+                                 created_by: owner, updated_by: owner)
+          calendar_item = create(:advent_calendar_item, event: event, date: item_date)
+          create(:item, advent_calendar_item: calendar_item, created_at: item_created_at)
+        end
+        other
+      end
+
+      it 'includes visible other boards' do
+        other = create(:board, :public_user, owner: owner)
+        get :show, params: { board_id: viewer_board.board_id }
+        expect(assigns(:other_boards)).to include(other)
+      end
+
+      it 'excludes the currently displayed board' do
+        get :show, params: { board_id: viewer_board.board_id }
+        expect(assigns(:other_boards)).not_to include(viewer_board)
+      end
+
+      it 'excludes a private board the viewer can neither own nor join' do
+        private_board = create(:board, :private_user, owner: owner)
+        get :show, params: { board_id: viewer_board.board_id }
+        expect(assigns(:other_boards)).not_to include(private_board)
+      end
+
+      it 'includes the TOP board when viewing a user board' do
+        top_board = create(:board, :top)
+        get :show, params: { board_id: viewer_board.board_id }
+        expect(assigns(:other_boards)).to include(top_board)
+      end
+
+      it 'sorts boards by their sort key descending' do
+        get :show, params: { board_id: viewer_board.board_id }
+        expect(assigns(:other_boards)).to eq(
+          [newer_board, published_board, unpublished_only_board, no_item_board]
+        )
+      end
+
+      it 'sorts boards with an identical sort key by id ascending' do
+        first_board = create(:board, :public_user, owner: owner, created_at: Time.zone.local(2015, 11, 20))
+        second_board = create(:board, :public_user, owner: owner, created_at: Time.zone.local(2015, 11, 20))
+        get :show, params: { board_id: viewer_board.board_id }
+        listing = assigns(:other_boards)
+        expect(listing.index(first_board)).to be < listing.index(second_board)
+      end
+
+      it 'does not assign a next page number when all boards fit on one page' do
+        get :show, params: { board_id: viewer_board.board_id }
+        expect(assigns(:other_boards_next_page)).to be_nil
+      end
+    end
+
+    context 'when the TOP board is listed in @other_boards' do
+      render_views
+
+      it 'labels it with the site title, not its literal board name' do
+        ENV['RADVENT_TITLE'] = nil
+        create(:board, :top)
+        get :show, params: { board_id: board.board_id }
+        link = response.parsed_body.at_css('.other-boards-list-item a[href="/"]')
+        expect(link.text).to eq('Advent Calendar')
+      end
+    end
+
+    context 'when more boards than the page size exist' do
+      let(:viewer_board) { create(:board, :public_user, owner: owner, created_at: Time.zone.local(2015, 10, 1)) }
+
+      before do
+        allow(Time.zone).to receive(:today).and_return(Date.new(2015, 12, 2))
+        create_boards(11)
+      end
+
+      it 'caps @other_boards at 10 items' do
+        get :show, params: { board_id: viewer_board.board_id }
+        expect(assigns(:other_boards).size).to eq(10)
+      end
+
+      it 'assigns the total count of visible other boards' do
+        get :show, params: { board_id: viewer_board.board_id }
+        expect(assigns(:other_boards_more)).to eq(11)
+      end
+
+      it 'assigns the next page number' do
+        get :show, params: { board_id: viewer_board.board_id }
+        expect(assigns(:other_boards_next_page)).to eq(2)
+      end
+    end
+
+    context 'when there are no other visible boards' do
+      render_views
+
+      it 'does not render the other boards heading' do
+        get :show, params: { board_id: board.board_id }
+        expect(response.body).not_to include(I18n.t('boards.show.other_boards.title'))
+      end
+
+      it 'does not render the other boards area markup' do
+        get :show, params: { board_id: board.board_id }
+        expect(response.body).not_to include('id="other-boards"')
       end
     end
 
