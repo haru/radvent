@@ -1,8 +1,8 @@
 ---
 title: JavaScript and CSS Asset Pipeline
 type: component
-sources: [S010, S011, S012, S013, S015]
-updated: 2026-09-16
+sources: [S010, S011, S012, S013, S015, S017]
+updated: 2026-09-17
 ---
 
 # JavaScript and CSS Asset Pipeline
@@ -48,7 +48,12 @@ Stimulus's convention or it silently won't register (S010).
 `postcss-cli` processes `app/javascript/stylesheets/application.css` with
 `postcss-import`, `postcss-flexbugs-fixes`, and `postcss-preset-env` (stage 3
 + Autoprefixer) (S010). That manifest imports MDB UI Kit, EasyMDE styles, and
-Simple-DataTables styles (S010). SCSS partials of note in
+Simple-DataTables styles (S010). Since EasyMDE's CSS is vendored (not
+directly editable), Dark-mode support for it is added as after-the-fact
+overrides in `application.scss`'s `dark-theme-styles` mixin rather than
+edited in place — see
+[Dark Theme — Full-App Color Coverage](./dark-theme-full-coverage.md#easymde-editor)
+(S017). SCSS partials of note in
 `app/assets/stylesheets/partials/`: `users.scss` (fixes a Bootstrap 4 → 5
 close-button regression in Devise alerts), `comments.scss` / `likes.scss`
 (interaction layout), `advent_calendar_items.scss` (calendar grid) (S010).

@@ -21,6 +21,8 @@ Sources are immutable inputs — the wiki never edits them.
 | S014 | specs/006-board-delete-id-confirm/plan.md (decision sections) | feature-artifact | 2026-09-16 | 2026-09-16 | board-delete-id-confirmation.md |
 | S015 | specs/007-theme-switch/research.md | feature-artifact | 2026-09-16 | 2026-09-16 | theme-switch.md, domain-model.md, controllers-and-routing.md, views-and-frontend.md, javascript-asset-pipeline.md |
 | S016 | specs/007-theme-switch/plan.md (decision sections) | feature-artifact | 2026-09-16 | 2026-09-16 | theme-switch.md |
+| S017 | specs/008-fix-dark-theme/research.md | feature-artifact | 2026-09-17 | 2026-09-17 | dark-theme-full-coverage.md, devise-views-format-conversion.md, views-and-frontend.md, javascript-asset-pipeline.md, theme-switch.md |
+| S018 | specs/008-fix-dark-theme/plan.md (decision sections) | feature-artifact | 2026-09-17 | 2026-09-17 | dark-theme-full-coverage.md |
 
 Note: domain-model.md exceeded the 600-word split threshold after S015's
 update; its Authorization section was split into authorization.md (S002,
@@ -28,3 +30,8 @@ S004, S009, S012, S013 — no new source). Links in
 image-upload-toolbar-button.md, javascript-asset-pipeline.md,
 controllers-and-routing.md, and board-delete-id-confirmation.md were
 retargeted to the new page accordingly.
+
+Note: dark-theme-full-coverage.md exceeded the 600-word split threshold on
+creation from S017; its Devise ERB→HAML/`.panel`→`.card` section (which also
+carries an implementation-flag conflict) was split into
+devise-views-format-conversion.md (S017 — no new source).

@@ -27,14 +27,26 @@
     --header-bg-color: #B81C22;
     --calendar-date-txt-color: #999;
     --calendar-date-bg-color: #eee;
+    --calendar-border-color: #ddd;
+    --table-bg-color: #fff;
     --top-menu-bg-color: #00693E;
     --item-preview-bg-color: #fff;
     --bread-crumb-bg-color: #00532E;
     --alert-info-bg-color: #00693E;
     --comment-color: #333;
     --comment-bg-color: #fff;
+    --comment-border-color: #d9d9d9;
+    --footer-txt-color: #777;
+    --footer-border-color: #e5e5e5;
     --anchor-color: #2196f3;
-    --event-card-bg-color: #fff
+    --event-card-bg-color: #fff;
+    --markdown-heading-color: #777;
+    --markdown-quote-color: #555;
+    --markdown-quote-border-color: #ddd;
+    --markdown-hr-color: #ccc;
+    --markdown-table-border-color: #d9d9d9;
+    --markdown-table-cell-border-color: #ccc;
+    --markdown-table-header-bg-color: #fff
 }
   
 // Dark theme rules, parameterized by the selector that decides when they apply.
@@ -48,6 +60,8 @@
         --header-bg-color: #2A3439;
         --calendar-date-txt-color: #fff;
         --calendar-date-bg-color: #5b676d;
+        --calendar-border-color: #5b676d;
+        --table-bg-color: #1F262A;
         --top-menu-bg-color: #375a7f;
         --item-preview-bg-color: #1F262A;
         --card-body-bg-color: #2A3439;
@@ -55,6 +69,18 @@
         --alert-info-bg-color: #2A7DFF;
         --anchor-color: #1DCB;
         --event-card-bg-color: #2A3439;
+        --comment-color: #ddd;
+        --comment-bg-color: #2A3439;
+        --comment-border-color: #848689;
+        --footer-txt-color: #aaa;
+        --footer-border-color: #5b676d;
+        --markdown-heading-color: #aaa;
+        --markdown-quote-color: #aaa;
+        --markdown-quote-border-color: #555;
+        --markdown-hr-color: #555;
+        --markdown-table-border-color: var(--main-txt-color);
+        --markdown-table-cell-border-color: var(--main-txt-color);
+        --markdown-table-header-bg-color: var(--card-body-bg-color);
     }
     #{$root-selector} body#advent_calendar_body {
         .event-card{
@@ -99,9 +125,60 @@
         .btn:hover, .custom-file-control:hover::before {
             color: rgba(255, 255, 255, 0.87);
         }
+        // .btn-light keeps a light background regardless of theme (e.g. the
+        // edit-event pencil icon on the jumbotron), so its icon/text must stay
+        // dark rather than inherit the white .btn override above.
+        .btn-light, .btn-light:hover {
+            color: #212529;
+        }
+        // MDB's .text-muted sets a fixed, light-mode-only gray via !important
+        // (comment date/delete link, board list empty-state text, form hints),
+        // which becomes low-contrast against the dark background.
+        .text-muted {
+            color: var(--main-txt-color) !important;
+        }
 
+        // MDB's .card sets a fixed text color (--mdb-body-color: #4f4f4f) meant
+        // for a light card background; on the dark card-body background below
+        // that low-contrast gray becomes hard to read, so follow the theme here.
+        .card {
+            color: var(--main-txt-color);
+        }
         .card-body {
             background-color: var(--card-body-bg-color);
+        }
+
+        .dropdown-menu {
+            background-color: var(--item-preview-bg-color);
+        }
+
+        // MDB's default hover/focus background for .dropdown-item stays light
+        // regardless of theme, which makes the (dark-themed) text unreadable.
+        .dropdown-item:hover, .dropdown-item:focus {
+            background-color: var(--card-body-bg-color);
+        }
+
+        .CodeMirror {
+            background-color: var(--main-bg-color);
+            color: var(--main-txt-color);
+        }
+        .CodeMirror-cursor {
+            border-left-color: var(--main-txt-color);
+        }
+        .editor-toolbar {
+            background-color: var(--main-bg-color);
+            border-color: var(--main-txt-color);
+        }
+        .editor-toolbar button, .editor-toolbar .easymde-dropdown {
+            color: var(--main-txt-color);
+        }
+        .editor-toolbar button.active, .editor-toolbar button:hover {
+            background-color: var(--card-body-bg-color);
+            border-color: var(--main-txt-color);
+        }
+        .editor-preview {
+            background-color: var(--main-bg-color);
+            color: var(--main-txt-color);
         }
 
         label.checkbox-inline, label.checkbox-inline:hover {
@@ -190,6 +267,16 @@ body#advent_calendar_body {
     .btn:hover {
         text-decoration: none;
     }
+    // .btn-outline-*/.btn-link keep a light hover/focus background by MDB
+    // default. Their hover text ends up unreadable in this app (pre-existing,
+    // independent of theme) unless forced to a fixed dark, readable color.
+    .btn-outline-primary:hover, .btn-outline-primary:focus,
+    .btn-outline-secondary:hover, .btn-outline-secondary:focus,
+    .btn-outline-success:hover, .btn-outline-success:focus,
+    .btn-outline-danger:hover, .btn-outline-danger:focus,
+    .btn-link:hover, .btn-link:focus {
+        color: #212529 !important;
+    }
     .btn-primary {
         background-color: #009688;
         color: #ffffff;
@@ -235,9 +322,9 @@ body#advent_calendar_body {
         padding: 0;
     }
 
-
     table.table {
         color: var(--main-txt-color);
+        --mdb-table-bg: var(--table-bg-color);
     }
 
     .table-striped {
