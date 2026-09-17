@@ -5,13 +5,13 @@
 
     = render 'form', board: @board
 
-    %hr
-    %h4= t('boards.edit.danger_zone')
-
     - if @board.editable?(current_user)
+      %hr
       = link_to t('board_memberships.index.title'), board_board_memberships_path(@board.board_id), class: 'btn btn-outline-secondary mb-3'
 
     - if @board.deletable?(current_user)
+      %hr
+      %h4= t('boards.edit.danger_zone')
       %div.card.border-danger.mt-3
         %div.card-body
           %h5.card-title.text-danger= t('boards.edit.delete_board')
