@@ -202,9 +202,9 @@ RSpec.describe BoardsController do
         other = create(:board, :public_user, owner: owner, created_at: created_at)
         if item_created_at
           event = create(:event, board: other, start_date: '2015-12-01', end_date: '2015-12-25',
-                                 created_by: owner, updated_by: owner)
+                                 created_by: owner, updated_by: owner, created_at: created_at)
           calendar_item = create(:advent_calendar_item, event: event, date: item_date)
-          create(:item, advent_calendar_item: calendar_item, created_at: item_created_at)
+          create(:item, advent_calendar_item: calendar_item, updated_at: item_created_at)
         end
         other
       end
