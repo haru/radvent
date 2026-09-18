@@ -257,6 +257,111 @@ RSpec.describe Board do
     end
   end
 
+  # --- List sort key ---
+  describe '#list_sort_key' do
+    let(:board) { create(:board, :public_user, created_at: Time.zone.local(2015, 11, 1)) }
+
+    before do
+      allow(Time.zone).to receive(:today).and_return(Date.new(2015, 12, 2))
+    end
+
+    context 'when the board has no events' do
+      it 'returns the board created_at' do
+        expect(board.list_sort_key).to eq(Time.zone.local(2015, 11, 1))
+      end
+    end
+
+    context 'when the board has published items' do
+      let(:event) do
+        create(:event, board: board, start_date: '2015-12-01', end_date: '2015-12-25',
+                       created_by: owner, updated_by: owner, created_at: Time.zone.local(2015, 11, 5))
+      end
+      let(:older_aci) { create(:advent_calendar_item, event: event, date: 1) }
+      let(:newer_aci) { create(:advent_calendar_item, event: event, date: 2) }
+
+      before do
+        create(:item, advent_calendar_item: older_aci, updated_at: Time.zone.local(2015, 12, 1, 10, 0, 0))
+        create(:item, advent_calendar_item: newer_aci, updated_at: Time.zone.local(2015, 12, 2, 9, 0, 0))
+      end
+
+      it 'returns the newest updated_at of published items' do
+        expect(board.list_sort_key).to eq(Time.zone.local(2015, 12, 2, 9, 0, 0))
+      end
+    end
+
+    context 'when the board has an event but no published items' do
+      let(:event) do
+        create(:event, board: board, start_date: '2015-12-01', end_date: '2015-12-25',
+                       created_by: owner, updated_by: owner, created_at: Time.zone.local(2015, 11, 10))
+      end
+
+      it 'returns the event created_at when it has no items at all' do
+        event
+        expect(board.list_sort_key).to eq(Time.zone.local(2015, 11, 10))
+      end
+
+      it 'excludes items before their publish date' do
+        aci = create(:advent_calendar_item, event: event, date: 25)
+        create(:item, advent_calendar_item: aci, updated_at: Time.zone.local(2015, 12, 3, 0, 0, 0))
+        expect(board.list_sort_key).to eq(Time.zone.local(2015, 11, 10))
+      end
+
+      it 'excludes calendar slots without an item' do
+        create(:advent_calendar_item, event: event, date: 1, item: nil)
+        expect(board.list_sort_key).to eq(Time.zone.local(2015, 11, 10))
+      end
+    end
+
+    context 'when the board created_at is newer than the newest event and published item' do
+      let(:board) { create(:board, :public_user, created_at: Time.zone.local(2015, 12, 10)) }
+      let(:event) do
+        create(:event, board: board, start_date: '2015-12-01', end_date: '2015-12-25',
+                       created_by: owner, updated_by: owner, created_at: Time.zone.local(2015, 11, 20))
+      end
+      let(:aci) { create(:advent_calendar_item, event: event, date: 1) }
+
+      before do
+        create(:item, advent_calendar_item: aci, updated_at: Time.zone.local(2015, 12, 1, 10, 0, 0))
+      end
+
+      it 'returns the board created_at' do
+        expect(board.list_sort_key).to eq(Time.zone.local(2015, 12, 10))
+      end
+    end
+
+    context 'when the event created_at is newer than the board created_at and no published item is newer' do
+      let(:event) do
+        create(:event, board: board, start_date: '2015-12-01', end_date: '2015-12-25',
+                       created_by: owner, updated_by: owner, created_at: Time.zone.local(2015, 12, 5))
+      end
+      let(:aci) { create(:advent_calendar_item, event: event, date: 1) }
+
+      before do
+        create(:item, advent_calendar_item: aci, updated_at: Time.zone.local(2015, 11, 15))
+      end
+
+      it 'returns the event created_at' do
+        expect(board.list_sort_key).to eq(Time.zone.local(2015, 12, 5))
+      end
+    end
+
+    context 'when a published item update is newer than both the event created_at and the board created_at' do
+      let(:event) do
+        create(:event, board: board, start_date: '2015-12-01', end_date: '2015-12-25',
+                       created_by: owner, updated_by: owner, created_at: Time.zone.local(2015, 11, 15))
+      end
+      let(:aci) { create(:advent_calendar_item, event: event, date: 1) }
+
+      before do
+        create(:item, advent_calendar_item: aci, updated_at: Time.zone.local(2015, 12, 2, 12, 0, 0))
+      end
+
+      it 'returns the published item updated_at' do
+        expect(board.list_sort_key).to eq(Time.zone.local(2015, 12, 2, 12, 0, 0))
+      end
+    end
+  end
+
   # --- Permissionable truth table for Board ---
   describe 'Permissionable (Board itself)' do
     context 'with a TopBoard' do

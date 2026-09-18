@@ -1,30 +1,20 @@
 <!--
 Sync Impact Report
 ==================
-Version Change: 1.1.0 → 1.2.0
+Version Change: 1.2.0 → 1.3.0
 
-Modified Principles:
-- III. Git Flow Discipline — expanded to define the full git-flow branch set
-  (main, develop, feature/*, bugfix/*, release/*, hotfix/*)
+Modified Principles: None
 
 Added Sections:
-- Principle VII: Simplicity (KISS, DRY, YAGNI)
-- Principle VIII: Documentation & Architecture Decision Records (ADR)
-- Principle IX: Explicit Error Handling (No Silent Fallbacks)
-
-Updated Sections:
-- Code Review & Quality Gates: added ADR + simplicity + fail-loud checks to PR checklist
+- Principle X: Data Preservation (No Destructive Operations Without Approval)
 
 Removed Sections: None
 
 Templates Requiring Updates:
-✅ .specify/templates/tasks-template.md - Updated: added ADR task to Polish phase
-✅ .specify/templates/plan-template.md - reviewed, Constitution Check section is generic and compatible
-✅ .specify/templates/spec-template.md - reviewed, no changes required
-✅ AGENTS.md - reviewed, git-flow / docs conventions consistent
+✅ AGENTS.md - already updated with the matching Absolute Rule (commit 41b707a)
 
 Follow-up TODOs:
-- docs/ and docs/adr/ directories do not yet exist; create docs/adr/README.md when the first ADR is written.
+- None
 -->
 
 # Radvent Constitution
@@ -147,6 +137,19 @@ Errors MUST be treated as errors. Convenient fallbacks that mask failures are PR
 **Rationale**: Silent fallbacks hide bugs, corrupt data, and turn simple failures into hard-to-diagnose
 incidents. Loud, explicit failures keep the system honest and debuggable.
 
+### X. Data Preservation (No Destructive Operations Without Approval)
+Existing data MUST NOT be deleted or destructively modified without explicit user approval, in ANY
+real environment (development database included). Agents MUST NOT run `destroy_all` / `delete_all` /
+`update_all` / raw DELETE or UPDATE statements against existing records, MUST NOT run `db:reset` or
+re-seed over existing data, and MUST NOT delete files — unless the exact command and its target have
+been shown to and approved by the user beforehand. Verification and manual testing MUST use
+throwaway/test data or the test database, never live data.
+
+**Rationale**: Existing data is irreplaceable once destroyed. A destructive command executed without
+approval (e.g. wiping the development database to set up manual-test fixtures) causes permanent data
+loss. Requiring the exact command and target to be approved beforehand keeps destructive operations
+deliberate and reviewable.
+
 ## Security & Access Control
 
 Devise authentication is REQUIRED for user access. Admin actions protected with `admin_user!` helper.
@@ -173,7 +176,8 @@ Before creating a PR, verify: Tests pass locally, Code is formatted per rufo, Ne
 test coverage written via TDD (failing tests written before implementation code), Code follows KISS/
 DRY/YAGNI (no unjustified complexity or duplication), Significant design decisions are captured as
 append-only ADRs under `docs/adr/` (and linked from `docs/adr/README.md`), No silent fallbacks mask
-failures, Database migrations are safe, No hardcoded secrets or credentials.
+failures, No destructive operation was performed on existing data without explicit user approval,
+Database migrations are safe, No hardcoded secrets or credentials.
 
 **Rationale**: Quality gates prevent broken code from reaching production. Automated checks catch
 common issues early.
@@ -190,4 +194,4 @@ For runtime development guidance, refer to AGENTS.md which contains detailed con
 procedures, and project-specific gotchas. AGENTS.md is the authoritative reference for implementation
 details and should be consulted before making changes.
 
-**Version**: 1.2.0 | **Ratified**: 2026-02-27 | **Last Amended**: 2026-06-06
+**Version**: 1.3.0 | **Ratified**: 2026-02-27 | **Last Amended**: 2026-09-17

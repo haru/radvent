@@ -1,8 +1,8 @@
 ---
 title: Controllers and Routing
 type: component
-sources: [S004, S009, S013, S015]
-updated: 2026-09-16
+sources: [S004, S009, S013, S015, S019]
+updated: 2026-09-18
 ---
 
 # Controllers and Routing
@@ -24,6 +24,10 @@ routes with slug-based access for the main entities (S004):
   Devise's registration-update route so a theme change doesn't require
   `current_password`; see
   [Manual Theme Selection](./theme-switch.md) (S015).
+- Other-boards listing: `get 'boards/:board_ref_id/other_boards' =>
+  'board_other_boards#index'` (feature `009-board-list`) — uses `Board`'s
+  numeric `id` rather than the `board_id` slug, because TOP boards have no
+  slug; see [Other Boards Listing](./other-boards-listing.md) (S019).
 
 Slug-based routes for events/boards require careful route ordering to avoid
 conflicts with other resource routes (S004).
@@ -82,6 +86,7 @@ controller-side callers of that interface or a separate mechanism.
 | Comments / Likes | Social interaction on items; `Comment` has no `user_id` — stores `user_name` as a string (S004) |
 | Attachments | Image uploads via CarrierWave for the Markdown editor (S004) |
 | Themes | Single `update` action persisting `current_user.theme`; added by feature `007-theme-switch` (S015) |
+| BoardOtherBoards | Single `index` action returning a page of the viewer's visible boards, newest-activity-first, for the load-more listing; added by feature `009-board-list` (S019) |
 
 See [Domain Model](./domain-model.md) for the underlying entities and
 [Tech Stack](./tech-stack.md) for Devise and the locale-detection stack.

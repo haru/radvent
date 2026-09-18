@@ -70,6 +70,24 @@ class Board < ApplicationRecord
     input.to_s.strip.downcase == board_id
   end
 
+  # Returns the datetime used as the ordering key in the other-boards listing.
+  #
+  # This is the newest of three candidates, in priority order: the updated_at
+  # of the board's published (+published?+) items, the created_at of the
+  # board's events, and the board's own created_at. Callers are expected to
+  # preload associations (e.g. +includes(events: { advent_calendar_items: :item })+);
+  # this method must not issue additional queries.
+  #
+  # @return [Time]
+  def list_sort_key
+    published_item_updates = events.flat_map do |event|
+      event.advent_calendar_items.select(&:published?).map { |calendar_item| calendar_item.item.updated_at }
+    end
+    event_created_ats = events.map(&:created_at)
+
+    [*published_item_updates, *event_created_ats, created_at].max
+  end
+
   # --- Permissionable implementation ---
 
   def visible?(user)

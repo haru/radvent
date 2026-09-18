@@ -68,5 +68,11 @@ describe AdventCalendarItem do
       advent_calendar_item = build(:advent_calendar_item, date: 2, event: event)
       expect(advent_calendar_item).not_to be_published
     end
+
+    it 'returns false instead of raising when the date is out of range for the month' do
+      advent_calendar_item = create(:advent_calendar_item, date: 32, event: event)
+      create(:item, advent_calendar_item: advent_calendar_item)
+      expect(advent_calendar_item.reload).not_to be_published
+    end
   end
 end
