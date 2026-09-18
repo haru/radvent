@@ -256,10 +256,14 @@ RSpec.describe BoardsController do
     context 'when the TOP board is listed in @other_boards' do
       render_views
 
-      it 'labels it with the site title, not its literal board name' do
-        ENV['RADVENT_TITLE'] = nil
+      before do
+        allow(ENV).to receive(:[]).and_call_original
+        allow(ENV).to receive(:[]).with('RADVENT_TITLE').and_return(nil)
         create(:board, :top)
         get :show, params: { board_id: board.board_id }
+      end
+
+      it 'labels it with the site title, not its literal board name' do
         name = response.parsed_body.at_css('.other-boards-list-item a[href="/"] .other-board-card-name')
         expect(name.text.strip).to eq('Advent Calendar')
       end

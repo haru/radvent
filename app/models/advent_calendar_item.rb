@@ -19,8 +19,11 @@ class AdventCalendarItem < ApplicationRecord
   }
 
   def published?
-    item &&
-      Date.new(year, month, date) <= Time.zone.today
+    return false unless item
+
+    Date.new(year, month, date) <= Time.zone.today
+  rescue Date::Error
+    false
   end
 
   def editable_by?(author)

@@ -20,7 +20,7 @@
         %span.other-board-card-arrow
           %i.fas.fa-chevron-right
 - if @other_boards_next_page
-  = turbo_frame_tag 'other-boards-list' do
+  = turbo_frame_tag "other-boards-page-#{@other_boards_next_page}" do
     %div.other-boards-more
       = link_to board_other_boards_path(@board.id, page: @other_boards_next_page),
                 class: 'btn btn-outline-secondary other-boards-more-button' do

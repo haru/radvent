@@ -42,7 +42,8 @@ module OtherBoardsListing
   # @return [Array<Board>] the boards assigned to +@other_boards+
   def assign_other_boards(current_board, user, page: 1)
     boards = other_boards(current_board, user)
-    @other_boards = boards.slice((page - 1) * PAGE_SIZE, PAGE_SIZE) || []
+    offset = (page - 1) * PAGE_SIZE
+    @other_boards = offset > boards.size ? [] : boards.slice(offset, PAGE_SIZE) || []
     @other_boards_more = boards.size
     @other_boards_next_page = boards.size > page * PAGE_SIZE ? page + 1 : nil
     @other_boards

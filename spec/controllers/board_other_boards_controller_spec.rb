@@ -100,6 +100,18 @@ RSpec.describe BoardOtherBoardsController do
       end
     end
 
+    context 'when page is an enormous number beyond any possible offset' do
+      before { get :index, params: { board_ref_id: viewer_board.id, page: '999999999999999999999999999999' } }
+
+      it 'returns success instead of raising' do
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'returns an empty listing' do
+        expect(assigns(:other_boards)).to eq([])
+      end
+    end
+
     context 'with rendering and unshown boards remaining' do
       render_views
 
@@ -119,6 +131,17 @@ RSpec.describe BoardOtherBoardsController do
         get :index, params: { board_ref_id: viewer_board.id, page: 2 }
         button = response.parsed_body.at_css('.other-boards-more a.btn')
         expect(button.text.strip).to include(I18n.t('boards.show.other_boards.load_more'))
+      end
+
+      it 'wraps the response in a turbo-frame matching the requested page, not a fixed id' do
+        get :index, params: { board_ref_id: viewer_board.id, page: 2 }
+        expect(response.parsed_body.at_css('turbo-frame#other-boards-page-2')).to be_present
+      end
+
+      it 'does not emit a nested turbo-frame with a duplicate id' do
+        get :index, params: { board_ref_id: viewer_board.id, page: 2 }
+        frame_ids = response.parsed_body.css('turbo-frame').pluck('id')
+        expect(frame_ids.uniq.size).to eq(frame_ids.size)
       end
     end
 

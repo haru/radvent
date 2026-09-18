@@ -14,10 +14,11 @@ more" control fetches 10 more at a time without a full-page reload (S020).
 
 ## Sort key: Ruby-side, not SQL
 
-`Board` gets an instance method (`#list_sort_key`) that returns the newer of
-two datetimes: the most recent `created_at` among the board's items whose
-`AdventCalendarItem#published?` is true, or the board's own `created_at` if
-it has no published items. The listing controller preloads boards with
+`Board` gets an instance method (`#list_sort_key`) that returns the newest of
+three datetimes: the most recent `updated_at` among the board's items whose
+`AdventCalendarItem#published?` is true, the most recent `created_at` among
+the board's events, and the board's own `created_at`. The listing controller
+preloads boards with
 `includes(events: { advent_calendar_items: :item })`, filters with the
 existing [`Permissionable#visible?`](./authorization.md), then sorts in Ruby
 (descending by `list_sort_key`, ties broken by ascending `id`) (S019).
@@ -37,11 +38,12 @@ SQLite/MySQL/Postgres; reimplementing `AdventCalendarItem#published?` in SQL
 
 ### "Post datetime" definition
 
-Defined as the newest `created_at` among `Item`s whose `AdventCalendarItem`
+Defined as the newest `updated_at` among `Item`s whose `AdventCalendarItem`
 is `published?` — not the calendar slot's unlock date itself. `published?`
-already matches the spec's "unlocked" concept; `created_at` gives
+already matches the spec's "unlocked" concept; `updated_at` gives
 finer-grained, unambiguous ordering when multiple items unlock on the same
-calendar day (S019).
+calendar day, and reorders a board when a published item is later edited
+(S019).
 
 ## Routing: numeric board ID, not the `board_id` slug
 

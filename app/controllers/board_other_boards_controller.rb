@@ -3,7 +3,7 @@
 # Serves the "load more" paging of the other-boards listing.
 #
 # Returns a Turbo Frame fragment with the next page of boards for the
-# +other-boards-list+ frame (see contracts/other-boards-endpoint.md).
+# +other-boards-page-N+ frame matching the requested page (see contracts/other-boards-endpoint.md).
 class BoardOtherBoardsController < ApplicationController
   include OtherBoardsListing
 
