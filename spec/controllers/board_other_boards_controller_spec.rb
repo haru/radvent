@@ -114,6 +114,12 @@ RSpec.describe BoardOtherBoardsController do
         get :index, params: { board_ref_id: viewer_board.id, page: 2 }
         expect(response.body).to include('?page=3')
       end
+
+      it 'renders the load more link as a button' do
+        get :index, params: { board_ref_id: viewer_board.id, page: 2 }
+        button = response.parsed_body.at_css('.other-boards-more a.btn')
+        expect(button.text.strip).to include(I18n.t('boards.show.other_boards.load_more'))
+      end
     end
 
     context 'with rendering when all boards are shown' do

@@ -358,6 +358,12 @@ ja:
       other_boards:
         title: '他のボード'
         load_more: 'もっと見る'
+        calendar_count:
+          one: 'カレンダー %{count}'
+          other: 'カレンダー %{count}'
+        entry_count:
+          one: '記事 %{count}'
+          other: '記事 %{count}'
     new:
       title: 'ボードを作成'
     edit:

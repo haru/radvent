@@ -41,5 +41,7 @@
 
 - if @other_boards.present?
   %div#other-boards
-    %h2= t('boards.show.other_boards.title')
+    %h2.other-boards-title
+      %i.fas.fa-layer-group
+      = t('boards.show.other_boards.title')
     = render 'boards/other_boards'

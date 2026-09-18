@@ -40,6 +40,8 @@
     --footer-border-color: #e5e5e5;
     --anchor-color: #2196f3;
     --event-card-bg-color: #fff;
+    --board-card-accent-color: #00693E;
+    --board-card-top-accent-color: #B81C22;
     --markdown-heading-color: #777;
     --markdown-quote-color: #555;
     --markdown-quote-border-color: #ddd;
@@ -69,6 +71,10 @@
         --alert-info-bg-color: #2A7DFF;
         --anchor-color: #1DCB;
         --event-card-bg-color: #2A3439;
+        // The dark header background equals the card background, so the board
+        // card accents keep their own (readable) colors instead of following it.
+        --board-card-accent-color: #2E8B6E;
+        --board-card-top-accent-color: #C0392B;
         --comment-color: #ddd;
         --comment-bg-color: #2A3439;
         --comment-border-color: #848689;

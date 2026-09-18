@@ -260,8 +260,53 @@ RSpec.describe BoardsController do
         ENV['RADVENT_TITLE'] = nil
         create(:board, :top)
         get :show, params: { board_id: board.board_id }
-        link = response.parsed_body.at_css('.other-boards-list-item a[href="/"]')
-        expect(link.text).to eq('Advent Calendar')
+        name = response.parsed_body.at_css('.other-boards-list-item a[href="/"] .other-board-card-name')
+        expect(name.text.strip).to eq('Advent Calendar')
+      end
+    end
+
+    context 'when rendering the other boards listing' do
+      render_views
+
+      let!(:listed_board) do
+        create(:board, :public_user, owner: owner, name: 'Ruby Board', description: 'Ruby articles')
+      end
+
+      before do
+        event = create(:event, board: listed_board, start_date: '2015-12-01', end_date: '2015-12-25',
+                               created_by: owner, updated_by: owner)
+        calendar_item = create(:advent_calendar_item, event: event, date: 1)
+        create(:item, advent_calendar_item: calendar_item)
+        allow(Time.zone).to receive(:today).and_return(Date.new(2015, 12, 2))
+      end
+
+      it 'renders each board as a card' do
+        get :show, params: { board_id: board.board_id }
+        href = board_path(listed_board.board_id)
+        card = response.parsed_body.at_css(".other-boards-list-item a.other-board-card[href='#{href}']")
+        expect(card).to be_present
+      end
+
+      it 'renders the board name inside the card' do
+        get :show, params: { board_id: board.board_id }
+        expect(response.parsed_body.at_css('.other-board-card-name').text.strip).to eq('Ruby Board')
+      end
+
+      it 'renders the board description inside the card' do
+        get :show, params: { board_id: board.board_id }
+        expect(response.parsed_body.at_css('.other-board-card-description').text.strip).to eq('Ruby articles')
+      end
+
+      it 'renders the calendar count chip' do
+        get :show, params: { board_id: board.board_id }
+        chips = response.parsed_body.css('.other-board-card-chip').map { |chip| chip.text.strip }
+        expect(chips).to include(I18n.t('boards.show.other_boards.calendar_count', count: 1))
+      end
+
+      it 'renders the published entry count chip' do
+        get :show, params: { board_id: board.board_id }
+        chips = response.parsed_body.css('.other-board-card-chip').map { |chip| chip.text.strip }
+        expect(chips).to include(I18n.t('boards.show.other_boards.entry_count', count: 1))
       end
     end
 

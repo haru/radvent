@@ -1,0 +1,168 @@
+// Styles for the board pages.
+//
+// The "other boards" listing at the bottom of a board page is a responsive
+// grid of cards. Each page of the listing renders its own grid container
+// (the "load more" turbo frame appends a further one), so the container's
+// bottom margin matches the grid gap to keep the rows evenly spaced.
+
+body#advent_calendar_body {
+  #other-boards {
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+
+    .other-boards-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--calendar-border-color);
+
+      i {
+        font-size: 1.1rem;
+        color: var(--board-card-accent-color);
+      }
+    }
+  }
+
+  .other-boards-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin: 0 0 1rem;
+    padding: 0;
+    list-style: none;
+
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .other-boards-list-item {
+    display: flex;
+  }
+
+  a.other-board-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid var(--calendar-border-color);
+    border-radius: 0.5rem;
+    background-color: var(--event-card-bg-color);
+    color: var(--main-txt-color);
+    text-decoration: none;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+
+    &:hover,
+    &:focus {
+      transform: translateY(-2px);
+      border-color: var(--board-card-accent-color);
+      box-shadow: 0 6px 14px 0 rgba(0, 0, 0, 0.16);
+      text-decoration: none;
+
+      .other-board-card-arrow {
+        color: var(--board-card-accent-color);
+        transform: translateX(3px);
+      }
+    }
+
+    // Keyboard focus needs a visible ring; the hover lift alone is not enough.
+    &:focus-visible {
+      outline: 2px solid var(--board-card-accent-color);
+      outline-offset: 2px;
+    }
+  }
+
+  .other-board-card-icon {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 0.5rem;
+    background-color: var(--board-card-accent-color);
+    color: #fff;
+    font-size: 1.1rem;
+
+    // The TOP board is the site itself, so it takes the site's own accent color.
+    &.is-top {
+      background-color: var(--board-card-top-accent-color);
+    }
+  }
+
+  .other-board-card-main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .other-board-card-name {
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+
+  .other-board-card-description {
+    font-size: 0.875rem;
+    line-height: 1.45;
+    opacity: 0.75;
+    overflow-wrap: anywhere;
+    // Clamp to two lines so cards in a row keep a comparable height.
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .other-board-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.15rem;
+  }
+
+  .other-board-card-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    background-color: var(--calendar-date-bg-color);
+    color: var(--calendar-date-txt-color);
+    font-size: 0.75rem;
+    white-space: nowrap;
+
+    i {
+      font-size: 0.7rem;
+    }
+  }
+
+  .other-board-card-arrow {
+    flex: 0 0 auto;
+    align-self: center;
+    font-size: 0.8rem;
+    opacity: 0.6;
+    transition: transform 0.15s ease, color 0.15s ease;
+  }
+
+  .other-boards-more {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.5rem;
+  }
+
+  .other-boards-more-button {
+    border-radius: 999px;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}

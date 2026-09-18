@@ -1,11 +1,28 @@
 %ul.other-boards-list
   - @other_boards.each do |board|
     %li.other-boards-list-item
-      - if board.board_type_top?
-        = link_to system_title, root_path
-      - else
-        = link_to board.name, board_path(board.board_id)
+      = link_to other_board_path(board), class: 'other-board-card' do
+        %span.other-board-card-icon{ class: ('is-top' if board.board_type_top?) }
+          %i.fas{ class: board.board_type_top? ? 'fa-house' : 'fa-chalkboard' }
+        %span.other-board-card-main
+          %span.other-board-card-name= other_board_label(board)
+          - if board.description.present?
+            %span.other-board-card-description= board.description
+          %span.other-board-card-meta
+            %span.other-board-card-chip
+              %i.fas.fa-calendar-days
+              = t('boards.show.other_boards.calendar_count', count: board_calendar_count(board))
+            - published_items = board_published_item_count(board)
+            - if published_items.positive?
+              %span.other-board-card-chip
+                %i.fas.fa-file-lines
+                = t('boards.show.other_boards.entry_count', count: published_items)
+        %span.other-board-card-arrow
+          %i.fas.fa-chevron-right
 - if @other_boards_next_page
   = turbo_frame_tag 'other-boards-list' do
-    = link_to t('boards.show.other_boards.load_more'),
-              board_other_boards_path(@board.id, page: @other_boards_next_page)
+    %div.other-boards-more
+      = link_to board_other_boards_path(@board.id, page: @other_boards_next_page),
+                class: 'btn btn-outline-secondary other-boards-more-button' do
+        = t('boards.show.other_boards.load_more')
+        %i.fas.fa-chevron-down.ms-2

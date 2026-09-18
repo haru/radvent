@@ -206,6 +206,12 @@ en:
       other_boards:
         title: 'Other Boards'
         load_more: 'Load more'
+        calendar_count:
+          one: '%{count} calendar'
+          other: '%{count} calendars'
+        entry_count:
+          one: '%{count} entry'
+          other: '%{count} entries'
     new:
       title: 'Create Board'
     edit:
