@@ -1,8 +1,8 @@
 ---
 title: JavaScript and CSS Asset Pipeline
 type: component
-sources: [S010, S011, S012]
-updated: 2026-08-14
+sources: [S010, S011, S012, S013, S015, S017]
+updated: 2026-09-17
 ---
 
 # JavaScript and CSS Asset Pipeline
@@ -36,6 +36,8 @@ calls `new mdb.Input(el).init()` / `.update()`, bound to `turbo:load` and
 | `datatable_controller` | Initializes `simple-datatables` for admin list views (search/sort) (S010) |
 | `popover_controller` | MDB Popover lifecycle — init on `connect`, dispose on `disconnect` (S010) |
 | `navbar_dropdown_controller` | Mobile/desktop dropdown state; closes on outside click (S010) |
+| `board_delete_confirmation_controller` | Disables the board-delete submit button until the typed board ID matches the target board's ID in real time (S013) |
+| `theme_controller` | Feature `007-theme-switch`: applies the picked theme to `data-theme` immediately, `fetch`-PATCHes `theme_path`, and rolls back on failure — see [Manual Theme Selection](./theme-switch.md) (S015) |
 
 Controllers are auto-registered via a manifest rather than explicit imports —
 this cuts boilerplate but means a controller's filename/naming must follow
@@ -46,7 +48,12 @@ Stimulus's convention or it silently won't register (S010).
 `postcss-cli` processes `app/javascript/stylesheets/application.css` with
 `postcss-import`, `postcss-flexbugs-fixes`, and `postcss-preset-env` (stage 3
 + Autoprefixer) (S010). That manifest imports MDB UI Kit, EasyMDE styles, and
-Simple-DataTables styles (S010). SCSS partials of note in
+Simple-DataTables styles (S010). Since EasyMDE's CSS is vendored (not
+directly editable), Dark-mode support for it is added as after-the-fact
+overrides in `application.scss`'s `dark-theme-styles` mixin rather than
+edited in place — see
+[Dark Theme — Full-App Color Coverage](./dark-theme-full-coverage.md#easymde-editor)
+(S017). SCSS partials of note in
 `app/assets/stylesheets/partials/`: `users.scss` (fixes a Bootstrap 4 → 5
 close-button regression in Devise alerts), `comments.scss` / `likes.scss`
 (interaction layout), `advent_calendar_items.scss` (calendar grid) (S010).
@@ -70,7 +77,7 @@ existing content untouched. See
 Feature `003-image-file-upload` specifies that button's behavior in detail:
 a spinner shown and the button disabled for the duration of the upload;
 upload gated by the same `edit_permission?` check used elsewhere (see
-[Domain Model](./domain-model.md#authorization)), while viewing an uploaded
+[Authorization](./authorization.md)), while viewing an uploaded
 image's URL remains unrestricted. Full decision record in
 [Toolbar Image Upload — UX and Access Control](./image-upload-toolbar-button.md)
 (S012).

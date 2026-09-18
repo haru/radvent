@@ -3,7 +3,7 @@ name: speckit-wiki-init
 description: Create the project wiki skeleton (schema, index, source registry) — the three-layer LLM Wiki structure
 compatibility: Requires spec-kit project structure with .specify/ directory
 metadata:
-  author: github-spec-kit
+  author: formin
   source: wiki:commands/speckit.wiki.init.md
 ---
 

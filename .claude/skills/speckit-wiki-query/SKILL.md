@@ -3,7 +3,7 @@ name: speckit-wiki-query
 description: Answer a question from the wiki with page and source citations; flag coverage gaps
 compatibility: Requires spec-kit project structure with .specify/ directory
 metadata:
-  author: github-spec-kit
+  author: formin
   source: wiki:commands/speckit.wiki.query.md
 ---
 

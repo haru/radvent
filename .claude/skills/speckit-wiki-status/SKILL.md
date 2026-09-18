@@ -3,7 +3,7 @@ name: speckit-wiki-status
 description: 'Compact wiki snapshot: counts, freshness, open lint issues, and one recommended next action'
 compatibility: Requires spec-kit project structure with .specify/ directory
 metadata:
-  author: github-spec-kit
+  author: formin
   source: wiki:commands/speckit.wiki.status.md
 ---
 

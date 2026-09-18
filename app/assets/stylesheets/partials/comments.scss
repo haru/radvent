@@ -9,7 +9,7 @@
   position: relative;
   .comment-user{
     display: inline-block;
-    color: #5D310C;
+    color: var(--comment-color);
   }
   .comment-metadata{
     position: absolute;
@@ -28,7 +28,7 @@
   padding: 15px 15px 0;
   background-color: var(--comment-bg-color);
   color: var(--comment-color);
-  border: solid 1px #d9d9d9;
+  border: solid 1px var(--comment-border-color);
   margin-top: 11px;
   margin-bottom: 24px;
   &:before, &:after{
@@ -43,13 +43,13 @@
   }
   &:before{
     border-color: rgba(255,255,255,0);
-    border-bottom-color: #d9d9d9;
+    border-bottom-color: var(--comment-border-color);
     border-width: 7px;
     margin-left: -7px;
   }
   &:after{
     border-color: rgba(255,255,255,0);
-    border-bottom-color: #fff;
+    border-bottom-color: var(--comment-bg-color);
     border-width: 6px;
     margin-left: -6px;
   }

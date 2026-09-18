@@ -68,6 +68,11 @@ RSpec.describe BoardsController do
         get :new
         expect(response.body).not_to include('translation missing')
       end
+
+      it 'does not render a placeholder on the board_id field' do
+        get :new
+        expect(response.body).not_to include('placeholder="my-board"')
+      end
     end
   end
 
@@ -189,11 +194,32 @@ RSpec.describe BoardsController do
     end
 
     context 'when authenticated as owner' do
+      render_views
       before { sign_in owner }
 
       it 'returns http success' do
         get :edit, params: { board_id: board.board_id }
         expect(response).to have_http_status(:success)
+      end
+
+      it 'renders the confirmation message including the board_id' do
+        get :edit, params: { board_id: board.board_id }
+        expect(response.body).to include("ボードIDは #{board.board_id} です。")
+      end
+
+      it 'renders a native turbo-confirm dialog on the delete form' do
+        get :edit, params: { board_id: board.board_id }
+        expect(response.body).to include(%(data-turbo-confirm="#{I18n.t('boards.edit.delete_warning')}"))
+      end
+
+      it 'renders a label associated with the confirm_board_id field' do
+        get :edit, params: { board_id: board.board_id }
+        expect(response.body).to include('for="confirm_board_id"')
+      end
+
+      it 'does not render the delete button disabled by default' do
+        get :edit, params: { board_id: board.board_id }
+        expect(response.body).not_to include('disabled="disabled"')
       end
     end
 
@@ -236,14 +262,58 @@ RSpec.describe BoardsController do
     context 'when authenticated as owner' do
       before { sign_in owner }
 
-      it 'redirects after deleting the board' do
-        delete :destroy, params: { board_id: board.board_id }
-        expect(response).to have_http_status(:redirect)
+      it 'redirects to boards after deleting the board' do
+        delete :destroy, params: { board_id: board.board_id, confirm_board_id: board.board_id }
+        expect(response).to redirect_to(boards_path)
       end
 
-      it 'deletes the board' do
-        delete :destroy, params: { board_id: board.board_id }
+      it 'responds with See Other when the board is deleted' do
+        delete :destroy, params: { board_id: board.board_id, confirm_board_id: board.board_id }
+        expect(response).to have_http_status(:see_other)
+      end
+
+      it 'deletes the board when confirm_board_id matches' do
+        delete :destroy, params: { board_id: board.board_id, confirm_board_id: board.board_id }
         expect(Board.find_by(board_id: board.board_id)).to be_nil
+      end
+
+      it 'deletes the board when confirm_board_id differs only in case or whitespace' do
+        delete :destroy, params: { board_id: board.board_id, confirm_board_id: " #{board.board_id.upcase} " }
+        expect(Board.find_by(board_id: board.board_id)).to be_nil
+      end
+    end
+
+    context 'when confirm_board_id does not match' do
+      before { sign_in owner }
+
+      it 'does not delete the board on a wrong value' do
+        delete :destroy, params: { board_id: board.board_id, confirm_board_id: 'wrong-id' }
+        expect(Board.find_by(board_id: board.board_id)).to be_present
+      end
+
+      it 'does not delete the board on an empty value' do
+        delete :destroy, params: { board_id: board.board_id, confirm_board_id: '' }
+        expect(Board.find_by(board_id: board.board_id)).to be_present
+      end
+
+      it 'does not delete the board when confirm_board_id is omitted' do
+        delete :destroy, params: { board_id: board.board_id }
+        expect(Board.find_by(board_id: board.board_id)).to be_present
+      end
+
+      it 'redirects back to edit' do
+        delete :destroy, params: { board_id: board.board_id, confirm_board_id: 'wrong-id' }
+        expect(response).to redirect_to(edit_board_path(board.board_id))
+      end
+
+      it 'responds with See Other when the board ID does not match' do
+        delete :destroy, params: { board_id: board.board_id, confirm_board_id: 'wrong-id' }
+        expect(response).to have_http_status(:see_other)
+      end
+
+      it 'sets a mismatch alert' do
+        delete :destroy, params: { board_id: board.board_id, confirm_board_id: 'wrong-id' }
+        expect(flash[:alert]).to eq(I18n.t('boards.edit.delete_id_mismatch'))
       end
     end
 
@@ -251,7 +321,7 @@ RSpec.describe BoardsController do
       before { sign_in other_user }
 
       it 'returns 403' do
-        delete :destroy, params: { board_id: board.board_id }
+        delete :destroy, params: { board_id: board.board_id, confirm_board_id: board.board_id }
         expect(response).to have_http_status(:forbidden)
       end
     end
@@ -260,7 +330,7 @@ RSpec.describe BoardsController do
       before { sign_in admin }
 
       it 'deletes the board and redirects' do
-        delete :destroy, params: { board_id: board.board_id }
+        delete :destroy, params: { board_id: board.board_id, confirm_board_id: board.board_id }
         expect(response).to have_http_status(:redirect)
       end
     end

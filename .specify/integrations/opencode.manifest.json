@@ -1,10 +1,10 @@
 {
   "integration": "opencode",
-  "version": "1.0.7.dev0",
-  "installed_at": "2026-09-15T11:10:47.855268+00:00",
+  "version": "1.0.7",
+  "installed_at": "2026-09-16T13:45:31.411868+00:00",
   "files": {
     ".opencode/commands/speckit.analyze.md": "91fe16257ededdea9cc21d3cb27d539fcdd12d93ddcea52332cd4b68176b6a8d",
-    ".opencode/commands/speckit.clarify.md": "0656a0171e5578b79a093528b8f2009db2b31e9937313e922f7de59e93ac6365",
+    ".opencode/commands/speckit.clarify.md": "dd11eb5b9759f7d3cd18c9d7f23a0ae2fe7973fc6ca2486dbfaf53a5569224b1",
     ".opencode/commands/speckit.constitution.md": "9a7e9296f0878cdf4ed011b0de74cfb3656938680b64e43e808553fdfd054efc",
     ".opencode/commands/speckit.implement.md": "e036ce63702db93e656e1c91ee6c02a8dc3d4a4f8624f8ba4adc69027fe68983",
     ".opencode/commands/speckit.converge.md": "2642abc62947a0a3cd7c748038cf191c1e35362b9d69f76cc764fe9b53de89eb",

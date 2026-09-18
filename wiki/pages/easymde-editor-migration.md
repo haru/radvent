@@ -26,7 +26,7 @@ retiring the custom split-pane preview and legacy upload UI that
   `editor_controller`'s `_uploadImage` currently performs that upload, and
   [Toolbar Image Upload — UX and Access Control](./image-upload-toolbar-button.md)
   for that button's detailed UX and permission behavior (S012).
-- Fullscreen mode is added as a toolbar option.
+- Fullscreen mode is added as a toolbar option (FR-005) (S011).
 
 ## Decisions from the clarification session (2026-02-28)
 

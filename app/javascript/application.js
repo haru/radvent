@@ -1,5 +1,6 @@
 import 'mdb-ui-kit/js/mdb.es.min.js'
 import './mdb'
+import './theme_sync'
 import "@hotwired/turbo-rails"
 import * as ActiveStorage from "@rails/activestorage"
 import "./channels/consumer"

@@ -228,6 +228,35 @@ RSpec.describe Board do
     end
   end
 
+  # --- Delete confirmation ---
+  describe '#board_id_match?' do
+    let(:board) { create(:board, :public_user, board_id: 'myboard') }
+
+    it 'returns true for an exact match' do
+      expect(board.board_id_match?('myboard')).to be true
+    end
+
+    it 'returns true for input differing only in case' do
+      expect(board.board_id_match?('MyBoard')).to be true
+    end
+
+    it 'returns true for input with surrounding whitespace' do
+      expect(board.board_id_match?(' myboard ')).to be true
+    end
+
+    it 'returns false for a different string' do
+      expect(board.board_id_match?('wrong-id')).to be false
+    end
+
+    it 'returns false for nil' do
+      expect(board.board_id_match?(nil)).to be false
+    end
+
+    it 'returns false for an empty string' do
+      expect(board.board_id_match?('')).to be false
+    end
+  end
+
   # --- Permissionable truth table for Board ---
   describe 'Permissionable (Board itself)' do
     context 'with a TopBoard' do

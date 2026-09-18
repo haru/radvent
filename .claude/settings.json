@@ -5,6 +5,7 @@
   "enabledPlugins": {
     "context7@claude-plugins-official": true,
     "everything-claude-code@everything-claude-code": true,
-    "skill-creator@claude-plugins-official": false
+    "skill-creator@claude-plugins-official": true,
+    "claude-code-setup@claude-plugins-official": true
   }
 }

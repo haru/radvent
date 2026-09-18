@@ -3,7 +3,7 @@ name: speckit-wiki-lint
 description: 'Health-check the wiki: contradictions, orphan pages, stale claims, broken links, index drift'
 compatibility: Requires spec-kit project structure with .specify/ directory
 metadata:
-  author: github-spec-kit
+  author: formin
   source: wiki:commands/speckit.wiki.lint.md
 ---
 

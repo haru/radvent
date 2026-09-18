@@ -1,8 +1,8 @@
 ---
 title: Views and Frontend
 type: component
-sources: [S005, S010, S011]
-updated: 2026-08-14
+sources: [S005, S010, S011, S015, S017]
+updated: 2026-09-17
 ---
 
 # Views and Frontend
@@ -43,9 +43,19 @@ image-upload flow are in
 SCSS manifest at `app/assets/stylesheets/application.scss`, with
 component partials under `app/assets/stylesheets/partials/` (e.g.
 `items.scss`) (S005). Theming uses CSS custom properties (`--main-bg-color`,
-`--top-menu-bg-color`, etc.); dark mode switches automatically via a
-`prefers-color-scheme` media query — no separate stylesheet or JS toggle
-(S005).
+`--top-menu-bg-color`, etc.), switched via a `data-theme` attribute rendered
+server-side on `<html>` and updated instantly on selection by
+`theme_controller` (S005) (S015). A manual Light/Dark/System picker on My
+Page persists the choice on the user account; the System option keeps the
+`prefers-color-scheme` media query as its fallback, so it stays behaviorally
+identical to the previous automatic OS-driven switching. CSS variable values
+themselves are unchanged. See [Manual Theme Selection](./theme-switch.md)
+for the full decision record (S015).
+
+**Follow-up**: feature `008-fix-dark-theme` extends this same variable/mixin
+system to close remaining hardcoded-color gaps (tables, comments, footer,
+nav dropdown, Markdown rendering, EasyMDE) — see
+[Dark Theme — Full-App Color Coverage](./dark-theme-full-coverage.md) (S017).
 
 ## Item authoring UI
 

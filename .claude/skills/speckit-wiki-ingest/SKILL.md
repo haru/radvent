@@ -3,7 +3,7 @@ name: speckit-wiki-ingest
 description: Ingest a source (feature artifacts, file, or URL) and update the related wiki pages with citations
 compatibility: Requires spec-kit project structure with .specify/ directory
 metadata:
-  author: github-spec-kit
+  author: formin
   source: wiki:commands/speckit.wiki.ingest.md
 ---
 
