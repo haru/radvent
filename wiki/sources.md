@@ -23,6 +23,8 @@ Sources are immutable inputs — the wiki never edits them.
 | S016 | specs/007-theme-switch/plan.md (decision sections) | feature-artifact | 2026-09-16 | 2026-09-16 | theme-switch.md |
 | S017 | specs/008-fix-dark-theme/research.md | feature-artifact | 2026-09-17 | 2026-09-17 | dark-theme-full-coverage.md, devise-views-format-conversion.md, views-and-frontend.md, javascript-asset-pipeline.md, theme-switch.md |
 | S018 | specs/008-fix-dark-theme/plan.md (decision sections) | feature-artifact | 2026-09-17 | 2026-09-17 | dark-theme-full-coverage.md |
+| S019 | specs/009-board-list/research.md | feature-artifact | 2026-09-18 | 2026-09-18 | other-boards-listing.md, domain-model.md, controllers-and-routing.md, views-and-frontend.md |
+| S020 | specs/009-board-list/plan.md (decision sections) | feature-artifact | 2026-09-18 | 2026-09-18 | other-boards-listing.md |
 
 Note: domain-model.md exceeded the 600-word split threshold after S015's
 update; its Authorization section was split into authorization.md (S002,

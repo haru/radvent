@@ -1,8 +1,8 @@
 ---
 title: Views and Frontend
 type: component
-sources: [S005, S010, S011, S015, S017]
-updated: 2026-09-17
+sources: [S005, S010, S011, S015, S017, S019]
+updated: 2026-09-18
 ---
 
 # Views and Frontend
@@ -78,6 +78,10 @@ decision record (S011).
   welcome/board views (S005).
 - Jumbotron and board-detail content adapt to the board's visibility
   (public/protected/private) (S005).
+- The board show view's "other boards" listing (feature `009-board-list`)
+  wraps its list area in a Turbo Frame and paginates via a plain in-frame
+  "load more" link — no Stimulus controller or custom `fetch` code — see
+  [Other Boards Listing](./other-boards-listing.md) (S019).
 
 See [Domain Model](./domain-model.md) for the underlying entities and
 [Controllers and Routing](./controllers-and-routing.md) for how layouts are
