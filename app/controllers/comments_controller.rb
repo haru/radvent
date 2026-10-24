@@ -15,8 +15,12 @@ class CommentsController < ApplicationController
     item = Item.find_by(id: comment_params[:item_id])
     return render_not_found unless item&.readable?(current_user)
 
-    item.comments.create!(comment_params.slice(:user_name, :body))
-    redirect_to item_path(item)
+    @comment = item.comments.create!(comment_params.slice(:user_name, :body))
+    respond_to do |format|
+      # Turbo appends the comment in place, so the scroll position is kept.
+      format.turbo_stream
+      format.html { redirect_to item_path(item) }
+    end
   end
 
   # Deletes a comment.
