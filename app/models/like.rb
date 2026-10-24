@@ -4,8 +4,11 @@
 #
 # Likes associate a user with an item they've liked.
 #
-# A user may like an item once. This is enforced on creation only and without a unique index, so
-# duplicate rows that already exist stay valid and are neither deleted nor blocked from saving.
+# A user may like an item once. This is enforced by a validation on creation only and without a
+# unique index, so the validation neither deletes nor blocks saving of duplicate rows that already
+# exist, and two concurrent creates can still insert a duplicate. Readers therefore count distinct
+# users (Item#like_count, Item#liked_users). Adding the index needs a migration that first removes
+# the existing duplicates.
 class Like < ApplicationRecord
   belongs_to :item
   belongs_to :user

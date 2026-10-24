@@ -258,11 +258,11 @@ services:
 | `SMTP_PORT` | SMTP port | `587` |
 | `SMTP_USERNAME` | SMTP user name | — |
 | `SMTP_PASSWORD` | SMTP password | — |
-| `SMTP_AUTHENTICATION` | `plain` / `login` / `cram_md5` | — |
+| `SMTP_AUTHENTICATION` | `plain` / `login` / `cram_md5` / `xoauth2` (anything else fails the boot) | — |
 | `SMTP_DOMAIN` | HELO domain | — |
-| `SMTP_ENABLE_STARTTLS_AUTO` | Set to `false` to disable STARTTLS | `true` |
+| `SMTP_ENABLE_STARTTLS_AUTO` | Set to `false` (any case) to disable STARTTLS; any other value keeps it enabled | `true` |
 
-> **Password reset mails**: `RADVENT_URL` and `SMTP_ADDRESS` must be set for password reset mails to be delivered. To avoid revealing which addresses are registered, the app always answers a reset request with the same message; if the mail cannot be sent, the failure is only written to the log (`Password reset mail was not delivered`).
+> **Password reset mails**: `RADVENT_URL` and `SMTP_ADDRESS` must be set for password reset mails to be delivered. To avoid revealing which addresses are registered, the app always answers a reset request with the same message; if the mail cannot be sent, the failure is only written to the log (`Password reset mail was not delivered`, with the exception class only). The app warns at boot when `RADVENT_URL`, `SMTP_ADDRESS` or `RADVENT_MAIL_FROM` is unset, and refuses to boot when `RADVENT_URL`, `SMTP_PORT` or `SMTP_AUTHENTICATION` is set to an unusable value.
 
 ---
 

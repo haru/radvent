@@ -25,7 +25,7 @@ RSpec.describe LikesController do
       it "redirects an anonymous #{format} request to sign-in without liking", :aggregate_failures do
         sign_out user
         post :create, params: { item_id: target.id }, as: format
-        expect(response).to have_http_status(:redirect).or have_http_status(:unauthorized)
+        expect(response).to have_http_status(:found)
         expect(likes_count).to eq 0
       end
     end
@@ -42,6 +42,7 @@ RSpec.describe LikesController do
       it 'responds 404 to a non-member without liking', :aggregate_failures do
         post :create, params: { item_id: target.id }, as: :turbo_stream
         expect(response).to have_http_status(:not_found)
+        expect(response.body).not_to include(world[:author].name)
         expect(likes_count).to eq 0
       end
     end
@@ -81,7 +82,7 @@ RSpec.describe LikesController do
     it 'redirects an anonymous request to sign-in', :aggregate_failures do
       sign_out user
       delete :destroy, params: { item_id: target.id, id: 1 }, as: :turbo_stream
-      expect(response).to have_http_status(:redirect).or have_http_status(:unauthorized)
+      expect(response).to have_http_status(:found)
     end
 
     it 'responds 404 for a missing item' do
@@ -91,6 +92,17 @@ RSpec.describe LikesController do
 
     context 'when the board became private after the like' do
       let(:visibility) { :private }
+
+      it 'responds 404 and keeps the like', :aggregate_failures do
+        Like.create!(user: user, item: target)
+        delete :destroy, params: { item_id: target.id, id: 1 }, as: :turbo_stream
+        expect(response).to have_http_status(:not_found)
+        expect(likes_count).to eq 1
+      end
+    end
+
+    context 'when the item is not yet published' do
+      let(:item_date) { 20 }
 
       it 'responds 404 and keeps the like', :aggregate_failures do
         Like.create!(user: user, item: target)

@@ -3,7 +3,7 @@
 # Manages likes on articles.
 #
 # Handles creating and deleting likes on items. Both actions require a signed-in user and an item
-# the user can read; anything else is answered with 404 so hidden items are not revealed.
+# the user can read; a missing or unreadable item is answered with 404 so hidden items are not revealed.
 class LikesController < ApplicationController
   before_action :authenticate_user!
   before_action :find_readable_item

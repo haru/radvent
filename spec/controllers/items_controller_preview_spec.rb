@@ -61,6 +61,12 @@ RSpec.describe ItemsController, '#preview' do
         expect(response.body).not_to include('Stored Title', 'Stored body secret', board_name)
       end
 
+      it 'renders for an admin who is not a member' do
+        sign_in world[:admin]
+        preview_stored
+        expect(response).to have_http_status(:success)
+      end
+
       it 'responds 403 to a member who did not write the article' do
         sign_in world[:member]
         preview_stored
@@ -151,6 +157,12 @@ RSpec.describe ItemsController, '#preview' do
         preview_on(empty_slot.id)
         expect(response).to have_http_status(:not_found)
         expect(response.body).not_to include(world[:author].name, board_name)
+      end
+
+      it 'renders for an admin who is not a member' do
+        sign_in world[:admin]
+        preview_on(empty_slot.id)
+        expect(response).to have_http_status(:success)
       end
     end
 

@@ -247,11 +247,11 @@ services:
 | `SMTP_PORT` | SMTPポート番号 | `587` |
 | `SMTP_USERNAME` | SMTPユーザー名 | — |
 | `SMTP_PASSWORD` | SMTPパスワード | — |
-| `SMTP_AUTHENTICATION` | `plain` / `login` / `cram_md5` | — |
+| `SMTP_AUTHENTICATION` | `plain` / `login` / `cram_md5` / `xoauth2`(それ以外は起動エラー) | — |
 | `SMTP_DOMAIN` | HELOドメイン | — |
-| `SMTP_ENABLE_STARTTLS_AUTO` | `false` でSTARTTLSを無効にする | `true` |
+| `SMTP_ENABLE_STARTTLS_AUTO` | `false`(大文字小文字は問わない)でSTARTTLSを無効にする。それ以外の値では有効のまま | `true` |
 
-> **パスワード再設定メール**: メールを届けるには `RADVENT_URL` と `SMTP_ADDRESS` の設定が必須です。登録済みのアドレスが分からないように、再設定の要求にはつねに同じ案内を返します。メールを送れなかった場合は、ログに `Password reset mail was not delivered` と記録されるだけです。
+> **パスワード再設定メール**: メールを届けるには `RADVENT_URL` と `SMTP_ADDRESS` の設定が必須です。登録済みのアドレスが分からないように、再設定の要求にはつねに同じ案内を返します。メールを送れなかった場合は、ログに `Password reset mail was not delivered` と(例外クラス名のみ)記録されるだけです。起動時に `RADVENT_URL`、`SMTP_ADDRESS`、`RADVENT_MAIL_FROM` のどれかが未設定なら警告を出し、`RADVENT_URL`、`SMTP_PORT`、`SMTP_AUTHENTICATION` に使えない値が入っていると起動に失敗します。
 
 ---
 

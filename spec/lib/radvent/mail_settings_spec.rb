@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require 'spec_helper'
 require_relative '../../../lib/radvent/mail_settings'
 
 RSpec.describe Radvent::MailSettings do
@@ -19,7 +19,7 @@ RSpec.describe Radvent::MailSettings do
       expect([{}, { 'RADVENT_URL' => '' }].map { |env| described_class.default_url_options(env) }).to eq [nil, nil]
     end
 
-    ['advent.example.com', 'http://', 'http://exa mple.com', '://x'].each do |value|
+    ['advent.example.com', 'http://', 'http://exa mple.com', '://x', 'ftp://advent.example.com'].each do |value|
       it "raises a configuration error for #{value.inspect}" do
         expect { described_class.default_url_options('RADVENT_URL' => value) }
           .to raise_error(Radvent::MailSettings::ConfigurationError, /RADVENT_URL/)
@@ -53,6 +53,21 @@ RSpec.describe Radvent::MailSettings do
       expect(described_class.smtp_settings('SMTP_ADDRESS' => 'h', 'SMTP_ENABLE_STARTTLS_AUTO' => 'true'))
         .to include(enable_starttls_auto: true)
     end
+
+    it 'disables STARTTLS for false in any case' do
+      expect(described_class.smtp_settings('SMTP_ADDRESS' => 'h', 'SMTP_ENABLE_STARTTLS_AUTO' => 'FALSE'))
+        .to include(enable_starttls_auto: false)
+    end
+
+    it 'raises a configuration error naming SMTP_PORT for a non-numeric port' do
+      expect { described_class.smtp_settings('SMTP_ADDRESS' => 'h', 'SMTP_PORT' => 'abc') }
+        .to raise_error(Radvent::MailSettings::ConfigurationError, /SMTP_PORT/)
+    end
+
+    it 'raises a configuration error naming SMTP_AUTHENTICATION for an unknown method' do
+      expect { described_class.smtp_settings('SMTP_ADDRESS' => 'h', 'SMTP_AUTHENTICATION' => 'logn') }
+        .to raise_error(Radvent::MailSettings::ConfigurationError, /SMTP_AUTHENTICATION/)
+    end
   end
 
   describe '.mailer_sender' do
@@ -60,9 +75,21 @@ RSpec.describe Radvent::MailSettings do
       expect(described_class.mailer_sender('RADVENT_MAIL_FROM' => 'noreply@example.com')).to eq 'noreply@example.com'
     end
 
-    it 'falls back to the previous default when unset or empty' do
+    it 'falls back to the default sender when unset or empty' do
       expect([{}, { 'RADVENT_MAIL_FROM' => '' }].map { |env| described_class.mailer_sender(env) })
         .to all(eq('please-change-me-at-config-initializers-devise@example.com'))
+    end
+  end
+
+  describe '.missing_variables' do
+    it 'lists the unset or empty variables needed for password reset mails' do
+      expect(described_class.missing_variables('SMTP_ADDRESS' => '')).to eq %w[RADVENT_URL SMTP_ADDRESS
+                                                                               RADVENT_MAIL_FROM]
+    end
+
+    it 'returns an empty list when all are set' do
+      env = { 'RADVENT_URL' => 'https://a.example.com', 'SMTP_ADDRESS' => 'h', 'RADVENT_MAIL_FROM' => 'a@example.com' }
+      expect(described_class.missing_variables(env)).to eq []
     end
   end
 end

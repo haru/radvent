@@ -4,7 +4,7 @@
 #
 # Handles creating, reading, updating, and previewing articles (items) in the advent calendar.
 class ItemsController < ApplicationController
-  before_action :authenticate_user!, only: %i[new create edit update preview preview_new]
+  before_action :authenticate_user!, except: :show
   before_action :check_article_creation_authorization, only: %i[new create preview_new]
   before_action :find_item, only: %i[show edit update preview]
   before_action :check_visibility, only: %i[show preview]
@@ -70,10 +70,11 @@ class ItemsController < ApplicationController
 
   # Previews an existing item without saving.
   #
-  # Authorized like +edit+: +find_item+ answers 404 for a missing item, +check_visibility+ answers 404
-  # for an item on a board the requester cannot see, and +edit_permission?+ answers 403 unless the
-  # requester wrote the item or is an admin. Only the title and body are overwritten for display; the
-  # slot is never re-assigned, so the preview always shows the slot the item belongs to.
+  # Authorized like +edit+, plus +check_visibility+: +find_item+ answers 404 for a missing item,
+  # +check_visibility+ answers 404 for an item on a board the requester cannot see, and
+  # +edit_permission?+ answers 403 unless the requester owns the item's slot or is an admin. Only the
+  # title and body are overwritten for display; the slot is never re-assigned, so the preview always
+  # shows the slot the item belongs to. A request without an +item+ parameter is answered with 400.
   #
   # @return [void]
   def preview
@@ -87,8 +88,7 @@ class ItemsController < ApplicationController
   #
   # @return [void]
   def preview_new
-    @item = Item.new(article_params)
-    @item.advent_calendar_item = @advent_calendar_item
+    @item = Item.new(article_params.merge(advent_calendar_item: @advent_calendar_item))
     render :preview
   end
 

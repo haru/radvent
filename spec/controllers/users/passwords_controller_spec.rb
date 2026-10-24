@@ -29,14 +29,15 @@ RSpec.describe Users::PasswordsController do
     post :create, params: { user: { email: email } }
   end
 
-  # Raises the given error with the message 'boom'; a template error needs a cause to take it from.
+  # Raises the given error with a message naming the recipient, as real SMTP errors do; a template
+  # error needs a cause to take it from.
   #
   # @param error [Class] the error class
   # @return [void]
   def raise_delivery_error(error)
-    raise 'boom'
+    raise 'rejected <registered@example.com>'
   rescue StandardError
-    raise error == ActionView::Template::Error ? error.new(nil) : error.new('boom')
+    raise error == ActionView::Template::Error ? error.new(nil) : error.new('rejected <registered@example.com>')
   end
 
   # Returns the parts of the response that must not differ between accounts.
@@ -65,7 +66,8 @@ RSpec.describe Users::PasswordsController do
       context "when delivery fails with #{error}" do
         before do
           allow(Rails.logger).to receive(:error)
-          allow(User).to receive(:send_reset_password_instructions) { raise_delivery_error(error) }
+          allow(Rails.error).to receive(:report)
+          allow(Devise::Mailer).to receive(:reset_password_instructions) { raise_delivery_error(error) }
           request_reset('registered@example.com')
         end
 
@@ -74,19 +76,23 @@ RSpec.describe Users::PasswordsController do
           expect(flash[:notice]).to eq notice
         end
 
-        it 'logs the class and message' do
-          expect(Rails.logger).to have_received(:error).with(a_string_including(error.name, 'boom'))
+        it 'logs the class only' do
+          expect(Rails.logger).to have_received(:error).with(a_string_including(error.name))
         end
 
-        it 'does not log the address' do
-          expect(Rails.logger).not_to have_received(:error).with(a_string_including('registered@'))
+        it 'does not log the address or the error message' do
+          expect(Rails.logger).not_to have_received(:error).with(a_string_including('registered@', 'rejected'))
+        end
+
+        it 'reports the error as handled' do
+          expect(Rails.error).to have_received(:report).with(an_instance_of(error), hash_including(handled: true))
         end
       end
     end
 
     it 'responds identically for registered, unregistered and failed delivery' do
       outcomes = %w[registered@example.com nobody@example.com].map { |email| request_reset(email) && observable }
-      allow(User).to receive(:send_reset_password_instructions).and_raise(Net::SMTPFatalError, 'x')
+      allow(Devise::Mailer).to receive(:reset_password_instructions).and_raise(Net::SMTPFatalError, 'x')
       outcomes << (request_reset('registered@example.com') && observable)
       expect(outcomes.uniq.size).to eq 1
     end
@@ -105,6 +111,11 @@ RSpec.describe Users::PasswordsController do
         expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include(I18n.t('errors.messages.invalid'))
       end
+    end
+
+    it 'does not swallow errors raised before delivery, such as a database failure' do
+      allow(User).to receive(:find_by).and_raise(ActiveRecord::ConnectionNotEstablished)
+      expect { request_reset('registered@example.com') }.to raise_error(ActiveRecord::ConnectionNotEstablished)
     end
 
     it 'normalizes case and surrounding whitespace like sign-in', :aggregate_failures do
