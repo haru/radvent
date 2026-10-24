@@ -1,7 +1,7 @@
 ---
 title: Authorization
 type: component
-sources: [S002, S004, S009, S012, S013, S023, S024, S026, S027, S028]
+sources: [S002, S004, S009, S012, S013, S023, S024, S026, S027, S028, S029]
 updated: 2026-10-24
 ---
 
@@ -63,6 +63,10 @@ User-info editing is admin-only, and creating events, slots and articles
 board/event/slot with 404 for hidden and 403 for forbidden targets; see
 [User, Event, Slot and Article Authorization](./user-event-item-authorization.md)
 (S027).
+
+Event edit/update/destroy now answer 404 before 403 for events on boards the
+requester cannot see; see
+[Event Addressing by Board](./event-addressing-by-board.md) (S029).
 
 Both article previews now require sign-in, and previews are authorized with the
 existing visibility/edit filters; see

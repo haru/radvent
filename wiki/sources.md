@@ -33,6 +33,8 @@ Sources are immutable inputs — the wiki never edits them.
 | S026 | specs/012-comment-authorization/research.md | feature-artifact | 2026-10-24 | 2026-10-24 | comment-authorization.md, authorization.md, controllers-and-routing.md |
 | S027 | specs/013-user-event-item-authorization/research.md | feature-artifact | 2026-10-24 | 2026-10-24 | user-event-item-authorization.md, authorization.md |
 | S028 | specs/014-preview-email-exposure/research.md | feature-artifact | 2026-10-24 | 2026-10-24 | article-preview-authorization.md, password-reset-account-hiding.md, likes-hardening.md, configuration.md, user-event-item-authorization.md, authorization.md, controllers-and-routing.md, controller-groups.md |
+| S029 | specs/015-env-log-event-collision/research.md | feature-artifact | 2026-10-24 | 2026-10-24 | event-addressing-by-board.md, startup-log-secret-hygiene.md, controllers-and-routing.md, authorization.md, user-event-item-authorization.md, docker-deployment.md, domain-model.md |
+| S030 | specs/015-env-log-event-collision/plan.md (summary) | feature-artifact | 2026-10-24 | 2026-10-24 | event-addressing-by-board.md, startup-log-secret-hygiene.md |
 
 Note: domain-model.md exceeded the 600-word split threshold after S015's
 update; its Authorization section was split into authorization.md (S002,

@@ -1,7 +1,7 @@
 ---
 title: Controllers and Routing
 type: component
-sources: [S004, S009, S013, S015, S019, S024, S028]
+sources: [S004, S009, S013, S015, S019, S024, S028, S029]
 updated: 2026-10-24
 ---
 
@@ -17,7 +17,8 @@ routes with slug-based access for the main entities (S004):
   events are addressed as `/boards/:board_board_id/events/:name`, and a
   name-only URL that matches no TOP board event redirects to the board-scoped
   URL only when exactly one visible user board event has that name
-  (see ADR 0009).
+  (ADR 0009; S029). See
+  [Event Addressing by Board](./event-addressing-by-board.md).
 - Boards: slug parameter constrained to alphanumeric characters and hyphens
   (S004).
 - Admin routes: `delete 'users/delete/:id'`, `put 'user/:id/update'` (S004).
@@ -65,7 +66,8 @@ All controllers inherit from `ApplicationController`, which provides (S004):
   `admin` flag set (S004); see [Authorization](./authorization.md).
 - `check_visibility` (`BoardsController`; also the Events / Items /
   AdventCalendarItems `show` actions) — 404 unless the board's `visible?`
-  rule holds (`public` / `protected` / `private`) (S004); see
+  rule holds (`public` / `protected` / `private`) (S004); Events also run it
+  on `edit` / `update` / `destroy` (S029); see
   [Board Visibility on Show Pages](./show-page-visibility.md) (S024).
 - `edit_permission?` (Items / AdventCalendarItems controllers) — allows edits
   only for the content's creator or an admin (S004).
