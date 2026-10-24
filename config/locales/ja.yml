@@ -8,6 +8,14 @@ ja:
           has_one: "%{record}が存在しているので削除できません"
           has_many: "%{record}が存在しているので削除できません"
       models:
+        advent_calendar_item:
+          attributes:
+            date:
+              taken: にはすでに枠があります
+        item:
+          attributes:
+            advent_calendar_item_id:
+              taken: にはすでに記事があります
         event:
           attributes:
             end_date:
@@ -24,7 +32,9 @@ ja:
       advent_calendar_item:
         user_name: お名前
         comment: コメント
+        date: 日付
       item:
+        advent_calendar_item_id: 日付枠
         title: タイトル
         title_empty: 無題
         body: 本文

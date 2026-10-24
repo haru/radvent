@@ -122,8 +122,8 @@ describe Event do
     end
 
     it 'returns 2 after two entries are added' do
-      create(:advent_calendar_item, event: event)
-      create(:advent_calendar_item, event: event)
+      create(:advent_calendar_item, event: event, date: 1)
+      create(:advent_calendar_item, event: event, date: 2)
       event.reload
       expect(event.entry_count).to eq(2)
     end
@@ -143,7 +143,9 @@ describe Event do
     end
 
     it 'returns 100 when all days are filled' do
-      5.times { create(:advent_calendar_item, event: event) }
+      event.start_date.day.upto(event.end_date.day).each do |day|
+        create(:advent_calendar_item, event: event, date: day)
+      end
       event.reload
       expect(event.entry_percent).to eq(100)
     end
@@ -250,6 +252,70 @@ describe Event do
 
       it 'allows owner' do
         expect(described_class.creatable_on?(private_board, owner)).to be true
+      end
+    end
+  end
+
+  describe '#joinable?' do
+    let(:owner) { create(:user) }
+    let(:member) { create(:user) }
+    let(:outsider) { create(:user) }
+    let(:admin_user) { create(:user, admin: true) }
+    let(:joinable_event) do
+      create(:event, board: board, name: 'joinable-cal', title: 'Joinable Calendar',
+                     start_date: '2015-12-01', end_date: '2015-12-25', created_by: owner,
+                     updated_by: owner)
+    end
+
+    before do
+      create(:board_membership, board: board, user: member) if board.board_type_user?
+      joinable_event
+    end
+
+    context 'when the board is TOP' do
+      let(:board) { create(:board, :top) }
+
+      it 'is true for every logged-in user and false for a guest', :aggregate_failures do
+        expect(joinable_event.joinable?(nil)).to be false
+        expect(joinable_event.joinable?(outsider)).to be true
+        expect(joinable_event.joinable?(member)).to be true
+        expect(joinable_event.joinable?(admin_user)).to be true
+      end
+    end
+
+    context 'when the board is public' do
+      let(:board) { create(:board, :public_user, owner: owner) }
+
+      it 'is true for every logged-in user and false for a guest', :aggregate_failures do
+        expect(joinable_event.joinable?(nil)).to be false
+        expect(joinable_event.joinable?(outsider)).to be true
+        expect(joinable_event.joinable?(member)).to be true
+        expect(joinable_event.joinable?(owner)).to be true
+        expect(joinable_event.joinable?(admin_user)).to be true
+      end
+    end
+
+    context 'when the board is protected' do
+      let(:board) { create(:board, :protected_user, owner: owner) }
+
+      it 'is true for owner, member and admin only', :aggregate_failures do
+        expect(joinable_event.joinable?(nil)).to be false
+        expect(joinable_event.joinable?(outsider)).to be false
+        expect(joinable_event.joinable?(member)).to be true
+        expect(joinable_event.joinable?(owner)).to be true
+        expect(joinable_event.joinable?(admin_user)).to be true
+      end
+    end
+
+    context 'when the board is private' do
+      let(:board) { create(:board, :private_user, owner: owner) }
+
+      it 'is true for owner, member and admin only', :aggregate_failures do
+        expect(joinable_event.joinable?(nil)).to be false
+        expect(joinable_event.joinable?(outsider)).to be false
+        expect(joinable_event.joinable?(member)).to be true
+        expect(joinable_event.joinable?(owner)).to be true
+        expect(joinable_event.joinable?(admin_user)).to be true
       end
     end
   end

@@ -26,6 +26,62 @@ RSpec.describe UsersController do
     end
   end
 
+  describe 'GET #edit_info authorization' do
+    render_views
+
+    let(:target_user) { create(:user, email: 'target@example.com', name: 'targetuser') }
+    let(:requested_id) { target_user.id }
+
+    before { target_user }
+
+    shared_examples 'a forbidden page without user info' do
+      before { get :edit_info, params: { id: requested_id } }
+
+      it 'responds with 403 without exposing the email address or name', :aggregate_failures do
+        expect(response).to have_http_status(:forbidden)
+        expect(response.body).not_to include('target@example.com', 'targetuser')
+      end
+    end
+
+    context 'when not signed in' do
+      before { sign_out user }
+
+      it_behaves_like 'a forbidden page without user info'
+    end
+
+    context 'when a non-admin user opens another user' do
+      before { sign_in create(:user) }
+
+      it_behaves_like 'a forbidden page without user info'
+    end
+
+    context 'when a non-admin user opens own account' do
+      let(:non_admin) { create(:user) }
+      let(:requested_id) { non_admin.id }
+
+      before { sign_in non_admin }
+
+      it_behaves_like 'a forbidden page without user info'
+    end
+
+    context 'when a non-admin user opens a non-existent id' do
+      let(:requested_id) { User.maximum(:id).to_i + 1 }
+
+      before { sign_in create(:user) }
+
+      it_behaves_like 'a forbidden page without user info'
+    end
+
+    context 'when signed in as admin' do
+      before { get :edit_info, params: { id: target_user.id } }
+
+      it 'responds with success showing the email address and name', :aggregate_failures do
+        expect(response).to have_http_status(:success)
+        expect(response.body).to include('target@example.com', 'targetuser')
+      end
+    end
+  end
+
   describe 'PUT #update_info' do
     let(:other_user) { create(:user, admin: false) }
 

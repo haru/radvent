@@ -60,6 +60,14 @@ en:
       like: like
     errors:
       models:
+        advent_calendar_item:
+          attributes:
+            date:
+              taken: already has a slot
+        item:
+          attributes:
+            advent_calendar_item_id:
+              taken: already has an article
         event:
           attributes:
             end_date:
@@ -68,7 +76,9 @@ en:
       advent_calendar_item:
         user_name: Name
         comment: Comment
+        date: Date
       item:
+        advent_calendar_item_id: Calendar slot
         title: Title
         title_empty: No title
         body: Body

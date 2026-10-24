@@ -109,33 +109,35 @@ RSpec.describe ItemsController do
   end
 
   describe 'GET #new' do
+    let!(:new_slot) { create(:advent_calendar_item, event: event, user: user, date: 12) }
+
     it 'assigns the requested date to @date' do
-      get :new, params: { date: 1 }
+      get :new, params: { id: new_slot.id, date: 1 }
       expect(assigns(:date)).to eq '1'
     end
 
     it 'assigns a new item to @item' do
-      get :new
+      get :new, params: { id: new_slot.id }
       expect(assigns(:item)).to be_a_new(Item)
     end
 
     it 'assigns the requested id to @item.advent_calendar_item_id' do
-      get :new, params: { id: 1 }
-      expect(assigns(:item).advent_calendar_item_id).to eq 1
+      get :new, params: { id: new_slot.id }
+      expect(assigns(:item).advent_calendar_item_id).to eq new_slot.id
     end
 
     it 'assigns a new attachment to @attachment' do
-      get :new
+      get :new, params: { id: new_slot.id }
       expect(assigns(:attachment)).to be_a_new(Attachment)
     end
 
     it 'assigns the requested id to @attachment.advent_calendar_item_id' do
-      get :new, params: { id: 1 }
-      expect(assigns(:attachment).advent_calendar_item_id).to eq 1
+      get :new, params: { id: new_slot.id }
+      expect(assigns(:attachment).advent_calendar_item_id).to eq new_slot.id
     end
 
     it 'renders the :new template' do
-      get :new
+      get :new, params: { id: new_slot.id }
       expect(response).to render_template :new
     end
 
@@ -143,8 +145,7 @@ RSpec.describe ItemsController do
       render_views
 
       it 'returns http success' do
-        aci = create(:advent_calendar_item, date: 8, event: event, user: user)
-        get :new, params: { id: aci.id, date: aci.date }
+        get :new, params: { id: new_slot.id, date: new_slot.date }
         expect(response).to have_http_status(:success)
       end
     end
@@ -152,16 +153,16 @@ RSpec.describe ItemsController do
     context 'when rendering the view without an advent_calendar_item id' do
       render_views
 
-      it 'returns http success' do
+      it 'returns not found' do
         get :new
-        expect(response).to have_http_status(:success)
+        expect(response).to have_http_status(:not_found)
       end
     end
   end
 
   describe 'GET #edit' do
     it 'assigns the requested item to @item' do
-      aci = create(:advent_calendar_item, date: 2, event: event, user: user)
+      aci = create(:advent_calendar_item, date: 4, event: event, user: user)
       item = aci.item
       get :edit, params: { use_route: :radvent, id: item }
       expect(assigns(:item)).to eq item
@@ -199,19 +200,20 @@ RSpec.describe ItemsController do
     end
 
     it 'renders the :new if the new item is not saved' do
+      aci = create(:advent_calendar_item, date: 8, event: event, user: user)
       allow_any_instance_of(Item).to receive(:save).and_return(false)
-      post :create, params: { item: attributes_for(:item) }
+      post :create, params: { item: attributes_for(:item, advent_calendar_item_id: aci.id) }
       expect(response).to render_template :new
     end
 
     context 'when rendering the view after a failed save' do
       render_views
 
-      it 'returns http success' do
+      it 'returns http unprocessable content' do
         aci = create(:advent_calendar_item, date: 8, event: event, user: user)
         allow_any_instance_of(Item).to receive(:save).and_return(false)
         post :create, params: { item: attributes_for(:item, advent_calendar_item_id: aci.id) }
-        expect(response).to have_http_status(:success)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
 
@@ -255,10 +257,10 @@ RSpec.describe ItemsController do
     context 'when rendering the view after a failed save' do
       render_views
 
-      it 'returns http success' do
+      it 'returns http unprocessable content' do
         allow_any_instance_of(Item).to receive(:save).and_return(false)
         patch :update, params: { id: item, item: attributes_for(:item) }
-        expect(response).to have_http_status(:success)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
 
@@ -438,6 +440,233 @@ RSpec.describe ItemsController do
       item = advent_calendar_item.item
       post :preview, params: { id: item, item: attributes_for(:item) }
       expect(response).to render_template :preview
+    end
+  end
+
+  describe 'article authorization' do
+    let(:slot_owner) { create(:user) }
+    let(:slot_event) do
+      create(:event, board: create(:board, :public_user, owner: slot_owner), name: 'auth-item-cal',
+                     title: 'Auth Item Calendar', start_date: '2015-12-01', end_date: '2015-12-25',
+                     created_by: slot_owner, updated_by: slot_owner)
+    end
+    let!(:slot_with_item) { create(:advent_calendar_item, event: slot_event, user: slot_owner, date: 7) }
+
+    before do
+      allow(Time.zone).to receive(:today).and_return(Date.new(2015, 11, 30))
+      create(:item, advent_calendar_item: slot_with_item, title: 'existing title', body: 'existing body')
+    end
+
+    # Returns an empty slot of the slot owner, creating it once per example.
+    #
+    # @return [AdventCalendarItem]
+    def empty_slot
+      @empty_slot ||= create(:advent_calendar_item, event: slot_event, user: slot_owner, date: 5)
+    end
+
+    # Returns a slot on a board the requester cannot see, creating it once per example.
+    #
+    # @return [AdventCalendarItem]
+    def invisible_slot
+      @invisible_slot ||= begin
+        board = create(:board, :private_user, owner: slot_owner)
+        event = create(:event, board: board, name: 'auth-item-private', title: 'Auth Item Private',
+                               start_date: '2015-12-01', end_date: '2015-12-25', created_by: slot_owner,
+                               updated_by: slot_owner)
+        create(:advent_calendar_item, event: event, user: slot_owner, date: 6)
+      end
+    end
+
+    # Builds the article attributes posted to create and update.
+    #
+    # @param slot_id [Integer] the advent calendar item id sent in the request
+    # @param title [String] the article title
+    # @param body [String] the article body
+    # @return [Hash] the item attributes
+    def article_attributes(slot_id, title: 'new title', body: 'new body')
+      { title: title, body: body, advent_calendar_item_id: slot_id }
+    end
+
+    # Posts an article creation request for the given slot id.
+    #
+    # @param slot_id [Integer] the advent calendar item id sent in the request
+    # @return [void]
+    def post_article(slot_id)
+      post :create, params: { item: article_attributes(slot_id) }
+    end
+
+    context 'when a non-admin user targets a visible slot of another user' do
+      before { sign_in user }
+
+      it 'returns 403 for new' do
+        get :new, params: { id: empty_slot.id }
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it 'returns 403 and creates nothing for create', :aggregate_failures do
+        expect { post_article(empty_slot.id) }.not_to change(Item, :count)
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context 'when the slot is on a board the user cannot see or does not exist' do
+      before { sign_in user }
+
+      it 'returns 404 for new on an invisible slot' do
+        get :new, params: { id: invisible_slot.id }
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it 'returns 404 and creates nothing for create on an invisible slot', :aggregate_failures do
+        expect { post_article(invisible_slot.id) }.not_to change(Item, :count)
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it 'returns 404 for new on a non-existent slot' do
+        get :new, params: { id: AdventCalendarItem.maximum(:id).to_i + 1 }
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it 'returns 404 and creates nothing for create on a non-existent slot', :aggregate_failures do
+        expect { post_article(AdventCalendarItem.maximum(:id).to_i + 1) }.not_to change(Item, :count)
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context 'when the slot owner writes before the publish date' do
+      before { sign_in slot_owner }
+
+      it 'returns success for new' do
+        get :new, params: { id: empty_slot.id }
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'creates the article and redirects to the slot page', :aggregate_failures do
+        expect { post_article(empty_slot.id) }.to change(Item, :count).by(1)
+        expect(response).to redirect_to(advent_calendar_item_path(id: empty_slot.id))
+      end
+    end
+
+    context 'when admin writes to the slot of another user' do
+      before { sign_in create(:user, admin: true) }
+
+      it 'creates the article and redirects to the slot page', :aggregate_failures do
+        expect { post_article(empty_slot.id) }.to change(Item, :count).by(1)
+        expect(response).to redirect_to(advent_calendar_item_path(id: empty_slot.id))
+      end
+    end
+
+    context 'when the owner targets a slot that already has an article' do
+      before { sign_in slot_owner }
+
+      it 'does not save, re-renders new and keeps the existing article', :aggregate_failures do
+        expect { post_article(slot_with_item.id) }.not_to change(Item, :count)
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response).to render_template :new
+        expect(slot_with_item.item.reload).to have_attributes(title: 'existing title',
+                                                              body: 'existing body')
+      end
+
+      it 'assigns the board of the authorized slot for the layout' do
+        post_article(slot_with_item.id)
+        expect(assigns(:board)).to eq slot_event.board
+      end
+    end
+
+    context 'when the duplicate article is rendered with views' do
+      render_views
+
+      before { sign_in slot_owner }
+
+      it 'shows the validation error and keeps the slot id in the form', :aggregate_failures do
+        post_article(slot_with_item.id)
+        expect(response.body).to include('alert-danger')
+        slot_input = response.body[/<input[^>]*name="item\[advent_calendar_item_id\]"[^>]*>/]
+        expect(slot_input).to include(%(value="#{slot_with_item.id}"))
+      end
+    end
+
+    context 'when a conflicting top-level id is sent with create' do
+      before { sign_in slot_owner }
+
+      it 'authorizes only item[advent_calendar_item_id]', :aggregate_failures do
+        others_slot = create(:advent_calendar_item, event: slot_event, user: create(:user), date: 12)
+        expect do
+          post :create, params: { id: empty_slot.id, item: article_attributes(others_slot.id) }
+        end.not_to change(Item, :count)
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context 'when the slot has no account and matches only by user name' do
+      before { sign_in slot_owner }
+
+      # Builds a legacy slot that has no account, saved without validation.
+      #
+      # @param user_name [String] the name the slot is registered under
+      # @param date [Integer] the calendar date
+      # @return [AdventCalendarItem]
+      def legacy_slot(user_name, date)
+        build(:advent_calendar_item, event: slot_event, user: nil, user_name: user_name, date: date)
+          .tap { |slot| slot.save(validate: false) }
+      end
+
+      it 'allows the article when the user name matches', :aggregate_failures do
+        legacy = legacy_slot(slot_owner.name, 13)
+        expect { post_article(legacy.id) }.to change(Item, :count).by(1)
+      end
+
+      it 'returns 403 when the user name differs', :aggregate_failures do
+        legacy = legacy_slot('someone else', 14)
+        expect { post_article(legacy.id) }.not_to change(Item, :count)
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context 'when not signed in' do
+      before { sign_out user }
+
+      it 'redirects to the sign-in page for new' do
+        get :new, params: { id: empty_slot.id }
+        expect(response).to redirect_to(new_user_session_path)
+      end
+
+      it 'redirects to the sign-in page for create' do
+        post_article(empty_slot.id)
+        expect(response).to redirect_to(new_user_session_path)
+      end
+    end
+
+    describe 'PATCH #update keeps the article on its slot' do
+      before { sign_in slot_owner }
+
+      # Patches the article with attributes pointing at the given slot id.
+      #
+      # @param item [Item] the article under test
+      # @param slot_id [Integer] the advent calendar item id sent in the request
+      # @return [void]
+      def patch_article_to(item, slot_id)
+        patch :update, params: { id: item,
+                                 item: article_attributes(slot_id, title: 'updated title',
+                                                                   body: 'updated body') }
+      end
+
+      it 'keeps the article on the original slot when another own slot is given', :aggregate_failures do
+        own_other_slot = create(:advent_calendar_item, event: slot_event, user: slot_owner, date: 9)
+        patch_article_to(slot_with_item.item, own_other_slot.id)
+        expect(slot_with_item.item.reload.advent_calendar_item_id).to eq slot_with_item.id
+        expect(slot_with_item.item.reload).to have_attributes(title: 'updated title', body: 'updated body')
+        expect(response).to redirect_to(advent_calendar_item_path(id: slot_with_item.id))
+      end
+
+      it 'keeps the article on the original slot when the slot of another user is given',
+         :aggregate_failures do
+        others_slot = create(:advent_calendar_item, event: slot_event, user: create(:user), date: 11)
+        patch_article_to(slot_with_item.item, others_slot.id)
+        expect(slot_with_item.item.reload.advent_calendar_item_id).to eq slot_with_item.id
+        expect(slot_with_item.item.reload).to have_attributes(title: 'updated title', body: 'updated body')
+        expect(response).to redirect_to(advent_calendar_item_path(id: slot_with_item.id))
+      end
     end
   end
 end

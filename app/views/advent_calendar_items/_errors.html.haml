@@ -1,0 +1,5 @@
+- if advent_calendar_item.errors.any?
+  %div.alert.alert-danger
+    %ul
+      - advent_calendar_item.errors.full_messages.each do |msg|
+        %li= msg

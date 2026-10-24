@@ -11,6 +11,8 @@ class AdventCalendarItem < ApplicationRecord
   belongs_to :event
   has_one :item, dependent: :destroy
   has_many :attachments, dependent: :destroy
+  validates :date, presence: true, numericality: { only_integer: true, in: 1..31 }
+  validates :date, uniqueness: { scope: :event_id }, if: :will_save_change_to_date?
   scope :prev, lambda { |item|
     joins(:item, :event).where('event_id = ? and date < ?', item.event_id, item.date).order(:date).reverse_order
   }
@@ -22,7 +24,7 @@ class AdventCalendarItem < ApplicationRecord
     return false unless item
 
     Date.new(year, month, date) <= Time.zone.today
-  rescue Date::Error
+  rescue Date::Error, TypeError
     false
   end
 
