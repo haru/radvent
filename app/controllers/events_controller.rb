@@ -4,10 +4,12 @@
 #
 # Handles creating, reading, updating, and deleting events, as well as displaying the calendar view.
 class EventsController < ApplicationController
+  include EventLookup
+
   before_action :set_events_menu
   before_action :check_event_creation_authorization, only: %i[new create]
   before_action :find_event, except: %i[new create]
-  before_action :check_visibility, only: [:show]
+  before_action :check_visibility, only: %i[show edit update destroy]
   before_action :check_edit_permission, only: %i[edit update destroy]
   before_action :find_board
 
@@ -53,7 +55,7 @@ class EventsController < ApplicationController
     @event.attributes = params.expect(event: %i[title start_date end_date name description])
     @event.updated_by = current_user
     if @event.save
-      redirect_to show_event_path(@event.name), status: :see_other, notice: t('events.updated')
+      redirect_to helpers.event_page_path(@event), status: :see_other, notice: t('events.updated')
     else
       render :edit, status: :unprocessable_content
     end
@@ -119,13 +121,6 @@ class EventsController < ApplicationController
     event.updated_by = current_user
     event.board = @board
     event
-  end
-
-  def find_event
-    return if params[:name].blank?
-
-    @event = Event.find_by(name: params[:name])
-    render_not_found unless @event
   end
 
   # Renders 404 unless the viewer may read the board this event belongs to.

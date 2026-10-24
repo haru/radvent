@@ -177,7 +177,7 @@ RSpec.describe EventsController do
     end
 
     shared_examples 'a hidden calendar' do
-      before { get :show, params: { name: secret_event.name } }
+      before { get :show, params: { board_board_id: board.board_id, name: secret_event.name } }
 
       it 'responds with 404' do
         expect(response).to have_http_status(:not_found)
@@ -193,7 +193,7 @@ RSpec.describe EventsController do
     end
 
     shared_examples 'a readable calendar' do
-      before { get :show, params: { name: secret_event.name } }
+      before { get :show, params: { board_board_id: board.board_id, name: secret_event.name } }
 
       it 'renders the calendar' do
         expect(response).to render_template :show

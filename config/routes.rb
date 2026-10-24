@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   resources :boards, param: :board_id,
                      constraints: { board_id: /[a-z0-9_-]+/ } do
     resources :board_memberships, only: %i[index create]
+    resources :events, param: :name, only: %i[show edit update destroy]
   end
   get 'boards/:board_ref_id/other_boards' => 'board_other_boards#index', as: :board_other_boards
   resources :board_memberships, only: [:destroy]

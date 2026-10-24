@@ -60,7 +60,7 @@ class AdventCalendarItemsController < ApplicationController
   def destroy
     event = @advent_calendar_item.event
     @advent_calendar_item.destroy
-    redirect_to show_event_path(event.name)
+    redirect_to helpers.event_page_path(event)
   end
 
   private
