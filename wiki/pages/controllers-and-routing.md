@@ -1,7 +1,7 @@
 ---
 title: Controllers and Routing
 type: component
-sources: [S004, S009, S013, S015, S019, S023, S024]
+sources: [S004, S009, S013, S015, S019, S023, S024, S026]
 updated: 2026-10-24
 ---
 
@@ -86,7 +86,7 @@ mechanism.
 | Events / AdventCalendarItems | Advent calendar management, date-slot assignment (`date` is Integer 1–31) (S004) |
 | Items | Content creation for a calendar slot, plus the Markdown preview pipeline (S004) |
 | Users | Admin-only account/profile management (S004) |
-| Comments / Likes | Social interaction on items; `Comment` has no `user_id` — stores `user_name` as a string (S004) |
+| Comments / Likes | Social interaction on items; `Comment` has no `user_id` — stores `user_name` as a string (S004); create/destroy are authorized — see [Comment Authorization](./comment-authorization.md) (S026) |
 | Attachments | Image uploads via CarrierWave for the Markdown editor (S004); `show` (`GET /attachments/:id/:filename`) serves images with access control — see [Protected Image Serving](./protected-image-serving.md) (S023) |
 | Themes | Single `update` action persisting `current_user.theme`; added by feature `007-theme-switch` (S015) |
 | BoardOtherBoards | Single `index` action returning a page of the viewer's visible boards, newest-activity-first, for the load-more listing; added by feature `009-board-list` (S019) |

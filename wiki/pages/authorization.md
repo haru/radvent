@@ -1,7 +1,7 @@
 ---
 title: Authorization
 type: component
-sources: [S002, S004, S009, S012, S013, S023, S024]
+sources: [S002, S004, S009, S012, S013, S023, S024, S026]
 updated: 2026-10-24
 ---
 
@@ -51,5 +51,11 @@ activates, re-verified server-side via
 native browser confirm dialog alongside it, is in
 [Board Deletion — ID Confirmation & Dialog](./board-delete-id-confirmation.md)
 (S013).
+
+Comments: only an admin or the owner of the item's board may delete a comment,
+and posting requires the item to be readable (board visible *and* published,
+with no exception for admins). Unreadable items answer 404, readable-but-not-
+deletable answers 403. See [Comment Authorization](./comment-authorization.md)
+(S026).
 
 See [Domain Model](./domain-model.md) for the entities these rules apply to.

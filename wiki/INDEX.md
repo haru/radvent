@@ -24,6 +24,7 @@ page files, not here.
 - [Manual Theme Selection (Light/Dark/System)](pages/theme-switch.md) — My Page theme picker, the `data-theme` CSS scheme, and why it saves through a separate endpoint from Devise's registration form
 - [Dark Theme — Full-App Color Coverage](pages/dark-theme-full-coverage.md) — closing hardcoded-color gaps (tables, comments, nav, Markdown, EasyMDE) left after the theme switch
 - [Devise Auth Views: ERB → HAML + .panel → .card (flagged)](pages/devise-views-format-conversion.md) — split from the page above; a flagged conflict with a prior "never convert Devise views" constraint
+- [Comment Authorization (Posting and Deleting)](pages/comment-authorization.md) — `Item#readable?`, delete-order rule, and the uniform 404 vs 403 split for comments
 - [Other Boards Listing (Load-More Pagination)](pages/other-boards-listing.md) — Ruby-side sort key reusing `visible?`, numeric-ID routing so TOP boards can share it, and Turbo-Frame-only "load more"
 
 ## howto

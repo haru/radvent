@@ -29,6 +29,18 @@ class Item < ApplicationRecord
     likes.find_by(user_id: user.id) != nil
   end
 
+  # Checks if the given user can read this item: it is visible to them and its publish date has come.
+  #
+  # Unlike Board#visible?, an unpublished item is not readable by anyone, including admins, the
+  # board owner and the author. This mirrors ItemsController#show, which redirects away from
+  # unpublished items, so it must not be loosened for privileged users.
+  #
+  # @param user [User, nil] the user to check
+  # @return [Boolean] true if the item is visible and published
+  def readable?(user)
+    visible?(user) && advent_calendar_item.published?
+  end
+
   # --- Permissionable implementation ---
 
   delegate :visible?, to: :advent_calendar_item
