@@ -27,6 +27,123 @@ RSpec.describe AdventCalendarItemsController do
     end
   end
 
+  describe 'GET #show on a private board' do
+    render_views
+
+    let(:owner) { create(:user) }
+    let(:author) { owner }
+    let(:board) { create(:board, :private_user, owner: owner, name: 'Secret Board Name') }
+    let(:private_event) do
+      create(:event, board: board, name: 'secret-cal', title: 'Secret Calendar Title',
+                     start_date: '2015-12-01', end_date: '2015-12-25', created_by: owner, updated_by: owner)
+    end
+    let!(:private_aci) do
+      create(:advent_calendar_item, event: private_event, user: author, user_name: 'Secret Participant',
+                                    comment: 'Secret slot comment', date: 3)
+    end
+    let(:leaked_texts) { ['Secret Board Name', 'Secret Calendar Title', 'Secret Participant', 'Secret slot comment'] }
+
+    shared_examples 'a hidden slot' do
+      before { get :show, params: { id: private_aci.id } }
+
+      it 'responds with 404' do
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it 'renders the not-found page' do
+        expect(response).to render_template('errors/notfound')
+      end
+
+      it 'does not leak the board, calendar or participant details' do
+        expect(response.body).not_to include(*leaked_texts)
+      end
+    end
+
+    shared_examples 'a readable slot' do
+      before { get :show, params: { id: private_aci.id } }
+
+      it 'renders the slot' do
+        expect(response).to render_template :show
+      end
+    end
+
+    context 'when the viewer is a guest' do
+      before { sign_out user }
+
+      it_behaves_like 'a hidden slot'
+    end
+
+    context 'when the viewer is signed in but not a member' do
+      before { sign_in create(:user) }
+
+      it_behaves_like 'a hidden slot'
+    end
+
+    context 'when the viewer registered the slot but is no longer a member' do
+      let(:author) { create(:user) }
+
+      before do
+        create(:board_membership, board: board, user: author).destroy!
+        sign_in author
+      end
+
+      it_behaves_like 'a hidden slot'
+    end
+
+    context 'when the board is public and the viewer is a guest' do
+      let(:board) { create(:board, :public_user, owner: owner, name: 'Secret Board Name') }
+
+      before { sign_out user }
+
+      it_behaves_like 'a readable slot'
+    end
+
+    context 'when the board is protected and the viewer is a guest' do
+      let(:board) { create(:board, :protected_user, owner: owner, name: 'Secret Board Name') }
+
+      before { sign_out user }
+
+      it_behaves_like 'a readable slot'
+    end
+
+    context 'when the viewer is the board owner' do
+      before { sign_in owner }
+
+      it_behaves_like 'a readable slot'
+    end
+
+    context 'when the viewer is a board member' do
+      before do
+        member = create(:user)
+        create(:board_membership, board: board, user: member)
+        sign_in member
+      end
+
+      it_behaves_like 'a readable slot'
+    end
+
+    context 'when the viewer is a system admin' do
+      before { sign_in create(:user, admin: true) }
+
+      it_behaves_like 'a readable slot'
+    end
+
+    context 'when the slot does not exist' do
+      before do
+        sign_out user
+        get :show, params: { id: AdventCalendarItem.maximum(:id) + 1 }
+      end
+
+      it 'renders the not-found page' do
+        expect(response).to render_template('errors/notfound')
+      end
+
+      it 'does not mention the board name' do
+        expect(response.body).not_to include('Secret Board Name')
+      end
+    end
+  end
+
   describe 'GET #new' do
     it 'assigns a new advent_calendar_item to @advent_calendar_item' do
       get :new, params: { date: 1 }

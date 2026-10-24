@@ -1,7 +1,7 @@
 ---
 title: Authorization
 type: component
-sources: [S002, S004, S009, S012, S013, S023]
+sources: [S002, S004, S009, S012, S013, S023, S024]
 updated: 2026-10-24
 ---
 
@@ -17,7 +17,11 @@ views through a separate admin layout from the public-facing templates
 (S002). `BoardsController` restricts access per-board via a `check_visibility`
 filter on the `visibility` enum, and Items/AdventCalendarItems controllers
 gate edits with an `edit_permission?` guard limited to the creator or an
-admin (S004). Full routing and controller breakdown in
+admin (S004). Since feature `011-private-board-content-visibility`, the
+`show` actions of Events, Items and AdventCalendarItems also run a
+`check_visibility` filter that returns 404 unless the model's `visible?`
+holds — see [Board Visibility on Show Pages](./show-page-visibility.md)
+(S024). Full routing and controller breakdown in
 [Controllers and Routing](./controllers-and-routing.md).
 
 The design spec for user-created boards additionally calls for `Board`,

@@ -28,6 +28,8 @@ Sources are immutable inputs — the wiki never edits them.
 | S021 | specs/010-board-image-access-control/research.md | feature-artifact | 2026-10-24 | 2026-10-24 | protected-image-serving.md, authorization.md, image-upload-toolbar-button.md, configuration.md, docker-deployment.md, javascript-asset-pipeline.md |
 | S022 | specs/010-board-image-access-control/plan.md (summary) | feature-artifact | 2026-10-24 | 2026-10-24 | protected-image-serving.md |
 | S023 | docs/adr/0007-serve-new-images-through-authorized-endpoint.md | file | 2026-10-24 | 2026-10-24 | protected-image-serving.md, authorization.md, configuration.md, docker-deployment.md, domain-model.md, controllers-and-routing.md |
+| S024 | specs/011-private-board-content-visibility/research.md | feature-artifact | 2026-10-24 | 2026-10-24 | show-page-visibility.md, authorization.md, controllers-and-routing.md, protected-image-serving.md |
+| S025 | specs/011-private-board-content-visibility/plan.md (decision sections) | feature-artifact | 2026-10-24 | 2026-10-24 | show-page-visibility.md |
 
 Note: domain-model.md exceeded the 600-word split threshold after S015's
 update; its Authorization section was split into authorization.md (S002,

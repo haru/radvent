@@ -19,6 +19,7 @@ page files, not here.
 - [EasyMDE Editor Migration](pages/easymde-editor-migration.md) — planned removal of the custom preview pane/help modal/file-select UI in favor of EasyMDE's built-ins
 - [Toolbar Image Upload — UX and Access Control](pages/image-upload-toolbar-button.md) — spinner/disable UX, edit-permission upload gate, and the original lack of view-time access control (superseded by feature 010 for new images)
 - [Protected Image Serving (Board Image Access Control)](pages/protected-image-serving.md) — new images stored outside `public/`, served via an authorized endpoint with one uniform 404; legacy images left public
+- [Board Visibility on Show Pages](pages/show-page-visibility.md) — calendar/article/slot `show` actions now apply `visible?` before `find_board`, with one 404 and no author exception
 - [Board Deletion — ID Confirmation & Dialog](pages/board-delete-id-confirmation.md) — typed board-ID gate for deletion, server-side re-verification, and the reversed decision to keep the native confirm dialog too
 - [Manual Theme Selection (Light/Dark/System)](pages/theme-switch.md) — My Page theme picker, the `data-theme` CSS scheme, and why it saves through a separate endpoint from Devise's registration form
 - [Dark Theme — Full-App Color Coverage](pages/dark-theme-full-coverage.md) — closing hardcoded-color gaps (tables, comments, nav, Markdown, EasyMDE) left after the theme switch

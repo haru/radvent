@@ -6,6 +6,7 @@
 class AdventCalendarItemsController < ApplicationController
   before_action :authenticate_user!, only: %i[new create edit update destroy]
   before_action :find_calendar_item, only: %i[show edit update destroy]
+  before_action :check_visibility, only: [:show]
   before_action :edit_permission?, only: %i[edit update destroy]
   before_action :find_board
 
@@ -68,6 +69,15 @@ class AdventCalendarItemsController < ApplicationController
   def find_calendar_item
     @advent_calendar_item = AdventCalendarItem.find_by(id: params[:id])
     render_not_found unless @advent_calendar_item
+  end
+
+  # Renders 404 unless the viewer may read the board this slot belongs to.
+  #
+  # Declared before +find_board+ so a hidden slot never exposes its board name in the layout.
+  #
+  # @return [void]
+  def check_visibility
+    render_not_found unless @advent_calendar_item.visible?(current_user)
   end
 
   def find_board
