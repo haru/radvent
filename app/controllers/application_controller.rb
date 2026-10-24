@@ -36,7 +36,8 @@ class ApplicationController < ActionController::Base
   #
   # @return [void]
   def render_not_found
-    render template: 'errors/notfound', status: :not_found, layout: 'application', content_type: 'text/html'
+    render template: 'errors/notfound', status: :not_found, layout: 'application', content_type: 'text/html',
+           formats: [:html]
   end
 
   # Renders a 403 forbidden error page.

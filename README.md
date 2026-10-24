@@ -164,6 +164,10 @@ export SECRET_KEY_BASE=$(bundle exec rails secret)
 bundle exec rails s -e production
 ```
 
+> **Note:** Uploaded images are stored under `storage/protected_uploads` in the application
+> directory (override with `RADVENT_PROTECTED_UPLOAD_DIR`) and served only to users who may read
+> the article. Back up and persist this directory together with `public/uploads`.
+
 ---
 
 ## Docker
@@ -173,6 +177,11 @@ bundle exec rails s -e production
 ```bash
 docker run -d -p 3000:3000 -v /host/data/directory:/var/radvent_data haru/radvent
 ```
+
+> **Note:** Uploaded images are stored under `/var/radvent_data/protected_uploads` (set with
+> `RADVENT_PROTECTED_UPLOAD_DIR`) and served only to users who may view the article.
+> Mount `/var/radvent_data` as a volume so they persist. Images uploaded before protected
+> storage was introduced remain in `/var/radvent_data/uploads` and stay publicly accessible.
 
 ### docker-compose Example (MySQL)
 
@@ -242,6 +251,7 @@ services:
 | `DB_PORT` | DB port number | MySQL: `3306` / PostgreSQL: `5432` |
 | `DB_CREATE_ON_START` | Set to `true` to run `db:create` on startup | `false` |
 | `RADVENT_TITLE` | Site name displayed in the header | `Advent Calendar` |
+| `RADVENT_PROTECTED_UPLOAD_DIR` | Directory for uploaded images served with access control (relative paths are resolved against the app root) | `storage/protected_uploads` (Docker: `/var/radvent_data/protected_uploads`) |
 
 ---
 

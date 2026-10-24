@@ -21,7 +21,9 @@ Rails.application.routes.draw do
   end
 
   resources :advent_calendar_items
-  resources :attachments
+  resources :attachments, only: [:create]
+  get 'attachments/:id/:filename', to: 'attachments#show', as: :attachment_image,
+                                   constraints: { id: /\d+/, filename: %r{[^/]+} }, format: false
   resources :comments
 
   resources :boards, param: :board_id,
