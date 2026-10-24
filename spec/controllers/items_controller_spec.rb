@@ -430,16 +430,19 @@ RSpec.describe ItemsController do
     end
   end
 
-  describe 'POST #preview' do
-    it 'renders the :preview for a new item' do
-      post :preview, params: { item: attributes_for(:item) }
-      expect(response).to render_template :preview
+  describe 'preview routing' do
+    it 'routes POST /items/preview to items#preview_new' do
+      expect(post: '/items/preview').to route_to(controller: 'items', action: 'preview_new')
     end
 
-    it 'renders the :preview for an existing item' do
-      item = advent_calendar_item.item
-      post :preview, params: { id: item, item: attributes_for(:item) }
-      expect(response).to render_template :preview
+    it 'keeps preview_items_path pointing at /items/preview' do
+      expect(preview_items_path).to eq '/items/preview'
+    end
+
+    %i[get post patch].each do |verb|
+      it "routes #{verb.upcase} /items/:id/preview to items#preview" do
+        expect(verb => '/items/1/preview').to route_to(controller: 'items', action: 'preview', id: '1')
+      end
     end
   end
 

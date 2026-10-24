@@ -69,4 +69,47 @@ describe Item do
       expect(item).to be_valid
     end
   end
+
+  describe 'likes' do
+    let(:item) { create(:item) }
+    let(:alice) { create(:user, name: 'alice') }
+    let(:bob) { create(:user, name: 'bob') }
+
+    # Adds a like without validation so that legacy duplicate rows can be built.
+    #
+    # @param user [User] the liking user
+    # @param target [Item] the liked item
+    # @return [void]
+    def like!(user, target = item)
+      Like.new(user: user, item: target).save!(validate: false)
+    end
+
+    it 'counts zero and lists nobody without likes', :aggregate_failures do
+      expect(item.like_count).to eq 0
+      expect(item.liked_users).to be_empty
+    end
+
+    it 'counts each user once', :aggregate_failures do
+      like!(alice)
+      like!(bob)
+      expect(item.like_count).to eq 2
+      expect(item.liked_users.map(&:name)).to eq %w[alice bob]
+    end
+
+    it 'counts and lists a user with duplicate rows only once', :aggregate_failures do
+      2.times { like!(alice) }
+      expect(item.like_count).to eq 1
+      expect(item.liked_users.to_a).to eq [alice]
+    end
+
+    it 'ignores likes of other items' do
+      like!(alice, create(:item))
+      expect(item.like_count).to eq 0
+    end
+
+    it 'still reports liked_by? from the rows' do
+      like!(alice)
+      expect([item.liked_by?(alice), item.liked_by?(bob), item.liked_by?(nil)]).to eq [true, false, false]
+    end
+  end
 end

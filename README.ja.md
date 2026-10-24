@@ -241,6 +241,17 @@ services:
 | `DB_PORT` | DBポート番号 | MySQL: `3306` / PostgreSQL: `5432` |
 | `DB_CREATE_ON_START` | `true` にすると起動時に `db:create` を実行 | `false` |
 | `RADVENT_TITLE` | ヘッダーに表示するサイト名 | `Advent Calendar` |
+| `RADVENT_URL` | メール内のリンクに使うサイトのURL(例: `https://advent.example.com`)。**パスワード再設定に必須** | — |
+| `RADVENT_MAIL_FROM` | パスワード再設定メールの送信元アドレス(既定値は多くのSMTPサーバに拒否されます) | `please-change-me-at-config-initializers-devise@example.com` |
+| `SMTP_ADDRESS` | SMTPサーバのホスト名。**パスワード再設定に必須** | — |
+| `SMTP_PORT` | SMTPポート番号 | `587` |
+| `SMTP_USERNAME` | SMTPユーザー名 | — |
+| `SMTP_PASSWORD` | SMTPパスワード | — |
+| `SMTP_AUTHENTICATION` | `plain` / `login` / `cram_md5` | — |
+| `SMTP_DOMAIN` | HELOドメイン | — |
+| `SMTP_ENABLE_STARTTLS_AUTO` | `false` でSTARTTLSを無効にする | `true` |
+
+> **パスワード再設定メール**: メールを届けるには `RADVENT_URL` と `SMTP_ADDRESS` の設定が必須です。登録済みのアドレスが分からないように、再設定の要求にはつねに同じ案内を返します。メールを送れなかった場合は、ログに `Password reset mail was not delivered` と記録されるだけです。
 
 ---
 

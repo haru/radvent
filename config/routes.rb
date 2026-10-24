@@ -8,11 +8,11 @@ Rails.application.routes.draw do
   put 'user/:id/update' => 'users#update_info', as: :update_user
   resources :users, only: [:index]
 
-  devise_for :users
+  devise_for :users, controllers: { passwords: 'users/passwords' }
   patch 'theme' => 'themes#update'
   resources :items do
     collection do
-      post 'preview'
+      post 'preview', action: :preview_new, as: :preview
     end
     member do
       match 'preview', via: %i[get post patch]

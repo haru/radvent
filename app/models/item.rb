@@ -30,6 +30,20 @@ class Item < ApplicationRecord
     likes.find_by(user_id: user.id) != nil
   end
 
+  # Counts the users who liked this item, a user with duplicate like rows counting once.
+  #
+  # @return [Integer] the number of distinct users
+  def like_count
+    likes.distinct.count(:user_id)
+  end
+
+  # Lists the users who liked this item, each once, ordered by id.
+  #
+  # @return [ActiveRecord::Relation<User>] the distinct users
+  def liked_users
+    User.where(id: likes.select(:user_id)).order(:id)
+  end
+
   # Checks if the given user can read this item: it is visible to them and its publish date has come.
   #
   # Unlike Board#visible?, an unpublished item is not readable by anyone, including admins, the

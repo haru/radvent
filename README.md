@@ -252,6 +252,17 @@ services:
 | `DB_CREATE_ON_START` | Set to `true` to run `db:create` on startup | `false` |
 | `RADVENT_TITLE` | Site name displayed in the header | `Advent Calendar` |
 | `RADVENT_PROTECTED_UPLOAD_DIR` | Directory for uploaded images served with access control (relative paths are resolved against the app root) | `storage/protected_uploads` (Docker: `/var/radvent_data/protected_uploads`) |
+| `RADVENT_URL` | Site URL used in links inside mails, e.g. `https://advent.example.com`. **Required for password reset mails** | — |
+| `RADVENT_MAIL_FROM` | Sender address of password reset mails (most SMTP servers reject the default) | `please-change-me-at-config-initializers-devise@example.com` |
+| `SMTP_ADDRESS` | SMTP server host name. **Required for password reset mails** | — |
+| `SMTP_PORT` | SMTP port | `587` |
+| `SMTP_USERNAME` | SMTP user name | — |
+| `SMTP_PASSWORD` | SMTP password | — |
+| `SMTP_AUTHENTICATION` | `plain` / `login` / `cram_md5` | — |
+| `SMTP_DOMAIN` | HELO domain | — |
+| `SMTP_ENABLE_STARTTLS_AUTO` | Set to `false` to disable STARTTLS | `true` |
+
+> **Password reset mails**: `RADVENT_URL` and `SMTP_ADDRESS` must be set for password reset mails to be delivered. To avoid revealing which addresses are registered, the app always answers a reset request with the same message; if the mail cannot be sent, the failure is only written to the log (`Password reset mail was not delivered`).
 
 ---
 
