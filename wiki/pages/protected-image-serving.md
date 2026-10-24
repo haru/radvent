@@ -1,7 +1,7 @@
 ---
 title: Protected Image Serving (Board Image Access Control)
 type: decision
-sources: [S021, S022, S023]
+sources: [S021, S022, S023, S024]
 updated: 2026-10-24
 ---
 
@@ -36,7 +36,9 @@ belong to. This supersedes the "no view-time access control" decision in
   [Authorization](./authorization.md)) and additionally requires the article to
   be *published*, unless the viewer may edit it (author or admin) — otherwise
   future-dated articles' images would leak before release. An orphaned
-  attachment is never visible, editable or deletable (S023).
+  attachment is never visible, editable or deletable (S023). The same board
+  rule now guards the calendar, article and slot pages too — see
+  [Board Visibility on Show Pages](./show-page-visibility.md) (S024).
 - **Caching**: `Cache-Control: no-cache, private`, so permission changes apply
   on the next request and shared caches never store images. No ETag is sent, so
   images are re-downloaded on every view (S021, S023).

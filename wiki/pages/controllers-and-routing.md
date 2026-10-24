@@ -1,7 +1,7 @@
 ---
 title: Controllers and Routing
 type: component
-sources: [S004, S009, S013, S015, S019, S023]
+sources: [S004, S009, S013, S015, S019, S023, S024]
 updated: 2026-10-24
 ---
 
@@ -56,8 +56,10 @@ All controllers inherit from `ApplicationController`, which provides (S004):
 
 - `admin_user!` — renders 403 Forbidden unless the signed-in user has the
   `admin` flag set (S004); see [Authorization](./authorization.md).
-- `check_visibility` (`BoardsController`) — restricts board access based on
-  the `visibility` enum (`public` / `protected` / `private`) (S004).
+- `check_visibility` (`BoardsController`; also the Events / Items /
+  AdventCalendarItems `show` actions) — 404 unless the board's `visible?`
+  rule holds (`public` / `protected` / `private`) (S004); see
+  [Board Visibility on Show Pages](./show-page-visibility.md) (S024).
 - `edit_permission?` (Items / AdventCalendarItems controllers) — allows edits
   only for the content's creator or an admin (S004).
 - `check_deletability` (`BoardsController`) — gates `destroy` via
@@ -71,9 +73,10 @@ All controllers inherit from `ApplicationController`, which provides (S004):
 The user-boards design spec calls for a more general, object-level
 `visible?`/`editable?`/`deletable?` interface on the affected models rather
 than one-off controller filters — see
-[User Boards & Multi-Event Support](./user-boards-feature.md) (S009). It's
-not confirmed whether `check_visibility`/`edit_permission?` are the
-controller-side callers of that interface or a separate mechanism.
+[User Boards & Multi-Event Support](./user-boards-feature.md) (S009).
+`check_visibility` is the controller-side caller of `visible?` (S024); it's
+not confirmed whether `edit_permission?` calls that interface or a separate
+mechanism.
 
 ## Controller groups
 

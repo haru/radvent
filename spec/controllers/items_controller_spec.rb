@@ -233,6 +233,166 @@ RSpec.describe ItemsController do
     end
   end
 
+  describe 'GET #show on a private board' do
+    render_views
+
+    let(:owner) { create(:user) }
+    let(:board) { create(:board, :private_user, owner: owner, name: 'Secret Board Name') }
+    let(:private_aci) do
+      event = create(:event, board: board, name: 'secret-cal', title: 'Secret Calendar',
+                             start_date: '2015-12-01', end_date: '2015-12-30', created_by: owner, updated_by: owner)
+      create(:advent_calendar_item, event: event, user: owner, user_name: owner.name, date: 2)
+    end
+    let!(:private_item) do
+      create(:item, advent_calendar_item: private_aci, title: 'Secret Article Title', body: 'Secret article body')
+    end
+
+    before do
+      allow(Time.zone).to receive(:today).and_return(Date.new(2015, 12, 2))
+    end
+
+    shared_examples 'a hidden article' do
+      before { get :show, params: { id: private_item.id } }
+
+      it 'responds with 404' do
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it 'renders the not-found page' do
+        expect(response).to render_template('errors/notfound')
+      end
+
+      it 'does not leak the board name, title or body' do
+        expect(response.body).not_to include('Secret Board Name', 'Secret Article Title', 'Secret article body')
+      end
+    end
+
+    shared_examples 'a readable article' do
+      before { get :show, params: { id: private_item.id } }
+
+      it 'renders the article' do
+        expect(response).to render_template :show
+      end
+    end
+
+    context 'when the viewer is a guest' do
+      before { sign_out user }
+
+      it_behaves_like 'a hidden article'
+    end
+
+    context 'when the viewer is signed in but not a member' do
+      before { sign_in create(:user) }
+
+      it_behaves_like 'a hidden article'
+    end
+
+    context 'when the viewer wrote the article but is no longer a member' do
+      before do
+        author = create(:user)
+        private_aci.update!(user: author)
+        create(:board_membership, board: board, user: author).destroy!
+        sign_in author
+      end
+
+      it_behaves_like 'a hidden article'
+    end
+
+    context 'when the viewer is a guest and the article is not yet published' do
+      before do
+        allow(Time.zone).to receive(:today).and_return(Date.new(2015, 11, 30))
+        sign_out user
+      end
+
+      it_behaves_like 'a hidden article'
+    end
+
+    context 'when the board has just been changed from private to public and the viewer is a guest' do
+      before do
+        board.update!(visibility: :public)
+        sign_out user
+      end
+
+      it_behaves_like 'a readable article'
+    end
+
+    context 'when the board has just been changed from public to private and the viewer is a guest' do
+      let(:board) { create(:board, :public_user, owner: owner, name: 'Secret Board Name') }
+
+      before do
+        board.update!(visibility: :private)
+        sign_out user
+      end
+
+      it_behaves_like 'a hidden article'
+    end
+
+    context 'when the board is public and the viewer is a guest' do
+      let(:board) { create(:board, :public_user, owner: owner, name: 'Secret Board Name') }
+
+      before { sign_out user }
+
+      it_behaves_like 'a readable article'
+    end
+
+    context 'when the board is protected and the viewer is a guest' do
+      let(:board) { create(:board, :protected_user, owner: owner, name: 'Secret Board Name') }
+
+      before { sign_out user }
+
+      it_behaves_like 'a readable article'
+    end
+
+    context 'when the viewer is the board owner' do
+      before { sign_in owner }
+
+      it_behaves_like 'a readable article'
+    end
+
+    context 'when the viewer is a board member' do
+      before do
+        member = create(:user)
+        create(:board_membership, board: board, user: member)
+        sign_in member
+      end
+
+      it_behaves_like 'a readable article'
+    end
+
+    context 'when the viewer is a system admin' do
+      before { sign_in create(:user, admin: true) }
+
+      it_behaves_like 'a readable article'
+    end
+
+    context 'when the owner opens an article that is not yet published' do
+      before do
+        allow(Time.zone).to receive(:today).and_return(Date.new(2015, 11, 30))
+        sign_in owner
+        get :show, params: { id: private_item.id }
+      end
+
+      it 'redirects to root as before' do
+        expect(response).to redirect_to root_path
+      end
+    end
+
+    context 'when the article does not exist' do
+      before do
+        sign_out user
+        get :show, params: { id: Item.maximum(:id) + 1 }
+      end
+
+      it 'renders the not-found page' do
+        expect(response).to render_template('errors/notfound')
+      end
+
+      it 'does not mention the board name' do
+        expect(response.body).not_to include('Secret Board Name')
+      end
+    end
+  end
+
   describe 'POST #preview' do
     it 'renders the :preview for a new item' do
       post :preview, params: { item: attributes_for(:item) }
