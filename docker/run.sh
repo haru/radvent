@@ -14,6 +14,12 @@ then
 fi
 
 mkdir -p /var/radvent_data/uploads
+mkdir -p /var/radvent_data/protected_uploads
+if [ ! -w /var/radvent_data/protected_uploads ]
+then
+  echo "/var/radvent_data/protected_uploads is not writable" >&2
+  exit 1
+fi
 
 rm -f /usr/local/radvent/tmp/pids/server.pid
 if [ "$DB_CREATE_ON_START" = "true" ]

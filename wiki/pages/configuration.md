@@ -1,8 +1,8 @@
 ---
 title: Configuration
 type: component
-sources: [S007]
-updated: 2026-08-14
+sources: [S007, S021, S023]
+updated: 2026-10-24
 ---
 
 # Configuration
@@ -22,6 +22,16 @@ environment-specific settings files (S007). For the app-level env vars
 | `CI` | Enables eager loading in the test environment when present (S007) |
 | `RAILS_MASTER_KEY` | Decrypts credentials when `master.key` is unavailable (S007) |
 | `SECRET_KEY_BASE` | Encrypts cookies/sessions in production (S007) |
+
+## Upload storage
+
+`config.x.protected_upload_root` (set in `config/application.rb`) is where new
+image uploads and CarrierWave's cache live, outside `public/` so static
+serving (`RAILS_SERVE_STATIC_FILES`) cannot bypass authorization. It defaults
+to `storage/protected_uploads`; `RADVENT_PROTECTED_UPLOAD_DIR` overrides it —
+an empty value falls back to the default and a relative one resolves against
+`Rails.root` (S021, S023). See
+[Protected Image Serving](./protected-image-serving.md).
 
 ## Database
 

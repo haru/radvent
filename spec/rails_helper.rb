@@ -41,7 +41,37 @@ require 'devise'
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
+PROTECTED_UPLOAD_TEST_ROOT = Rails.root.join('tmp/test_protected_uploads')
+Rails.application.config.x.protected_upload_root = PROTECTED_UPLOAD_TEST_ROOT
+# Legacy images live under the CarrierWave root; keep specs away from the real public/uploads.
+LEGACY_UPLOAD_TEST_ROOT = Rails.root.join('tmp/test_public')
+CarrierWave.root = LEGACY_UPLOAD_TEST_ROOT.to_s
+
+# Where an attachment's image directory lives in each upload area.
+module UploadPathHelpers
+  def legacy_upload_dir(attachment)
+    LEGACY_UPLOAD_TEST_ROOT.join(attachment.image.store_dir)
+  end
+
+  def protected_upload_dir(attachment)
+    PROTECTED_UPLOAD_TEST_ROOT.join(attachment.image.store_dir)
+  end
+end
+
 RSpec.configure do |config|
+  # Clear leftovers from an aborted run too, since reused record ids would otherwise hit stale files.
+  config.before(:suite) do
+    FileUtils.rm_rf(PROTECTED_UPLOAD_TEST_ROOT)
+    FileUtils.rm_rf(LEGACY_UPLOAD_TEST_ROOT)
+  end
+
+  config.after(:suite) do
+    FileUtils.rm_rf(PROTECTED_UPLOAD_TEST_ROOT)
+    FileUtils.rm_rf(LEGACY_UPLOAD_TEST_ROOT)
+  end
+
+  config.include UploadPathHelpers
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_paths = [Rails.root.join('spec/fixtures').to_s]
 

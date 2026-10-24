@@ -1,8 +1,8 @@
 ---
 title: Domain Model
 type: component
-sources: [S001, S002, S003, S004, S006, S008, S009, S010, S012, S013, S015, S019]
-updated: 2026-09-18
+sources: [S001, S002, S003, S004, S006, S008, S009, S010, S012, S013, S015, S019, S023]
+updated: 2026-10-24
 ---
 
 # Domain Model
@@ -30,7 +30,7 @@ Board ──< Event ──< AdventCalendarItem >── User
 | `Item` | Markdown article. One-to-one with `AdventCalendarItem` |
 | `Like` | Like on an article |
 | `Comment` | Comment on an article. Stores `user_name` as a plain string, not a `User` reference |
-| `Attachment` | File attachment via CarrierWave (`ImageUploader`); created by the editor's image-upload endpoint — see [JavaScript and CSS Asset Pipeline](./javascript-asset-pipeline.md) (S010) |
+| `Attachment` | File attachment via CarrierWave (`ImageUploader`); created by the editor's image-upload endpoint — see [JavaScript and CSS Asset Pipeline](./javascript-asset-pipeline.md) (S010); implements `visible?`/`editable?`/`deletable?` via its article, served through [Protected Image Serving](./protected-image-serving.md) (S023) |
 
 A `Board` can hold multiple `Event`s, meaning a single install supports
 multiple concurrent Advent Calendar events with independent membership and
@@ -57,6 +57,6 @@ Devise handles authentication; a separate `admin` flag and a set of
 controller-level filters and object-level rules drive authorization — moved
 to its own page once this one passed the wiki's word-count split threshold.
 See [Authorization](./authorization.md) for admin filters, board visibility,
-edit/delete gating, and the image-upload access-control gap.
+edit/delete gating, and image access control.
 
 Built with the stack in [Tech Stack](./tech-stack.md).

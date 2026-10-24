@@ -1,8 +1,8 @@
 ---
 title: User Boards & Multi-Event Support
 type: decision
-sources: [S009]
-updated: 2026-08-14
+sources: [S004, S009]
+updated: 2026-10-24
 ---
 
 # User Boards & Multi-Event Support

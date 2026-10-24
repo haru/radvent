@@ -25,6 +25,9 @@ Sources are immutable inputs — the wiki never edits them.
 | S018 | specs/008-fix-dark-theme/plan.md (decision sections) | feature-artifact | 2026-09-17 | 2026-09-17 | dark-theme-full-coverage.md |
 | S019 | specs/009-board-list/research.md | feature-artifact | 2026-09-18 | 2026-09-18 | other-boards-listing.md, domain-model.md, controllers-and-routing.md, views-and-frontend.md |
 | S020 | specs/009-board-list/plan.md (decision sections) | feature-artifact | 2026-09-18 | 2026-09-18 | other-boards-listing.md |
+| S021 | specs/010-board-image-access-control/research.md | feature-artifact | 2026-10-24 | 2026-10-24 | protected-image-serving.md, authorization.md, image-upload-toolbar-button.md, configuration.md, docker-deployment.md, javascript-asset-pipeline.md |
+| S022 | specs/010-board-image-access-control/plan.md (summary) | feature-artifact | 2026-10-24 | 2026-10-24 | protected-image-serving.md |
+| S023 | docs/adr/0007-serve-new-images-through-authorized-endpoint.md | file | 2026-10-24 | 2026-10-24 | protected-image-serving.md, authorization.md, configuration.md, docker-deployment.md, domain-model.md, controllers-and-routing.md |
 
 Note: domain-model.md exceeded the 600-word split threshold after S015's
 update; its Authorization section was split into authorization.md (S002,

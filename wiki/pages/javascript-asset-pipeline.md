@@ -1,8 +1,8 @@
 ---
 title: JavaScript and CSS Asset Pipeline
 type: component
-sources: [S010, S011, S012, S013, S015, S017]
-updated: 2026-09-17
+sources: [S010, S011, S012, S013, S015, S017, S021]
+updated: 2026-10-24
 ---
 
 # JavaScript and CSS Asset Pipeline
@@ -78,6 +78,7 @@ Feature `003-image-file-upload` specifies that button's behavior in detail:
 a spinner shown and the button disabled for the duration of the upload;
 upload gated by the same `edit_permission?` check used elsewhere (see
 [Authorization](./authorization.md)), while viewing an uploaded
-image's URL remains unrestricted. Full decision record in
+image's URL was unrestricted then (since superseded: see
+[Protected Image Serving](./protected-image-serving.md), S021). Decision record in
 [Toolbar Image Upload — UX and Access Control](./image-upload-toolbar-button.md)
 (S012).

@@ -13,3 +13,4 @@ unchanged.
 | [0004](0004-separate-theme-endpoint-from-devise-registration.md) | Separate theme endpoint from Devise registration | Accepted |
 | [0005](0005-css-theme-switching-via-data-theme-attribute.md) | CSS theme switching via data-theme attribute | Accepted |
 | [0006](0006-migrations-must-not-provision-seed-data-via-models.md) | Migrations must not provision seed data via ActiveRecord models | Accepted |
+| [0007](0007-serve-new-images-through-authorized-endpoint.md) | Serve new images through an authorized endpoint | Accepted |

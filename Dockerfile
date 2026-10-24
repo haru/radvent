@@ -23,11 +23,13 @@ RUN SECRET_KEY_BASE=dummy RAILS_ENV=production bundle exec rake assets:clean ass
 COPY docker/run.sh /usr/local/bin/run.sh
 
 RUN mkdir -p /var/radvent_data/uploads
+RUN mkdir -p /var/radvent_data/protected_uploads
 RUN rm -f /usr/local/radvent/public/uploads
 RUN ln -s /var/radvent_data/uploads /usr/local/radvent/public/uploads
 
 ENV RAILS_ENV=production
 ENV RAILS_SERVE_STATIC_FILES=true
+ENV RADVENT_PROTECTED_UPLOAD_DIR=/var/radvent_data/protected_uploads
 
 EXPOSE 3000
 

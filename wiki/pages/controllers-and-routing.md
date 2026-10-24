@@ -1,8 +1,8 @@
 ---
 title: Controllers and Routing
 type: component
-sources: [S004, S009, S013, S015, S019]
-updated: 2026-09-18
+sources: [S004, S009, S013, S015, S019, S023]
+updated: 2026-10-24
 ---
 
 # Controllers and Routing
@@ -84,7 +84,7 @@ controller-side callers of that interface or a separate mechanism.
 | Items | Content creation for a calendar slot, plus the Markdown preview pipeline (S004) |
 | Users | Admin-only account/profile management (S004) |
 | Comments / Likes | Social interaction on items; `Comment` has no `user_id` — stores `user_name` as a string (S004) |
-| Attachments | Image uploads via CarrierWave for the Markdown editor (S004) |
+| Attachments | Image uploads via CarrierWave for the Markdown editor (S004); `show` (`GET /attachments/:id/:filename`) serves images with access control — see [Protected Image Serving](./protected-image-serving.md) (S023) |
 | Themes | Single `update` action persisting `current_user.theme`; added by feature `007-theme-switch` (S015) |
 | BoardOtherBoards | Single `index` action returning a page of the viewer's visible boards, newest-activity-first, for the load-more listing; added by feature `009-board-list` (S019) |
 
