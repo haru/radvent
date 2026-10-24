@@ -1,10 +1,8 @@
 # Wiki Lint Report — 2026-10-24
 
-Scope: full pass, 26 pages, 28 sources (S001–S028).
+Scope: full pass, 28 pages, 30 sources (S001–S030).
 
 No findings.
 
-Resolved since the previous pass (same day, by editing pages at the user's request):
-- Five `⚠ conflict` markers (configuration, likes-hardening, password-reset-account-hiding, user-event-item-authorization ×2) replaced with the shipped behaviour.
-- comment-authorization.md frontmatter now lists S024.
-- controllers-and-routing.md split; the controller table moved to controller-groups.md.
+Resolved since the previous pass (by editing the page at the user's request):
+- domain-model.md: the `⚠ conflict` on `Event.name` uniqueness (S003 vs S029) was replaced with the verified behaviour — unique per board via the composite index on `[board_id, name]` (S029).

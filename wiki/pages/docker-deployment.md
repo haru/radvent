@@ -1,7 +1,7 @@
 ---
 title: Docker Deployment
 type: howto
-sources: [S001, S007, S021, S023]
+sources: [S001, S007, S021, S023, S029]
 updated: 2026-10-24
 ---
 
@@ -73,6 +73,12 @@ that feature stay in `/var/radvent_data/uploads` and remain public. Mounting
 also persist `protected_uploads`. Rolling back leaves legacy images working
 but stops serving the new ones (S021, S023). See
 [Protected Image Serving](./protected-image-serving.md).
+
+## Startup logs
+
+The container no longer dumps `env` or runs `run.sh` under `sh -x`, so
+secrets stay out of `docker logs`; progress is reported with fixed messages
+only (S029). See [Startup Log Secret Hygiene](./startup-log-secret-hygiene.md).
 
 ## Manual production deployment (non-Docker) (S001)
 

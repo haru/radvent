@@ -17,6 +17,35 @@ class Event < ApplicationRecord
   validates :name, presence: true, uniqueness: { scope: :board_id }, format: { with: NAME_FORMAT }
   validate :start_and_end_dates_must_be_same_month
 
+  # Events that belong to the TOP board.
+  scope :on_top_board, -> { joins(:board).merge(Board.board_type_top) }
+
+  # Events that belong to user boards.
+  scope :on_user_boards, -> { joins(:board).merge(Board.board_type_user) }
+
+  # Lists the events with the given name on user boards that the user can see.
+  #
+  # Visibility is filtered in Ruby, so a private board costs one membership query per match.
+  #
+  # @param name [String] the event name
+  # @param user [User, nil] the viewer
+  # @return [Array<Event>] the visible matches
+  def self.visible_on_user_boards(name, user)
+    on_user_boards.includes(:board).where(name: name).select { |event| event.visible?(user) }
+  end
+
+  # Finds the event with the given name on user boards, only when exactly one is visible to the user.
+  #
+  # Used to resolve a legacy name-only URL; an ambiguous or missing match is never guessed.
+  #
+  # @param name [String] the event name
+  # @param user [User, nil] the viewer
+  # @return [Event, nil] the sole visible match, or nil when there are zero or several
+  def self.sole_visible_on_user_boards(name, user)
+    matches = visible_on_user_boards(name, user)
+    matches.first if matches.one?
+  end
+
   # Returns true if the given user can create an event on the given board.
   #
   # @param board [Board] the target board

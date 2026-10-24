@@ -403,6 +403,8 @@ ja:
     created: 'ボードを作成しました'
     updated: 'ボードを更新しました'
     deleted: 'ボードを削除しました'
+  advent_calendar_items:
+    delete_failed: '枠を削除できませんでした'
   events:
     updated: 'イベントを更新しました'
   board_memberships:

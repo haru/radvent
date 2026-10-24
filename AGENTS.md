@@ -61,7 +61,7 @@ Event ──< AdventCalendarItem >── User
 
 | Gotcha | Detail |
 |--------|--------|
-| **Event routing uses `name`, not ID** | `show_event_path(event.name)` — never `event_path(event)` |
+| **Event routing uses `name`, not ID** | Link with `event_page_path(event)` / `edit_event_page_path(event)` (TOP board: `/events/:name`; user board: `/boards/:board_id/events/:name`) — never `event_path(event)` |
 | **Board routing uses `board_id` slug** | `resources :boards, param: :board_id` — use `board_path(board.board_id)` |
 | **AdventCalendarItem.date is Integer** | Query with `.where(date: date.day)` |
 | **Comment has no user_id** | Stores `user_name` as string only |

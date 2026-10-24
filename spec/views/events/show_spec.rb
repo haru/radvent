@@ -85,4 +85,19 @@ RSpec.describe 'events/show', type: :request do
       expect(response.body).to match(%r{far fa-heart"></i>\s*1\s*<})
     end
   end
+
+  context 'when the event is on a user board' do
+    let(:board) { create(:board, :public_user) }
+    let(:board_event) do
+      create(:event, board: board, name: 'user-ev', title: 'User Ev', start_date: '2016-12-01',
+                     end_date: '2016-12-25', created_by: event_owner)
+    end
+
+    before { sign_in event_owner }
+
+    it 'links the pencil icon to the board-scoped edit path' do
+      get board_event_path(board.board_id, board_event.name)
+      expect(response.body).to include("/boards/#{board.board_id}/events/user-ev/edit")
+    end
+  end
 end

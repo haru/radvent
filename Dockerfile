@@ -33,4 +33,4 @@ ENV RADVENT_PROTECTED_UPLOAD_DIR=/var/radvent_data/protected_uploads
 
 EXPOSE 3000
 
-CMD sh -x /usr/local/bin/run.sh
+CMD sh /usr/local/bin/run.sh

@@ -31,6 +31,8 @@ page files, not here.
 - [Password Reset Hides Account Existence](pages/password-reset-account-hiding.md) — `Users::PasswordsController#create` answers identically for any well-formed address; delivery failures only logged (ADR-0008)
 - [Likes Hardening](pages/likes-hardening.md) — sign-in and readable-article gate, idempotent create/destroy, create-time uniqueness validation, distinct like counts
 - [Other Boards Listing (Load-More Pagination)](pages/other-boards-listing.md) — Ruby-side sort key reusing `visible?`, numeric-ID routing so TOP boards can share it, and Turbo-Frame-only "load more"
+- [Event Addressing by Board (Name Collision Fix)](pages/event-addressing-by-board.md) — board-scoped event URLs, TOP-only name URLs, 302 legacy redirect, visibility-before-permission order
+- [Startup Log Secret Hygiene](pages/startup-log-secret-hygiene.md) — `env` dump and `sh -x` trace removed from container startup; file-reading RSpec guard
 
 ## howto
 - [Development Setup](pages/development-setup.md) — local install, running, and testing

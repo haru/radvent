@@ -469,4 +469,29 @@ RSpec.describe AdventCalendarItemsController do
       expect(duplicate.reload.comment).to eq 'updated comment'
     end
   end
+
+  describe 'DELETE #destroy redirect' do
+    it 'redirects to the board-scoped event page for a user board event', :aggregate_failures do
+      board = create(:board, :public_user)
+      event = create(:event, board: board, name: 'del-user', start_date: '2015-12-01', end_date: '2015-12-25')
+      item = create(:advent_calendar_item, event: event, user: user)
+      delete :destroy, params: { id: item.id }
+      expect(response).to redirect_to("/boards/#{board.board_id}/events/del-user")
+    end
+
+    it 'redirects with an alert and keeps the slot when destroy fails', :aggregate_failures do
+      item = create(:advent_calendar_item, event: create(:event, name: 'del-fail'), user: user)
+      allow_any_instance_of(AdventCalendarItem).to receive(:destroy).and_return(false)
+      delete :destroy, params: { id: item.id }
+      expect(response).to redirect_to(advent_calendar_item_path(item))
+      expect(flash[:alert]).to be_present
+    end
+
+    it 'redirects to the name-only event page for a TOP board event' do
+      event = create(:event, name: 'del-top', start_date: '2015-12-01', end_date: '2015-12-25')
+      item = create(:advent_calendar_item, event: event, user: user)
+      delete :destroy, params: { id: item.id }
+      expect(response).to redirect_to('/events/del-top')
+    end
+  end
 end

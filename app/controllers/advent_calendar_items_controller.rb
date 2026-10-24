@@ -59,8 +59,11 @@ class AdventCalendarItemsController < ApplicationController
   # @return [void]
   def destroy
     event = @advent_calendar_item.event
-    @advent_calendar_item.destroy
-    redirect_to show_event_path(event.name)
+    if @advent_calendar_item.destroy
+      redirect_to helpers.event_page_path(event), status: :see_other
+    else
+      redirect_to @advent_calendar_item, alert: t('advent_calendar_items.delete_failed'), status: :see_other
+    end
   end
 
   private

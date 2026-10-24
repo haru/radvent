@@ -1,7 +1,7 @@
 ---
 title: User, Event, Slot and Article Authorization
 type: decision
-sources: [S027, S028]
+sources: [S027, S028, S029]
 updated: 2026-10-24
 ---
 
@@ -61,6 +61,9 @@ errors partial with localized "already has an article" text (S027).
 Also added after review: slot `date` must be present and within 1..31, and the
 event controller assigns `@board` only after the visibility check passes, since
 the 404 layout prints `@board.name` for user boards.
+
+Event edit/update/destroy later gained the same 404-before-403 visibility
+filter (S029); see [Event Addressing by Board](./event-addressing-by-board.md).
 
 ## Out of scope
 

@@ -7,7 +7,7 @@
           =@event.description
         - if @event.editable?(current_user)
           %div.col-auto.d-flex.align-items-center
-            = link_to edit_event_path(@event.name), class: 'btn btn-light btn-sm' do
+            = link_to edit_event_page_path(@event), class: 'btn btn-light btn-sm' do
               %i.fas.fa-pencil-alt
 
 %div
