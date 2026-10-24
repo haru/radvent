@@ -39,5 +39,9 @@ board event with the same name.
 - Links generated before this change for user board events keep working while
   the name is unique among visible user boards, and stop working (404) once a
   second visible board uses the same name.
+- A legacy name-only link to a user board event shows a different event if an
+  event with the same name is later created on the TOP board, because the TOP
+  board is always resolved first. The outcome can also differ per viewer, since
+  only events visible to that viewer are counted.
 - A creator removed from a private board can no longer edit or delete the
   event until re-added; admins still can.

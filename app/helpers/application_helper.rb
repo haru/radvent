@@ -13,21 +13,37 @@ module ApplicationHelper
   #
   # TOP board events keep the name-only URL; user board events are addressed by board and name.
   #
+  # The URL is built from the persisted name, so a form re-rendered after a failed rename still
+  # targets the event being edited rather than the rejected new name.
+  #
   # @param event [Event] the event
   # @return [String] the event page path
   def event_page_path(event)
-    return show_event_path(event.name) if event.board.board_type_top?
+    name = persisted_event_name(event)
+    return show_event_path(name) if event.board.board_type_top?
 
-    board_event_path(event.board.board_id, event.name)
+    board_event_path(event.board.board_id, name)
   end
 
   # Returns the URL path of an event edit page.
   #
+  # TOP board events keep the name-only URL; user board events are addressed by board and name.
+  # Follows the same URL rule as {#event_page_path}.
+  #
   # @param event [Event] the event
   # @return [String] the event edit path
   def edit_event_page_path(event)
-    return edit_event_path(event.name) if event.board.board_type_top?
+    name = persisted_event_name(event)
+    return edit_event_path(name) if event.board.board_type_top?
 
-    edit_board_event_path(event.board.board_id, event.name)
+    edit_board_event_path(event.board.board_id, name)
+  end
+
+  private
+
+  # @param event [Event] the event
+  # @return [String] the stored name, or the in-memory name for an unsaved event
+  def persisted_event_name(event)
+    event.name_in_database.presence || event.name
   end
 end

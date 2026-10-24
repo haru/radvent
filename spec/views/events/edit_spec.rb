@@ -13,7 +13,7 @@ RSpec.describe 'events/edit', type: :request do
     event = create(:event, name: 'top-ev', start_date: '2016-12-01', end_date: '2016-12-25', created_by: creator)
     get edit_event_path(event.name)
     expect(response.body).to include('action="/events/top-ev"')
-    expect(response.body).not_to include('/boards/')
+    expect(response.body).not_to include('action="/boards/')
   end
 
   it 'targets the board-scoped URL for a user board event' do

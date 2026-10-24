@@ -72,6 +72,21 @@ RSpec.describe EventsController do
       expect(response.body).not_to include('Hidden Board Name')
     end
 
+    it 'shows a private board event to a member' do
+      event_on(private_board, 'secret')
+      create(:board_membership, board: private_board, user: owner)
+      sign_in owner
+      get :show, params: scoped(private_board, 'secret')
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'shows a private board event to an admin' do
+      event_on(private_board, 'secret')
+      sign_in create(:user, admin: true)
+      get :show, params: scoped(private_board, 'secret')
+      expect(response).to have_http_status(:ok)
+    end
+
     it 'returns 404 for a guest on a private board' do
       event_on(private_board, 'secret')
       get :show, params: scoped(private_board, 'secret')
@@ -171,6 +186,20 @@ RSpec.describe EventsController do
 
       it 'renders edit with 422 on validation errors', :aggregate_failures do
         put :update, params: scoped(board_a, 'dup', event: { title: '' })
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response.body).to include(%(action="/boards/#{board_a.board_id}/events/dup"))
+      end
+
+      it 'keeps the form pointing at the persisted event after a colliding rename', :aggregate_failures do
+        event_on(board_a, 'other')
+        put :update, params: scoped(board_a, 'dup', event: { name: 'other' })
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response.body).to include(%(action="/boards/#{board_a.board_id}/events/dup"))
+        expect(response.body).not_to include(%(action="/boards/#{board_a.board_id}/events/other"))
+      end
+
+      it 'does not raise when the rename leaves the name blank', :aggregate_failures do
+        put :update, params: scoped(board_a, 'dup', event: { name: '' })
         expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include(%(action="/boards/#{board_a.board_id}/events/dup"))
       end
@@ -279,6 +308,12 @@ RSpec.describe EventsController do
         expect(response).to redirect_to("/boards/#{board_a.board_id}/events/legacy/edit")
       end
 
+      it 'answers 403 once a non-creator follows the edit redirect' do
+        sign_in create(:user)
+        get :edit, params: scoped(board_a, 'legacy')
+        expect(response).to have_http_status(:forbidden)
+      end
+
       it 'returns 404 for update and changes nothing', :aggregate_failures do
         sign_in owner
         put :update, params: { name: 'legacy', event: { title: 'X' } }
@@ -311,6 +346,21 @@ RSpec.describe EventsController do
       event_on(private_board, 'mix')
       get :show, params: { name: 'mix' }
       expect(response).to redirect_to("/boards/#{board_a.board_id}/events/mix")
+    end
+
+    it 'redirects a private board member to the private board URL' do
+      event_on(private_board, 'secret')
+      create(:board_membership, board: private_board, user: owner)
+      sign_in owner
+      get :show, params: { name: 'secret' }
+      expect(response).to redirect_to("/boards/#{private_board.board_id}/events/secret")
+    end
+
+    it 'logs the ambiguity when several visible user boards match' do
+      [board_a, board_b].each { |board| event_on(board, 'amb') }
+      allow(Rails.logger).to receive(:info)
+      get :show, params: { name: 'amb' }
+      expect(Rails.logger).to have_received(:info).with(/legacy event URL ambiguous name=amb visible_matches=2/)
     end
 
     it 'returns 404 for a member who sees both matches' do

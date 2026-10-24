@@ -203,6 +203,8 @@ en:
     board_management: 'Manage Boards'
   breadcrumb:
     top: 'TOP'
+  advent_calendar_items:
+    delete_failed: 'Failed to delete the slot'
   events:
     updated: 'Event updated successfully'
   boards:

@@ -39,8 +39,8 @@ RSpec.describe 'event routes' do
     expect(post: '/events').to route_to('events#create')
   end
 
-  it 'does not nest new' do
-    expect(get: '/boards/b1/events/new').not_to route_to('events#new', board_board_id: 'b1')
+  it 'treats "new" under a board as an event name, not the new action' do
+    expect(get: '/boards/b1/events/new').to route_to('events#show', board_board_id: 'b1', name: 'new')
   end
 
   it 'does not nest create' do

@@ -140,7 +140,7 @@ class EventsController < ApplicationController
   end
 
   def check_edit_permission
-    render_forbidden unless @event&.editable?(current_user)
+    render_forbidden unless @event.editable?(current_user)
   end
 
   def split_week(range)

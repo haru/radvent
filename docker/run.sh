@@ -1,16 +1,22 @@
 #!/bin/sh
 set -e
+trap 'rc=$?; [ "$rc" -eq 0 ] || echo "startup failed (exit $rc)" >&2' EXIT
+
+echo "RAILS_ENV=${RAILS_ENV:?RAILS_ENV is not set} DB_CREATE_ON_START=${DB_CREATE_ON_START:-false}"
 
 KEYBASE_FILE=/usr/local/keybase
 
 if [ "$SECRET_KEY_BASE" = "" ]
 then
-  if [ ! -f $KEYBASE_FILE ]
+  # Do not dump env or use sh -x: it prints secrets to the container logs.
+  if [ ! -s "$KEYBASE_FILE" ]
   then
     echo "Generating secret key file"
-    bundle exec rails secret > $KEYBASE_FILE
+    bundle exec rails secret > "$KEYBASE_FILE.tmp"
+    mv "$KEYBASE_FILE.tmp" "$KEYBASE_FILE"
   fi
-  export SECRET_KEY_BASE=`cat $KEYBASE_FILE`
+  SECRET_KEY_BASE=$(cat "$KEYBASE_FILE")
+  export SECRET_KEY_BASE
 fi
 
 mkdir -p /var/radvent_data/uploads
@@ -32,4 +38,4 @@ bundle exec rake db:migrate
 echo "Seeding database"
 bundle exec rake db:seed
 echo "Starting puma"
-bundle exec puma -w 3 -p 3000 -e $RAILS_ENV
+exec bundle exec puma -w 3 -p 3000 -e "$RAILS_ENV"

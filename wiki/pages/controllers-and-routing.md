@@ -13,7 +13,11 @@ updated: 2026-10-24
 routes with slug-based access for the main entities (S004):
 
 - Events: `get 'events/:name' => 'events#show'` — accessed by `name` slug,
-  not numeric ID (S004).
+  not numeric ID (S004). TOP board events keep this name-only URL; user board
+  events are addressed as `/boards/:board_board_id/events/:name`, and a
+  name-only URL that matches no TOP board event redirects to the board-scoped
+  URL only when exactly one visible user board event has that name
+  (see ADR 0009).
 - Boards: slug parameter constrained to alphanumeric characters and hyphens
   (S004).
 - Admin routes: `delete 'users/delete/:id'`, `put 'user/:id/update'` (S004).

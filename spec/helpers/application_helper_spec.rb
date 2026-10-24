@@ -30,6 +30,13 @@ describe ApplicationHelper do
       expect(event_page_path(user_event)).to eq "/boards/#{user_board.board_id}/events/user-ev"
     end
 
+    it 'builds paths from the persisted name while an unsaved rename is pending', :aggregate_failures do
+      user_event.name = 'unsaved'
+      top_event.name = ''
+      expect(event_page_path(user_event)).to eq "/boards/#{user_board.board_id}/events/user-ev"
+      expect(edit_event_page_path(top_event)).to eq '/events/top-ev/edit'
+    end
+
     it 'builds the board-scoped edit path for a user board event' do
       expect(edit_event_page_path(user_event)).to eq "/boards/#{user_board.board_id}/events/user-ev/edit"
     end
