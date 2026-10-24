@@ -6,8 +6,8 @@
 class EventsController < ApplicationController
   before_action :set_events_menu
   before_action :check_event_creation_authorization, only: %i[new create]
-  before_action :find_event, except: %i[new create show]
-  before_action :find_event_by_name, only: [:show]
+  before_action :find_event, except: %i[new create]
+  before_action :check_visibility, only: [:show]
   before_action :check_edit_permission, only: %i[edit update destroy]
   before_action :find_board
 
@@ -112,11 +112,14 @@ class EventsController < ApplicationController
     render_not_found unless @event
   end
 
-  def find_event_by_name
-    return if params[:name].blank?
-
-    @event = Event.find_by(name: params[:name])
-    render_not_found unless @event
+  # Renders 404 unless the viewer may read the board this event belongs to.
+  #
+  # Declared before +find_board+ so a hidden event never exposes its board name in the layout.
+  # +find_event+ leaves +@event+ nil when the name param is blank, which is treated as not found.
+  #
+  # @return [void]
+  def check_visibility
+    render_not_found unless @event&.visible?(current_user)
   end
 
   def find_board

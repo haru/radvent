@@ -6,6 +6,7 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!, only: %i[new create edit update preview]
   before_action :find_item, only: %i[show edit update]
+  before_action :check_visibility, only: [:show]
   before_action :edit_permission?, only: %i[edit update]
   before_action :find_board
 
@@ -88,6 +89,15 @@ class ItemsController < ApplicationController
   def find_item
     @item = Item.find_by(id: params[:id])
     render_not_found unless @item
+  end
+
+  # Renders 404 unless the viewer may read the board this item belongs to.
+  #
+  # Declared before +find_board+ so a hidden item never exposes its board name in the layout.
+  #
+  # @return [void]
+  def check_visibility
+    render_not_found unless @item.visible?(current_user)
   end
 
   def edit_permission?
