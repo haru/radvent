@@ -1,17 +1,21 @@
 <!--
 Sync Impact Report
 ==================
-Version Change: 1.2.0 → 1.3.0
+Version Change: 1.3.0 → 1.4.0
 
 Modified Principles: None
 
 Added Sections:
-- Principle X: Data Preservation (No Destructive Operations Without Approval)
+- Principle XI: Migration Safety Against Existing Data (Migrations Never Fail on Stored Data)
+
+Modified Sections:
+- Code Review & Quality Gates: "Database migrations are safe" expanded to require that migrations
+  cannot fail on previously stored data (Principle XI)
 
 Removed Sections: None
 
 Templates Requiring Updates:
-✅ AGENTS.md - already updated with the matching Absolute Rule (commit 41b707a)
+⚠ AGENTS.md - consider adding a matching gotcha/rule (not modified by this command)
 
 Follow-up TODOs:
 - None
@@ -150,6 +154,30 @@ approval (e.g. wiping the development database to set up manual-test fixtures) c
 loss. Requiring the exact command and target to be approved beforehand keeps destructive operations
 deliberate and reviewable.
 
+### XI. Migration Safety Against Existing Data (Migrations Never Fail on Stored Data)
+A migration MUST NEVER fail because of data that was saved in the past. This applies to every change,
+not only the current feature. Any data state that any released version of the application could have
+written (including states reachable only through race conditions, direct requests that bypass the UI,
+or validations that did not exist yet) MUST be assumed to exist in production.
+
+- Do NOT add a constraint that existing data may violate (unique index, NOT NULL, foreign key, check
+  constraint, narrower column type or length). Such a constraint is permitted ONLY when it is proven
+  that no stored data can violate it — for example, because the same rule has been enforced at the
+  database level since the data was first written. Otherwise, enforce the rule in application code
+  for new writes only.
+- Do NOT make a migration "safe" by deleting, merging, or rewriting existing records to fit a new
+  constraint. That is a destructive operation and falls under Principle X.
+- Data migrations and backfills MUST handle every value that can exist in the column (NULL, empty
+  strings, duplicates, out-of-range or malformed values, orphaned references) without raising.
+- Every migration that changes schema constraints or existing data MUST have a test that runs it
+  against deliberately "dirty" existing data representing those past states, and verifies that it
+  completes without error and without losing records.
+
+**Rationale**: A migration that fails on existing data blocks the deployment of every operator who
+runs this software, and the failing data is often invisible until then (for example, duplicates
+created by simultaneous requests). The data was valid under the rules of the version that wrote it,
+so the new version MUST accept it rather than demand that operators repair it by hand.
+
 ## Security & Access Control
 
 Devise authentication is REQUIRED for user access. Admin actions protected with `admin_user!` helper.
@@ -177,7 +205,8 @@ test coverage written via TDD (failing tests written before implementation code)
 DRY/YAGNI (no unjustified complexity or duplication), Significant design decisions are captured as
 append-only ADRs under `docs/adr/` (and linked from `docs/adr/README.md`), No silent fallbacks mask
 failures, No destructive operation was performed on existing data without explicit user approval,
-Database migrations are safe, No hardcoded secrets or credentials.
+Database migrations are safe and cannot fail on any previously stored data (tested against dirty
+existing data per Principle XI), No hardcoded secrets or credentials.
 
 **Rationale**: Quality gates prevent broken code from reaching production. Automated checks catch
 common issues early.
@@ -194,4 +223,4 @@ For runtime development guidance, refer to AGENTS.md which contains detailed con
 procedures, and project-specific gotchas. AGENTS.md is the authoritative reference for implementation
 details and should be consulted before making changes.
 
-**Version**: 1.3.0 | **Ratified**: 2026-02-27 | **Last Amended**: 2026-09-17
+**Version**: 1.4.0 | **Ratified**: 2026-02-27 | **Last Amended**: 2026-10-24
