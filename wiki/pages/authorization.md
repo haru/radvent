@@ -1,8 +1,8 @@
 ---
 title: Authorization
 type: component
-sources: [S002, S004, S009, S012, S013]
-updated: 2026-09-16
+sources: [S002, S004, S009, S012, S013, S023]
+updated: 2026-10-24
 ---
 
 # Authorization
@@ -29,14 +29,15 @@ centralized per object rather than duplicated per controller (S009) — see
 board-type rules and rationale.
 
 Uploading an `Attachment` (via the editor's image-upload button) is gated by
-the same `edit_permission?` check as the parent item, but *viewing* an
-uploaded image's URL currently has no access control at all — anyone who
-knows the URL can view it, independent of the item's visibility. Feature
-`003-image-file-upload` confirms this is intentional (view-time
-authorization is out of scope there), which is a gap relative to S009's
-`visible?(user)` target for `Attachment` — see
-[Toolbar Image Upload — UX and Access Control](./image-upload-toolbar-button.md)
-(S012).
+the same `edit_permission?` check as the parent item (S012). *Viewing* an
+uploaded image was originally unrestricted (feature `003-image-file-upload`,
+S012); since feature `010-board-image-access-control`, new images are served
+only to viewers for whom `Attachment#visible?` holds — the article's board
+visibility plus the article being published (authors and admins exempt) — and
+everyone else gets a 404. Images uploaded before that feature stay public, so
+S012's "no view-time control" describes only those legacy images (S023).
+See [Protected Image Serving](./protected-image-serving.md) (S023) and
+[Toolbar Image Upload — UX and Access Control](./image-upload-toolbar-button.md).
 
 Deleting a `Board` additionally requires typing the board's normalized ID
 (case-insensitive, surrounding whitespace ignored) before the delete button

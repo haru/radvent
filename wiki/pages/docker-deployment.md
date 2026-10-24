@@ -1,8 +1,8 @@
 ---
 title: Docker Deployment
 type: howto
-sources: [S001, S007]
-updated: 2026-08-14
+sources: [S001, S007, S021, S023]
+updated: 2026-10-24
 ---
 
 # Docker Deployment
@@ -57,11 +57,22 @@ docker-compose (PostgreSQL) follows the same shape with `DB: postgres` and a
 | `DB_PORT` | DB port number | MySQL: `3306` / PostgreSQL: `5432` |
 | `DB_CREATE_ON_START` | Set to `true` to run `db:create` on startup | `false` |
 | `RADVENT_TITLE` | Site name displayed in the header | `Advent Calendar` |
+| `RADVENT_PROTECTED_UPLOAD_DIR` | Directory for access-controlled image uploads | `storage/protected_uploads` (Docker: `/var/radvent_data/protected_uploads`) (S021, S023) |
 
 These are radvent's own app-level variables. Rails-standard production
 variables (`RAILS_MASTER_KEY`, `SECRET_KEY_BASE`, `RAILS_SERVE_STATIC_FILES`,
 `RAILS_LOG_TO_STDOUT`) are documented in [Configuration](./configuration.md)
 (S007).
+
+## Persisting uploaded images
+
+New images are stored in `/var/radvent_data/protected_uploads` (created by
+`docker/run.sh`) and served only to authorized viewers; images from before
+that feature stay in `/var/radvent_data/uploads` and remain public. Mounting
+`/var/radvent_data` persists both; a setup that mounts only `uploads` must
+also persist `protected_uploads`. Rolling back leaves legacy images working
+but stops serving the new ones (S021, S023). See
+[Protected Image Serving](./protected-image-serving.md).
 
 ## Manual production deployment (non-Docker) (S001)
 
@@ -72,5 +83,9 @@ bundle exec rake db:migrate RAILS_ENV=production
 export SECRET_KEY_BASE=$(bundle exec rails secret)
 bundle exec rails s -e production
 ```
+
+Without Docker, new images go to `storage/protected_uploads` in the app
+directory (or `RADVENT_PROTECTED_UPLOAD_DIR`) — back it up and persist it
+along with `public/uploads` (S023).
 
 Contrast with local dev setup in [Development Setup](./development-setup.md).
