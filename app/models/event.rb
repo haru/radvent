@@ -31,6 +31,20 @@ class Event < ApplicationRecord
     board.owner?(user) || board.member?(user)
   end
 
+  # Returns true if the given user can join the event (create a calendar slot in it).
+  #
+  # A guest can never join. Every signed-in user may join events on the TOP board; other boards
+  # follow the same rule as event creation ({Event.creatable_on?}).
+  #
+  # @param user [User, nil] nil means unauthenticated
+  # @return [Boolean]
+  def joinable?(user)
+    return false if user.nil?
+    return true if board.board_type_top?
+
+    Event.creatable_on?(board, user)
+  end
+
   # --- Permissionable implementation ---
 
   delegate :visible?, to: :board

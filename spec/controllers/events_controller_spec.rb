@@ -310,4 +310,198 @@ RSpec.describe EventsController do
       end
     end
   end
+
+  describe 'event creation authorization' do
+    let(:board_owner) { create(:user) }
+    let(:other_user) { create(:user) }
+    let(:public_board) { create(:board, :public_user, owner: board_owner) }
+    let(:protected_board) { create(:board, :protected_user, owner: board_owner) }
+    let(:private_board) { create(:board, :private_user, owner: board_owner) }
+    let(:own_board) { create(:board, :public_user, owner: other_user) }
+    let(:top_board) { Board.find_by!(board_type: :top) }
+
+    before do
+      public_board
+      protected_board
+      private_board
+      own_board
+    end
+
+    # Extracts the hidden input for the target board from the rendered form.
+    #
+    # @return [String, nil] the matching input tag, or nil when it is not rendered
+    def event_board_hidden_input
+      response.body[/<input[^>]*name="event\[board_id\]"[^>]*>/]
+    end
+
+    # Posts an event creation request.
+    #
+    # @param board_id [Object] the event[board_id] value sent in the request
+    # @param name [String] the unique event name
+    # @param top_level_board_id [Object, nil] the top-level board_id sent beside the event payload
+    # @param title [String] the event title
+    # @return [void]
+    def post_event(board_id, name, top_level_board_id: nil, title: 'new event')
+      params = { event: { title: title, start_date: '2017-12-01', end_date: '2017-12-25',
+                          name: name, description: 'desc', board_id: board_id } }
+      params[:board_id] = top_level_board_id if top_level_board_id
+      post :create, params: params
+    end
+
+    describe 'GET #new' do
+      render_views
+
+      it 'returns success for admin without board_id' do
+        get :new
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'returns 403 without board_id (TOP) for a non-admin' do
+        sign_in other_user
+        get :new
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it 'embeds the board id for a public board', :aggregate_failures do
+        sign_in other_user
+        get :new, params: { board_id: public_board.id }
+        expect(response).to have_http_status(:success)
+        expect(event_board_hidden_input).to include(%(value="#{public_board.id}"))
+      end
+
+      it 'embeds the board id for the own board', :aggregate_failures do
+        sign_in other_user
+        get :new, params: { board_id: own_board.id }
+        expect(response).to have_http_status(:success)
+        expect(event_board_hidden_input).to include(%(value="#{own_board.id}"))
+      end
+
+      it 'returns 403 for a protected board the user is not a member of' do
+        sign_in other_user
+        get :new, params: { board_id: protected_board.id }
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it 'returns 404 for a private board the user is not a member of' do
+        sign_in other_user
+        get :new, params: { board_id: private_board.id }
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it 'returns 404 for a non-existent board id' do
+        sign_in other_user
+        get :new, params: { board_id: Board.maximum(:id).to_i + 1 }
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    describe 'POST #create' do
+      it 'returns 403 and creates nothing when event[board_id] is empty', :aggregate_failures do
+        sign_in other_user
+        expect { post_event('', 'auth-evt-empty', top_level_board_id: own_board.id) }
+          .not_to change(Event, :count)
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it 'returns 404 and creates nothing when event[board_id] is an invisible private board',
+         :aggregate_failures do
+        sign_in other_user
+        expect { post_event(private_board.id, 'auth-evt-private', top_level_board_id: own_board.id) }
+          .not_to change(Event, :count)
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it 'returns 404 and creates nothing when event[board_id] does not exist', :aggregate_failures do
+        sign_in other_user
+        expect { post_event(Board.maximum(:id).to_i + 1, 'auth-evt-none', top_level_board_id: own_board.id) }
+          .not_to change(Event, :count)
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it 'returns 403 and creates nothing for a protected board the user is not a member of',
+         :aggregate_failures do
+        sign_in other_user
+        expect { post_event(protected_board.id, 'auth-evt-protected') }.not_to change(Event, :count)
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it 'creates the event and redirects to the board page for the own board', :aggregate_failures do
+        sign_in other_user
+        expect { post_event(own_board.id, 'auth-evt-own') }.to change(Event, :count).by(1)
+        expect(response).to redirect_to(board_path(own_board.board_id))
+        expect(Event.last.board).to eq own_board
+      end
+
+      it 'creates the event on event[board_id] even when a top-level board_id points elsewhere',
+         :aggregate_failures do
+        sign_in other_user
+        expect { post_event(own_board.id, 'auth-evt-mismatch', top_level_board_id: top_board.id) }
+          .to change(Event, :count).by(1)
+        expect(Event.last.board).to eq own_board
+      end
+
+      it 'creates the event on a private board for a board member', :aggregate_failures do
+        create(:board_membership, board: private_board, user: other_user)
+        sign_in other_user
+        expect { post_event(private_board.id, 'auth-evt-member') }.to change(Event, :count).by(1)
+        expect(Event.last.board).to eq private_board
+      end
+
+      it 'creates the event on a protected board for a board member', :aggregate_failures do
+        create(:board_membership, board: protected_board, user: other_user)
+        sign_in other_user
+        expect { post_event(protected_board.id, 'auth-evt-protected-member') }.to change(Event, :count).by(1)
+        expect(Event.last.board).to eq protected_board
+      end
+
+      it 'returns 403 and creates nothing for a guest', :aggregate_failures do
+        sign_out user
+        expect { post_event(public_board.id, 'auth-evt-guest') }.not_to change(Event, :count)
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it 'creates the event on the TOP board and redirects to root when board_id is empty',
+         :aggregate_failures do
+        expect { post_event('', 'auth-evt-top-empty') }.to change(Event, :count).by(1)
+        expect(response).to redirect_to(root_path)
+        expect(Event.last.board).to eq top_board
+      end
+
+      it 'creates the event on the TOP board and redirects to root when the TOP board is given',
+         :aggregate_failures do
+        expect { post_event(top_board.id, 'auth-evt-top-given') }.to change(Event, :count).by(1)
+        expect(response).to redirect_to(root_path)
+        expect(Event.last.board).to eq top_board
+      end
+    end
+
+    describe 'hidden board name' do
+      render_views
+
+      it 'is not rendered in the 404 page of GET #new', :aggregate_failures do
+        sign_in other_user
+        get :new, params: { board_id: private_board.id }
+        expect(response).to have_http_status(:not_found)
+        expect(response.body).not_to include(private_board.name)
+      end
+
+      it 'is not rendered in the 404 page of POST #create', :aggregate_failures do
+        sign_in other_user
+        post_event(private_board.id, 'auth-evt-leak')
+        expect(response).to have_http_status(:not_found)
+        expect(response.body).not_to include(private_board.name)
+      end
+    end
+
+    describe 'POST #create failure' do
+      render_views
+
+      it 'keeps the same board id in the hidden field when rendering new again', :aggregate_failures do
+        sign_in other_user
+        post_event(own_board.id, 'auth-evt-fail', title: '')
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(event_board_hidden_input).to include(%(value="#{own_board.id}"))
+      end
+    end
+  end
 end

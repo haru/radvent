@@ -9,6 +9,7 @@ class Item < ApplicationRecord
   belongs_to :advent_calendar_item
   has_many :comments, -> { order(:id) }, dependent: :destroy, inverse_of: :item
   has_many :likes, dependent: :destroy
+  validates :advent_calendar_item_id, uniqueness: true
 
   # Returns the title, or a default placeholder if empty.
   #

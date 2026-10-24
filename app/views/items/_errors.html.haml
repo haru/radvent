@@ -1,0 +1,5 @@
+- if item.errors.any?
+  %div.alert.alert-danger
+    %ul
+      - item.errors.full_messages.each do |msg|
+        %li= msg

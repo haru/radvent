@@ -52,4 +52,21 @@ describe Item do
       end
     end
   end
+
+  describe 'advent_calendar_item_id uniqueness' do
+    let(:advent_calendar_item) { create(:advent_calendar_item) }
+
+    it 'is invalid when the slot already has an item', :aggregate_failures do
+      create(:item, advent_calendar_item: advent_calendar_item)
+      duplicate = build(:item, advent_calendar_item: advent_calendar_item)
+      expect(duplicate).not_to be_valid
+      expect(duplicate.errors[:advent_calendar_item_id]).to be_present
+    end
+
+    it 'is valid when the article belongs to a different slot' do
+      create(:item, advent_calendar_item: create(:advent_calendar_item))
+      item = build(:item, advent_calendar_item: advent_calendar_item)
+      expect(item).to be_valid
+    end
+  end
 end
