@@ -1,7 +1,7 @@
 ---
 title: Configuration
 type: component
-sources: [S007, S021, S023]
+sources: [S007, S021, S023, S028]
 updated: 2026-10-24
 ---
 
@@ -32,6 +32,25 @@ to `storage/protected_uploads`; `RADVENT_PROTECTED_UPLOAD_DIR` overrides it —
 an empty value falls back to the default and a relative one resolves against
 `Rails.root` (S021, S023). See
 [Protected Image Serving](./protected-image-serving.md).
+
+## Mail settings (password reset)
+
+`Radvent::MailSettings` (`lib/radvent/mail_settings.rb`) builds the mailer
+config from environment variables; `config/environments/production.rb`
+`require_relative`s it, because environment files load before Zeitwerk (S028).
+`RADVENT_URL` (e.g. `https://advent.example.com`) becomes
+`default_url_options` (host, protocol, port omitted when standard);
+`SMTP_ADDRESS` enables SMTP delivery with `SMTP_PORT` (default 587), user
+name, password, authentication, domain and STARTTLS; `RADVENT_MAIL_FROM`
+overrides Devise's `mailer_sender` (S028). Unset values do not stop boot, so
+installs without mail keep starting and the failure is logged; a set but
+malformed `RADVENT_URL` raises at boot (S028). Production previously had no
+`default_url_options` or SMTP, so reset mails always failed with Missing host
+(S028). See [Password Reset Hides Account Existence](./password-reset-account-hiding.md).
+
+A boot-time warning names any unset mail variable
+(`MailSettings.missing_variables`), and the production config relies on
+`raise_delivery_errors` staying true so delivery failures reach the log (S028).
 
 ## Database
 

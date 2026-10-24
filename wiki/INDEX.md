@@ -9,6 +9,7 @@ page files, not here.
 - [Domain Model](pages/domain-model.md) — core models and their relationships (Board, Event, Item, etc.)
 - [Authorization](pages/authorization.md) — admin filters, per-board visibility, edit/delete gating, and image access control (split from Domain Model)
 - [Controllers and Routing](pages/controllers-and-routing.md) — routing conventions, layouts, and authorization filters
+- [Controller Groups](pages/controller-groups.md) — per-controller responsibilities (split from Controllers and Routing)
 - [Views and Frontend](pages/views-and-frontend.md) — HAML templating, Stimulus/Turbo, styling, and the Markdown editor UI
 - [Configuration](pages/configuration.md) — Rails env vars, initializers, and per-environment settings
 - [JavaScript and CSS Asset Pipeline](pages/javascript-asset-pipeline.md) — JS entry point, Stimulus controller registry, MDB/Turbo lifecycle, image upload flow
@@ -26,6 +27,9 @@ page files, not here.
 - [Devise Auth Views: ERB → HAML + .panel → .card (flagged)](pages/devise-views-format-conversion.md) — split from the page above; a flagged conflict with a prior "never convert Devise views" constraint
 - [Comment Authorization (Posting and Deleting)](pages/comment-authorization.md) — `Item#readable?`, delete-order rule, and the uniform 404 vs 403 split for comments
 - [User, Event, Slot and Article Authorization](pages/user-event-item-authorization.md) — admin-only user edit, one-value board/event/slot resolution, `Event#joinable?`, parent keys removed from strong params, and uniqueness rules
+- [Article Preview Authorization](pages/article-preview-authorization.md) — `preview_new` split, existing filters reused, slot id dropped from preview params, 404-before-403 ordering
+- [Password Reset Hides Account Existence](pages/password-reset-account-hiding.md) — `Users::PasswordsController#create` answers identically for any well-formed address; delivery failures only logged (ADR-0008)
+- [Likes Hardening](pages/likes-hardening.md) — sign-in and readable-article gate, idempotent create/destroy, create-time uniqueness validation, distinct like counts
 - [Other Boards Listing (Load-More Pagination)](pages/other-boards-listing.md) — Ruby-side sort key reusing `visible?`, numeric-ID routing so TOP boards can share it, and Turbo-Frame-only "load more"
 
 ## howto

@@ -1,7 +1,7 @@
 ---
 title: Comment Authorization (Posting and Deleting)
 type: decision
-sources: [S026]
+sources: [S024, S026]
 updated: 2026-10-24
 ---
 
