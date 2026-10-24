@@ -1,7 +1,7 @@
 ---
 title: Controllers and Routing
 type: component
-sources: [S004, S009, S013, S015, S019, S023, S024, S026]
+sources: [S004, S009, S013, S015, S019, S024, S028]
 updated: 2026-10-24
 ---
 
@@ -18,7 +18,10 @@ routes with slug-based access for the main entities (S004):
   (S004).
 - Admin routes: `delete 'users/delete/:id'`, `put 'user/:id/update'` (S004).
 - Items: both collection and member preview routes, to support live
-  Markdown preview before persistence (S004).
+  Markdown preview before persistence (S004). The collection `POST
+  /items/preview` routes to `items#preview_new` (path helper
+  `preview_items_path` unchanged); see
+  [Article Preview Authorization](./article-preview-authorization.md) (S028).
 - Theme: `patch 'theme' => 'themes#update'` (feature `007-theme-switch`) — a
   lightweight, `current_user`-only endpoint deliberately kept separate from
   Devise's registration-update route so a theme change doesn't require
@@ -78,18 +81,6 @@ than one-off controller filters — see
 not confirmed whether `edit_permission?` calls that interface or a separate
 mechanism.
 
-## Controller groups
-
-| Group | Responsibility |
-|-------|-----------------|
-| Boards / BoardMemberships | Board lifecycle, visibility-based access, membership management (add/remove users by email or name) (S004) |
-| Events / AdventCalendarItems | Advent calendar management, date-slot assignment (`date` is Integer 1–31) (S004) |
-| Items | Content creation for a calendar slot, plus the Markdown preview pipeline (S004) |
-| Users | Admin-only account/profile management (S004) |
-| Comments / Likes | Social interaction on items; `Comment` has no `user_id` — stores `user_name` as a string (S004); create/destroy are authorized — see [Comment Authorization](./comment-authorization.md) (S026) |
-| Attachments | Image uploads via CarrierWave for the Markdown editor (S004); `show` (`GET /attachments/:id/:filename`) serves images with access control — see [Protected Image Serving](./protected-image-serving.md) (S023) |
-| Themes | Single `update` action persisting `current_user.theme`; added by feature `007-theme-switch` (S015) |
-| BoardOtherBoards | Single `index` action returning a page of the viewer's visible boards, newest-activity-first, for the load-more listing; added by feature `009-board-list` (S019) |
-
-See [Domain Model](./domain-model.md) for the underlying entities and
-[Tech Stack](./tech-stack.md) for Devise and the locale-detection stack.
+The per-controller responsibility table lives in
+[Controller Groups](./controller-groups.md) (split out at the 600-word
+threshold).

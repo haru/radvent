@@ -1,7 +1,7 @@
 ---
 title: Authorization
 type: component
-sources: [S002, S004, S009, S012, S013, S023, S024, S026, S027]
+sources: [S002, S004, S009, S012, S013, S023, S024, S026, S027, S028]
 updated: 2026-10-24
 ---
 
@@ -63,5 +63,11 @@ User-info editing is admin-only, and creating events, slots and articles
 board/event/slot with 404 for hidden and 403 for forbidden targets; see
 [User, Event, Slot and Article Authorization](./user-event-item-authorization.md)
 (S027).
+
+Both article previews now require sign-in, and previews are authorized with the
+existing visibility/edit filters; see
+[Article Preview Authorization](./article-preview-authorization.md). Likes
+require sign-in and a readable article; see [Likes Hardening](./likes-hardening.md)
+(S028).
 
 See [Domain Model](./domain-model.md) for the entities these rules apply to.

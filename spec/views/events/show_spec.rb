@@ -72,4 +72,17 @@ RSpec.describe 'events/show', type: :request do
       expect(response.body).not_to include(edit_event_path(owned_event.name))
     end
   end
+
+  context 'when an article has duplicate like rows' do
+    let(:liked_item) do
+      create(:item, advent_calendar_item: create(:advent_calendar_item, event: owned_event, user: event_owner, date: 3))
+    end
+
+    it 'shows the like count with each user counted once' do
+      2.times { Like.new(user: other_user, item: liked_item).save!(validate: false) }
+      sign_in other_user
+      get show_event_path(owned_event.name)
+      expect(response.body).to match(%r{far fa-heart"></i>\s*1\s*<})
+    end
+  end
 end

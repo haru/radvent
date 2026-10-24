@@ -9,6 +9,8 @@ class Item < ApplicationRecord
   belongs_to :advent_calendar_item
   has_many :comments, -> { order(:id) }, dependent: :destroy, inverse_of: :item
   has_many :likes, dependent: :destroy
+  # The users who liked this item, each once (a user with duplicate like rows counts once), by id.
+  has_many :liked_users, -> { distinct.order(:id) }, through: :likes, source: :user
   validates :advent_calendar_item_id, uniqueness: true
 
   # Returns the title, or a default placeholder if empty.
@@ -27,7 +29,14 @@ class Item < ApplicationRecord
   def liked_by?(user)
     return false unless user
 
-    likes.find_by(user_id: user.id) != nil
+    likes.exists?(user_id: user.id)
+  end
+
+  # Counts the users who liked this item, a user with duplicate like rows counting once.
+  #
+  # @return [Integer] the number of distinct users
+  def like_count
+    likes.distinct.count(:user_id)
   end
 
   # Checks if the given user can read this item: it is visible to them and its publish date has come.

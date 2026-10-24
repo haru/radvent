@@ -4,11 +4,11 @@
 #
 # Handles creating, reading, updating, and previewing articles (items) in the advent calendar.
 class ItemsController < ApplicationController
-  before_action :authenticate_user!, only: %i[new create edit update preview]
-  before_action :check_article_creation_authorization, only: %i[new create]
-  before_action :find_item, only: %i[show edit update]
-  before_action :check_visibility, only: [:show]
-  before_action :edit_permission?, only: %i[edit update]
+  before_action :authenticate_user!, except: :show
+  before_action :check_article_creation_authorization, only: %i[new create preview_new]
+  before_action :find_item, only: %i[show edit update preview]
+  before_action :check_visibility, only: %i[show preview]
+  before_action :edit_permission?, only: %i[edit update preview]
   before_action :find_board
 
   # Shows an item (article).
@@ -68,40 +68,40 @@ class ItemsController < ApplicationController
     end
   end
 
-  # Previews an item without saving.
+  # Previews an existing item without saving.
+  #
+  # Authorized like +edit+, plus +check_visibility+: +find_item+ answers 404 for a missing item,
+  # +check_visibility+ answers 404 for an item on a board the requester cannot see, and
+  # +edit_permission?+ answers 403 unless the requester owns the item's slot or is an admin. Only the
+  # title and body are overwritten for display; the slot is never re-assigned, so the preview always
+  # shows the slot the item belongs to. A request without an +item+ parameter is answered with 400.
   #
   # @return [void]
   def preview
-    @item = if params[:id]
-              item = Item.find_by(id: params[:id])
-              render_not_found and return unless item
+    @item.assign_attributes(article_params)
+  end
 
-              item.tap { |i| i.assign_attributes(preview_params) }
-            else
-              Item.new(preview_params)
-            end
+  # Previews a new item without saving.
+  #
+  # Authorized like +create+ by +check_article_creation_authorization+, which resolves the slot from
+  # +item[advent_calendar_item_id]+; the same slot is used for the decision and the display.
+  #
+  # @return [void]
+  def preview_new
+    @item = Item.new(article_params.merge(advent_calendar_item: @advent_calendar_item))
+    render :preview
   end
 
   private
 
-  # Returns the permitted article attributes for create and update.
+  # Returns the permitted article attributes for create, update and the previews.
   #
   # The slot assignment is deliberately excluded: the target slot is resolved and authorized by
-  # +check_article_creation_authorization+ on creation, and never changes on update.
+  # +check_article_creation_authorization+ on creation, and never changes on update or preview.
   #
   # @return [ActionController::Parameters]
   def article_params
     params.expect(item: %i[title body])
-  end
-
-  # Returns the permitted attributes for the preview.
-  #
-  # Unlike +article_params+ it still accepts +advent_calendar_item_id+, which the preview needs to
-  # render the slot's author and date. The preview never saves, so the slot is not re-assigned.
-  #
-  # @return [ActionController::Parameters]
-  def preview_params
-    params.expect(item: %i[title body advent_calendar_item_id])
   end
 
   def find_item
@@ -111,12 +111,12 @@ class ItemsController < ApplicationController
 
   # Renders 404/403 unless the requester may write an article on the target slot.
   #
-  # +new+ resolves the slot from +params[:id]+ and +create+ from +item[advent_calendar_item_id]+
-  # only, so the slot used for the decision is always the slot the article is created on. A slot
-  # the requester cannot see is answered with 404 so its existence is not revealed. The publish
-  # date is not part of the decision: the owner may write before it, and an admin may write on
-  # any visible slot. Declared before +find_board+ so a hidden slot never exposes its board name
-  # in the layout.
+  # +new+ resolves the slot from +params[:id]+ and +create+ / +preview_new+ from
+  # +item[advent_calendar_item_id]+ only, so the slot used for the decision is always the slot the
+  # article is created on. A slot the requester cannot see is answered with 404 so its existence
+  # is not revealed. The publish date is not part of the decision: the owner may write before it,
+  # and an admin may write on any visible slot. Declared before +find_board+ so a hidden slot never
+  # exposes its board name in the layout.
   #
   # @return [void]
   def check_article_creation_authorization

@@ -2,31 +2,45 @@
 
 # Manages likes on articles.
 #
-# Handles creating and deleting likes on items.
+# Handles creating and deleting likes on items. Both actions require a signed-in user and an item
+# the user can read; a missing or unreadable item is answered with 404 so hidden items are not revealed.
 class LikesController < ApplicationController
-  # Creates a like on an item.
+  before_action :authenticate_user!
+  before_action :find_readable_item
+
+  # Likes an item once; liking again leaves the existing like in place.
   #
   # @return [void]
   def create
-    @like = Like.create(user_id: current_user.id, item_id: params[:item_id])
-    @likes = Like.where(item_id: params[:item_id])
-    @item = Item.find_by(id: params[:item_id])
-
-    respond_to do |format|
-      format.turbo_stream
-      format.html { redirect_to @item }
-    end
+    @item.likes.find_or_create_by(user: current_user)
+    respond_with_item
   end
 
-  # Deletes a like on an item.
+  # Removes the requester's likes of an item, including duplicate rows.
+  #
+  # The like id in the URL is ignored: the target is always the requester's own like(s) on the item,
+  # so another user's like cannot be removed by passing its id.
   #
   # @return [void]
   def destroy
-    like = Like.find_by(user_id: current_user.id, item_id: params[:item_id])
-    like.destroy
-    @likes = Like.where(item_id: params[:item_id])
-    @item = Item.find_by(id: params[:item_id])
+    @item.likes.where(user: current_user).destroy_all
+    respond_with_item
+  end
 
+  private
+
+  # Loads the item or renders 404 when it does not exist or the requester cannot read it.
+  #
+  # @return [void]
+  def find_readable_item
+    @item = Item.find_by(id: params[:item_id])
+    render_not_found unless @item&.readable?(current_user)
+  end
+
+  # Replies with the refreshed like area (Turbo Stream) or back to the item (HTML).
+  #
+  # @return [void]
+  def respond_with_item
     respond_to do |format|
       format.turbo_stream
       format.html { redirect_to @item }

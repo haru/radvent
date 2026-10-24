@@ -1,7 +1,7 @@
 ---
 title: User, Event, Slot and Article Authorization
 type: decision
-sources: [S027]
+sources: [S027, S028]
 updated: 2026-10-24
 ---
 
@@ -52,15 +52,11 @@ is [Comment Authorization](./comment-authorization.md).
 - **Filter order.** The new `before_action`s run after `authenticate_user!` and
   before `find_board`, so a hidden target never reaches the layout (S027).
 
-## Shipped differences from the research
+## Shipped behaviour
 
-> ⚠ conflict: S027 (R8) says slot `update` keeps a plain `render :edit`; the
-> shipped code returns `unprocessable_content` (422) for failed slot updates and
-> article create/update, because Turbo ignores a 200 form response.
-
-> ⚠ conflict: S027 (R11) says the article form shows no error message; the
-> shipped code adds an errors partial and localized "already has an article"
-> text.
+Failed slot updates and article create/update return `unprocessable_content`
+(422), because Turbo ignores a 200 form response; the article form shows an
+errors partial with localized "already has an article" text (S027).
 
 Also added after review: slot `date` must be present and within 1..31, and the
 event controller assigns `@board` only after the visibility check passes, since
@@ -68,6 +64,8 @@ the 404 layout prints `@board.name` for user boards.
 
 ## Out of scope
 
-Article preview (V-06) is still unauthorized and `preview_params` keeps
-`advent_calendar_item_id`; "join" links are still shown to users who would get
+Article preview (V-06) was still unauthorized when this feature shipped; it was
+fixed by feature 014 — see
+[Article Preview Authorization](./article-preview-authorization.md) (S028).
+"Join" links are still shown to users who would get
 403 (S027).
