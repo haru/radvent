@@ -1,7 +1,7 @@
 ---
 title: Authorization
 type: component
-sources: [S002, S004, S009, S012, S013, S023, S024, S026]
+sources: [S002, S004, S009, S012, S013, S023, S024, S026, S027]
 updated: 2026-10-24
 ---
 
@@ -57,5 +57,11 @@ and posting requires the item to be readable (board visible *and* published,
 with no exception for admins). Unreadable items answer 404, readable-but-not-
 deletable answers 403. See [Comment Authorization](./comment-authorization.md)
 (S026).
+
+User-info editing is admin-only, and creating events, slots and articles
+(and updating slots and articles) is authorized against the target
+board/event/slot with 404 for hidden and 403 for forbidden targets; see
+[User, Event, Slot and Article Authorization](./user-event-item-authorization.md)
+(S027).
 
 See [Domain Model](./domain-model.md) for the entities these rules apply to.

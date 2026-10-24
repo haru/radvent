@@ -25,6 +25,7 @@ page files, not here.
 - [Dark Theme — Full-App Color Coverage](pages/dark-theme-full-coverage.md) — closing hardcoded-color gaps (tables, comments, nav, Markdown, EasyMDE) left after the theme switch
 - [Devise Auth Views: ERB → HAML + .panel → .card (flagged)](pages/devise-views-format-conversion.md) — split from the page above; a flagged conflict with a prior "never convert Devise views" constraint
 - [Comment Authorization (Posting and Deleting)](pages/comment-authorization.md) — `Item#readable?`, delete-order rule, and the uniform 404 vs 403 split for comments
+- [User, Event, Slot and Article Authorization](pages/user-event-item-authorization.md) — admin-only user edit, one-value board/event/slot resolution, `Event#joinable?`, parent keys removed from strong params, and uniqueness rules
 - [Other Boards Listing (Load-More Pagination)](pages/other-boards-listing.md) — Ruby-side sort key reusing `visible?`, numeric-ID routing so TOP boards can share it, and Turbo-Frame-only "load more"
 
 ## howto
