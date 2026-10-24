@@ -4,6 +4,9 @@
 #
 # Any model including this concern MUST implement visible?, editable?, and deletable?.
 # The default implementations raise NotImplementedError to enforce the contract.
+#
+# visible? is container-level access. Models with publish gating (e.g. Item#readable?) may add a
+# stricter predicate on top instead of redefining visible?.
 module Permissionable
   extend ActiveSupport::Concern
 

@@ -3,47 +3,195 @@
 require 'rails_helper'
 
 RSpec.describe CommentsController do
-  let(:user) { create(:user) }
+  include_context 'with a board item world'
+
+  let(:item) { world[:item] }
 
   before do
     Comment.destroy_all
     Item.destroy_all
     AdventCalendarItem.destroy_all
     Event.destroy_all
-    User.destroy_all
-    sign_in user
+  end
+
+  # Signs in as the given role; nil means anonymous.
+  def sign_in_as(role)
+    sign_in world[role] if role
+  end
+
+  def expect_rendered(status, template)
+    expect(response).to have_http_status(status)
+    expect(response).to render_template(template)
   end
 
   describe 'POST #create' do
-    it 'saves the new comment in the database' do
-      item = create(:item)
-      expect do
-        post :create, params: { comment: build(:comment, item: item).attributes }
-      end.to change(Comment, :count).by(1)
+    def post_comment(item_id)
+      post :create, params: { comment: { user_name: 'guest', body: 'hello', item_id: item_id } }
     end
 
-    it 'redirect to items#show if the new comment is saved' do
-      item = create(:item)
-      post :create, params: { comment: build(:comment, item: item).attributes }
-      expect(response).to redirect_to item_path(id: item)
+    shared_examples 'rejected posts' do |roles|
+      roles.each do |role|
+        it "responds with 404 and creates nothing for #{role || 'anonymous'}", :aggregate_failures do
+          sign_in_as(role)
+          expect { post_comment(item.id) }.not_to change(Comment, :count)
+          expect_rendered(:not_found, 'errors/notfound')
+        end
+      end
+    end
+
+    context 'when the item is readable' do
+      it 'creates the comment for an anonymous user and redirects to the item', :aggregate_failures do
+        expect { post_comment(item.id) }.to change(Comment, :count).by(1)
+        expect(response).to redirect_to item_path(item)
+        expect(Comment.last).to have_attributes(user_name: 'guest', body: 'hello', item_id: item.id)
+      end
+    end
+
+    context 'when the board is private' do
+      let(:visibility) { :private }
+
+      it_behaves_like 'rejected posts', [nil, :outsider]
+
+      %i[owner member admin].each do |role|
+        it "lets #{role} post and redirects to the item", :aggregate_failures do
+          sign_in_as(role)
+          expect { post_comment(item.id) }.to change(Comment, :count).by(1)
+          expect(response).to redirect_to item_path(item)
+        end
+      end
+    end
+
+    context 'when the publish date has not come' do
+      let(:today) { Date.new(2015, 12, 4) }
+
+      it_behaves_like 'rejected posts', [nil, :author, :owner, :admin]
+    end
+
+    context 'when the item does not exist' do
+      it 'responds with 404 and creates nothing', :aggregate_failures do
+        expect { post_comment(0) }.not_to change(Comment, :count)
+        expect_rendered(:not_found, 'errors/notfound')
+      end
     end
   end
 
   describe 'DELETE #destroy' do
-    let(:item) { create(:item) }
-    let(:comment) { create(:comment, item: item) }
+    let!(:comment) { create(:comment, item: item) }
 
-    before { comment }
-
-    it 'deletes the comment' do
-      expect do
-        delete :destroy, params: { id: comment }
-      end.to change(Comment, :count).by(-1)
+    def delete_comment(id = comment.id)
+      delete :destroy, params: { id: id }
     end
 
-    it 'redirect to items#show if the comment is deleted' do
-      delete :destroy, params: { id: comment }
-      expect(response).to redirect_to item_path(id: item)
+    shared_examples 'rejected deletes' do |roles, status, template|
+      roles.each do |role|
+        it "responds with #{status} and keeps the comment for #{role || 'anonymous'}", :aggregate_failures do
+          sign_in_as(role)
+          expect { delete_comment }.not_to change(Comment, :count)
+          expect_rendered(status, template)
+        end
+      end
+    end
+
+    shared_examples 'permitted deletes' do |roles|
+      roles.each do |role|
+        it "deletes the comment and redirects to the item for #{role}", :aggregate_failures do
+          sign_in_as(role)
+          expect { delete_comment }.to change(Comment, :count).by(-1)
+          expect(response).to redirect_to item_path(item.id)
+        end
+      end
+    end
+
+    context 'when the item is readable' do
+      it_behaves_like 'rejected deletes', [nil, :outsider, :member, :author], :forbidden, 'errors/forbidden'
+      it_behaves_like 'permitted deletes', %i[owner admin]
+    end
+
+    context 'when the comment does not exist' do
+      it 'responds with 404', :aggregate_failures do
+        delete_comment(0)
+        expect_rendered(:not_found, 'errors/notfound')
+      end
+    end
+
+    context 'when the board is private' do
+      let(:visibility) { :private }
+
+      it_behaves_like 'rejected deletes', [nil, :outsider], :not_found, 'errors/notfound'
+      it_behaves_like 'rejected deletes', [:member], :forbidden, 'errors/forbidden'
+      it_behaves_like 'permitted deletes', %i[owner admin]
+    end
+
+    context 'when the board is protected' do
+      let(:visibility) { :protected }
+
+      it_behaves_like 'rejected deletes', [nil, :outsider, :member, :author], :forbidden, 'errors/forbidden'
+      it_behaves_like 'permitted deletes', %i[owner admin]
+    end
+
+    context 'when the board is the top board' do
+      before do
+        # Bypass the one-top-board validation: only the board type matters here.
+        item.advent_calendar_item.event.board.update_columns(board_type: Board.board_types[:top]) # rubocop:disable Rails/SkipsModelValidations
+      end
+
+      it_behaves_like 'rejected deletes', [nil, :outsider], :forbidden, 'errors/forbidden'
+    end
+
+    context 'when the board ownership changes between requests' do
+      it 'applies the new owner on the next request', :aggregate_failures do
+        sign_in_as(:owner)
+        item.advent_calendar_item.event.board.update!(owner: world[:outsider])
+        expect { delete_comment }.not_to change(Comment, :count)
+        expect_rendered(:forbidden, 'errors/forbidden')
+      end
+
+      it 'hides a board made private from an anonymous user on the next request', :aggregate_failures do
+        item.advent_calendar_item.event.board.update!(visibility: :private)
+        expect { delete_comment }.not_to change(Comment, :count)
+        expect_rendered(:not_found, 'errors/notfound')
+      end
+    end
+
+    context 'when the comment is orphaned from its item' do
+      before { comment.update_columns(item_id: 0) } # rubocop:disable Rails/SkipsModelValidations
+
+      it 'responds with 404 for a signed-in non-admin', :aggregate_failures do
+        sign_in_as(:outsider)
+        expect { delete_comment }.not_to change(Comment, :count)
+        expect_rendered(:not_found, 'errors/notfound')
+      end
+    end
+
+    context 'when the client asks for JSON' do
+      it 'still renders the 403 page instead of failing', :aggregate_failures do
+        sign_in_as(:outsider)
+        request.headers['Accept'] = 'application/json'
+        delete_comment
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context 'when the publish date has not come' do
+      let(:today) { Date.new(2015, 12, 4) }
+
+      it_behaves_like 'rejected deletes', [nil, :author], :not_found, 'errors/notfound'
+      it_behaves_like 'permitted deletes', %i[owner admin]
+    end
+
+    context 'when the user owns a different board' do
+      before { sign_in create(:board).owner }
+
+      it 'responds with 403 and keeps the comment', :aggregate_failures do
+        expect { delete_comment }.not_to change(Comment, :count)
+        expect_rendered(:forbidden, 'errors/forbidden')
+      end
+    end
+
+    it 'keeps every comment when an unauthorized user deletes them one by one' do
+      comments = create_list(:comment, 3, item: item)
+      sign_in_as(:outsider)
+      expect { comments.each { |c| delete_comment(c.id) } }.not_to change(Comment, :count)
     end
   end
 end

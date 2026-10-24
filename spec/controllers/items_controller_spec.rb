@@ -73,6 +73,41 @@ RSpec.describe ItemsController do
     end
   end
 
+  describe 'GET #show comment delete button' do
+    render_views
+
+    include_context 'with a board item world'
+
+    let(:today) { Date.new(2015, 12, 2) }
+    let(:item_date) { 2 }
+    let(:delete_button) { %r{action="/comments/\d+"} }
+
+    before do
+      create(:comment, item: world[:item], user_name: 'alice', body: 'first')
+      create(:comment, item: world[:item], user_name: 'bob', body: 'second')
+      # The file-level sign_in is not wanted here; each example picks its own role.
+      sign_out user
+    end
+
+    [nil, :member, :author, :outsider].each do |role|
+      it "does not show delete buttons to #{role || 'anonymous'} but shows the comments", :aggregate_failures do
+        sign_in world[role] if role
+        get :show, params: { id: world[:item].id }
+        expect(response.body).to include('alice').and include('second')
+        expect(response.body.scan(delete_button)).to be_empty
+      end
+    end
+
+    %i[owner admin].each do |role|
+      it "shows a delete button on every comment to #{role}", :aggregate_failures do
+        sign_in world[role]
+        get :show, params: { id: world[:item].id }
+        expect(response.body.scan(delete_button).size).to eq 2
+        expect(response.body).to include('alice').and include('second')
+      end
+    end
+  end
+
   describe 'GET #new' do
     it 'assigns the requested date to @date' do
       get :new, params: { date: 1 }

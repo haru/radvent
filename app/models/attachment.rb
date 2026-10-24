@@ -14,8 +14,10 @@ class Attachment < ApplicationRecord
   # --- Permissionable implementation ---
   # An orphaned attachment is never visible, editable or deletable.
 
-  # An attachment is visible exactly when its article is readable: the board is visible and the
-  # article is published, or the viewer may edit it (author or admin) and so sees it before release.
+  # An attachment is visible when the board is visible and the article is published, or when the
+  # viewer may edit it (author or admin) and so sees it before release. This is intentionally looser
+  # than Item#readable?, which hides unpublished articles from everyone: authors need to preview
+  # the images they upload while writing.
   #
   # @param user [User, nil] the viewer (nil for a guest)
   # @return [Boolean]

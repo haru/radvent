@@ -44,6 +44,7 @@ class ApplicationController < ActionController::Base
   #
   # @return [void]
   def render_forbidden
-    render 'errors/forbidden', status: :forbidden
+    render template: 'errors/forbidden', status: :forbidden, layout: 'application', content_type: 'text/html',
+           formats: [:html]
   end
 end
