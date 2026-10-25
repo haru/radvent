@@ -1,8 +1,8 @@
 ---
 title: Domain Model
 type: component
-sources: [S001, S002, S003, S004, S006, S008, S009, S010, S012, S013, S015, S019, S023, S029]
-updated: 2026-10-24
+sources: [S001, S002, S003, S006, S008, S010, S015, S019, S023, S029]
+updated: 2026-10-25
 ---
 
 # Domain Model

@@ -2,7 +2,7 @@
 title: Project Origin
 type: decision
 sources: [S001]
-updated: 2026-08-14
+updated: 2026-10-25
 ---
 
 # Project Origin
@@ -14,9 +14,9 @@ Radvent is a fork of [nanonanomachine/radvent](https://github.com/nanonanomachin
 
 - User authentication (Devise)
 - Per-user event management: multiple boards with `public` / `protected` /
-  `private` visibility and membership control
+  `private` visibility and membership control (S001)
 - Multiple Advent Calendar events (one `Board` can hold several `Event`s —
-  see [Domain Model](./domain-model.md))
+  see [Domain Model](./domain-model.md)) (S001)
 - Likes and comments on articles
 - File attachments (CarrierWave)
 

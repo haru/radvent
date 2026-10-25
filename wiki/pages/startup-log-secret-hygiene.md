@@ -2,7 +2,7 @@
 title: Startup Log Secret Hygiene
 type: decision
 sources: [S029, S030]
-updated: 2026-10-24
+updated: 2026-10-25
 ---
 
 # Startup Log Secret Hygiene
@@ -15,7 +15,7 @@ writing secrets to its startup logs (S029).
 - **Two causes, not one.** `docker/run.sh` ran `env`, but the `Dockerfile`
   also ran `CMD sh -x ...`; the `-x` trace prints expanded values such as the
   `SECRET_KEY_BASE` test and the generated key export even after `env` is
-  removed. Both `env` and `-x` had to go (S029).
+  removed. Both `env` and `-x` had to go (S029, S030).
 - **Keep progress visible without values.** Fixed `echo` lines before each
   stage (key generation, `db:create`, `db:migrate`, `db:seed`, puma) replace
   the trace; they never reference `SECRET_KEY_BASE` or `DB_PASSWORD`. `set -e`

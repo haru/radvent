@@ -14,6 +14,9 @@ yarn install
 yarn playwright install chromium   # add --with-deps if system libraries are missing
 ```
 
+The devcontainer does both automatically (`.devcontainer/Dockerfile` installs the
+system libraries, `post-create.sh` downloads Chromium).
+
 - Port 4500 must be free. A development server on port 3000 can keep running.
 
 ## Running
@@ -86,5 +89,6 @@ published) and a second event covers days 1-7 of the same month two years
 ahead (never published). The server's date is not manipulated.
 
 Items (articles) have no required field: saving an empty title succeeds and the
-article is shown as 無題. AS 4-6 therefore provokes the input error on an event
-(empty title) and a supplementary step pins the 無題 behaviour of articles down.
+article is shown as 無題. AS 4-6 therefore provokes the input errors on an event
+(an empty title is stopped by the browser, a title already used in the board by
+the server) and a supplementary step pins the 無題 behaviour of articles down.

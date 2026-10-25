@@ -213,10 +213,17 @@ test.describe.serial('利用者の一連の操作', () => {
       await expect(page.locator('#item-show h1')).toHaveText('E2E 編集後見出し')
     })
 
-    // An article has no required field, so the input error is provoked on an event instead.
+    // An article has no required field, so the input errors are provoked on an event instead.
     await test.step('AS 4-6 必須項目を空にすると、保存されずに入力エラーが出る', async () => {
       await page.goto(`${pastEventPath}/edit`)
-      await page.getByLabel('タイトル').fill('')
+      const title = page.getByLabel('タイトル')
+      // The required field stops an empty submit in the browser, so nothing reaches the server.
+      await title.fill('')
+      await page.getByRole('button', { name: '更新する' }).click()
+      await expect(page).toHaveURL(/\/edit$/)
+      expect(await title.evaluate((input) => input.validationMessage)).not.toBe('')
+      // A title already used in the board is rejected by the server, which shows the error list.
+      await title.fill(futureEvent.title)
       await page.getByRole('button', { name: '更新する' }).click()
       await expect(page.locator('.alert-danger')).toBeVisible()
       await page.goto(pastEventPath)

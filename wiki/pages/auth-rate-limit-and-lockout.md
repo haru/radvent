@@ -1,7 +1,7 @@
 ---
 title: Authentication Rate Limits and Account Lockout
 type: decision
-sources: [S035, S036, S037]
+sources: [S035, S036, S037, S038]
 updated: 2026-10-25
 ---
 
@@ -29,6 +29,7 @@ Feature `020-auth-rate-limit-lockout` (Issue #289) limits brute-force sign-in, b
 - Behind a proxy or CDN, add it to `config.action_dispatch.trusted_proxies`, or everyone counts as one IP (S036).
 - Development uses `:null_store` unless `tmp/caching-dev.txt` exists, so no limit applies there by default (S036).
 - Test env uses `:memory_store`, cleared before each example, because `:null_store` never counts (S035).
+- The `e2e` env also uses `:memory_store` (fresh per boot) and keeps the limits on; see [E2E Scenario Design](./e2e-scenario-design.md) (S038).
 
 ## Account lockout
 

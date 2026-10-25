@@ -1,8 +1,8 @@
 ---
 title: Controllers and Routing
 type: component
-sources: [S004, S009, S013, S015, S019, S024, S028, S029]
-updated: 2026-10-24
+sources: [S004, S009, S013, S015, S019, S024, S028, S029, S032, S033]
+updated: 2026-10-25
 ---
 
 # Controllers and Routing

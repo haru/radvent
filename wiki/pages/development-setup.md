@@ -1,8 +1,8 @@
 ---
 title: Development Setup
 type: howto
-sources: [S001, S006, S007]
-updated: 2026-08-14
+sources: [S001, S006, S038]
+updated: 2026-10-25
 ---
 
 # Development Setup
@@ -89,6 +89,15 @@ Model specs cover associations, validations, and business logic such as the
 [Controllers and Routing](./controllers-and-routing.md). Because visibility
 is date-driven, specs make heavy use of `Time.zone` mocking to verify
 publish-date transitions (S006).
+
+## E2E tests (S038)
+
+```bash
+yarn playwright install chromium   # first time; the devcontainer does this
+yarn e2e                           # resets a dedicated SQLite DB, serves on port 4500
+```
+
+Separate from RSpec and not part of CI — see [E2E Tests with Playwright](./e2e-testing.md).
 
 For containerized deployment instead of local setup, see
 [Docker Deployment](./docker-deployment.md). Stack details in

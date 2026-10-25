@@ -1,8 +1,8 @@
 ---
 title: Tech Stack
 type: component
-sources: [S001, S002, S005, S008]
-updated: 2026-08-14
+sources: [S001, S002, S005, S008, S038]
+updated: 2026-10-25
 ---
 
 # Tech Stack
@@ -22,6 +22,7 @@ Radvent is a Ruby on Rails application. Core stack (S001):
 | DB (development) | SQLite3 |
 | DB (production) | SQLite3 / MySQL 5.7+ / PostgreSQL |
 | Testing | RSpec / FactoryBot / SimpleCov |
+| E2E testing | Playwright (Chromium), dedicated `e2e` Rails environment (S038) — see [E2E Tests](./e2e-testing.md) |
 | CI | GitHub Actions |
 
 The app ships with Japanese and English locales, switching automatically based

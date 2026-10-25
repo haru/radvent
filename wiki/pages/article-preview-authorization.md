@@ -2,7 +2,7 @@
 title: Article Preview Authorization
 type: decision
 sources: [S028]
-updated: 2026-10-24
+updated: 2026-10-25
 ---
 
 # Article Preview Authorization
@@ -41,8 +41,8 @@ chosen by the request (S028). General rules: [Authorization](./authorization.md)
 ## Rejected alternatives
 
 - An `authorize_preview` method that calls the checks in turn: needs
-  `performed?` guards and a second style next to the `before_action` chain.
+  `performed?` guards and a second style next to the `before_action` chain (S028).
 - Lambda `if:`/`unless:` conditions: `new` also uses `params[:id]` as the slot
-  id, so the condition becomes unreadable.
+  id, so the condition becomes unreadable (S028).
 - Only "run `edit_permission?` when `params[:id]` is present": a non-author
   would get 403 on a hidden article, exposing it (S028).

@@ -2,7 +2,7 @@
 title: Event Addressing by Board (Name Collision Fix)
 type: decision
 sources: [S029, S030]
-updated: 2026-10-24
+updated: 2026-10-25
 ---
 
 # Event Addressing by Board (Name Collision Fix)
@@ -10,7 +10,7 @@ updated: 2026-10-24
 Feature `015-env-log-event-collision` (V-14) fixed a defect: event `name` is
 unique only within a board, yet every event page was looked up with
 `Event.find_by(name:)` across all boards, so which of two same-named events
-opened depended on database order (S029). The decision is recorded in ADR 0009
+opened depended on database order (S029, S030). The decision is recorded in ADR 0009
 (S029). Companion fix in the same feature:
 [Startup Log Secret Hygiene](./startup-log-secret-hygiene.md).
 
