@@ -56,6 +56,49 @@ RSpec.describe CommentsController do
       end
     end
 
+    context 'when the name or the body is blank' do
+      render_views
+
+      def post_blank(**)
+        post :create, params: { comment: { user_name: ' ', body: 'typed body', item_id: item.id } }, **
+      end
+
+      it 'saves nothing and re-renders the article with 422 keeping the typed values', :aggregate_failures do # rubocop:disable RSpec/ExampleLength
+        expect { post_blank }.not_to change(Comment, :count)
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response).to render_template('items/show')
+        page = Capybara.string(response.body)
+        expect(page).to have_css('#comment_errors', text: Comment.human_attribute_name(:user_name))
+        expect(page).to have_field('comment[body]', with: 'typed body')
+        expect(item.reload.comments_count).to eq 0
+      end
+
+      it 'keeps the rejected comment out of the list for a user who can delete comments', :aggregate_failures do
+        sign_in_as(:owner)
+        create(:comment, item: item, user_name: 'saved', body: 'kept')
+
+        expect { post_blank }.not_to change(Comment, :count)
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(Capybara.string(response.body)).to have_css('#comments_list .comment', count: 1)
+      end
+
+      it 'renders the breadcrumb of the event like the article page', :aggregate_failures do
+        post_blank
+        page = Capybara.string(response.body)
+        expect(page).to have_css('#top-menu .breadcrumb-event')
+        expect(assigns(:board)).to eq item.advent_calendar_item.event.board
+      end
+
+      it 'answers a Turbo Stream with 422 and the error messages only', :aggregate_failures do # rubocop:disable RSpec/ExampleLength
+        expect { post_blank(format: :turbo_stream) }.not_to change(Comment, :count)
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response.media_type).to eq 'text/vnd.turbo-stream.html'
+        expect(response.body).to include('target="comment_errors"')
+        expect(response.body).to include(Comment.human_attribute_name(:user_name))
+        expect(response.body).not_to include('comments_list')
+      end
+    end
+
     context 'when the board is private' do
       let(:visibility) { :private }
 

@@ -11,9 +11,10 @@ RSpec.describe 'comments/create.turbo_stream' do
     render
   end
 
-  it 'only appends the new comment and leaves the form alone', :aggregate_failures do
+  it 'appends the new comment and clears stale errors without touching the typed values', :aggregate_failures do
     expect(rendered).to have_css('turbo-stream[action="append"][target="comments_list"]', visible: :all)
-    expect(rendered).to have_css('turbo-stream', count: 1, visible: :all)
+    expect(rendered).to have_css('turbo-stream[action="replace"][target="comment_errors"]', visible: :all)
+    expect(rendered).to have_css('turbo-stream', count: 2, visible: :all)
     expect(rendered).to include(comment.body)
   end
 end

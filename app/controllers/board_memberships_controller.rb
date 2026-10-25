@@ -4,7 +4,7 @@
 #
 # Handles adding and removing members from UserBoards.
 class BoardMembershipsController < ApplicationController
-  before_action :require_authentication
+  before_action :authenticate_user!
   before_action :find_board, only: %i[index create]
   before_action :check_editability, only: %i[index create]
   before_action :find_membership, only: [:destroy]
@@ -35,12 +35,6 @@ class BoardMembershipsController < ApplicationController
   end
 
   private
-
-  def require_authentication
-    return if user_signed_in?
-
-    redirect_to new_user_session_path
-  end
 
   def find_board
     @board = Board.find_by(board_id: params[:board_board_id])

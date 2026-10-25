@@ -4,6 +4,8 @@
 #
 # Handles creating, reading, updating, and previewing articles (items) in the advent calendar.
 class ItemsController < ApplicationController
+  include ItemPage
+
   before_action :authenticate_user!, except: :show
   before_action :check_article_creation_authorization, only: %i[new create preview_new]
   before_action :find_item, only: %i[show edit update preview]
@@ -18,8 +20,7 @@ class ItemsController < ApplicationController
     if @item.advent_calendar_item.published?
       @comment = Comment.new(item_id: @item.id)
       @comment.user_name = current_user.name if user_signed_in?
-      @advent_calendar_item_prev = AdventCalendarItem.prev(@item.advent_calendar_item).first
-      @advent_calendar_item_next = AdventCalendarItem.next(@item.advent_calendar_item).first
+      assign_neighbours(@item.advent_calendar_item)
     else
       redirect_to root_path
     end
@@ -148,8 +149,6 @@ class ItemsController < ApplicationController
   # @return [void]
   def find_board
     aci = @item&.advent_calendar_item || @advent_calendar_item || AdventCalendarItem.find_by(id: params[:id])
-    event = aci&.event
-    @board = event&.board
-    @breadcrumb_event = event
+    assign_breadcrumb(aci)
   end
 end

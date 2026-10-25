@@ -29,6 +29,9 @@ ja:
       user: ユーザ
       like: いいね
     attributes:
+      comment:
+        user_name: お名前
+        body: コメント
       advent_calendar_item:
         user_name: お名前
         comment: コメント
@@ -417,6 +420,7 @@ ja:
       add_member: 'メンバーを追加'
       member_placeholder: 'ユーザー名またはメールアドレス'
       no_members: 'メンバーがいません'
+      deleted_user: '削除されたユーザー'
     member_added: 'メンバーを追加しました'
     member_removed: 'メンバーを削除しました'
     remove: '削除'

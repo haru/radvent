@@ -37,7 +37,8 @@ class UsersController < ApplicationController
     if @user.save
       redirect_to edit_user_path(@user)
     else
-      render :edit_info
+      @menu = :users
+      render :edit_info, layout: 'admin', status: :unprocessable_content
     end
   end
 

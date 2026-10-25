@@ -19,8 +19,12 @@
         %tbody
           - @memberships.each do |membership|
             %tr
-              %td= membership.user.name
-              %td= membership.user.email
+              - if membership.user
+                %td= membership.user.name
+                %td= membership.user.email
+              - else
+                %td.text-muted= t('board_memberships.index.deleted_user')
+                %td
               %td
                 = button_to t('board_memberships.remove'), board_membership_path(membership),
                              method: :delete, class: 'btn btn-sm btn-outline-danger',

@@ -1,4 +1,6 @@
 - content_for(:content) do
+  -# The edited board_id may be invalid after a failed update; links must use the stored one.
+  - persisted_id = @board.board_id_in_database
   %div.container.mt-4
     %h1= t('boards.edit.title')
     %hr
@@ -7,7 +9,7 @@
 
     - if @board.editable?(current_user)
       %hr
-      = link_to t('board_memberships.index.title'), board_board_memberships_path(@board.board_id), class: 'btn btn-outline-secondary mb-3'
+      = link_to t('board_memberships.index.title'), board_board_memberships_path(persisted_id), class: 'btn btn-outline-secondary mb-3'
 
     - if @board.deletable?(current_user)
       %hr
@@ -15,10 +17,10 @@
       %div.card.border-danger.mt-3
         %div.card-body
           %h5.card-title.text-danger= t('boards.edit.delete_board')
-          %p= t('boards.edit.confirm_delete', board_id: @board.board_id)
-          = form_with url: board_path(@board.board_id), method: :delete,
+          %p= t('boards.edit.confirm_delete', board_id: persisted_id)
+          = form_with url: board_path(persisted_id), method: :delete,
                       html: { data: { controller: 'board-delete-confirmation',
-                                      'board-delete-confirmation-expected-id-value': @board.board_id,
+                                      'board-delete-confirmation-expected-id-value': persisted_id,
                                       'turbo-confirm': t('boards.edit.delete_warning') } } do
             = label_tag :confirm_board_id, t('boards.edit.confirm_board_id_label'), class: 'form-label'
             = text_field_tag :confirm_board_id, nil, class: 'form-control mb-2',

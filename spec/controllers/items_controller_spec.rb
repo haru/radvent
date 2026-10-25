@@ -35,6 +35,18 @@ RSpec.describe ItemsController do
       expect(response).to redirect_to root_path
     end
 
+    context 'when the author has deleted their account' do
+      render_views
+
+      it 'still renders the article' do
+        item = advent_calendar_item.item
+        user.destroy
+        sign_out :user
+        get :show, params: { id: item.id }
+        expect(response).to have_http_status(:success)
+      end
+    end
+
     it 'assigns the requested item to @item' do
       item = advent_calendar_item.item
       get :show, params: { id: item.id }
