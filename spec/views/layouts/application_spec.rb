@@ -217,7 +217,7 @@ RSpec.describe 'layouts/application' do
         expect(breadcrumb_event.text).to eq '<script>bad()</script>'
         expect(breadcrumb_event[:title]).to eq '<script>bad()</script>'
         expect(rendered).to include('&lt;script&gt;')
-        expect(rendered_layout).to have_no_selector('script')
+        expect(rendered_layout).to have_no_css('script')
       end
     end
   end
