@@ -264,6 +264,8 @@ services:
 
 > **Password reset mails**: `RADVENT_URL` and `SMTP_ADDRESS` must be set for password reset mails to be delivered. To avoid revealing which addresses are registered, the app always answers a reset request with the same message; if the mail cannot be sent, the failure is only written to the log (`Password reset mail was not delivered`, with the exception class only). The app warns at boot when `RADVENT_URL`, `SMTP_ADDRESS` or `RADVENT_MAIL_FROM` is unset, and refuses to boot when `RADVENT_URL`, `SMTP_PORT` or `SMTP_AUTHENTICATION` is set to an unusable value.
 
+> **Rate limits and account lockout**: Sign-in is limited to 10 attempts per minute per client IP address, sign-up and password reset requests to 5 per hour per client IP address, and reset mail to one per address every 5 minutes. Ten consecutive failed sign-ins lock the account for 15 minutes (a password reset unlocks it). Counters are shared by all processes through Solid Cache in the primary database (run `db:migrate`; the Docker image does this on start). If you run behind a reverse proxy or CDN, add its address to `config.action_dispatch.trusted_proxies`, otherwise every client counts as one address. Log lines to monitor: `Account locked: user_id=`, `Rate limit exceeded:` and `SolidCacheStore: increment failed` (production only: the counter store failed and requests were let through).
+
 ---
 
 ## Architecture

@@ -273,3 +273,7 @@ en:
     light: 'Light'
     dark: 'Dark'
     update_failed: 'Failed to save theme'
+  errors:
+    too_many_requests:
+      title: 'Too many requests'
+      message: 'Please wait a while and try again.'

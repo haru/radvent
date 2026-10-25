@@ -47,4 +47,19 @@ class ApplicationController < ActionController::Base
     render template: 'errors/forbidden', status: :forbidden, layout: 'application', content_type: 'text/html',
            formats: [:html]
   end
+
+  # Renders the 429 page shown when a rate limit rejects the request.
+  #
+  # The log line names only the controller and action, never the submitted
+  # address or password (FR-018). A prepended +rate_limit+ runs before +set_locale+,
+  # so the locale is set here to answer in the request's language instead of the one
+  # the thread was left with (FR-011).
+  #
+  # @return [void]
+  def render_too_many_requests
+    set_locale
+    Rails.logger.warn("Rate limit exceeded: #{controller_path}##{action_name}")
+    render template: 'errors/too_many_requests', status: :too_many_requests, layout: 'application',
+           content_type: 'text/html', formats: [:html]
+  end
 end

@@ -1,8 +1,8 @@
 ---
 title: Configuration
 type: component
-sources: [S007, S021, S023, S028]
-updated: 2026-10-24
+sources: [S007, S021, S023, S028, S035, S036]
+updated: 2026-10-25
 ---
 
 # Configuration
@@ -87,10 +87,12 @@ migrations (S007).
 |-----|----------|
 | Development | Code reloading on; cache store is `:null_store` unless `tmp/caching-dev.txt` is present; allowed hosts include the Docker service hostname `app` and GitHub Codespaces domains (S007) |
 | Production | Eager loading on; log level `:info` tagged with `:request_id`; static file serving gated by `RAILS_SERVE_STATIC_FILES` (S007) |
-| Test | Cache `:null_store`; mailer uses `:test` delivery (emails accumulate in an array, not sent); CSRF protection disabled for easier POST/PATCH specs (S007) |
+| Test | Cache `:memory_store`, cleared before each example (was `:null_store`, which never counts rate limits; S035, see [rate limits](auth-rate-limit-and-lockout.md)); mailer uses `:test` delivery (emails accumulate in an array, not sent); CSRF protection disabled for easier POST/PATCH specs (S007) |
 
 ## Secrets
 
 Credentials are encrypted/decrypted via `RAILS_MASTER_KEY` or a local
 `master.key` file; `config/secrets.yml.example` is the template for required
 secrets (S007).
+
+Production `cache_store` is `:solid_cache_store` on the primary database (S036).

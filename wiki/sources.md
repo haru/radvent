@@ -39,6 +39,9 @@ Sources are immutable inputs — the wiki never edits them.
 | S032 | specs/018-restrict-item-info-access/research.md | feature-artifact | 2026-10-25 | 2026-10-25 | slot-info-page-access.md, show-page-visibility.md, authorization.md, controller-groups.md |
 | S033 | docs/adr/0010-restrict-slot-info-page-to-author-and-admin.md | file | 2026-10-25 | 2026-10-25 | slot-info-page-access.md, show-page-visibility.md, authorization.md, controller-groups.md |
 | S034 | specs/019-breadcrumb-event/research.md | feature-artifact | 2026-10-25 | 2026-10-25 | navbar-breadcrumb.md, views-and-frontend.md, show-page-visibility.md |
+| S035 | specs/020-auth-rate-limit-lockout/research.md | feature-artifact | 2026-10-25 | 2026-10-25 | auth-rate-limit-and-lockout.md, password-reset-account-hiding.md, configuration.md |
+| S036 | docs/adr/0011-share-auth-rate-limit-counters-in-solid-cache.md | file | 2026-10-25 | 2026-10-25 | auth-rate-limit-and-lockout.md, configuration.md |
+| S037 | docs/adr/0012-account-lockout-is-time-based-and-invisible.md | file | 2026-10-25 | 2026-10-25 | auth-rate-limit-and-lockout.md |
 
 Note: domain-model.md exceeded the 600-word split threshold after S015's
 update; its Authorization section was split into authorization.md (S002,

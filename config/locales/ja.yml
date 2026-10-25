@@ -203,6 +203,9 @@ ja:
       header:
         one: "%{model}にエラーが発生しました"
         other: "%{model}に%{count}個のエラーが発生しました"
+    too_many_requests:
+      title: 'リクエストが多すぎます'
+      message: 'しばらく時間をおいてから、もう一度お試しください。'
   helpers:
     select:
       prompt: 選択してください
@@ -432,6 +435,11 @@ ja:
       signed_in: ""
       signed_out: ""
       already_signed_out: ""
+    failure:
+      # One shared wording for every sign-in failure: wrong password, unknown
+      # address and a locked account all answer the same (FR-009a).
+      invalid: 'メールアドレスかパスワードが違うか、一時的にログインが制限されています。'
+      not_found_in_database: 'メールアドレスかパスワードが違うか、一時的にログインが制限されています。'
   time:
     am: 午前
     formats:

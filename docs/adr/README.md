@@ -17,3 +17,5 @@ unchanged.
 | [0008](0008-password-reset-hides-account-existence-and-delivery-failure.md) | Password reset hides account existence and delivery failure | Accepted |
 | [0009](0009-address-user-board-events-by-board-and-name.md) | Address user board events by board id and name | Accepted |
 | [0010](0010-restrict-slot-info-page-to-author-and-admin.md) | Restrict the slot info page to its author and admins | Accepted |
+| [0011](0011-share-auth-rate-limit-counters-in-solid-cache.md) | Share authentication rate-limit counters in Solid Cache | Accepted |
+| [0012](0012-account-lockout-is-time-based-and-invisible.md) | Account lockout is time-based, invisible and does not end sessions | Accepted |
