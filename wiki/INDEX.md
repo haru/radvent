@@ -33,6 +33,7 @@ page files, not here.
 - [Other Boards Listing (Load-More Pagination)](pages/other-boards-listing.md) — Ruby-side sort key reusing `visible?`, numeric-ID routing so TOP boards can share it, and Turbo-Frame-only "load more"
 - [Event Addressing by Board (Name Collision Fix)](pages/event-addressing-by-board.md) — board-scoped event URLs, TOP-only name URLs, 302 legacy redirect, visibility-before-permission order
 - [Startup Log Secret Hygiene](pages/startup-log-secret-hygiene.md) — `env` dump and `sh -x` trace removed from container startup; file-reading RSpec guard
+- [Entry Page — "View Article" Button](pages/entry-page-view-article-button.md) — published articles show a View button instead of Edit, reusing `published?` and `editable_by?`
 
 ## howto
 - [Development Setup](pages/development-setup.md) — local install, running, and testing

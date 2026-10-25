@@ -1,8 +1,8 @@
 ---
 title: Board Visibility on Show Pages
 type: decision
-sources: [S009, S024, S025]
-updated: 2026-10-24
+sources: [S009, S024, S025, S031]
+updated: 2026-10-25
 ---
 
 # Board Visibility on Show Pages
@@ -52,3 +52,7 @@ TOP board, which everyone may see (S024).
 When asserting "indistinguishable from a missing record" in a spec, compare
 status, rendered template and the absence of the board name — not the whole
 HTML, because the CSRF meta token differs on every response (S024).
+
+The entry page's "View" button for published articles relies on this
+visibility check having already passed — see
+[Entry Page View-Article Button](./entry-page-view-article-button.md) (S031).

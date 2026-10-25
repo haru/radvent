@@ -73,6 +73,34 @@ RSpec.describe ItemsController do
     end
   end
 
+  describe 'GET #show edit button for the author' do
+    render_views
+
+    before do
+      allow(Time.zone).to receive(:today).and_return(Date.new(2015, 12, 2))
+      sign_in user
+      get :show, params: { id: advent_calendar_item.item.id }
+    end
+
+    it 'shows the edit button linking to the item edit page' do
+      expect(response.body).to include("href=\"/items/#{advent_calendar_item.item.id}/edit\"")
+    end
+  end
+
+  describe 'GET #show edit button for a non-author' do
+    render_views
+
+    before do
+      allow(Time.zone).to receive(:today).and_return(Date.new(2015, 12, 2))
+      sign_in create(:user)
+      get :show, params: { id: advent_calendar_item.item.id }
+    end
+
+    it 'does not show the edit button' do
+      expect(response.body).not_to include("href=\"/items/#{advent_calendar_item.item.id}/edit\"")
+    end
+  end
+
   describe 'GET #show comment delete button' do
     render_views
 
