@@ -16,8 +16,22 @@ export default defineConfig({
     screenshot: 'only-on-failure',
     trace: 'retain-on-failure'
   },
+  // The main journey signs up alice and bob first; setup adds the other accounts; the remaining
+  // specs only rely on those accounts and create their own boards.
   projects: [
-    { name: 'chromium', use: { ...devices['Desktop Chrome'] } }
+    { name: 'journey', testMatch: 'user-journey.spec.js', use: { ...devices['Desktop Chrome'] } },
+    {
+      name: 'setup',
+      testMatch: 'setup.spec.js',
+      dependencies: ['journey'],
+      use: { ...devices['Desktop Chrome'] }
+    },
+    {
+      name: 'scenarios',
+      testIgnore: ['user-journey.spec.js', 'setup.spec.js'],
+      dependencies: ['setup'],
+      use: { ...devices['Desktop Chrome'] }
+    }
   ],
   webServer: {
     command: 'sh build-scripts/e2e-server.sh',

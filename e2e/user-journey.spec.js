@@ -1,21 +1,12 @@
 import { test, expect } from '@playwright/test'
 import {
-  accounts, closeOpenedContexts, login, logout, openAs, openPage, rememberLogin, submitLogin, userMenu
+  accounts, closeOpenedContexts, login, logout, openAs, openPage, rememberLogin, submitLogin
 } from './support/accounts.js'
 import { acceptNextDialog } from './support/dialog.js'
 import { fillMarkdown, openPreview } from './support/editor.js'
+import { createEvent, dayCell, joinDay, signUp, writeArticle } from './support/forms.js'
 import { futureEventPeriod, pastEventPeriod } from './support/dates.js'
 import { clearJsErrors, expectNoJsErrors, watchJsErrors } from './support/js-errors.js'
-
-async function register(page, account) {
-  await page.goto('/users/sign_up')
-  await page.getByLabel('メールアドレス').fill(account.email)
-  await page.getByLabel('名前').fill(account.name)
-  await page.getByLabel('パスワード', { exact: true }).fill(account.password)
-  await page.getByLabel('確認用パスワード').fill(account.password)
-  await page.getByRole('button', { name: 'アカウント登録' }).click()
-  await expect(userMenu(page)).toHaveText(account.name)
-}
 
 const boardId = 'e2e-board'
 const boardName = 'E2E ボード'
@@ -29,41 +20,6 @@ const articleBody = '# E2E 見出し\n\nE2E 本文の **強調** です。'
 const articleBodyEdited = '# E2E 編集後見出し\n\nE2E 編集後の本文です。'
 const articleTitle = 'E2E 記事'
 const articleTitleEdited = 'E2E 記事(編集後)'
-
-// The calendar cell of the given day of the event. Cells of neighbouring months show the same
-// day numbers but carry neither a join button nor an author.
-function dayCell(page, day) {
-  return page
-    .locator('td', { has: page.locator('p.advent-calendar-date', { hasText: new RegExp(`^\\s*${day}\\s*$`) }) })
-    .filter({ has: page.locator('.advent-calendar-author, .advent-calendar-join') })
-}
-
-// Joins the calendar on the given day; ends on that slot's page.
-async function joinDay(page, eventPath, day) {
-  await page.goto(eventPath)
-  await dayCell(page, day).getByRole('link', { name: '参加登録' }).click()
-  await page.getByRole('button', { name: '登録する' }).click()
-  await expect(page.getByRole('heading', { name: 'AdventCalendar情報' })).toBeVisible()
-}
-
-// From a slot page, writes and saves an article; ends back on the slot page.
-async function writeArticle(page, title, body) {
-  await page.getByRole('link', { name: '記事を登録する' }).click()
-  await page.getByLabel('タイトル').fill(title)
-  await fillMarkdown(page, body)
-  await page.getByRole('button', { name: '登録する' }).click()
-  await expect(page.getByText('記事が登録されています')).toBeVisible()
-}
-
-async function createEvent(page, event) {
-  await page.getByRole('link', { name: 'イベントを作成' }).click()
-  await page.getByLabel('名', { exact: true }).fill(event.name)
-  await page.getByLabel('タイトル').fill(event.title)
-  await page.getByLabel('開始日').fill(event.start)
-  await page.getByLabel('終了日').fill(event.end)
-  await page.getByRole('button', { name: '登録する' }).click()
-  await expect(page.getByRole('heading', { name: event.title })).toBeVisible()
-}
 
 test.describe.serial('利用者の一連の操作', () => {
   // Path of the published article (set by US4, used by US5).
@@ -92,7 +48,7 @@ test.describe.serial('利用者の一連の操作', () => {
     await test.step('AS 2-2 新規登録すると、そのユーザーでログインした状態になる', async () => {
       for (const account of [accounts.alice, accounts.bob]) {
         const { page: registrationPage } = await openPage(browser)
-        await register(registrationPage, account)
+        await signUp(registrationPage, account)
         await rememberLogin(registrationPage, account)
       }
     })
