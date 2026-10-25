@@ -41,4 +41,18 @@ describe ApplicationHelper do
       expect(edit_event_page_path(user_event)).to eq "/boards/#{user_board.board_id}/events/user-ev/edit"
     end
   end
+
+  describe 'persisted_event_title' do
+    let(:stored_event) { create(:event, title: 'Stored Title') }
+
+    it 'returns the persisted title while an unsaved rename is pending' do
+      stored_event.title = 'Unsaved Title'
+      expect(persisted_event_title(stored_event)).to eq 'Stored Title'
+    end
+
+    it 'falls back to the in-memory title when the event has no stored title yet' do
+      draft_event = build(:event, title: 'Draft Title')
+      expect(persisted_event_title(draft_event)).to eq 'Draft Title'
+    end
+  end
 end

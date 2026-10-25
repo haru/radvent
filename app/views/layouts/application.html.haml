@@ -21,6 +21,14 @@
         - if @board&.board_type_user? && @board.board_id.present?
           %span.px-2 /
           = link_to @board.name, board_path(@board.board_id), class: "navbar-brand ms-0"
+        - if @breadcrumb_event
+          %span.px-2 /
+          - breadcrumb_title = persisted_event_title(@breadcrumb_event)
+          - if current_page?(event_page_path(@breadcrumb_event))
+            %span.breadcrumb-event.navbar-brand.ms-0{ title: breadcrumb_title, "aria-current" => "page" }= breadcrumb_title
+          - else
+            = link_to breadcrumb_title, event_page_path(@breadcrumb_event),
+                      class: "navbar-brand ms-0 breadcrumb-event", title: breadcrumb_title
       %button.navbar-toggler{type:"button", "data-mdb-toggle": "collapse", "data-mdb-target": "#navTopMenu", "aria-controls": "navTopMenu", "aria-expanded": "false", "aria-label": "Toggle navigation"}
         %span.navbar-toggler-icon
       %div#navTopMenu.collapse.navbar-collapse

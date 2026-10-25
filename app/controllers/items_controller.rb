@@ -146,5 +146,6 @@ class ItemsController < ApplicationController
   def find_board
     aci = @item&.advent_calendar_item || @advent_calendar_item || AdventCalendarItem.find_by(id: params[:id])
     @board = aci&.event&.board
+    @breadcrumb_event = aci&.event
   end
 end

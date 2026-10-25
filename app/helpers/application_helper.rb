@@ -39,6 +39,18 @@ module ApplicationHelper
     edit_board_event_path(event.board.board_id, name)
   end
 
+  # Returns the persisted title of an event.
+  #
+  # A form re-rendered after a failed edit still holds the typed title in memory; the breadcrumb
+  # trail must keep showing the stored title, so unsaved changes are ignored, like
+  # {#persisted_event_name}.
+  #
+  # @param event [Event] the event
+  # @return [String] the stored title, or the in-memory title for an event never saved yet
+  def persisted_event_title(event)
+    event.title_in_database.presence || event.title
+  end
+
   private
 
   # @param event [Event] the event

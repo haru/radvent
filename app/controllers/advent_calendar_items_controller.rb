@@ -118,6 +118,7 @@ class AdventCalendarItemsController < ApplicationController
   def find_board
     event = @advent_calendar_item&.event || @event
     @board = event&.board
+    @breadcrumb_event = event
   end
 
   # Renders 403 unless the user is an admin or the slot's editor.

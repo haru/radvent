@@ -700,4 +700,144 @@ RSpec.describe ItemsController do
       end
     end
   end
+
+  describe 'GET #show breadcrumb trail' do
+    render_views
+
+    before do
+      allow(Time.zone).to receive(:today).and_return(Date.new(2015, 12, 2))
+    end
+
+    context 'when the article is on a user board event' do
+      let(:owner) { create(:user) }
+      let(:board) { create(:board, :public_user, owner: owner, name: 'Crumb Board Name') }
+      let(:crumb_event) do
+        create(:event, board: board, name: 'crumb-cal', title: 'Crumb Event Title',
+                       start_date: '2015-12-01', end_date: '2015-12-25', created_by: owner, updated_by: owner)
+      end
+      let!(:article) do
+        create(:item, advent_calendar_item: create(:advent_calendar_item, event: crumb_event, user: owner,
+                                                                          date: 2),
+                      title: 'Crumb Article Title', body: 'Crumb article body')
+      end
+
+      # Returns the breadcrumb event element of the rendered page.
+      #
+      # @return [Capybara::Node::Element] the breadcrumb event element
+      def breadcrumb_event
+        Capybara.string(response.body).find('.breadcrumb-event')
+      end
+
+      it 'shows TOP / board name / event name in order', :aggregate_failures do
+        sign_in owner
+        get :show, params: { id: article.id }
+        body = response.body
+        expect(body.index('TOP')).to be < body.index('Crumb Board Name')
+        expect(body.index('Crumb Board Name')).to be < body.index('Crumb Event Title')
+      end
+
+      it 'links the event name to the board-scoped calendar page', :aggregate_failures do
+        sign_in owner
+        get :show, params: { id: article.id }
+        expect(breadcrumb_event[:href]).to eq "/boards/#{board.board_id}/events/crumb-cal"
+        expect(breadcrumb_event.text).to eq 'Crumb Event Title'
+      end
+
+      it 'shows the event name to a guest', :aggregate_failures do
+        sign_out user
+        get :show, params: { id: article.id }
+        expect(response).to render_template :show
+        expect(breadcrumb_event[:href]).to eq "/boards/#{board.board_id}/events/crumb-cal"
+      end
+    end
+
+    context 'when the article is on a top board event' do
+      it 'shows TOP / event name without a board name link', :aggregate_failures do
+        get :show, params: { id: advent_calendar_item.item.id }
+        menu = Capybara.string(response.body).find('nav#top-menu')
+        expect(menu.find('.breadcrumb-event')[:href]).to eq '/events/test'
+        expect(menu).to have_link('TOP', href: '/')
+        expect(menu).to have_no_css('a[href*="/boards/"]')
+      end
+    end
+
+    context 'when the article cannot be seen' do
+      let(:owner) { create(:user) }
+      let(:board) { create(:board, :private_user, owner: owner, name: 'Secret Board Name') }
+      let(:secret_event) do
+        create(:event, board: board, name: 'secret-cal', title: 'Secret Calendar',
+                       start_date: '2015-12-01', end_date: '2015-12-25', created_by: owner, updated_by: owner)
+      end
+      let!(:article) do
+        create(:item, advent_calendar_item: create(:advent_calendar_item, event: secret_event, user: owner,
+                                                                          date: 2),
+                      title: 'Secret Article Title')
+      end
+
+      before { sign_out user }
+
+      it 'hides the event and board names for a missing article', :aggregate_failures do
+        get :show, params: { id: Item.maximum(:id).to_i + 1 }
+        expect(response).to have_http_status(:not_found)
+        expect(response.body).not_to include('Secret Board Name', 'Secret Calendar', 'Secret Article Title')
+        expect(Capybara.string(response.body)).to have_no_css('.breadcrumb-event')
+      end
+
+      it 'hides the event and board names for a hidden article', :aggregate_failures do
+        get :show, params: { id: article.id }
+        expect(response).to have_http_status(:not_found)
+        expect(response.body).not_to include('Secret Board Name', 'Secret Calendar', 'Secret Article Title')
+        expect(Capybara.string(response.body)).to have_no_css('.breadcrumb-event')
+      end
+    end
+
+    context 'when writing an article on a user board event' do
+      let(:owner) { create(:user) }
+      let(:board) { create(:board, :public_user, owner: owner, name: 'Crumb Board Name') }
+      let(:crumb_event) do
+        create(:event, board: board, name: 'crumb-new', title: 'Crumb Event Title',
+                       start_date: '2015-12-01', end_date: '2015-12-25', created_by: owner, updated_by: owner)
+      end
+      let!(:article) do
+        create(:item, advent_calendar_item: create(:advent_calendar_item, event: crumb_event, user: owner,
+                                                                          date: 6),
+                      title: 'Crumb Article Title', body: 'Crumb article body')
+      end
+
+      before { sign_in owner }
+
+      # Returns the author's empty slot on the event, creating it once per example.
+      #
+      # @return [AdventCalendarItem]
+      def empty_slot
+        @empty_slot ||= create(:advent_calendar_item, event: crumb_event, user: owner, date: 7)
+      end
+
+      it 'shows the event name on the new article form', :aggregate_failures do
+        get :new, params: { id: empty_slot.id }
+        expect(response).to have_http_status(:success)
+        expect(Capybara.string(response.body)).to have_css('.breadcrumb-event', text: 'Crumb Event Title')
+      end
+
+      it 'shows the event name when the article creation fails', :aggregate_failures do
+        allow_any_instance_of(Item).to receive(:save).and_return(false)
+        post :create, params: { item: { title: 'x', body: 'y', advent_calendar_item_id: empty_slot.id } }
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(Capybara.string(response.body)).to have_css('.breadcrumb-event', text: 'Crumb Event Title')
+      end
+
+      it 'shows the event name on the edit form', :aggregate_failures do
+        get :edit, params: { id: article.id }
+        expect(response).to have_http_status(:success)
+        expect(Capybara.string(response.body)).to have_css('.breadcrumb-event', text: 'Crumb Event Title')
+      end
+
+      it 'shows the event name when the article update fails', :aggregate_failures do
+        allow_any_instance_of(Item).to receive(:save).and_return(false)
+        patch :update, params: { id: article.id, item: { title: 'broken', body: 'x' } }
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(Capybara.string(response.body)).to have_css('.breadcrumb-event', text: 'Crumb Event Title')
+      end
+    end
+  end
 end

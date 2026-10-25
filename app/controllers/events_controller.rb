@@ -137,6 +137,7 @@ class EventsController < ApplicationController
     return unless @event
 
     @board = @event.board
+    @breadcrumb_event = @event
   end
 
   def check_edit_permission

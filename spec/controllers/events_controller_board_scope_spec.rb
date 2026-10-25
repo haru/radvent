@@ -378,4 +378,38 @@ RSpec.describe EventsController do
       expect(response.body).not_to include('Hidden Board Name')
     end
   end
+
+  describe 'breadcrumb trail URL scope' do
+    # Returns the breadcrumb event element of the last rendered page.
+    #
+    # @return [Capybara::Node::Element] the breadcrumb event element
+    def breadcrumb_event
+      Capybara.string(response.body).find('.breadcrumb-event')
+    end
+
+    it 'links the event name to /events/:name for a TOP board event', :aggregate_failures do
+      event_on(top_board, 'scope-top')
+      sign_in owner
+      get :edit, params: { name: 'scope-top' }
+      expect(breadcrumb_event[:href]).to eq '/events/scope-top'
+      expect(breadcrumb_event.text).to eq "#{top_board.name} scope-top"
+    end
+
+    it 'links the event name to /boards/:board_id/events/:name for a user board event',
+       :aggregate_failures do
+      event_on(board_a, 'scope-user')
+      sign_in owner
+      get :edit, params: scoped(board_a, 'scope-user')
+      expect(breadcrumb_event[:href]).to eq "/boards/#{board_a.board_id}/events/scope-user"
+      expect(breadcrumb_event.text).to eq "#{board_a.name} scope-user"
+    end
+
+    it 'marks the event as the current location on the board-scoped calendar page',
+       :aggregate_failures do
+      event_on(board_a, 'scope-now')
+      get :show, params: scoped(board_a, 'scope-now')
+      expect(breadcrumb_event.tag_name).to eq 'span'
+      expect(breadcrumb_event[:'aria-current']).to eq 'page'
+    end
+  end
 end
