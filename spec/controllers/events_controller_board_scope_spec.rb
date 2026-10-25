@@ -104,9 +104,10 @@ RSpec.describe EventsController do
     end
 
     context 'when a guest' do
-      it 'returns 403 for edit' do
+      it 'returns 403 for edit without a breadcrumb event', :aggregate_failures do
         get :edit, params: scoped(board_a, 'dup')
         expect(response).to have_http_status(:forbidden)
+        expect_no_breadcrumb_event
       end
 
       it 'returns 403 for update and changes nothing', :aggregate_failures do
@@ -124,9 +125,10 @@ RSpec.describe EventsController do
     context 'when neither the creator nor an admin' do
       before { sign_in create(:user) }
 
-      it 'returns 403 for edit' do
+      it 'returns 403 for edit without a breadcrumb event', :aggregate_failures do
         get :edit, params: scoped(board_a, 'dup')
         expect(response).to have_http_status(:forbidden)
+        expect_no_breadcrumb_event
       end
 
       it 'returns 403 for update' do
@@ -376,6 +378,33 @@ RSpec.describe EventsController do
       get :show, params: { name: 'secret' }
       expect(response).to have_http_status(:not_found)
       expect(response.body).not_to include('Hidden Board Name')
+    end
+  end
+
+  describe 'breadcrumb trail URL scope' do
+    it 'links the event title to /events/:name for a TOP board event', :aggregate_failures do
+      event_on(top_board, 'scope-top')
+      sign_in owner
+      get :edit, params: { name: 'scope-top' }
+      expect(breadcrumb_event[:href]).to eq '/events/scope-top'
+      expect(breadcrumb_event.text).to eq Event.find_by!(name: 'scope-top').title
+    end
+
+    it 'links the event title to /boards/:board_id/events/:name for a user board event',
+       :aggregate_failures do
+      event_on(board_a, 'scope-user')
+      sign_in owner
+      get :edit, params: scoped(board_a, 'scope-user')
+      expect(breadcrumb_event[:href]).to eq "/boards/#{board_a.board_id}/events/scope-user"
+      expect(breadcrumb_event.text).to eq Event.find_by!(name: 'scope-user').title
+    end
+
+    it 'marks the event as the current location on the board-scoped calendar page',
+       :aggregate_failures do
+      event_on(board_a, 'scope-now')
+      get :show, params: scoped(board_a, 'scope-now')
+      expect(breadcrumb_event.tag_name).to eq 'span'
+      expect(breadcrumb_event[:'aria-current']).to eq 'page'
     end
   end
 end

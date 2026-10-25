@@ -89,7 +89,7 @@ class AdventCalendarItemsController < ApplicationController
 
   # Renders 404 unless the viewer may read the board this slot belongs to.
   #
-  # Declared before +find_board+ so a hidden slot never exposes its board name in the layout, and
+  # Declared before +find_board+ so a hidden slot never exposes its board name or event title in the layout, and
   # before +edit_permission?+ so a hidden board answers 404 rather than 403.
   #
   # @return [void]
@@ -103,7 +103,7 @@ class AdventCalendarItemsController < ApplicationController
   # +advent_calendar_item[event_id]+ only, so the event used for the decision is always the
   # event the slot is created in. An event the requester cannot see is answered with 404 so its
   # existence is not revealed. Declared before +find_board+ so a hidden board never exposes its
-  # name in the layout.
+  # name or event title in the layout.
   #
   # @return [void]
   def check_slot_creation_authorization
@@ -115,9 +115,13 @@ class AdventCalendarItemsController < ApplicationController
     render_forbidden
   end
 
+  # Sets the board and the event shown in the navbar breadcrumb trail.
+  #
+  # @return [void]
   def find_board
     event = @advent_calendar_item&.event || @event
     @board = event&.board
+    @breadcrumb_event = event
   end
 
   # Renders 403 unless the user is an admin or the slot's editor.

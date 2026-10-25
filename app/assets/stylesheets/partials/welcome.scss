@@ -98,6 +98,16 @@ body#advent_calendar_body {
       height: 15px;
       color: inherit;
     }
+    // Let the breadcrumb trail shrink so a long event title truncates instead of
+    // overflowing the navbar on narrow screens.
+    > .d-flex {
+      min-width: 0;
+    }
+    .breadcrumb-event {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
 
   #event-cards {

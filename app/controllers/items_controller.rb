@@ -116,7 +116,7 @@ class ItemsController < ApplicationController
   # article is created on. A slot the requester cannot see is answered with 404 so its existence
   # is not revealed. The publish date is not part of the decision: the owner may write before it,
   # and an admin may write on any visible slot. Declared before +find_board+ so a hidden slot never
-  # exposes its board name in the layout.
+  # exposes its board name or event title in the layout.
   #
   # @return [void]
   def check_article_creation_authorization
@@ -130,7 +130,7 @@ class ItemsController < ApplicationController
 
   # Renders 404 unless the viewer may read the board this item belongs to.
   #
-  # Declared before +find_board+ so a hidden item never exposes its board name in the layout.
+  # Declared before +find_board+ so a hidden item never exposes its board name or event title in the layout.
   #
   # @return [void]
   def check_visibility
@@ -143,8 +143,13 @@ class ItemsController < ApplicationController
     render_forbidden unless @item.editable_by? current_user
   end
 
+  # Sets the board and the event shown in the navbar breadcrumb trail.
+  #
+  # @return [void]
   def find_board
     aci = @item&.advent_calendar_item || @advent_calendar_item || AdventCalendarItem.find_by(id: params[:id])
-    @board = aci&.event&.board
+    event = aci&.event
+    @board = event&.board
+    @breadcrumb_event = event
   end
 end

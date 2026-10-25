@@ -125,7 +125,7 @@ class EventsController < ApplicationController
 
   # Renders 404 unless the viewer may read the board this event belongs to.
   #
-  # Declared before +find_board+ so a hidden event never exposes its board name in the layout.
+  # Declared before +find_board+ so a hidden event never exposes its board name or event title in the layout.
   # +find_event+ leaves +@event+ nil when the name param is blank, which is treated as not found.
   #
   # @return [void]
@@ -133,10 +133,14 @@ class EventsController < ApplicationController
     render_not_found unless @event&.visible?(current_user)
   end
 
+  # Sets the board and the event shown in the navbar breadcrumb trail.
+  #
+  # @return [void]
   def find_board
     return unless @event
 
     @board = @event.board
+    @breadcrumb_event = @event
   end
 
   def check_edit_permission
