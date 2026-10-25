@@ -1,21 +1,21 @@
 <!--
 Sync Impact Report
 ==================
-Version Change: 1.3.0 → 1.4.0
+Version Change: 1.4.0 → 1.5.0
 
 Modified Principles: None
 
 Added Sections:
-- Principle XI: Migration Safety Against Existing Data (Migrations Never Fail on Stored Data)
+- Principle XII: End-to-End Testing (Playwright)
 
 Modified Sections:
-- Code Review & Quality Gates: "Database migrations are safe" expanded to require that migrations
-  cannot fail on previously stored data (Principle XI)
+- Code Review & Quality Gates: E2E suite (`yarn e2e`) and docs/e2e-scenarios.md must be kept in
+  sync with user-visible changes before a PR (Principle XII)
 
 Removed Sections: None
 
 Templates Requiring Updates:
-⚠ AGENTS.md - consider adding a matching gotcha/rule (not modified by this command)
+⚠ AGENTS.md - consider adding a matching rule (not modified by this command)
 
 Follow-up TODOs:
 - None
@@ -178,6 +178,27 @@ runs this software, and the failing data is often invisible until then (for exam
 created by simultaneous requests). The data was valid under the rules of the version that wrote it,
 so the new version MUST accept it rather than demand that operators repair it by hand.
 
+### XII. End-to-End Testing (Playwright)
+User-visible behavior MUST be verified by the Playwright E2E suite (`yarn e2e`, see
+`docs/e2e-testing.md`) in addition to RSpec:
+
+- A change that adds or alters a screen, a user flow, or browser-side behavior (Stimulus controllers,
+  forms, navigation, permissions visible in the UI) MUST add or update an E2E scenario covering it.
+  Scenarios MUST be listed in `docs/e2e-scenarios.md`, kept in sync with the tests.
+- The E2E suite MUST be run and MUST pass before a PR is created for such a change. A failing or
+  skipped scenario MUST be reported with its output, never hidden, retried until green without
+  investigation, or deleted to make the suite pass.
+- A bug found by an E2E scenario MUST be fixed following Principle VI (a failing RSpec test first
+  where the defect is reproducible at that level), and the scenario MUST remain as a regression guard.
+- E2E tests MUST run only against the dedicated `e2e` Rails environment and its own database
+  (port 4500), never against development or production data (Principle X).
+- E2E tests are not part of CI or RSpec and MUST NOT count toward the RSpec coverage figure
+  (Principle I).
+
+**Rationale**: Unit and controller specs cannot detect broken screens, JavaScript wiring, or
+cross-page flows. A maintained E2E suite catches these regressions, and tying it to the change that
+causes them keeps scenarios and behavior from drifting apart.
+
 ## Security & Access Control
 
 Devise authentication is REQUIRED for user access. Admin actions protected with `admin_user!` helper.
@@ -206,7 +227,8 @@ DRY/YAGNI (no unjustified complexity or duplication), Significant design decisio
 append-only ADRs under `docs/adr/` (and linked from `docs/adr/README.md`), No silent fallbacks mask
 failures, No destructive operation was performed on existing data without explicit user approval,
 Database migrations are safe and cannot fail on any previously stored data (tested against dirty
-existing data per Principle XI), No hardcoded secrets or credentials.
+existing data per Principle XI), E2E scenarios are added/updated for user-visible changes and
+`yarn e2e` passes (Principle XII), No hardcoded secrets or credentials.
 
 **Rationale**: Quality gates prevent broken code from reaching production. Automated checks catch
 common issues early.
@@ -223,4 +245,4 @@ For runtime development guidance, refer to AGENTS.md which contains detailed con
 procedures, and project-specific gotchas. AGENTS.md is the authoritative reference for implementation
 details and should be consulted before making changes.
 
-**Version**: 1.4.0 | **Ratified**: 2026-02-27 | **Last Amended**: 2026-10-24
+**Version**: 1.5.0 | **Ratified**: 2026-02-27 | **Last Amended**: 2026-10-25
