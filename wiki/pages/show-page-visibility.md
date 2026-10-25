@@ -53,7 +53,9 @@ by the board page and by protected images — see
 Only the calendar, article and slot show pages changed: three controllers and
 their controller specs, with no model, view, route, schema or i18n change
 (S025). Existing specs keep passing because the event factory defaults to the
-TOP board, which everyone may see (S024).
+TOP board, which everyone may see (S024). Feature 018 later changed the
+filters of the slot show page again; see
+[Slot Info Page Access](./slot-info-page-access.md) (S032, S033).
 
 When asserting "indistinguishable from a missing record" in a spec, compare
 status, rendered template and the absence of the board name — not the whole

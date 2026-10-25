@@ -73,6 +73,29 @@ RSpec.describe 'events/show', type: :request do
     end
   end
 
+  context 'when a slot has no article yet' do
+    let(:slot_author) { create(:user) }
+    let!(:slot) { create(:advent_calendar_item, event: owned_event, user: slot_author, date: 5) }
+    let(:slot_path) { advent_calendar_item_path(id: slot.id) }
+
+    it 'links the slot page to its author' do
+      sign_in slot_author
+      get show_event_path(owned_event.name)
+      expect(response.body).to include(%(href="#{slot_path}"))
+    end
+
+    it 'does not link the slot page to another user' do
+      sign_in other_user
+      get show_event_path(owned_event.name)
+      expect(response.body).not_to include(%(href="#{slot_path}"))
+    end
+
+    it 'does not link the slot page to a guest' do
+      get show_event_path(owned_event.name)
+      expect(response.body).not_to include(%(href="#{slot_path}"))
+    end
+  end
+
   context 'when an article has duplicate like rows' do
     let(:liked_item) do
       create(:item, advent_calendar_item: create(:advent_calendar_item, event: owned_event, user: event_owner, date: 3))

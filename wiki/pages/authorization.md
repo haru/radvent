@@ -16,7 +16,7 @@ otherwise (S002, S004). `UsersController` renders admin-facing user-management
 views through a separate admin layout from the public-facing templates
 (S002). `BoardsController` restricts access per-board via a `check_visibility`
 filter on the `visibility` enum, and Items/AdventCalendarItems controllers
-gate edits with an `edit_permission?` guard limited to the creator or an
+gate edits (and, since feature 018, the slot info page) with an `edit_permission?` guard limited to the creator or an
 admin (S004). Since feature `011-private-board-content-visibility`, the
 `show` actions of Events, Items and AdventCalendarItems also run a
 `check_visibility` filter that returns 404 unless the model's `visible?`

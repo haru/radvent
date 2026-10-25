@@ -30,7 +30,7 @@ public boards and would not stop the leak.
 - The declaration order of the filters is kept:
   `authenticate_user!` → `find_calendar_item` → `check_visibility` →
   `edit_permission?` → `find_board`. The response therefore follows the
-  contract table in `specs/018-restrict-item-info-access/`:
+  contract table in `specs/018-restrict-item-info-access/contracts/slot-info-page-access.md`:
   1. Guest (regardless of board type or slot existence): `302` to the
      sign-in page, so existence is never revealed.
   2. Signed in, slot does not exist: `404`.

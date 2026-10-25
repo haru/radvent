@@ -4,14 +4,18 @@
 #
 # Handles creating, reading, updating, and deleting calendar day slots for advent calendar events.
 class AdventCalendarItemsController < ApplicationController
-  before_action :authenticate_user!, only: %i[new create show edit update destroy]
+  before_action :authenticate_user!
   before_action :check_slot_creation_authorization, only: %i[new create]
   before_action :find_calendar_item, only: %i[show edit update destroy]
   before_action :check_visibility, only: [:show]
   before_action :edit_permission?, only: %i[show edit update destroy]
   before_action :find_board
 
-  # Shows an advent calendar item.
+  # Shows the slot info page (the author's management page).
+  #
+  # Restricted to the slot's editor and admins: +authenticate_user!+ redirects guests to sign-in,
+  # +check_visibility+ answers 404 for a hidden board, and +edit_permission?+ answers 403 for
+  # everyone else. See ADR-0010.
   #
   # @return [void]
   def show; end
@@ -85,7 +89,8 @@ class AdventCalendarItemsController < ApplicationController
 
   # Renders 404 unless the viewer may read the board this slot belongs to.
   #
-  # Declared before +find_board+ so a hidden slot never exposes its board name in the layout.
+  # Declared before +find_board+ so a hidden slot never exposes its board name in the layout, and
+  # before +edit_permission?+ so a hidden board answers 404 rather than 403.
   #
   # @return [void]
   def check_visibility
@@ -115,6 +120,12 @@ class AdventCalendarItemsController < ApplicationController
     @board = event&.board
   end
 
+  # Renders 403 unless the user is an admin or the slot's editor.
+  #
+  # Guards +show+ as well as the write actions, because the slot info page is an authoring page.
+  # Must stay after +check_visibility+ so a hidden board is answered with 404, not 403.
+  #
+  # @return [void]
   def edit_permission?
     return true if current_user.admin?
 

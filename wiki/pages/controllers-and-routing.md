@@ -70,7 +70,10 @@ All controllers inherit from `ApplicationController`, which provides (S004):
   on `edit` / `update` / `destroy` (S029); see
   [Board Visibility on Show Pages](./show-page-visibility.md) (S024).
 - `edit_permission?` (Items / AdventCalendarItems controllers) — allows edits
-  only for the content's creator or an admin (S004).
+  only for the content's creator or an admin (S004). In
+  AdventCalendarItems it also gates `show`, so the slot info page is limited
+  to its author and admins; see
+  [Slot Info Page Access](./slot-info-page-access.md) (S032, S033).
 - `check_deletability` (`BoardsController`) — gates `destroy` via
   `Board#deletable?`. The action further requires the submitted
   `confirm_board_id` param to match the board's actual ID
