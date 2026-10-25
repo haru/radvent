@@ -2,7 +2,7 @@
 title: Protected Image Serving (Board Image Access Control)
 type: decision
 sources: [S021, S022, S023, S024]
-updated: 2026-10-24
+updated: 2026-10-25
 ---
 
 # Protected Image Serving (Board Image Access Control)
@@ -21,7 +21,7 @@ belong to. This supersedes the "no view-time access control" decision in
   `config.x.protected_upload_root` — `storage/protected_uploads` by default,
   `RADVENT_PROTECTED_UPLOAD_DIR` to override, `/var/radvent_data/protected_uploads`
   in Docker. `store_dir` (`uploads/attachment/image/<id>`) is unchanged
-  (S021, S023). Config details: [Configuration](./configuration.md).
+  (S021, S022, S023). Config details: [Configuration](./configuration.md).
 - **Endpoint**: `GET /attachments/:id/:filename` → `AttachmentsController#show`
   → `send_file` (inline), only when `Attachment#visible?(current_user)` holds.
   `:filename` is compared to the stored identifier and never used to build a

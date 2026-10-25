@@ -24,5 +24,13 @@ export default [
       quotes: ['error', 'single'],
       indent: ['error', 2]
     }
+  },
+  {
+    files: ['e2e/**/*.js', 'playwright.config.js'],
+    languageOptions: {
+      globals: {
+        URL: 'readonly'
+      }
+    }
   }
 ]

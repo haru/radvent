@@ -27,6 +27,9 @@ bundle exec rspec spec                              # all tests
 bundle exec rspec spec/models/user_spec.rb           # single file
 bundle exec rspec spec/models/user_spec.rb:42        # specific test line
 
+# E2E (Playwright, dedicated `e2e` Rails env on port 4500; not part of CI or rspec)
+yarn e2e                                            # see docs/e2e-testing.md
+
 # Lint (run ALL before completing any task)
 sh build-scripts/lint.sh                             # rubocop + YARD 100% + eslint
 bundle exec rubocop -a                               # auto-fix Ruby
