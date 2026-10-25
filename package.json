@@ -20,11 +20,13 @@
     "build": "node esbuild.config.mjs",
     "build:css": "postcss ./app/javascript/stylesheets/application.css -o ./app/assets/builds/application_pack.css",
     "copy:fonts": "cp -r node_modules/@fortawesome/fontawesome-free/webfonts public/assets/webfonts",
-    "lint": "eslint app/javascript/**/*.js",
-    "lint:fix": "eslint app/javascript/**/*.js --fix"
+    "e2e": "playwright test",
+    "lint": "eslint app/javascript/**/*.js \"e2e/**/*.js\" playwright.config.js",
+    "lint:fix": "eslint app/javascript/**/*.js \"e2e/**/*.js\" playwright.config.js --fix"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.64.1",
     "eslint": "^10.8.0",
     "postcss": "^8.5.24",
     "postcss-cli": "^12.0.0",

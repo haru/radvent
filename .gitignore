@@ -74,3 +74,8 @@ doc/
 db/schema.rb
 .claude/settings.local.json
 .devcontainer/devcontainer-lock.json
+
+# E2E (Playwright) outputs
+/test-results/
+/playwright-report/
+/public/e2e-assets

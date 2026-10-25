@@ -19,3 +19,4 @@ unchanged.
 | [0010](0010-restrict-slot-info-page-to-author-and-admin.md) | Restrict the slot info page to its author and admins | Accepted |
 | [0011](0011-share-auth-rate-limit-counters-in-solid-cache.md) | Share authentication rate-limit counters in Solid Cache | Accepted |
 | [0012](0012-account-lockout-is-time-based-and-invisible.md) | Account lockout is time-based, invisible and does not end sessions | Accepted |
+| [0013](0013-e2e-tests-with-playwright-and-dedicated-rails-env.md) | E2E tests run with Playwright against a dedicated Rails environment | Accepted |
