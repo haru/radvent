@@ -1,7 +1,8 @@
 %div.comment-form
-  = form_for comment do |f|
+  = form_for comment, html: { data: { controller: 'comment-form', action: 'turbo:submit-end->comment-form#reset' } } do |f|
     %fieldset
       %legend #{t "views.comments._form.title"}
+      = render 'comments/errors', comment: comment
       %div.form-group
         %div.form-outline
           = f.text_field :user_name, class:"form-control"

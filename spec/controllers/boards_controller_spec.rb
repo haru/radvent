@@ -14,6 +14,11 @@ RSpec.describe BoardsController do
         get :index
         expect(response).to redirect_to(new_user_session_path)
       end
+
+      it 'tells the guest to sign in or sign up', :aggregate_failures do
+        get :index
+        expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')
+      end
     end
 
     context 'when authenticated' do
@@ -34,6 +39,11 @@ RSpec.describe BoardsController do
 
   describe 'GET #new' do
     context 'when not authenticated' do
+      it 'tells the guest to sign in or sign up' do
+        get :new
+        expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')
+      end
+
       it 'redirects to sign in' do
         get :new
         expect(response).to redirect_to(new_user_session_path)
@@ -108,6 +118,18 @@ RSpec.describe BoardsController do
         expect(response).to have_http_status(:unprocessable_content)
       end
     end
+
+    context 'when the board_id is malformed' do
+      render_views
+      before { sign_in owner }
+
+      it 'renders the form with the ID error instead of failing', :aggregate_failures do
+        post :create, params: { board: { board_id: 'Bad ID!', name: 'My Board', visibility: 'public' } }
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(Capybara.string(response.body)).to have_field('board[board_id]', with: 'bad id!')
+        expect(Board.find_by(board_id: 'Bad ID!')).to be_nil
+      end
+    end
   end
 
   describe 'GET #show' do
@@ -125,6 +147,21 @@ RSpec.describe BoardsController do
 
       it 'returns http success for authenticated non-member' do
         sign_in other_user
+        get :show, params: { board_id: board.board_id }
+        expect(response).to have_http_status(:success)
+      end
+    end
+
+    context 'when the owner has deleted their account' do
+      render_views
+      let(:board) { create(:board, :public_user, owner: owner) }
+
+      before do
+        board
+        owner.destroy
+      end
+
+      it 'still renders the board for a visitor' do
         get :show, params: { board_id: board.board_id }
         expect(response).to have_http_status(:success)
       end
@@ -427,6 +464,21 @@ RSpec.describe BoardsController do
       it 'updates the board' do
         patch :update, params: { board_id: board.board_id, board: { name: 'Updated Name' } }
         expect(board.reload.name).to eq('Updated Name')
+      end
+    end
+
+    context 'when the owner changes the board_id to a malformed value' do
+      render_views
+      before { sign_in owner }
+
+      it 'renders the edit form with 422 and links to the stored ID', :aggregate_failures do # rubocop:disable RSpec/ExampleLength
+        stored_id = board.board_id
+        patch :update, params: { board_id: stored_id, board: { board_id: 'Bad ID!' } }
+        expect(response).to have_http_status(:unprocessable_content)
+        page = Capybara.string(response.body)
+        expect(page).to have_link(board.name, href: "/boards/#{stored_id}")
+        expect(page).to have_css("form[action='/boards/#{stored_id}']")
+        expect(board.reload.board_id).to eq stored_id
       end
     end
 

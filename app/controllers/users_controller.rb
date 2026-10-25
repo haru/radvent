@@ -4,7 +4,7 @@
 #
 # Handles listing, showing, editing info, and deleting users (admin functions).
 class UsersController < ApplicationController
-  before_action :admin_user!, only: %i[index update_info destroy]
+  before_action :admin_user!, only: %i[index edit_info update_info destroy]
   before_action :find_user, only: %i[show edit_info update_info destroy]
 
   # Lists all users (admin view).
@@ -37,7 +37,8 @@ class UsersController < ApplicationController
     if @user.save
       redirect_to edit_user_path(@user)
     else
-      render :edit_info
+      @menu = :users
+      render :edit_info, layout: 'admin', status: :unprocessable_content
     end
   end
 

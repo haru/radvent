@@ -1,8 +1,8 @@
 ---
 title: EasyMDE Editor Migration
 type: decision
-sources: [S011]
-updated: 2026-08-14
+sources: [S011, S012]
+updated: 2026-10-24
 ---
 
 # EasyMDE Editor Migration

@@ -1,8 +1,8 @@
 ---
 title: Controllers and Routing
 type: component
-sources: [S004, S009, S013, S015, S019]
-updated: 2026-09-18
+sources: [S004, S009, S013, S015, S019, S024, S028, S029, S032, S033]
+updated: 2026-10-25
 ---
 
 # Controllers and Routing
@@ -13,12 +13,20 @@ updated: 2026-09-18
 routes with slug-based access for the main entities (S004):
 
 - Events: `get 'events/:name' => 'events#show'` — accessed by `name` slug,
-  not numeric ID (S004).
+  not numeric ID (S004). TOP board events keep this name-only URL; user board
+  events are addressed as `/boards/:board_board_id/events/:name`, and a
+  name-only URL that matches no TOP board event redirects to the board-scoped
+  URL only when exactly one visible user board event has that name
+  (ADR 0009; S029). See
+  [Event Addressing by Board](./event-addressing-by-board.md).
 - Boards: slug parameter constrained to alphanumeric characters and hyphens
   (S004).
 - Admin routes: `delete 'users/delete/:id'`, `put 'user/:id/update'` (S004).
 - Items: both collection and member preview routes, to support live
-  Markdown preview before persistence (S004).
+  Markdown preview before persistence (S004). The collection `POST
+  /items/preview` routes to `items#preview_new` (path helper
+  `preview_items_path` unchanged); see
+  [Article Preview Authorization](./article-preview-authorization.md) (S028).
 - Theme: `patch 'theme' => 'themes#update'` (feature `007-theme-switch`) — a
   lightweight, `current_user`-only endpoint deliberately kept separate from
   Devise's registration-update route so a theme change doesn't require
@@ -56,10 +64,16 @@ All controllers inherit from `ApplicationController`, which provides (S004):
 
 - `admin_user!` — renders 403 Forbidden unless the signed-in user has the
   `admin` flag set (S004); see [Authorization](./authorization.md).
-- `check_visibility` (`BoardsController`) — restricts board access based on
-  the `visibility` enum (`public` / `protected` / `private`) (S004).
+- `check_visibility` (`BoardsController`; also the Events / Items /
+  AdventCalendarItems `show` actions) — 404 unless the board's `visible?`
+  rule holds (`public` / `protected` / `private`) (S004); Events also run it
+  on `edit` / `update` / `destroy` (S029); see
+  [Board Visibility on Show Pages](./show-page-visibility.md) (S024).
 - `edit_permission?` (Items / AdventCalendarItems controllers) — allows edits
-  only for the content's creator or an admin (S004).
+  only for the content's creator or an admin (S004). In
+  AdventCalendarItems it also gates `show`, so the slot info page is limited
+  to its author and admins; see
+  [Slot Info Page Access](./slot-info-page-access.md) (S032, S033).
 - `check_deletability` (`BoardsController`) — gates `destroy` via
   `Board#deletable?`. The action further requires the submitted
   `confirm_board_id` param to match the board's actual ID
@@ -71,22 +85,11 @@ All controllers inherit from `ApplicationController`, which provides (S004):
 The user-boards design spec calls for a more general, object-level
 `visible?`/`editable?`/`deletable?` interface on the affected models rather
 than one-off controller filters — see
-[User Boards & Multi-Event Support](./user-boards-feature.md) (S009). It's
-not confirmed whether `check_visibility`/`edit_permission?` are the
-controller-side callers of that interface or a separate mechanism.
+[User Boards & Multi-Event Support](./user-boards-feature.md) (S009).
+`check_visibility` is the controller-side caller of `visible?` (S024); it's
+not confirmed whether `edit_permission?` calls that interface or a separate
+mechanism.
 
-## Controller groups
-
-| Group | Responsibility |
-|-------|-----------------|
-| Boards / BoardMemberships | Board lifecycle, visibility-based access, membership management (add/remove users by email or name) (S004) |
-| Events / AdventCalendarItems | Advent calendar management, date-slot assignment (`date` is Integer 1–31) (S004) |
-| Items | Content creation for a calendar slot, plus the Markdown preview pipeline (S004) |
-| Users | Admin-only account/profile management (S004) |
-| Comments / Likes | Social interaction on items; `Comment` has no `user_id` — stores `user_name` as a string (S004) |
-| Attachments | Image uploads via CarrierWave for the Markdown editor (S004) |
-| Themes | Single `update` action persisting `current_user.theme`; added by feature `007-theme-switch` (S015) |
-| BoardOtherBoards | Single `index` action returning a page of the viewer's visible boards, newest-activity-first, for the load-more listing; added by feature `009-board-list` (S019) |
-
-See [Domain Model](./domain-model.md) for the underlying entities and
-[Tech Stack](./tech-stack.md) for Devise and the locale-detection stack.
+The per-controller responsibility table lives in
+[Controller Groups](./controller-groups.md) (split out at the 600-word
+threshold).

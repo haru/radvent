@@ -72,4 +72,55 @@ RSpec.describe 'events/show', type: :request do
       expect(response.body).not_to include(edit_event_path(owned_event.name))
     end
   end
+
+  context 'when a slot has no article yet' do
+    let(:slot_author) { create(:user) }
+    let!(:slot) { create(:advent_calendar_item, event: owned_event, user: slot_author, date: 5) }
+    let(:slot_path) { advent_calendar_item_path(id: slot.id) }
+
+    it 'links the slot page to its author' do
+      sign_in slot_author
+      get show_event_path(owned_event.name)
+      expect(response.body).to include(%(href="#{slot_path}"))
+    end
+
+    it 'does not link the slot page to another user' do
+      sign_in other_user
+      get show_event_path(owned_event.name)
+      expect(response.body).not_to include(%(href="#{slot_path}"))
+    end
+
+    it 'does not link the slot page to a guest' do
+      get show_event_path(owned_event.name)
+      expect(response.body).not_to include(%(href="#{slot_path}"))
+    end
+  end
+
+  context 'when an article has duplicate like rows' do
+    let(:liked_item) do
+      create(:item, advent_calendar_item: create(:advent_calendar_item, event: owned_event, user: event_owner, date: 3))
+    end
+
+    it 'shows the like count with each user counted once' do
+      2.times { Like.new(user: other_user, item: liked_item).save!(validate: false) }
+      sign_in other_user
+      get show_event_path(owned_event.name)
+      expect(response.body).to match(%r{far fa-heart"></i>\s*1\s*<})
+    end
+  end
+
+  context 'when the event is on a user board' do
+    let(:board) { create(:board, :public_user) }
+    let(:board_event) do
+      create(:event, board: board, name: 'user-ev', title: 'User Ev', start_date: '2016-12-01',
+                     end_date: '2016-12-25', created_by: event_owner)
+    end
+
+    before { sign_in event_owner }
+
+    it 'links the pencil icon to the board-scoped edit path' do
+      get board_event_path(board.board_id, board_event.name)
+      expect(response.body).to include("/boards/#{board.board_id}/events/user-ev/edit")
+    end
+  end
 end

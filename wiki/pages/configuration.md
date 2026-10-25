@@ -1,8 +1,8 @@
 ---
 title: Configuration
 type: component
-sources: [S007]
-updated: 2026-08-14
+sources: [S007, S021, S023, S028, S035, S036]
+updated: 2026-10-25
 ---
 
 # Configuration
@@ -22,6 +22,35 @@ environment-specific settings files (S007). For the app-level env vars
 | `CI` | Enables eager loading in the test environment when present (S007) |
 | `RAILS_MASTER_KEY` | Decrypts credentials when `master.key` is unavailable (S007) |
 | `SECRET_KEY_BASE` | Encrypts cookies/sessions in production (S007) |
+
+## Upload storage
+
+`config.x.protected_upload_root` (set in `config/application.rb`) is where new
+image uploads and CarrierWave's cache live, outside `public/` so static
+serving (`RAILS_SERVE_STATIC_FILES`) cannot bypass authorization. It defaults
+to `storage/protected_uploads`; `RADVENT_PROTECTED_UPLOAD_DIR` overrides it —
+an empty value falls back to the default and a relative one resolves against
+`Rails.root` (S021, S023). See
+[Protected Image Serving](./protected-image-serving.md).
+
+## Mail settings (password reset)
+
+`Radvent::MailSettings` (`lib/radvent/mail_settings.rb`) builds the mailer
+config from environment variables; `config/environments/production.rb`
+`require_relative`s it, because environment files load before Zeitwerk (S028).
+`RADVENT_URL` (e.g. `https://advent.example.com`) becomes
+`default_url_options` (host, protocol, port omitted when standard);
+`SMTP_ADDRESS` enables SMTP delivery with `SMTP_PORT` (default 587), user
+name, password, authentication, domain and STARTTLS; `RADVENT_MAIL_FROM`
+overrides Devise's `mailer_sender` (S028). Unset values do not stop boot, so
+installs without mail keep starting and the failure is logged; a set but
+malformed `RADVENT_URL` raises at boot (S028). Production previously had no
+`default_url_options` or SMTP, so reset mails always failed with Missing host
+(S028). See [Password Reset Hides Account Existence](./password-reset-account-hiding.md).
+
+A boot-time warning names any unset mail variable
+(`MailSettings.missing_variables`), and the production config relies on
+`raise_delivery_errors` staying true so delivery failures reach the log (S028).
 
 ## Database
 
@@ -58,10 +87,12 @@ migrations (S007).
 |-----|----------|
 | Development | Code reloading on; cache store is `:null_store` unless `tmp/caching-dev.txt` is present; allowed hosts include the Docker service hostname `app` and GitHub Codespaces domains (S007) |
 | Production | Eager loading on; log level `:info` tagged with `:request_id`; static file serving gated by `RAILS_SERVE_STATIC_FILES` (S007) |
-| Test | Cache `:null_store`; mailer uses `:test` delivery (emails accumulate in an array, not sent); CSRF protection disabled for easier POST/PATCH specs (S007) |
+| Test | Cache `:memory_store`, cleared before each example (was `:null_store`, which never counts rate limits; S035, see [rate limits](auth-rate-limit-and-lockout.md)); mailer uses `:test` delivery (emails accumulate in an array, not sent); CSRF protection disabled for easier POST/PATCH specs (S007) |
 
 ## Secrets
 
 Credentials are encrypted/decrypted via `RAILS_MASTER_KEY` or a local
 `master.key` file; `config/secrets.yml.example` is the template for required
 secrets (S007).
+
+Production `cache_store` is `:solid_cache_store` on the primary database (S036).

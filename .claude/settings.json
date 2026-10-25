@@ -2,10 +2,19 @@
   "permissions": {
     "allow": []
   },
+  "attribution": {
+    "commit": "",
+    "pr": "",
+    "sessionUrl": false
+  },
   "enabledPlugins": {
     "context7@claude-plugins-official": true,
     "everything-claude-code@everything-claude-code": true,
     "skill-creator@claude-plugins-official": true,
     "claude-code-setup@claude-plugins-official": true
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "ruby -rjson -e 'd = JSON.parse($stdin.read); printf(\"%s | Context: %.0f%%\", d.dig(\"model\", \"display_name\"), d.dig(\"context_window\", \"used_percentage\") || 0)'"
   }
 }

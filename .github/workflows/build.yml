@@ -8,7 +8,6 @@ on:
       - ".specify/**"
       - "lib/radvent/version.rb"
       - "AGENTS.md"
-      - "CLAUDE.md"
       - "README.md"
       - "wiki/**"
   pull_request:
@@ -19,7 +18,6 @@ on:
       - ".specify/**"
       - "lib/radvent/version.rb"
       - "AGENTS.md"
-      - "CLAUDE.md"
       - "README.md"
       - "wiki/**"
   workflow_dispatch:

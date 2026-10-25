@@ -25,6 +25,10 @@ ENV NVM_DIR="/home/vscode/.nvm"
 RUN su vscode -c "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash" \
 	&& su vscode -c ". /home/vscode/.nvm/nvm.sh && nvm install --lts && nvm alias default lts/*"
 
+# System libraries for Playwright's Chromium (E2E tests, see docs/e2e-testing.md).
+# Keep the version in step with @playwright/test in package.json.
+RUN . /home/vscode/.nvm/nvm.sh && npx --yes playwright@1.64.1 install-deps chromium
+
 # [Optional] Uncomment this line to install additional gems.
 # RUN gem install <your-gem-names-here>
 

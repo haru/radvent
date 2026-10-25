@@ -29,6 +29,12 @@ module Radvent
     config.i18n.available_locales = %i[ja en]
     config.i18n.default_locale = :ja
 
+    # Root directory for uploaded images that must be served through an authorized endpoint
+    # (kept outside public/ so the web server never serves them directly). An empty value falls
+    # back to the default, and a relative one is resolved against Rails.root, not the working directory.
+    config.x.protected_upload_root =
+      Rails.root.join(ENV['RADVENT_PROTECTED_UPLOAD_DIR'].presence || 'storage/protected_uploads')
+
     config.generators do |g|
       g.test_framework :rspec,
                        fixtures: true,

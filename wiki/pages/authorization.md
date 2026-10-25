@@ -1,8 +1,8 @@
 ---
 title: Authorization
 type: component
-sources: [S002, S004, S009, S012, S013]
-updated: 2026-09-16
+sources: [S002, S004, S009, S012, S013, S023, S024, S026, S027, S028, S029, S032, S033]
+updated: 2026-10-25
 ---
 
 # Authorization
@@ -16,8 +16,12 @@ otherwise (S002, S004). `UsersController` renders admin-facing user-management
 views through a separate admin layout from the public-facing templates
 (S002). `BoardsController` restricts access per-board via a `check_visibility`
 filter on the `visibility` enum, and Items/AdventCalendarItems controllers
-gate edits with an `edit_permission?` guard limited to the creator or an
-admin (S004). Full routing and controller breakdown in
+gate edits (and, since feature 018, the slot info page) with an `edit_permission?` guard limited to the creator or an
+admin (S004). Since feature `011-private-board-content-visibility`, the
+`show` actions of Events, Items and AdventCalendarItems also run a
+`check_visibility` filter that returns 404 unless the model's `visible?`
+holds — see [Board Visibility on Show Pages](./show-page-visibility.md)
+(S024). Full routing and controller breakdown in
 [Controllers and Routing](./controllers-and-routing.md).
 
 The design spec for user-created boards additionally calls for `Board`,
@@ -29,14 +33,15 @@ centralized per object rather than duplicated per controller (S009) — see
 board-type rules and rationale.
 
 Uploading an `Attachment` (via the editor's image-upload button) is gated by
-the same `edit_permission?` check as the parent item, but *viewing* an
-uploaded image's URL currently has no access control at all — anyone who
-knows the URL can view it, independent of the item's visibility. Feature
-`003-image-file-upload` confirms this is intentional (view-time
-authorization is out of scope there), which is a gap relative to S009's
-`visible?(user)` target for `Attachment` — see
-[Toolbar Image Upload — UX and Access Control](./image-upload-toolbar-button.md)
-(S012).
+the same `edit_permission?` check as the parent item (S012). *Viewing* an
+uploaded image was originally unrestricted (feature `003-image-file-upload`,
+S012); since feature `010-board-image-access-control`, new images are served
+only to viewers for whom `Attachment#visible?` holds — the article's board
+visibility plus the article being published (authors and admins exempt) — and
+everyone else gets a 404. Images uploaded before that feature stay public, so
+S012's "no view-time control" describes only those legacy images (S023).
+See [Protected Image Serving](./protected-image-serving.md) (S023) and
+[Toolbar Image Upload — UX and Access Control](./image-upload-toolbar-button.md).
 
 Deleting a `Board` additionally requires typing the board's normalized ID
 (case-insensitive, surrounding whitespace ignored) before the delete button
@@ -46,5 +51,33 @@ activates, re-verified server-side via
 native browser confirm dialog alongside it, is in
 [Board Deletion — ID Confirmation & Dialog](./board-delete-id-confirmation.md)
 (S013).
+
+Comments: only an admin or the owner of the item's board may delete a comment,
+and posting requires the item to be readable (board visible *and* published,
+with no exception for admins). Unreadable items answer 404, readable-but-not-
+deletable answers 403. See [Comment Authorization](./comment-authorization.md)
+(S026).
+
+User-info editing is admin-only, and creating events, slots and articles
+(and updating slots and articles) is authorized against the target
+board/event/slot with 404 for hidden and 403 for forbidden targets; see
+[User, Event, Slot and Article Authorization](./user-event-item-authorization.md)
+(S027).
+
+Event edit/update/destroy now answer 404 before 403 for events on boards the
+requester cannot see; see
+[Event Addressing by Board](./event-addressing-by-board.md) (S029).
+
+The slot info page (`AdventCalendarItemsController#show`) is additionally
+gated by `authenticate_user!` and `edit_permission?` — sign-in redirect for
+guests, 404 for invisible boards, 403 for non-editors; see
+[Slot Info Page — Author and Admin Only](./slot-info-page-access.md)
+(S032, S033).
+
+Both article previews now require sign-in, and previews are authorized with the
+existing visibility/edit filters; see
+[Article Preview Authorization](./article-preview-authorization.md). Likes
+require sign-in and a readable article; see [Likes Hardening](./likes-hardening.md)
+(S028).
 
 See [Domain Model](./domain-model.md) for the entities these rules apply to.

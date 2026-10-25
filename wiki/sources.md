@@ -25,6 +25,25 @@ Sources are immutable inputs — the wiki never edits them.
 | S018 | specs/008-fix-dark-theme/plan.md (decision sections) | feature-artifact | 2026-09-17 | 2026-09-17 | dark-theme-full-coverage.md |
 | S019 | specs/009-board-list/research.md | feature-artifact | 2026-09-18 | 2026-09-18 | other-boards-listing.md, domain-model.md, controllers-and-routing.md, views-and-frontend.md |
 | S020 | specs/009-board-list/plan.md (decision sections) | feature-artifact | 2026-09-18 | 2026-09-18 | other-boards-listing.md |
+| S021 | specs/010-board-image-access-control/research.md | feature-artifact | 2026-10-24 | 2026-10-24 | protected-image-serving.md, authorization.md, image-upload-toolbar-button.md, configuration.md, docker-deployment.md, javascript-asset-pipeline.md |
+| S022 | specs/010-board-image-access-control/plan.md (summary) | feature-artifact | 2026-10-24 | 2026-10-24 | protected-image-serving.md |
+| S023 | docs/adr/0007-serve-new-images-through-authorized-endpoint.md | file | 2026-10-24 | 2026-10-24 | protected-image-serving.md, authorization.md, configuration.md, docker-deployment.md, domain-model.md, controllers-and-routing.md |
+| S024 | specs/011-private-board-content-visibility/research.md | feature-artifact | 2026-10-24 | 2026-10-24 | show-page-visibility.md, authorization.md, controllers-and-routing.md, protected-image-serving.md |
+| S025 | specs/011-private-board-content-visibility/plan.md (decision sections) | feature-artifact | 2026-10-24 | 2026-10-24 | show-page-visibility.md |
+| S026 | specs/012-comment-authorization/research.md | feature-artifact | 2026-10-24 | 2026-10-24 | comment-authorization.md, authorization.md, controllers-and-routing.md |
+| S027 | specs/013-user-event-item-authorization/research.md | feature-artifact | 2026-10-24 | 2026-10-24 | user-event-item-authorization.md, authorization.md |
+| S028 | specs/014-preview-email-exposure/research.md | feature-artifact | 2026-10-24 | 2026-10-24 | article-preview-authorization.md, password-reset-account-hiding.md, likes-hardening.md, configuration.md, user-event-item-authorization.md, authorization.md, controllers-and-routing.md, controller-groups.md |
+| S029 | specs/015-env-log-event-collision/research.md | feature-artifact | 2026-10-24 | 2026-10-24 | event-addressing-by-board.md, startup-log-secret-hygiene.md, controllers-and-routing.md, authorization.md, user-event-item-authorization.md, docker-deployment.md, domain-model.md |
+| S030 | specs/015-env-log-event-collision/plan.md (summary) | feature-artifact | 2026-10-24 | 2026-10-24 | event-addressing-by-board.md, startup-log-secret-hygiene.md |
+| S031 | specs/017-post-edit-view-link/research.md | feature-artifact | 2026-10-25 | 2026-10-25 | entry-page-view-article-button.md, views-and-frontend.md, show-page-visibility.md |
+| S032 | specs/018-restrict-item-info-access/research.md | feature-artifact | 2026-10-25 | 2026-10-25 | slot-info-page-access.md, show-page-visibility.md, authorization.md, controller-groups.md, controllers-and-routing.md |
+| S033 | docs/adr/0010-restrict-slot-info-page-to-author-and-admin.md | file | 2026-10-25 | 2026-10-25 | slot-info-page-access.md, show-page-visibility.md, authorization.md, controller-groups.md, controllers-and-routing.md |
+| S034 | specs/019-breadcrumb-event/research.md | feature-artifact | 2026-10-25 | 2026-10-25 | navbar-breadcrumb.md, views-and-frontend.md, show-page-visibility.md |
+| S035 | specs/020-auth-rate-limit-lockout/research.md | feature-artifact | 2026-10-25 | 2026-10-25 | auth-rate-limit-and-lockout.md, password-reset-account-hiding.md, configuration.md |
+| S036 | docs/adr/0011-share-auth-rate-limit-counters-in-solid-cache.md | file | 2026-10-25 | 2026-10-25 | auth-rate-limit-and-lockout.md, configuration.md |
+| S037 | docs/adr/0012-account-lockout-is-time-based-and-invisible.md | file | 2026-10-25 | 2026-10-25 | auth-rate-limit-and-lockout.md |
+| S038 | specs/021-e2e-playwright-tests/research.md | feature-artifact | 2026-10-25 | 2026-10-25 | e2e-testing.md, e2e-scenario-design.md, development-setup.md, tech-stack.md, auth-rate-limit-and-lockout.md |
+| S039 | docs/adr/0013-e2e-tests-with-playwright-and-dedicated-rails-env.md | file | 2026-10-25 | 2026-10-25 | e2e-testing.md, e2e-scenario-design.md |
 
 Note: domain-model.md exceeded the 600-word split threshold after S015's
 update; its Authorization section was split into authorization.md (S002,
@@ -37,3 +56,7 @@ Note: dark-theme-full-coverage.md exceeded the 600-word split threshold on
 creation from S017; its Devise ERB→HAML/`.panel`→`.card` section (which also
 carries an implementation-flag conflict) was split into
 devise-views-format-conversion.md (S017 — no new source).
+
+Note: controllers-and-routing.md exceeded the 600-word split threshold; its
+"Controller groups" table was split into controller-groups.md (S004, S015,
+S019, S023, S026, S028 — no new source).

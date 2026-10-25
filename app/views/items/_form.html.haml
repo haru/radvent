@@ -13,6 +13,7 @@
   } |
 %div.form-container{data: editor_data}
   = form_for item do |f|
+    = render 'items/errors', item: item
     %fieldset
       %div.form-group
         %div.form-outline

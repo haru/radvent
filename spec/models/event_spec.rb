@@ -122,8 +122,8 @@ describe Event do
     end
 
     it 'returns 2 after two entries are added' do
-      create(:advent_calendar_item, event: event)
-      create(:advent_calendar_item, event: event)
+      create(:advent_calendar_item, event: event, date: 1)
+      create(:advent_calendar_item, event: event, date: 2)
       event.reload
       expect(event.entry_count).to eq(2)
     end
@@ -143,9 +143,91 @@ describe Event do
     end
 
     it 'returns 100 when all days are filled' do
-      5.times { create(:advent_calendar_item, event: event) }
+      event.start_date.day.upto(event.end_date.day).each do |day|
+        create(:advent_calendar_item, event: event, date: day)
+      end
       event.reload
       expect(event.entry_percent).to eq(100)
+    end
+  end
+
+  describe 'board scopes' do
+    let(:top_board) { Board.find_or_create_by!(board_type: :top) { |b| b.name = 'TOP' } }
+    let(:user_board) { create(:board, :public_user) }
+    let!(:top_event) { create(:event, board: top_board, name: 'scope-top') }
+    let!(:user_event) { create(:event, board: user_board, name: 'scope-user') }
+
+    it '.on_top_board returns only TOP board events' do
+      expect(described_class.on_top_board).to contain_exactly(top_event)
+    end
+
+    it '.on_user_boards returns only user board events' do
+      expect(described_class.on_user_boards).to contain_exactly(user_event)
+    end
+  end
+
+  describe '.sole_visible_on_user_boards' do
+    let(:owner) { create(:user) }
+    let(:member) { create(:user) }
+    let(:stranger) { create(:user) }
+    let(:admin) { create(:user, admin: true) }
+    let(:public_board) { create(:board, :public_user, owner: owner) }
+    let(:other_public_board) { create(:board, :public_user, owner: owner) }
+    let(:protected_board) { create(:board, :protected_user, owner: owner) }
+    let(:private_board) { create(:board, :private_user, owner: owner) }
+
+    before { create(:board_membership, board: private_board, user: member) }
+
+    it 'returns the single visible match' do
+      event = create(:event, board: public_board, name: 'dup')
+      expect(described_class.sole_visible_on_user_boards('dup', nil)).to eq event
+    end
+
+    it 'ignores matches the viewer cannot see' do
+      event = create(:event, board: public_board, name: 'dup')
+      create(:event, board: private_board, name: 'dup')
+      expect(described_class.sole_visible_on_user_boards('dup', stranger)).to eq event
+    end
+
+    it 'returns nil when only invisible matches exist' do
+      create(:event, board: private_board, name: 'dup')
+      expect(described_class.sole_visible_on_user_boards('dup', nil)).to be_nil
+    end
+
+    it 'returns nil when nothing matches' do
+      expect(described_class.sole_visible_on_user_boards('none', nil)).to be_nil
+    end
+
+    it 'returns nil when two or more visible matches exist' do
+      create(:event, board: public_board, name: 'dup')
+      create(:event, board: other_public_board, name: 'dup')
+      expect(described_class.sole_visible_on_user_boards('dup', nil)).to be_nil
+    end
+
+    it 'does not count TOP board events' do
+      create(:event, name: 'dup')
+      expect(described_class.sole_visible_on_user_boards('dup', nil)).to be_nil
+    end
+
+    it 'counts protected boards for guests' do
+      event = create(:event, board: protected_board, name: 'dup')
+      expect(described_class.sole_visible_on_user_boards('dup', nil)).to eq event
+    end
+
+    it 'counts private boards for members, making two matches ambiguous' do
+      create(:event, board: public_board, name: 'dup')
+      create(:event, board: private_board, name: 'dup')
+      expect(described_class.sole_visible_on_user_boards('dup', member)).to be_nil
+    end
+
+    it 'counts private boards for the owner' do
+      event = create(:event, board: private_board, name: 'dup')
+      expect(described_class.sole_visible_on_user_boards('dup', owner)).to eq event
+    end
+
+    it 'counts private boards for admins' do
+      event = create(:event, board: private_board, name: 'dup')
+      expect(described_class.sole_visible_on_user_boards('dup', admin)).to eq event
     end
   end
 
@@ -250,6 +332,70 @@ describe Event do
 
       it 'allows owner' do
         expect(described_class.creatable_on?(private_board, owner)).to be true
+      end
+    end
+  end
+
+  describe '#joinable?' do
+    let(:owner) { create(:user) }
+    let(:member) { create(:user) }
+    let(:outsider) { create(:user) }
+    let(:admin_user) { create(:user, admin: true) }
+    let(:joinable_event) do
+      create(:event, board: board, name: 'joinable-cal', title: 'Joinable Calendar',
+                     start_date: '2015-12-01', end_date: '2015-12-25', created_by: owner,
+                     updated_by: owner)
+    end
+
+    before do
+      create(:board_membership, board: board, user: member) if board.board_type_user?
+      joinable_event
+    end
+
+    context 'when the board is TOP' do
+      let(:board) { create(:board, :top) }
+
+      it 'is true for every logged-in user and false for a guest', :aggregate_failures do
+        expect(joinable_event.joinable?(nil)).to be false
+        expect(joinable_event.joinable?(outsider)).to be true
+        expect(joinable_event.joinable?(member)).to be true
+        expect(joinable_event.joinable?(admin_user)).to be true
+      end
+    end
+
+    context 'when the board is public' do
+      let(:board) { create(:board, :public_user, owner: owner) }
+
+      it 'is true for every logged-in user and false for a guest', :aggregate_failures do
+        expect(joinable_event.joinable?(nil)).to be false
+        expect(joinable_event.joinable?(outsider)).to be true
+        expect(joinable_event.joinable?(member)).to be true
+        expect(joinable_event.joinable?(owner)).to be true
+        expect(joinable_event.joinable?(admin_user)).to be true
+      end
+    end
+
+    context 'when the board is protected' do
+      let(:board) { create(:board, :protected_user, owner: owner) }
+
+      it 'is true for owner, member and admin only', :aggregate_failures do
+        expect(joinable_event.joinable?(nil)).to be false
+        expect(joinable_event.joinable?(outsider)).to be false
+        expect(joinable_event.joinable?(member)).to be true
+        expect(joinable_event.joinable?(owner)).to be true
+        expect(joinable_event.joinable?(admin_user)).to be true
+      end
+    end
+
+    context 'when the board is private' do
+      let(:board) { create(:board, :private_user, owner: owner) }
+
+      it 'is true for owner, member and admin only', :aggregate_failures do
+        expect(joinable_event.joinable?(nil)).to be false
+        expect(joinable_event.joinable?(outsider)).to be false
+        expect(joinable_event.joinable?(member)).to be true
+        expect(joinable_event.joinable?(owner)).to be true
+        expect(joinable_event.joinable?(admin_user)).to be true
       end
     end
   end

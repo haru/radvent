@@ -1,8 +1,8 @@
 ---
 title: User Boards & Multi-Event Support
 type: decision
-sources: [S009]
-updated: 2026-08-14
+sources: [S004, S009]
+updated: 2026-10-24
 ---
 
 # User Boards & Multi-Event Support
@@ -63,8 +63,10 @@ interface, but that mapping isn't confirmed by either source.
   invite links are explicitly out of scope for this version (S009).
 - Board search/discovery and moving events between boards are out of scope
   (S009).
-- All existing URLs (`/events/:name`, etc.) must keep working unchanged
-  (S009).
+- All existing URLs (`/events/:name`, etc.) were intended to keep working
+  unchanged (S009). ADR 0009 narrows this: user board event links now use
+  `/boards/:board_board_id/events/:name`, and the old name-only URL redirects
+  only when exactly one visible user board event has that name.
 - Devise itself is not modified by this feature (S009).
 
 ## UI additions

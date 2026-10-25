@@ -60,15 +60,28 @@ en:
       like: like
     errors:
       models:
+        advent_calendar_item:
+          attributes:
+            date:
+              taken: already has a slot
+        item:
+          attributes:
+            advent_calendar_item_id:
+              taken: already has an article
         event:
           attributes:
             end_date:
               different_month: must be in the same month as start date
     attributes:
+      comment:
+        user_name: Name
+        body: Comment
       advent_calendar_item:
         user_name: Name
         comment: Comment
+        date: Date
       item:
+        advent_calendar_item_id: Calendar slot
         title: Title
         title_empty: No title
         body: Body
@@ -126,6 +139,7 @@ en:
         button_edit_advent_calendar_item: Edit Info
         item_title: Entry
         button_edit_item: Edit
+        button_show_item: View
         button_create_item: Register
         item_not_created: You haven't registered yet
         item_created: You have already registered
@@ -193,6 +207,8 @@ en:
     board_management: 'Manage Boards'
   breadcrumb:
     top: 'TOP'
+  advent_calendar_items:
+    delete_failed: 'Failed to delete the slot'
   events:
     updated: 'Event updated successfully'
   boards:
@@ -247,6 +263,7 @@ en:
       add_member: 'Add Member'
       member_placeholder: 'Username or email address'
       no_members: 'No members yet'
+      deleted_user: 'Deleted user'
     member_added: 'Member added successfully'
     member_removed: 'Member removed'
     remove: 'Remove'
@@ -260,3 +277,7 @@ en:
     light: 'Light'
     dark: 'Dark'
     update_failed: 'Failed to save theme'
+  errors:
+    too_many_requests:
+      title: 'Too many requests'
+      message: 'Please wait a while and try again.'

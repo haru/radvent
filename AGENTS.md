@@ -3,7 +3,6 @@
 ## Absolute Rules
 
 - **NEVER commit, push, or create PRs** without explicit user permission.
-- **NEVER decide commit messages** — ask the user.
 - **NEVER delete or modify existing data** without explicit user approval. This applies to any real environment (development DB included): no `destroy_all` / `delete_all` / `update_all` / raw DELETE/UPDATE on existing records, no `db:reset` / re-seeding over existing data, and no file deletion — unless the exact command and its target have been shown to and approved by the user beforehand. Use throwaway/test data for verification instead.
 - **Language**: All commit messages and source code comments must be written in **English**.
 - **KISS, DRY, YAGNI**: Keep implementations simple, avoid duplicating logic, and don't build for hypothetical future requirements.
@@ -27,6 +26,9 @@ bundle exec rails s
 bundle exec rspec spec                              # all tests
 bundle exec rspec spec/models/user_spec.rb           # single file
 bundle exec rspec spec/models/user_spec.rb:42        # specific test line
+
+# E2E (Playwright, dedicated `e2e` Rails env on port 4500; not part of CI or rspec)
+yarn e2e                                            # see docs/e2e-testing.md
 
 # Lint (run ALL before completing any task)
 sh build-scripts/lint.sh                             # rubocop + YARD 100% + eslint
@@ -61,7 +63,7 @@ Event ──< AdventCalendarItem >── User
 
 | Gotcha | Detail |
 |--------|--------|
-| **Event routing uses `name`, not ID** | `show_event_path(event.name)` — never `event_path(event)` |
+| **Event routing uses `name`, not ID** | Link with `event_page_path(event)` / `edit_event_page_path(event)` (TOP board: `/events/:name`; user board: `/boards/:board_id/events/:name`) — never `event_path(event)` |
 | **Board routing uses `board_id` slug** | `resources :boards, param: :board_id` — use `board_path(board.board_id)` |
 | **AdventCalendarItem.date is Integer** | Query with `.where(date: date.day)` |
 | **Comment has no user_id** | Stores `user_name` as string only |

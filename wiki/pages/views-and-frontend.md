@@ -1,8 +1,8 @@
 ---
 title: Views and Frontend
 type: component
-sources: [S005, S010, S011, S015, S017, S019]
-updated: 2026-09-18
+sources: [S005, S010, S011, S015, S017, S019, S031, S034]
+updated: 2026-10-25
 ---
 
 # Views and Frontend
@@ -82,6 +82,12 @@ decision record (S011).
   wraps its list area in a Turbo Frame and paginates via a plain in-frame
   "load more" link — no Stimulus controller or custom `fetch` code — see
   [Other Boards Listing](./other-boards-listing.md) (S019).
+- On the entry information page, a published article's author gets a "View"
+  button instead of "Edit" — see
+  [Entry Page View-Article Button](./entry-page-view-article-button.md) (S031).
+- The navbar trail "TOP / board / event" links article, slot and event pages
+  back to the calendar via a layout-only `@breadcrumb_event` — see
+  [Navbar Breadcrumb](./navbar-breadcrumb.md) (S034).
 
 See [Domain Model](./domain-model.md) for the underlying entities and
 [Controllers and Routing](./controllers-and-routing.md) for how layouts are

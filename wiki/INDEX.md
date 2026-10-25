@@ -7,22 +7,38 @@ page files, not here.
 ## component
 - [Tech Stack](pages/tech-stack.md) — languages, frameworks, and tooling the app is built on
 - [Domain Model](pages/domain-model.md) — core models and their relationships (Board, Event, Item, etc.)
-- [Authorization](pages/authorization.md) — admin filters, per-board visibility, edit/delete gating, and the image-upload access-control gap (split from Domain Model)
+- [Authorization](pages/authorization.md) — admin filters, per-board visibility, edit/delete gating, and image access control (split from Domain Model)
 - [Controllers and Routing](pages/controllers-and-routing.md) — routing conventions, layouts, and authorization filters
+- [Controller Groups](pages/controller-groups.md) — per-controller responsibilities (split from Controllers and Routing)
 - [Views and Frontend](pages/views-and-frontend.md) — HAML templating, Stimulus/Turbo, styling, and the Markdown editor UI
 - [Configuration](pages/configuration.md) — Rails env vars, initializers, and per-environment settings
 - [JavaScript and CSS Asset Pipeline](pages/javascript-asset-pipeline.md) — JS entry point, Stimulus controller registry, MDB/Turbo lifecycle, image upload flow
+- [E2E Scenario Design](pages/e2e-scenario-design.md) — serial stories with `AS x-y` steps, saved login states under live rate limits, Tokyo-date-based events, browser-error detection
 
 ## decision
 - [Project Origin](pages/project-origin.md) — fork of nanonanomachine/radvent and what was added
 - [User Boards & Multi-Event Support](pages/user-boards-feature.md) — design spec for user-created boards, board-type access rules, and the object-level permission interface
 - [EasyMDE Editor Migration](pages/easymde-editor-migration.md) — planned removal of the custom preview pane/help modal/file-select UI in favor of EasyMDE's built-ins
-- [Toolbar Image Upload — UX and Access Control](pages/image-upload-toolbar-button.md) — spinner/disable UX, edit-permission upload gate, and the deliberate lack of view-time access control
+- [Toolbar Image Upload — UX and Access Control](pages/image-upload-toolbar-button.md) — spinner/disable UX, edit-permission upload gate, and the original lack of view-time access control (superseded by feature 010 for new images)
+- [Protected Image Serving (Board Image Access Control)](pages/protected-image-serving.md) — new images stored outside `public/`, served via an authorized endpoint with one uniform 404; legacy images left public
+- [Board Visibility on Show Pages](pages/show-page-visibility.md) — calendar/article/slot `show` actions apply `visible?` before `find_board`; one 404 for calendar/article (slot page later author-gated)
 - [Board Deletion — ID Confirmation & Dialog](pages/board-delete-id-confirmation.md) — typed board-ID gate for deletion, server-side re-verification, and the reversed decision to keep the native confirm dialog too
 - [Manual Theme Selection (Light/Dark/System)](pages/theme-switch.md) — My Page theme picker, the `data-theme` CSS scheme, and why it saves through a separate endpoint from Devise's registration form
 - [Dark Theme — Full-App Color Coverage](pages/dark-theme-full-coverage.md) — closing hardcoded-color gaps (tables, comments, nav, Markdown, EasyMDE) left after the theme switch
 - [Devise Auth Views: ERB → HAML + .panel → .card (flagged)](pages/devise-views-format-conversion.md) — split from the page above; a flagged conflict with a prior "never convert Devise views" constraint
+- [Comment Authorization (Posting and Deleting)](pages/comment-authorization.md) — `Item#readable?`, delete-order rule, and the uniform 404 vs 403 split for comments
+- [User, Event, Slot and Article Authorization](pages/user-event-item-authorization.md) — admin-only user edit, one-value board/event/slot resolution, `Event#joinable?`, parent keys removed from strong params, and uniqueness rules
+- [Article Preview Authorization](pages/article-preview-authorization.md) — `preview_new` split, existing filters reused, slot id dropped from preview params, 404-before-403 ordering
+- [Password Reset Hides Account Existence](pages/password-reset-account-hiding.md) — `Users::PasswordsController#create` answers identically for any well-formed address; delivery failures only logged (ADR-0008)
+- [Likes Hardening](pages/likes-hardening.md) — sign-in and readable-article gate, idempotent create/destroy, create-time uniqueness validation, distinct like counts
 - [Other Boards Listing (Load-More Pagination)](pages/other-boards-listing.md) — Ruby-side sort key reusing `visible?`, numeric-ID routing so TOP boards can share it, and Turbo-Frame-only "load more"
+- [Event Addressing by Board (Name Collision Fix)](pages/event-addressing-by-board.md) — board-scoped event URLs, TOP-only name URLs, 302 legacy redirect, visibility-before-permission order
+- [Startup Log Secret Hygiene](pages/startup-log-secret-hygiene.md) — `env` dump and `sh -x` trace removed from container startup; file-reading RSpec guard
+- [Entry Page — "View Article" Button](pages/entry-page-view-article-button.md) — published articles show a View button instead of Edit, reusing `published?` and `editable_by?`
+- [Slot Info Page — Author and Admin Only](pages/slot-info-page-access.md) — `#show` reuses the edit-side filters; guests get the sign-in redirect, invisible boards 404, non-editors 403 (ADR-0010)
+- [Navbar Breadcrumb — Event Segment](pages/navbar-breadcrumb.md) — layout-only `@breadcrumb_event` assigned after authorization filters, saved-title helper, `aria-current` on the calendar page, CSS ellipsis
+- [Authentication Rate Limits and Account Lockout](pages/auth-rate-limit-and-lockout.md) — per-IP and per-address limits via Solid Cache, 429 page, time-based invisible lockout (ADR-0011, ADR-0012)
+- [E2E Tests with Playwright (Dedicated Rails Environment)](pages/e2e-testing.md) — `e2e` env on port 4500, per-run SQLite reset, one-command runner, Chromium via the devcontainer (ADR-0013)
 
 ## howto
 - [Development Setup](pages/development-setup.md) — local install, running, and testing

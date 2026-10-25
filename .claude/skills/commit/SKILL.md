@@ -15,7 +15,7 @@ disable-model-invocation: false
 Prepare a single git commit for the outstanding changes, but **never commit
 without the user's explicit go-ahead on both the action and the message.**
 
-> ⚠️ Per this project's ABSOLUTE RULES in [CLAUDE.md](../../../CLAUDE.md):
+> ⚠️ Per this project's Absolute Rules in [AGENTS.md](../../../AGENTS.md):
 > - Do **not** run `git commit` until the user has explicitly approved.
 > - Do **not** pick the commit message yourself and commit with it — propose
 >   it, then let the user confirm or rewrite it before you commit.
@@ -41,7 +41,7 @@ Run in parallel:
 
 ### Step 2: Run lint
 
-CLAUDE.md requires lint to pass after any code change, before considering work
+AGENTS.md requires lint to pass after any code change, before considering work
 done. If the diff touches code (not just docs/config), run:
 
 ```bash

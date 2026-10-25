@@ -14,6 +14,11 @@ RSpec.describe BoardMembershipsController do
         get :index, params: { board_board_id: board.board_id }
         expect(response).to redirect_to(new_user_session_path)
       end
+
+      it 'tells the guest to sign in or sign up' do
+        get :index, params: { board_board_id: board.board_id }
+        expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')
+      end
     end
 
     context 'when authenticated as non-owner' do
@@ -37,6 +42,23 @@ RSpec.describe BoardMembershipsController do
       it 'renders datatable controller on the memberships table' do
         get :index, params: { board_board_id: board.board_id }
         expect(response.body).to include('data-controller="datatable"')
+      end
+    end
+
+    context 'when a member has deleted their account' do
+      render_views
+      before do
+        sign_in owner
+        create(:board_membership, board: board, user: other_user)
+        other_user.destroy
+      end
+
+      it 'lists the row as a deleted user and keeps the remove button', :aggregate_failures do
+        get :index, params: { board_board_id: board.board_id }
+        expect(response).to have_http_status(:success)
+        page = Capybara.string(response.body)
+        expect(page).to have_css('td', text: I18n.t('board_memberships.index.deleted_user'))
+        expect(page).to have_button(I18n.t('board_memberships.remove'))
       end
     end
 

@@ -1,8 +1,8 @@
 ---
 title: Domain Model
 type: component
-sources: [S001, S002, S003, S004, S006, S008, S009, S010, S012, S013, S015, S019]
-updated: 2026-09-18
+sources: [S001, S002, S003, S006, S008, S010, S015, S019, S023, S029]
+updated: 2026-10-25
 ---
 
 # Domain Model
@@ -25,12 +25,13 @@ Board ──< Event ──< AdventCalendarItem >── User
 | `User` | Devise-authenticated user. Requires `name` present. Has an `admin` boolean flag, checked via an `admin?` helper (S008). Feature `007-theme-switch` adds a `theme` enum (`system`/`light`/`dark`, string-backed, default `system`) controlling UI theme — see [Manual Theme Selection](./theme-switch.md) (S015) |
 | `Board` | Container for events. Two types: `top` (system-wide) and `user` (user-created), with `public` / `protected` / `private` visibility. Routed by slug via `board_id` (S003). Feature `009-board-list` adds `#list_sort_key`, an instance method ranking a board by its newest published-item activity — see [Other Boards Listing](./other-boards-listing.md) (S019) |
 | `BoardMembership` | Join table between `Board` and `User` (membership management, owner-added only) |
-| `Event` | Advent Calendar event. Belongs to a `Board`. `name` doubles as the routing slug; `title` and `name` both have unique indexes (S003) |
+| `Event` | Advent Calendar event. Belongs to a `Board`. `name` doubles as the routing slug; `title` and `name` are each unique per board (composite unique index with `board_id`, `uniqueness: { scope: :board_id }`), so two boards may share an event name (S029). Pages are addressed by board + name for user boards — see [Event Addressing by Board](./event-addressing-by-board.md) (S029) |
 | `AdventCalendarItem` | Calendar date slot (`date` is an Integer 1–31). Exposes a `published?` method that gates visibility once the claimed date passes (S006) |
 | `Item` | Markdown article. One-to-one with `AdventCalendarItem` |
 | `Like` | Like on an article |
 | `Comment` | Comment on an article. Stores `user_name` as a plain string, not a `User` reference |
-| `Attachment` | File attachment via CarrierWave (`ImageUploader`); created by the editor's image-upload endpoint — see [JavaScript and CSS Asset Pipeline](./javascript-asset-pipeline.md) (S010) |
+| `Attachment` | File attachment via CarrierWave (`ImageUploader`); created by the editor's image-upload endpoint — see [JavaScript and CSS Asset Pipeline](./javascript-asset-pipeline.md) (S010); implements `visible?`/`editable?`/`deletable?` via its article, served through [Protected Image Serving](./protected-image-serving.md) (S023) |
+
 
 A `Board` can hold multiple `Event`s, meaning a single install supports
 multiple concurrent Advent Calendar events with independent membership and
@@ -57,6 +58,6 @@ Devise handles authentication; a separate `admin` flag and a set of
 controller-level filters and object-level rules drive authorization — moved
 to its own page once this one passed the wiki's word-count split threshold.
 See [Authorization](./authorization.md) for admin filters, board visibility,
-edit/delete gating, and the image-upload access-control gap.
+edit/delete gating, and image access control.
 
 Built with the stack in [Tech Stack](./tech-stack.md).

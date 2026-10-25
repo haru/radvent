@@ -1,5 +1,8 @@
 require "active_support/core_ext/integer/time"
 
+require_relative '../../lib/radvent/mail_settings'
+require_relative '../../lib/radvent/cache_error_handler'
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -61,13 +64,31 @@ Rails.application.configure do
   config.log_tags = [ :request_id ]
 
   # Use a different cache store in production.
-  # config.cache_store = :mem_cache_store
+  # Solid Cache keeps the shared rate-limit counters in the primary database (docs/adr/0011-*).
+  # Its default error handler logs nothing here, so a transient store failure gets an explicit one.
+  config.cache_store = :solid_cache_store, { error_handler: Radvent::CacheErrorHandler.method(:call) }
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter     = :resque
   # config.active_job.queue_name_prefix = "radvent_production"
 
   config.action_mailer.perform_caching = false
+
+  # Password reset mails need the site URL and an SMTP server; both come from the environment
+  # (see README). When unset the app still boots and the delivery failure is logged, but a set and
+  # malformed value (e.g. RADVENT_URL without a scheme, a non-numeric SMTP_PORT) fails the boot. The
+  # log line relies on raise_delivery_errors staying true (the default); do not turn it off.
+  mail_url_options = Radvent::MailSettings.default_url_options(ENV)
+  config.action_mailer.default_url_options = mail_url_options if mail_url_options
+  mail_smtp_settings = Radvent::MailSettings.smtp_settings(ENV)
+  if mail_smtp_settings
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.smtp_settings = mail_smtp_settings
+  end
+  missing_mail_variables = Radvent::MailSettings.missing_variables(ENV)
+  unless missing_mail_variables.empty?
+    warn "[radvent] Password reset mails will not be delivered properly: #{missing_mail_variables.join(', ')} not set"
+  end
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.

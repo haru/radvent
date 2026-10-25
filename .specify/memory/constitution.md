@@ -1,17 +1,21 @@
 <!--
 Sync Impact Report
 ==================
-Version Change: 1.2.0 → 1.3.0
+Version Change: 1.4.0 → 1.5.0
 
 Modified Principles: None
 
 Added Sections:
-- Principle X: Data Preservation (No Destructive Operations Without Approval)
+- Principle XII: End-to-End Testing (Playwright)
+
+Modified Sections:
+- Code Review & Quality Gates: E2E suite (`yarn e2e`) and docs/e2e-scenarios.md must be kept in
+  sync with user-visible changes before a PR (Principle XII)
 
 Removed Sections: None
 
 Templates Requiring Updates:
-✅ AGENTS.md - already updated with the matching Absolute Rule (commit 41b707a)
+⚠ AGENTS.md - consider adding a matching rule (not modified by this command)
 
 Follow-up TODOs:
 - None
@@ -150,6 +154,51 @@ approval (e.g. wiping the development database to set up manual-test fixtures) c
 loss. Requiring the exact command and target to be approved beforehand keeps destructive operations
 deliberate and reviewable.
 
+### XI. Migration Safety Against Existing Data (Migrations Never Fail on Stored Data)
+A migration MUST NEVER fail because of data that was saved in the past. This applies to every change,
+not only the current feature. Any data state that any released version of the application could have
+written (including states reachable only through race conditions, direct requests that bypass the UI,
+or validations that did not exist yet) MUST be assumed to exist in production.
+
+- Do NOT add a constraint that existing data may violate (unique index, NOT NULL, foreign key, check
+  constraint, narrower column type or length). Such a constraint is permitted ONLY when it is proven
+  that no stored data can violate it — for example, because the same rule has been enforced at the
+  database level since the data was first written. Otherwise, enforce the rule in application code
+  for new writes only.
+- Do NOT make a migration "safe" by deleting, merging, or rewriting existing records to fit a new
+  constraint. That is a destructive operation and falls under Principle X.
+- Data migrations and backfills MUST handle every value that can exist in the column (NULL, empty
+  strings, duplicates, out-of-range or malformed values, orphaned references) without raising.
+- Every migration that changes schema constraints or existing data MUST have a test that runs it
+  against deliberately "dirty" existing data representing those past states, and verifies that it
+  completes without error and without losing records.
+
+**Rationale**: A migration that fails on existing data blocks the deployment of every operator who
+runs this software, and the failing data is often invisible until then (for example, duplicates
+created by simultaneous requests). The data was valid under the rules of the version that wrote it,
+so the new version MUST accept it rather than demand that operators repair it by hand.
+
+### XII. End-to-End Testing (Playwright)
+User-visible behavior MUST be verified by the Playwright E2E suite (`yarn e2e`, see
+`docs/e2e-testing.md`) in addition to RSpec:
+
+- A change that adds or alters a screen, a user flow, or browser-side behavior (Stimulus controllers,
+  forms, navigation, permissions visible in the UI) MUST add or update an E2E scenario covering it.
+  Scenarios MUST be listed in `docs/e2e-scenarios.md`, kept in sync with the tests.
+- The E2E suite MUST be run and MUST pass before a PR is created for such a change. A failing or
+  skipped scenario MUST be reported with its output, never hidden, retried until green without
+  investigation, or deleted to make the suite pass.
+- A bug found by an E2E scenario MUST be fixed following Principle VI (a failing RSpec test first
+  where the defect is reproducible at that level), and the scenario MUST remain as a regression guard.
+- E2E tests MUST run only against the dedicated `e2e` Rails environment and its own database
+  (port 4500), never against development or production data (Principle X).
+- E2E tests are not part of CI or RSpec and MUST NOT count toward the RSpec coverage figure
+  (Principle I).
+
+**Rationale**: Unit and controller specs cannot detect broken screens, JavaScript wiring, or
+cross-page flows. A maintained E2E suite catches these regressions, and tying it to the change that
+causes them keeps scenarios and behavior from drifting apart.
+
 ## Security & Access Control
 
 Devise authentication is REQUIRED for user access. Admin actions protected with `admin_user!` helper.
@@ -177,7 +226,9 @@ test coverage written via TDD (failing tests written before implementation code)
 DRY/YAGNI (no unjustified complexity or duplication), Significant design decisions are captured as
 append-only ADRs under `docs/adr/` (and linked from `docs/adr/README.md`), No silent fallbacks mask
 failures, No destructive operation was performed on existing data without explicit user approval,
-Database migrations are safe, No hardcoded secrets or credentials.
+Database migrations are safe and cannot fail on any previously stored data (tested against dirty
+existing data per Principle XI), E2E scenarios are added/updated for user-visible changes and
+`yarn e2e` passes (Principle XII), No hardcoded secrets or credentials.
 
 **Rationale**: Quality gates prevent broken code from reaching production. Automated checks catch
 common issues early.
@@ -194,4 +245,4 @@ For runtime development guidance, refer to AGENTS.md which contains detailed con
 procedures, and project-specific gotchas. AGENTS.md is the authoritative reference for implementation
 details and should be consulted before making changes.
 
-**Version**: 1.3.0 | **Ratified**: 2026-02-27 | **Last Amended**: 2026-09-17
+**Version**: 1.5.0 | **Ratified**: 2026-02-27 | **Last Amended**: 2026-10-25

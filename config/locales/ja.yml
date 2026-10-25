@@ -8,6 +8,14 @@ ja:
           has_one: "%{record}が存在しているので削除できません"
           has_many: "%{record}が存在しているので削除できません"
       models:
+        advent_calendar_item:
+          attributes:
+            date:
+              taken: にはすでに枠があります
+        item:
+          attributes:
+            advent_calendar_item_id:
+              taken: にはすでに記事があります
         event:
           attributes:
             end_date:
@@ -21,10 +29,15 @@ ja:
       user: ユーザ
       like: いいね
     attributes:
+      comment:
+        user_name: お名前
+        body: コメント
       advent_calendar_item:
         user_name: お名前
         comment: コメント
+        date: 日付
       item:
+        advent_calendar_item_id: 日付枠
         title: タイトル
         title_empty: 無題
         body: 本文
@@ -193,6 +206,9 @@ ja:
       header:
         one: "%{model}にエラーが発生しました"
         other: "%{model}に%{count}個のエラーが発生しました"
+    too_many_requests:
+      title: 'リクエストが多すぎます'
+      message: 'しばらく時間をおいてから、もう一度お試しください。'
   helpers:
     select:
       prompt: 選択してください
@@ -280,6 +296,7 @@ ja:
         button_edit_advent_calendar_item: 名前とコメントを編集する
         item_title: 記事の登録
         button_edit_item: 投稿記事を編集する
+        button_show_item: 投稿記事を表示する
         button_create_item: 記事を登録する
         item_not_created: 記事が登録されていません
         item_created: 記事が登録されています
@@ -393,6 +410,8 @@ ja:
     created: 'ボードを作成しました'
     updated: 'ボードを更新しました'
     deleted: 'ボードを削除しました'
+  advent_calendar_items:
+    delete_failed: '枠を削除できませんでした'
   events:
     updated: 'イベントを更新しました'
   board_memberships:
@@ -401,6 +420,7 @@ ja:
       add_member: 'メンバーを追加'
       member_placeholder: 'ユーザー名またはメールアドレス'
       no_members: 'メンバーがいません'
+      deleted_user: '削除されたユーザー'
     member_added: 'メンバーを追加しました'
     member_removed: 'メンバーを削除しました'
     remove: '削除'
@@ -419,6 +439,11 @@ ja:
       signed_in: ""
       signed_out: ""
       already_signed_out: ""
+    failure:
+      # One shared wording for every sign-in failure: wrong password, unknown
+      # address and a locked account all answer the same (FR-009a).
+      invalid: 'メールアドレスかパスワードが違うか、一時的にログインが制限されています。'
+      not_found_in_database: 'メールアドレスかパスワードが違うか、一時的にログインが制限されています。'
   time:
     am: 午前
     formats:

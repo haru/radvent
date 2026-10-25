@@ -24,7 +24,7 @@
 
   %div.row
     - @events.each do |event|
-      = link_to show_event_path(event.name), class: "event-card card", style: "width: 30rem;" do
+      = link_to event_page_path(event), class: "event-card card", style: "width: 30rem;" do
         %div.card-header
           %h4
             %i.far.fa-calendar-alt

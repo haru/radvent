@@ -1,4 +1,5 @@
 = form_for advent_calendar_item do |f|
+  = render 'errors', advent_calendar_item: advent_calendar_item
   %fieldset
     %div.form-group
       = f.label :user_name, t("activerecord.attributes.advent_calendar_item.user_name")

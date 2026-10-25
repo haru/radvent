@@ -78,6 +78,7 @@ gem 'haml-rails', '~> 3.1'
 gem 'http_accept_language', '~> 2.1'
 gem 'i18n_generators', '~> 2.2'
 gem 'marked-rails', '~> 9.1'
+gem 'solid_cache', '~> 1.0'
 
 # if you don't need mysql, use "--without mysql" option.
 group :mysql do

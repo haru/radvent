@@ -241,6 +241,19 @@ services:
 | `DB_PORT` | DBポート番号 | MySQL: `3306` / PostgreSQL: `5432` |
 | `DB_CREATE_ON_START` | `true` にすると起動時に `db:create` を実行 | `false` |
 | `RADVENT_TITLE` | ヘッダーに表示するサイト名 | `Advent Calendar` |
+| `RADVENT_URL` | メール内のリンクに使うサイトのURL(例: `https://advent.example.com`)。**パスワード再設定に必須** | — |
+| `RADVENT_MAIL_FROM` | パスワード再設定メールの送信元アドレス(既定値は多くのSMTPサーバに拒否されます) | `please-change-me-at-config-initializers-devise@example.com` |
+| `SMTP_ADDRESS` | SMTPサーバのホスト名。**パスワード再設定に必須** | — |
+| `SMTP_PORT` | SMTPポート番号 | `587` |
+| `SMTP_USERNAME` | SMTPユーザー名 | — |
+| `SMTP_PASSWORD` | SMTPパスワード | — |
+| `SMTP_AUTHENTICATION` | `plain` / `login` / `cram_md5` / `xoauth2`(それ以外は起動エラー) | — |
+| `SMTP_DOMAIN` | HELOドメイン | — |
+| `SMTP_ENABLE_STARTTLS_AUTO` | `false`(大文字小文字は問わない)でSTARTTLSを無効にする。それ以外の値では有効のまま | `true` |
+
+> **パスワード再設定メール**: メールを届けるには `RADVENT_URL` と `SMTP_ADDRESS` の設定が必須です。登録済みのアドレスが分からないように、再設定の要求にはつねに同じ案内を返します。メールを送れなかった場合は、ログに `Password reset mail was not delivered` と(例外クラス名のみ)記録されるだけです。起動時に `RADVENT_URL`、`SMTP_ADDRESS`、`RADVENT_MAIL_FROM` のどれかが未設定なら警告を出し、`RADVENT_URL`、`SMTP_PORT`、`SMTP_AUTHENTICATION` に使えない値が入っていると起動に失敗します。
+
+> **レート制限とアカウントロック**: ログインは接続元ごとに 1 分あたり 10 回、新規登録とパスワード再設定の要求は接続元ごとに 1 時間あたり 5 回までです。再設定メールは同じアドレス宛てに 5 分に 1 通までです。ログインに 10 回連続で失敗するとアカウントを 15 分ロックします(パスワードを再設定すると解除されます)。回数は主データベースの Solid Cache で全プロセスが共有します(`db:migrate` が必要です。Docker イメージは起動時に実行します)。リバースプロキシや CDN の配下で動かす場合は、そのアドレスを `config.action_dispatch.trusted_proxies` に追加してください。追加しないと全員が 1 つの接続元として数えられます。監視するログは `Account locked: user_id=`、`Rate limit exceeded:`、`SolidCacheStore: increment failed`(本番のみ。回数の記録に失敗し、制限なしで通した)です。
 
 ---
 
