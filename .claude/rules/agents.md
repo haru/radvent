@@ -39,6 +39,13 @@ Launch 3 agents in parallel:
 First agent 1, then agent 2, then agent 3
 ```
 
+### Review Agents (`speckit-review-run`)
+
+When running `speckit-review-run`, ALWAYS launch all enabled review agents in parallel
+(multiple Agent tool calls in a single message), even if the user did not pass `parallel`.
+Do not run them sequentially unless the user explicitly asks for sequential execution.
+This overrides the "Sequential approach" default in the skill's step 6.
+
 ## Multi-Perspective Analysis
 
 For complex problems, use split role sub-agents:
