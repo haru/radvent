@@ -37,9 +37,12 @@ be configured.
 
 ## What is reset
 
-Only `db/radvent_e2e.sqlite3` (and its `-shm` / `-wal` files). Development and
-test databases, `db/schema.rb` and `public/assets` are never touched. Mail uses
-the `:test` delivery method and never leaves the machine.
+`db/radvent_e2e.sqlite3` (and its `-shm` / `-wal` files), `tmp/e2e/` (uploaded
+images) and `log/e2e.log` are recreated on every run. Development and test
+databases, `db/schema.rb`, `public/assets` and `storage/` are never touched.
+`app/assets/builds/` is rebuilt by the asset build (the content is the same one
+development uses). Mail uses the `:test` delivery method and never leaves the
+machine.
 
 ## Reading a failure
 
@@ -48,7 +51,7 @@ the `:test` delivery method and never leaves the machine.
 | Scenario failed | non-zero | failing test and step name (`AS 3-1 ...`), expected vs actual; later tests show as "did not run" |
 | Port 4500 in use | non-zero | Playwright's "already used" error; no scenario runs |
 | Asset build / DB reset / server start failed | non-zero | the script output and "webServer was not able to start" |
-| Server not answering within 180 s | non-zero | webServer timeout |
+| Server not answering within 300 s | non-zero | webServer timeout; the Rails log is in the output (`--log-to-stdout`) |
 
 Artifacts: `test-results/` (screenshot and trace of failed tests),
 `playwright-report/` (HTML report), `log/e2e.log` (Rails log). All are
@@ -58,9 +61,13 @@ git-ignored.
 
 - E2E is not part of CI or `bundle exec rspec`; run it on demand.
 - Stories run in order inside one `test.describe.serial` and hand data to the
-  next story, so a failure stops the rest. There are no retries.
-- Rate limits stay enabled. Each user logs in once and the login state is
-  reused for later tests.
+  next story, so a failure stops the rest. There are no retries. A single story
+  cannot be run alone with `--grep`: later stories need the data and login
+  states of the earlier ones.
+- Rate limits stay enabled. The login state of alice and bob is captured once
+  right after sign-up and reused; only US2 posts the login form.
+- Uncaught browser errors (`pageerror`, `console.error`) fail the test, except
+  the console lines the browser prints for 4xx/5xx answers.
 
 ## Layout of the tests
 
@@ -68,14 +75,16 @@ git-ignored.
 |------|------|
 | `playwright.config.js` | port 4500, Chromium, `ja-JP` / `Asia/Tokyo`, failure artifacts, `webServer` |
 | `e2e/user-journey.spec.js` | the scenarios: US2 (login, sign-up), US3 (board, events), US4 (articles), US5 (comments, likes). Each acceptance scenario is a `test.step` named `AS <story>-<n> ...` |
-| `e2e/support/accounts.js` | the three test accounts, login / logout helpers, login-state reuse |
+| `e2e/support/accounts.js` | the three test accounts, login / logout helpers, login-state reuse, context helpers |
+| `e2e/support/js-errors.js` | collects browser errors so the test fails on them |
+| `e2e/support/dialog.js` | accepts the next confirm dialog (fails if none appears) |
 | `e2e/support/dates.js` | event periods computed from today's date in Tokyo |
-| `e2e/support/editor.js` | typing into the EasyMDE (CodeMirror) editor |
+| `e2e/support/editor.js` | typing into the EasyMDE (CodeMirror) editor, opening the preview |
 
-Dates: the main events cover the whole previous month (every slot is already
+Dates: the main event covers the whole previous month (every slot is already
 published) and a second event covers days 1-7 of the same month two years
 ahead (never published). The server's date is not manipulated.
 
 Items (articles) have no required field: saving an empty title succeeds and the
-article is shown as 無題. AS 4-6 therefore pins that behaviour down instead of
-an input error.
+article is shown as 無題. AS 4-6 therefore provokes the input error on an event
+(empty title) and a supplementary step pins the 無題 behaviour of articles down.

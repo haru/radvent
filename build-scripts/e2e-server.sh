@@ -15,12 +15,21 @@ export SECRET_KEY_BASE_DUMMY=1
 # git-ignored and comes from the developer's own database, so point at a file that never
 # exists to always build the schema from the migrations.
 export SCHEMA=db/e2e_schema_unused.rb
+if [ -e "$SCHEMA" ]; then
+  echo "$SCHEMA must not exist (see the comment above)" >&2
+  exit 1
+fi
+
+# Start every run with an empty upload directory and an empty log, so log/e2e.log covers one run.
+rm -rf tmp/e2e
+: > log/e2e.log
 
 bin/rails assets:precompile
 # One rails process per task: after db:drop in the same process, db:migrate and db:seed
-# silently do nothing.
+# were observed to silently do nothing.
 bin/rails db:drop
 bin/rails db:create
 bin/rails db:migrate
 bin/rails db:seed
-exec bin/rails server -p 4500 -b 127.0.0.1
+# --log-to-stdout: request logs and backtraces show up in the Playwright output.
+exec bin/rails server -p 4500 -b 127.0.0.1 --log-to-stdout

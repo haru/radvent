@@ -22,7 +22,7 @@
     "copy:fonts": "cp -r node_modules/@fortawesome/fontawesome-free/webfonts public/assets/webfonts",
     "e2e": "playwright test",
     "lint": "eslint app/javascript/**/*.js \"e2e/**/*.js\" playwright.config.js",
-    "lint:fix": "eslint app/javascript/**/*.js \"e2e/**/*.js\" playwright.config.js --fix"
+    "lint:fix": "yarn lint --fix"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

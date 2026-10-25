@@ -11,8 +11,9 @@ Markdown editor, Turbo and CSRF-protected scripts (likes, comments) are not
 exercised end to end (Feature 021). The `test` environment cannot host such
 tests: it disables CSRF protection, so a script that forgets the token would
 still pass, and it is declared RSpec-only. `development` sends mail over SMTP,
-uses a null cache (rate limits do not work) and shares `tmp/pids/server.pid`
-with a running dev server. `production` requires SMTP settings and Solid Cache.
+uses a null cache by default (rate limits do not work unless `rails dev:cache`
+is on) and shares `tmp/pids/server.pid` with a running dev server. `production`
+expects SMTP settings (it only warns without them) and Solid Cache.
 `config/database.yml` is git-ignored and generated per developer, so adding an
 `e2e:` entry to the example file would not reach existing checkouts.
 
@@ -21,7 +22,8 @@ with a running dev server. `production` requires SMTP settings and Solid Cache.
 - Add a dedicated Rails environment `e2e` (`config/environments/e2e.rb`):
   production-like (eager load, no reloading, precompiled assets under
   `/e2e-assets`), CSRF protection left on, `:memory_store` cache so rate-limit
-  counters start fresh on every boot, and `:test` mail delivery.
+  counters start fresh on every boot, `:test` mail delivery, and uploaded images
+  under `tmp/e2e/protected_uploads` instead of `storage/protected_uploads`.
 - Select the database with `DATABASE_URL=sqlite3:db/radvent_e2e.sqlite3`, set
   unconditionally inside the server script. Without it, Rails raises instead of
   falling back to another environment's database.
@@ -40,10 +42,13 @@ with a running dev server. `production` requires SMTP settings and Solid Cache.
 
 ## Consequences
 
-- Only `db/radvent_e2e.sqlite3` is ever deleted; development and test
-  databases, `db/schema.rb` and `public/assets` are untouched.
-- Rate limits stay enabled, so the scenarios reuse each user's login state
-  instead of logging in repeatedly.
+- Only `db/radvent_e2e.sqlite3`, `tmp/e2e/` and `log/e2e.log` are reset;
+  development and test databases, `db/schema.rb`, `public/assets` and
+  `storage/` are untouched.
+- Rate limits stay enabled, so the scenarios capture each user's login state
+  once, right after sign-up, and reuse it instead of logging in repeatedly.
+- Uncaught browser errors fail the test, and the Rails log is printed to the
+  Playwright output (`--log-to-stdout`).
 - E2E is not part of CI or `bundle exec rspec`; it is run on demand.
 
 ## Alternatives considered

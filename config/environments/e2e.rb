@@ -1,8 +1,7 @@
-require "active_support/core_ext/integer/time"
-
 # The e2e environment is used exclusively by the Playwright E2E tests
-# (`yarn e2e`, see docs/e2e-testing.md). It behaves like production, but never
-# sends mail, keeps CSRF protection on and uses a throwaway database.
+# (`yarn e2e`, see docs/e2e-testing.md). It is production-like, but never sends
+# mail and keeps CSRF protection on. The throwaway database is selected by
+# DATABASE_URL in build-scripts/e2e-server.sh.
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -27,8 +26,9 @@ Rails.application.configure do
   # Rate-limit counters live in the server process, so every boot starts from zero.
   config.cache_store = :memory_store
 
-  # Keep uploads out of the development storage directory.
-  config.active_storage.service = :test
+  # Keep uploaded images out of the development directory (storage/protected_uploads), where the
+  # E2E database's ids would collide with real records.
+  config.x.protected_upload_root = Rails.root.join('tmp/e2e/protected_uploads')
 
   # Never deliver mail to the real world.
   config.action_mailer.perform_caching = false

@@ -6,3 +6,10 @@ export async function fillMarkdown(page, text, { replace = false } = {}) {
   }
   await page.keyboard.type(text)
 }
+
+// Clicks the preview button and returns the page of the preview window.
+export async function openPreview(page) {
+  const popup = page.waitForEvent('popup')
+  await page.getByRole('button', { name: 'プレビュー' }).click()
+  return popup
+}
