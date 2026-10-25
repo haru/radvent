@@ -47,6 +47,15 @@ RSpec.describe CommentsController do
       end
     end
 
+    context 'when requested as a Turbo Stream' do
+      it 'responds with a stream instead of redirecting, so the scroll position is kept', :aggregate_failures do
+        post :create, params: { comment: { user_name: 'guest', body: 'hi', item_id: item.id } }, format: :turbo_stream
+        expect(response).to have_http_status(:ok)
+        expect(response.media_type).to eq 'text/vnd.turbo-stream.html'
+        expect(response).to render_template('comments/create')
+      end
+    end
+
     context 'when the board is private' do
       let(:visibility) { :private }
 
