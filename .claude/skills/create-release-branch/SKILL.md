@@ -16,7 +16,7 @@ Create a `release/<version>` branch from `develop`, bump the `VERSION` constant
 in [lib/radvent/version.rb](../../../lib/radvent/version.rb), and prepare the
 version-bump commit for the user to approve.
 
-> ⚠️ Per this project's ABSOLUTE RULES in [CLAUDE.md](../../../CLAUDE.md):
+> ⚠️ Per this project's Absolute Rules in [AGENTS.md](../../../AGENTS.md):
 > - Creating the branch is a local, reversible action and does not need
 >   separate approval, but **do not run `git commit` or `git push` without
 >   explicit user approval.**
@@ -95,7 +95,7 @@ untouched.
 
 ### Step 5: Lint
 
-CLAUDE.md requires lint to pass after any code change:
+AGENTS.md requires lint to pass after any code change:
 
 ```bash
 sh build-scripts/lint.sh

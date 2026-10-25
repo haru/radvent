@@ -17,7 +17,7 @@ then fix whichever ones are still genuinely valid. Do not trust a review
 comment at face value — verify it, the same way a human would before acting
 on someone else's feedback.
 
-> ⚠️ Per this project's ABSOLUTE RULES in [CLAUDE.md](../../../CLAUDE.md):
+> ⚠️ Per this project's Absolute Rules in [AGENTS.md](../../../AGENTS.md):
 > this skill may edit files, run tests, and run lint, but it must **never**
 > run `git commit`, `git push`, or create/update a PR. Stop after fixing and
 > hand off to the user (and the `commit` skill) for the git step.
@@ -116,7 +116,7 @@ found in Step 5). This mirrors how you'd report a manual review check.
 
 ### Step 7: Fix the valid findings — following the project's mandatory TDD workflow
 
-Per CLAUDE.md ABSOLUTE RULES, for every finding classified **Valid**:
+Per AGENTS.md Absolute RULES, for every finding classified **Valid**:
 
 1. **RED** — add or extend a test that fails because of the problem the
    reviewer described. No production code changes before this exists.
