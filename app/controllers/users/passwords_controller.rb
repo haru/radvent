@@ -9,15 +9,16 @@ module Users
   # addresses are registered. +create+ therefore answers every well-formed address the same way. See
   # docs/adr/0008-password-reset-hides-account-existence-and-delivery-failure.md.
   class PasswordsController < Devise::PasswordsController
-    # Keeps rendering the +devise/passwords+ views, as before this controller existed.
+    include Users::DeviseViews
+
+    # Caps reset requests per client IP address at 5 per hour, whatever the address (FR-010).
     #
-    # The stale scaffold under +app/views/users/passwords+ would otherwise be picked up by the
-    # controller's own path and shadow them; it calls a helper Devise no longer provides.
+    # +prepend: true+ rejects the request before +create+ runs, so a rejected request sends no mail
+    # and spends none of the address's slot (FR-012). The answer is the same for every address.
     #
-    # @return [Array<String>] no controller-specific view prefix
-    def self.local_prefixes
-      []
-    end
+    # @return [void]
+    rate_limit to: 5, within: 1.hour, only: :create, prepend: true,
+               with: :render_too_many_requests
 
     # Sends the reset instructions to a registered address and always answers with the same notice.
     #
@@ -33,6 +34,20 @@ module Users
 
       deliver_instructions(resource.email)
       respond_with_notice
+    end
+
+    protected
+
+    # Always unlocks the account when the password is reset.
+    #
+    # Devise only unlocks via +update+ when an email unlock strategy is enabled, but locks here
+    # are lifted by time or by a password reset alone (docs/adr/0012-*): a user who proves
+    # control of the mailbox gets back in immediately (FR-006).
+    #
+    # @param _resource [User] the account being unlocked; unused, always unlockable
+    # @return [Boolean] true
+    def unlockable?(_resource)
+      true
     end
 
     private
@@ -67,15 +82,41 @@ module Users
       end
     end
 
-    # Looks up the account and sends it the instructions when it exists.
+    # Looks up the account and sends it the instructions when it exists and its mail slot was claimed.
     #
     # The lookup runs outside the rescue in +send_instructions+, so a database failure still surfaces.
+    # A suppressed mail is logged for registered addresses only, without the address, so operators can
+    # tell it from a mail that was never requested; the log never reaches the response.
     #
     # @param email [String] the normalized address
     # @return [void]
     def deliver_instructions(email)
+      claimed = mail_slot_claimed?(email)
       account = resource_class.find_by(email: email)
-      send_instructions(account) if account
+      return unless account
+
+      if claimed
+        send_instructions(account)
+      else
+        Rails.logger.info('Password reset mail suppressed: per-address limit')
+      end
+    end
+
+    # Claims the address's one mail per five minutes (FR-014).
+    #
+    # The slot is claimed per request, for unregistered addresses as well, so the answer and the cache
+    # traffic never depend on whether an account exists (FR-015). It stays claimed even if delivery
+    # later fails. The window is fixed from the first claim. The key holds a digest, never the address.
+    # +increment+ returns nil when the store fails; that counts as a claim (FR-019, docs/adr/0011-*),
+    # and production logs the failure through +Radvent::CacheErrorHandler+.
+    #
+    # @param email [String] the normalized address
+    # @return [Boolean] true when this is the first request for the address in the current five-minute
+    #   window, or when the counter store failed
+    def mail_slot_claimed?(email)
+      key = "password-reset-mail:#{Digest::SHA256.hexdigest(email)}"
+      count = Rails.cache.increment(key, 1, expires_in: 5.minutes)
+      count.nil? || count == 1
     end
 
     # Sends the instructions, swallowing failures so the response never depends on the outcome.

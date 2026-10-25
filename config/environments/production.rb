@@ -1,6 +1,7 @@
 require "active_support/core_ext/integer/time"
 
 require_relative '../../lib/radvent/mail_settings'
+require_relative '../../lib/radvent/cache_error_handler'
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -63,7 +64,9 @@ Rails.application.configure do
   config.log_tags = [ :request_id ]
 
   # Use a different cache store in production.
-  # config.cache_store = :mem_cache_store
+  # Solid Cache keeps the shared rate-limit counters in the primary database (docs/adr/0011-*).
+  # Its default error handler logs nothing here, so a transient store failure gets an explicit one.
+  config.cache_store = :solid_cache_store, { error_handler: Radvent::CacheErrorHandler.method(:call) }
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter     = :resque

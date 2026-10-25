@@ -1,8 +1,8 @@
 ---
 title: Password Reset Hides Account Existence
 type: decision
-sources: [S028]
-updated: 2026-10-24
+sources: [S028, S035]
+updated: 2026-10-25
 ---
 
 # Password Reset Hides Account Existence
@@ -48,6 +48,8 @@ registered (S028).
   documented fallback the project constitution (IX) allows, and needs its
   reason preserved so it is not "fixed" later (S028).
 
-- **View lookup.** The controller overrides `self.local_prefixes` to `[]`, so
+- **View lookup.** The controller includes `Users::DeviseViews`, which sets `local_prefixes` to `[]`, so
   the shared `devise/passwords` views are always used and a leftover scaffold
   under `app/views/users/passwords` cannot shadow them (S028).
+
+Rate limits per address and per IP and the lockout that builds on this page: [Authentication Rate Limits and Account Lockout](auth-rate-limit-and-lockout.md) (S035).

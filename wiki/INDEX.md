@@ -36,6 +36,7 @@ page files, not here.
 - [Entry Page — "View Article" Button](pages/entry-page-view-article-button.md) — published articles show a View button instead of Edit, reusing `published?` and `editable_by?`
 - [Slot Info Page — Author and Admin Only](pages/slot-info-page-access.md) — `#show` reuses the edit-side filters; guests get the sign-in redirect, invisible boards 404, non-editors 403 (ADR-0010)
 - [Navbar Breadcrumb — Event Segment](pages/navbar-breadcrumb.md) — layout-only `@breadcrumb_event` assigned after authorization filters, saved-title helper, `aria-current` on the calendar page, CSS ellipsis
+- [Authentication Rate Limits and Account Lockout](pages/auth-rate-limit-and-lockout.md) — per-IP and per-address limits via Solid Cache, 429 page, time-based invisible lockout (ADR-0011, ADR-0012)
 
 ## howto
 - [Development Setup](pages/development-setup.md) — local install, running, and testing

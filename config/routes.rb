@@ -8,7 +8,11 @@ Rails.application.routes.draw do
   put 'user/:id/update' => 'users#update_info', as: :update_user
   resources :users, only: [:index]
 
-  devise_for :users, controllers: { passwords: 'users/passwords' }
+  # The unlock routes are skipped: locks are lifted by time or by a password
+  # reset, and no unlock mail is ever sent (docs/adr/0012-*).
+  devise_for :users, controllers: { sessions: 'users/sessions', registrations: 'users/registrations',
+                                    passwords: 'users/passwords' },
+                     skip: [:unlocks]
   patch 'theme' => 'themes#update'
   resources :items do
     collection do

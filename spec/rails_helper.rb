@@ -20,6 +20,12 @@ require 'spec_helper'
 require File.expand_path('../config/environment', __dir__)
 require 'rspec/rails'
 require 'devise'
+
+# Controller tests dispatch straight to the controller, so the router never
+# finalizes and Devise never registers its Warden strategies. Authentication
+# (password check, failed-attempt counting) would then be skipped in every
+# controller spec, so register the Warden configuration up front.
+Devise.configure_warden!
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -97,6 +103,9 @@ RSpec.configure do |config|
   # https://relishapp.com/rspec/rspec-rails/docs
   config.infer_spec_type_from_file_location!
   config.include FactoryBot::Syntax::Methods
+  config.include ActiveSupport::Testing::TimeHelpers
+  # Rate limit counters live in the cache; start every example from an empty store.
+  config.before { Rails.cache.clear }
   config.infer_base_class_for_anonymous_controllers = true
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include BreadcrumbHelpers, type: :controller
