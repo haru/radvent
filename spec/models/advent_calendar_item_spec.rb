@@ -49,6 +49,39 @@ describe AdventCalendarItem do
     expect(described_class.next(first_advent_calendar_item).first).to be_nil
   end
 
+  describe '#editable_by?' do
+    let(:author) { create(:user, admin: false) }
+    let(:stranger) { create(:user, admin: false) }
+
+    context 'when the slot has an account' do
+      let(:slot) { build(:advent_calendar_item, event: event, user: author, user_name: stranger.name) }
+
+      it 'is false for a nil viewer' do
+        expect(slot.editable_by?(nil)).to be false
+      end
+
+      it 'is true for the account holder' do
+        expect(slot.editable_by?(author)).to be true
+      end
+
+      it 'is false for another user even when the display name matches' do
+        expect(slot.editable_by?(stranger)).to be false
+      end
+    end
+
+    context 'when the slot has no account' do
+      let(:slot) { build(:advent_calendar_item, event: event, user: nil, user_name: author.name) }
+
+      it 'is true when the viewer name matches the display name' do
+        expect(slot.editable_by?(author)).to be true
+      end
+
+      it 'is false when the viewer name differs from the display name' do
+        expect(slot.editable_by?(stranger)).to be false
+      end
+    end
+  end
+
   describe '#published?' do
     before do
       today = Date.new(2015, 12, 1)

@@ -13,6 +13,32 @@ RSpec.describe AdventCalendarItemsController do
     sign_in user
   end
 
+  # Expects the including group to define +slot+ and +hidden_texts+.
+  shared_examples 'a forbidden slot' do
+    before { get :show, params: { id: slot.id } }
+
+    it 'responds with 403' do
+      expect(response).to have_http_status(:forbidden)
+    end
+
+    it 'renders the forbidden page' do
+      expect(response).to render_template('errors/forbidden')
+    end
+
+    it 'does not leak the slot details' do
+      expect(response.body).not_to include(*hidden_texts)
+    end
+  end
+
+  # Expects the including group to define +slot+.
+  shared_examples 'a readable slot' do
+    before { get :show, params: { id: slot.id } }
+
+    it 'renders the slot' do
+      expect(response).to render_template :show
+    end
+  end
+
   describe 'GET #show' do
     it 'assigns the requested advent_calendar_item to @advent_calendar_item' do
       advent_calendar_item = create(:advent_calendar_item, user: user)
@@ -21,7 +47,7 @@ RSpec.describe AdventCalendarItemsController do
     end
 
     it 'renders the :show template' do
-      advent_calendar_item = create(:advent_calendar_item)
+      advent_calendar_item = create(:advent_calendar_item, user: user)
       get :show, params: { id: advent_calendar_item }
       expect(response).to render_template :show
     end
@@ -41,10 +67,11 @@ RSpec.describe AdventCalendarItemsController do
       create(:advent_calendar_item, event: private_event, user: author, user_name: 'Secret Participant',
                                     comment: 'Secret slot comment', date: 3)
     end
-    let(:leaked_texts) { ['Secret Board Name', 'Secret Calendar Title', 'Secret Participant', 'Secret slot comment'] }
+    let(:slot) { private_aci }
+    let(:hidden_texts) { ['Secret Board Name', 'Secret Calendar Title', 'Secret Participant', 'Secret slot comment'] }
 
     shared_examples 'a hidden slot' do
-      before { get :show, params: { id: private_aci.id } }
+      before { get :show, params: { id: slot.id } }
 
       it 'responds with 404' do
         expect(response).to have_http_status(:not_found)
@@ -55,22 +82,22 @@ RSpec.describe AdventCalendarItemsController do
       end
 
       it 'does not leak the board, calendar or participant details' do
-        expect(response.body).not_to include(*leaked_texts)
+        expect(response.body).not_to include(*hidden_texts)
       end
     end
 
-    shared_examples 'a readable slot' do
-      before { get :show, params: { id: private_aci.id } }
+    shared_examples 'a sign-in gate' do
+      before { get :show, params: { id: slot.id } }
 
-      it 'renders the slot' do
-        expect(response).to render_template :show
+      it 'redirects to the sign-in page' do
+        expect(response).to redirect_to(new_user_session_path)
       end
     end
 
     context 'when the viewer is a guest' do
       before { sign_out user }
 
-      it_behaves_like 'a hidden slot'
+      it_behaves_like 'a sign-in gate'
     end
 
     context 'when the viewer is signed in but not a member' do
@@ -95,7 +122,7 @@ RSpec.describe AdventCalendarItemsController do
 
       before { sign_out user }
 
-      it_behaves_like 'a readable slot'
+      it_behaves_like 'a sign-in gate'
     end
 
     context 'when the board is protected and the viewer is a guest' do
@@ -103,13 +130,15 @@ RSpec.describe AdventCalendarItemsController do
 
       before { sign_out user }
 
-      it_behaves_like 'a readable slot'
+      it_behaves_like 'a sign-in gate'
     end
 
-    context 'when the viewer is the board owner' do
+    context 'when the viewer is the board owner who is not the author' do
+      let(:author) { create(:user) }
+
       before { sign_in owner }
 
-      it_behaves_like 'a readable slot'
+      it_behaves_like 'a forbidden slot'
     end
 
     context 'when the viewer is a board member' do
@@ -117,6 +146,17 @@ RSpec.describe AdventCalendarItemsController do
         member = create(:user)
         create(:board_membership, board: board, user: member)
         sign_in member
+      end
+
+      it_behaves_like 'a forbidden slot'
+    end
+
+    context 'when the viewer is the author and a board member' do
+      let(:author) { create(:user) }
+
+      before do
+        create(:board_membership, board: board, user: author)
+        sign_in author
       end
 
       it_behaves_like 'a readable slot'
@@ -134,12 +174,8 @@ RSpec.describe AdventCalendarItemsController do
         get :show, params: { id: AdventCalendarItem.maximum(:id) + 1 }
       end
 
-      it 'renders the not-found page' do
-        expect(response).to render_template('errors/notfound')
-      end
-
-      it 'does not mention the board name' do
-        expect(response.body).not_to include('Secret Board Name')
+      it 'redirects to the sign-in page like a hidden slot does' do
+        expect(response).to redirect_to(new_user_session_path)
       end
     end
   end
@@ -154,7 +190,8 @@ RSpec.describe AdventCalendarItemsController do
                      end_date: '2015-12-25', created_by: author, updated_by: author)
     end
     let(:advent_calendar_item) do
-      create(:advent_calendar_item, event: event, user: author, user_name: author.name, date: item_date)
+      create(:advent_calendar_item, event: event, user: author, user_name: author.name,
+                                    comment: 'Entry actions slot comment', date: item_date)
     end
     let!(:item) { create(:item, advent_calendar_item: advent_calendar_item) if with_item }
 
@@ -213,33 +250,31 @@ RSpec.describe AdventCalendarItemsController do
       end
     end
 
-    context 'when a user other than the author views the published entry' do
-      let(:item_date) { 2 }
+    [['published', 2], ['unpublished', 3]].each do |label, date|
+      context "when a user other than the author views the #{label} entry" do
+        let(:item_date) { date }
 
-      before do
-        sign_in user
-        get :show, params: { id: advent_calendar_item.id }
-      end
+        before do
+          sign_in user
+          get :show, params: { id: advent_calendar_item.id }
+        end
 
-      it 'shows none of the article action buttons', :aggregate_failures do
-        expect(response.body).not_to include('投稿記事を表示する')
-        expect(response.body).not_to include('投稿記事を編集する')
-        expect(response.body).not_to include('記事を登録する')
-      end
-    end
+        it 'responds with 403' do
+          expect(response).to have_http_status(:forbidden)
+        end
 
-    context 'when a user other than the author views an unpublished entry' do
-      let(:item_date) { 3 }
+        it 'renders the forbidden page without the slot details', :aggregate_failures do
+          expect(response).to render_template('errors/forbidden')
+          expect(response.body).not_to include(author.name)
+          expect(response.body).not_to include('Entry actions slot comment')
+        end
 
-      before do
-        sign_in user
-        get :show, params: { id: advent_calendar_item.id }
-      end
-
-      it 'shows none of the article action buttons', :aggregate_failures do
-        expect(response.body).not_to include('投稿記事を表示する')
-        expect(response.body).not_to include('投稿記事を編集する')
-        expect(response.body).not_to include("href=\"/items/#{item.id}/edit\"")
+        it 'shows none of the article action buttons', :aggregate_failures do
+          expect(response.body).not_to include('投稿記事を表示する')
+          expect(response.body).not_to include('投稿記事を編集する')
+          expect(response.body).not_to include('記事を登録する')
+          expect(response.body).not_to include("href=\"/items/#{item.id}/edit\"")
+        end
       end
     end
 
@@ -255,6 +290,102 @@ RSpec.describe AdventCalendarItemsController do
         expect(response.body).to include("href=\"/items/#{item.id}\"")
         expect(response.body).to match(/>\s*View\s*</)
         expect(response.body).not_to include('投稿記事を表示する')
+      end
+    end
+  end
+
+  describe 'GET #show on a visible board' do
+    render_views
+
+    let(:owner) { create(:user) }
+    let(:author) { create(:user) }
+    let(:other_user) { create(:user) }
+    let(:board) { create(:board, :public_user, owner: owner, name: 'Visible Board Name') }
+    let(:visible_event) do
+      create(:event, board: board, name: 'visible-cal', title: 'Visible Calendar Title',
+                     start_date: '2015-12-01', end_date: '2015-12-25', created_by: owner, updated_by: owner)
+    end
+    let(:slot) do
+      create(:advent_calendar_item, event: visible_event, user: author, user_name: 'Visible Participant',
+                                    comment: 'Visible slot comment', date: 3)
+    end
+    let(:hidden_texts) do
+      ['Visible Participant', 'Visible slot comment', '投稿記事を表示する', '投稿記事を編集する', '記事を登録する']
+    end
+
+    context 'when the viewer is a non-author user' do
+      before { sign_in other_user }
+
+      it_behaves_like 'a forbidden slot'
+    end
+
+    context 'when the viewer is the board owner who is not the author' do
+      before { sign_in owner }
+
+      it_behaves_like 'a forbidden slot'
+    end
+
+    context 'when the viewer is a non-author member of the protected board' do
+      let(:board) { create(:board, :protected_user, owner: owner, name: 'Visible Board Name') }
+      let(:member) { create(:user) }
+
+      before do
+        create(:board_membership, board: board, user: member)
+        sign_in member
+      end
+
+      it_behaves_like 'a forbidden slot'
+    end
+
+    context 'when the viewer is the author' do
+      before { sign_in author }
+
+      it_behaves_like 'a readable slot'
+    end
+
+    context 'when the viewer is a system admin' do
+      before { sign_in create(:user, admin: true) }
+
+      it_behaves_like 'a readable slot'
+    end
+
+    context 'when the viewer name matches an author-less slot' do
+      let!(:orphan_slot) do
+        build(:advent_calendar_item, event: visible_event, user: nil, user_name: other_user.name, date: 4)
+          .tap { |slot| slot.save(validate: false) }
+      end
+
+      before { sign_in other_user }
+
+      it 'renders the slot' do
+        get :show, params: { id: orphan_slot.id }
+        expect(response).to render_template :show
+      end
+    end
+
+    context 'when the viewer name does not match an author-less slot' do
+      let!(:orphan_slot) do
+        build(:advent_calendar_item, event: visible_event, user: nil, user_name: 'Someone Else', date: 4)
+          .tap { |slot| slot.save(validate: false) }
+      end
+
+      before do
+        sign_in other_user
+        get :show, params: { id: orphan_slot.id }
+      end
+
+      it 'responds with 403' do
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context 'when the slot does not exist' do
+      before { get :show, params: { id: AdventCalendarItem.maximum(:id).to_i + 1 } }
+
+      it 'renders the not-found page without the board name', :aggregate_failures do
+        expect(response).to have_http_status(:not_found)
+        expect(response).to render_template('errors/notfound')
+        expect(response.body).not_to include('Visible Board Name')
       end
     end
   end
@@ -349,6 +480,27 @@ RSpec.describe AdventCalendarItemsController do
       patch :update, params: { id: advent_calendar_item,
                                advent_calendar_item: attributes_for(:advent_calendar_item) }
       expect(response).to redirect_to advent_calendar_item_path(advent_calendar_item)
+    end
+
+    context 'when an admin updates a slot registered by another user' do
+      let(:other_author) { create(:user) }
+      let(:advent_calendar_item) { create(:advent_calendar_item, user: other_author) }
+
+      before do
+        sign_in create(:user, admin: true)
+        patch :update, params: { id: advent_calendar_item,
+                                 advent_calendar_item: attributes_for(:advent_calendar_item) }
+      end
+
+      it 'keeps the original author' do
+        expect(advent_calendar_item.reload.user).to eq other_author
+      end
+
+      it 'redirects to a slot page the admin can open', :aggregate_failures do
+        expect(response).to redirect_to advent_calendar_item_path(advent_calendar_item)
+        get :show, params: { id: advent_calendar_item.id }
+        expect(response).to render_template :show
+      end
     end
   end
 

@@ -1,8 +1,8 @@
 ---
 title: Authorization
 type: component
-sources: [S002, S004, S009, S012, S013, S023, S024, S026, S027, S028, S029]
-updated: 2026-10-24
+sources: [S002, S004, S009, S012, S013, S023, S024, S026, S027, S028, S029, S032, S033]
+updated: 2026-10-25
 ---
 
 # Authorization
@@ -16,7 +16,7 @@ otherwise (S002, S004). `UsersController` renders admin-facing user-management
 views through a separate admin layout from the public-facing templates
 (S002). `BoardsController` restricts access per-board via a `check_visibility`
 filter on the `visibility` enum, and Items/AdventCalendarItems controllers
-gate edits with an `edit_permission?` guard limited to the creator or an
+gate edits (and, since feature 018, the slot info page) with an `edit_permission?` guard limited to the creator or an
 admin (S004). Since feature `011-private-board-content-visibility`, the
 `show` actions of Events, Items and AdventCalendarItems also run a
 `check_visibility` filter that returns 404 unless the model's `visible?`
@@ -67,6 +67,12 @@ board/event/slot with 404 for hidden and 403 for forbidden targets; see
 Event edit/update/destroy now answer 404 before 403 for events on boards the
 requester cannot see; see
 [Event Addressing by Board](./event-addressing-by-board.md) (S029).
+
+The slot info page (`AdventCalendarItemsController#show`) is additionally
+gated by `authenticate_user!` and `edit_permission?` — sign-in redirect for
+guests, 404 for invisible boards, 403 for non-editors; see
+[Slot Info Page — Author and Admin Only](./slot-info-page-access.md)
+(S032, S033).
 
 Both article previews now require sign-in, and previews are authorized with the
 existing visibility/edit filters; see
