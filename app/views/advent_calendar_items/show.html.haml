@@ -19,8 +19,12 @@
       #{t "views.advent_calendar_items.show.item_created"}
       - if @advent_calendar_item.editable_by? current_user
         %p.advent-calendar-item-link
-          = link_to t("views.advent_calendar_items.show.button_edit_item"),
-            edit_item_path(id:@advent_calendar_item.item.id), class:"btn btn-primary btn-raised"
+          - if @advent_calendar_item.published?
+            = link_to t("views.advent_calendar_items.show.button_show_item"),
+              item_path(id: @advent_calendar_item.item.id), class: "btn btn-primary btn-raised"
+          - else
+            = link_to t("views.advent_calendar_items.show.button_edit_item"),
+              edit_item_path(id: @advent_calendar_item.item.id), class: "btn btn-primary btn-raised"
     - else
       #{t "views.advent_calendar_items.show.item_not_created"}
       - if @advent_calendar_item.editable_by? current_user

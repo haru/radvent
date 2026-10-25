@@ -290,6 +290,7 @@ ja:
         button_edit_advent_calendar_item: 名前とコメントを編集する
         item_title: 記事の登録
         button_edit_item: 投稿記事を編集する
+        button_show_item: 投稿記事を表示する
         button_create_item: 記事を登録する
         item_not_created: 記事が登録されていません
         item_created: 記事が登録されています

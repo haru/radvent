@@ -144,6 +144,121 @@ RSpec.describe AdventCalendarItemsController do
     end
   end
 
+  describe 'GET #show entry action buttons' do
+    render_views
+
+    let(:author) { create(:user) }
+    let(:with_item) { true }
+    let(:event) do
+      create(:event, name: 'entry-actions-cal', title: 'Entry Actions Calendar', start_date: '2015-12-01',
+                     end_date: '2015-12-25', created_by: author, updated_by: author)
+    end
+    let(:advent_calendar_item) do
+      create(:advent_calendar_item, event: event, user: author, user_name: author.name, date: item_date)
+    end
+    let!(:item) { create(:item, advent_calendar_item: advent_calendar_item) if with_item }
+
+    before do
+      allow(Time.zone).to receive(:today).and_return(Date.new(2015, 12, 2))
+      sign_in author
+    end
+
+    [['today', 2], ['the day after the publish date', 1]].each do |label, date|
+      context "when the article is published (#{label})" do
+        let(:item_date) { date }
+
+        before { get :show, params: { id: advent_calendar_item.id } }
+
+        it 'shows the view-article button linking to the item', :aggregate_failures do
+          expect(response.body).to include('投稿記事を表示する')
+          expect(response.body).to include("href=\"/items/#{item.id}\"")
+        end
+
+        it 'does not show the edit-article button', :aggregate_failures do
+          expect(response.body).not_to include('投稿記事を編集する')
+          expect(response.body).not_to include("href=\"/items/#{item.id}/edit\"")
+        end
+      end
+    end
+
+    context 'when the day before the publish date' do
+      let(:item_date) { 3 }
+
+      before { get :show, params: { id: advent_calendar_item.id } }
+
+      it 'shows the edit-article button linking to the item edit page', :aggregate_failures do
+        expect(response.body).to include('投稿記事を編集する')
+        expect(response.body).to include("href=\"/items/#{item.id}/edit\"")
+      end
+
+      it 'does not show the view-article button' do
+        expect(response.body).not_to include('投稿記事を表示する')
+      end
+    end
+
+    context 'when the entry has no article' do
+      let(:item_date) { 2 }
+      let(:with_item) { false }
+
+      before { get :show, params: { id: advent_calendar_item.id } }
+
+      it 'shows only the register-article button', :aggregate_failures do
+        expect(response.body).to include('記事を登録する')
+        expect(response.body).to match(%r{href="/items/new\?date=2&amp;id=#{advent_calendar_item.id}"})
+      end
+
+      it 'does not show the view-article or edit-article button', :aggregate_failures do
+        expect(response.body).not_to include('投稿記事を表示する')
+        expect(response.body).not_to include('投稿記事を編集する')
+      end
+    end
+
+    context 'when a user other than the author views the published entry' do
+      let(:item_date) { 2 }
+
+      before do
+        sign_in user
+        get :show, params: { id: advent_calendar_item.id }
+      end
+
+      it 'shows none of the article action buttons', :aggregate_failures do
+        expect(response.body).not_to include('投稿記事を表示する')
+        expect(response.body).not_to include('投稿記事を編集する')
+        expect(response.body).not_to include('記事を登録する')
+      end
+    end
+
+    context 'when a user other than the author views an unpublished entry' do
+      let(:item_date) { 3 }
+
+      before do
+        sign_in user
+        get :show, params: { id: advent_calendar_item.id }
+      end
+
+      it 'shows none of the article action buttons', :aggregate_failures do
+        expect(response.body).not_to include('投稿記事を表示する')
+        expect(response.body).not_to include('投稿記事を編集する')
+        expect(response.body).not_to include("href=\"/items/#{item.id}/edit\"")
+      end
+    end
+
+    context 'with the English locale' do
+      let(:item_date) { 2 }
+
+      before do
+        request.headers['Accept-Language'] = 'en'
+        get :show, params: { id: advent_calendar_item.id }
+      end
+
+      it 'shows the English view-article button instead of the Japanese one', :aggregate_failures do
+        expect(response.body).to include("href=\"/items/#{item.id}\"")
+        expect(response.body).to match(/>\s*View\s*</)
+        expect(response.body).not_to include('投稿記事を表示する')
+      end
+    end
+  end
+
   describe 'GET #new' do
     let!(:new_event) do
       create(:event, name: 'aci-new-top', title: 'Aci New Top', start_date: '2015-12-01',

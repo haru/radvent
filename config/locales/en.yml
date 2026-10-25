@@ -136,6 +136,7 @@ en:
         button_edit_advent_calendar_item: Edit Info
         item_title: Entry
         button_edit_item: Edit
+        button_show_item: View
         button_create_item: Register
         item_not_created: You haven't registered yet
         item_created: You have already registered
