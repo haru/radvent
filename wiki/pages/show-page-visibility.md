@@ -1,7 +1,7 @@
 ---
 title: Board Visibility on Show Pages
 type: decision
-sources: [S009, S024, S025, S031, S032, S033]
+sources: [S009, S024, S025, S031, S032, S033, S034]
 updated: 2026-10-25
 ---
 
@@ -24,7 +24,9 @@ by the board page and by protected images — see
   [Authorization](./authorization.md) for the rule itself.
 - **Order matters**: the filter is declared *before* `find_board`. The layout
   prints `@board.name` in the navbar for user boards, so halting before
-  `@board` is assigned keeps the 404 page from revealing the board (S024).
+  `@board` is assigned keeps the 404 page from revealing the board (S024). Feature `019` reuses this
+  for the event segment of the navbar trail — see
+  [Navbar Breadcrumb](./navbar-breadcrumb.md) (S034).
 - **One 404, same as a missing record**: a denied viewer gets the usual
   `render_not_found` page — no login redirect, no distinction between a guest
   and a signed-in non-member, and no hint that the record exists (S024, S025).

@@ -38,6 +38,7 @@ Sources are immutable inputs — the wiki never edits them.
 | S031 | specs/017-post-edit-view-link/research.md | feature-artifact | 2026-10-25 | 2026-10-25 | entry-page-view-article-button.md, views-and-frontend.md, show-page-visibility.md |
 | S032 | specs/018-restrict-item-info-access/research.md | feature-artifact | 2026-10-25 | 2026-10-25 | slot-info-page-access.md, show-page-visibility.md, authorization.md, controller-groups.md |
 | S033 | docs/adr/0010-restrict-slot-info-page-to-author-and-admin.md | file | 2026-10-25 | 2026-10-25 | slot-info-page-access.md, show-page-visibility.md, authorization.md, controller-groups.md |
+| S034 | specs/019-breadcrumb-event/research.md | feature-artifact | 2026-10-25 | 2026-10-25 | navbar-breadcrumb.md, views-and-frontend.md, show-page-visibility.md |
 
 Note: domain-model.md exceeded the 600-word split threshold after S015's
 update; its Authorization section was split into authorization.md (S002,
