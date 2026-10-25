@@ -8,6 +8,7 @@
     %i.far.fa-comments
     = "#{t 'activerecord.models.comment'}"
   %hr
-  = render @item.comments
+  %div#comments_list
+    = render @item.comments
   = render "comments/form", comment: @comment
 
