@@ -1,8 +1,8 @@
 ---
 title: Authorization
 type: component
-sources: [S002, S004, S009, S012, S013, S023, S024, S026, S027, S028, S029]
-updated: 2026-10-24
+sources: [S002, S004, S009, S012, S013, S023, S024, S026, S027, S028, S029, S032, S033]
+updated: 2026-10-25
 ---
 
 # Authorization
@@ -67,6 +67,12 @@ board/event/slot with 404 for hidden and 403 for forbidden targets; see
 Event edit/update/destroy now answer 404 before 403 for events on boards the
 requester cannot see; see
 [Event Addressing by Board](./event-addressing-by-board.md) (S029).
+
+The slot info page (`AdventCalendarItemsController#show`) is additionally
+gated by `authenticate_user!` and `edit_permission?` — sign-in redirect for
+guests, 404 for invisible boards, 403 for non-editors; see
+[Slot Info Page — Author and Admin Only](./slot-info-page-access.md)
+(S032, S033).
 
 Both article previews now require sign-in, and previews are authorized with the
 existing visibility/edit filters; see

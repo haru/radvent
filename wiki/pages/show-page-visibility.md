@@ -1,7 +1,7 @@
 ---
 title: Board Visibility on Show Pages
 type: decision
-sources: [S009, S024, S025, S031]
+sources: [S009, S024, S025, S031, S032, S033]
 updated: 2026-10-25
 ---
 
@@ -28,6 +28,10 @@ by the board page and by protected images — see
 - **One 404, same as a missing record**: a denied viewer gets the usual
   `render_not_found` page — no login redirect, no distinction between a guest
   and a signed-in non-member, and no hint that the record exists (S024, S025).
+  Since feature `018`, this no longer holds for the slot page, which is
+  author-gated instead — see
+  [Slot Info Page — Author and Admin Only](./slot-info-page-access.md) (S032,
+  S033); it still holds for the calendar and article pages.
 - **Visibility before publication**: on the article page the check runs before
   the "not yet published → redirect to root" branch; otherwise that redirect
   would reveal that an unpublished article exists. Viewers who may read the
@@ -36,7 +40,9 @@ by the board page and by protected images — see
   article or registered the slot does not help once the viewer lost access to
   the board (e.g. was removed as a member). This matches `Attachment#visible?`,
   which also checks board visibility first and only then lets authors see
-  unpublished content (S024).
+  unpublished content (S024). Visibility is still decided before permission on
+  the slot page after feature `018`, so a removed member's author keeps getting
+  404, not 403 (S032).
 - **No new abstraction**: three one-line private methods, not a shared concern.
   The decision logic already lives once, in the models (S024).
 - **No logging of denials**: a denied view is an expected outcome, and the

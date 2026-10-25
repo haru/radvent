@@ -36,6 +36,8 @@ Sources are immutable inputs — the wiki never edits them.
 | S029 | specs/015-env-log-event-collision/research.md | feature-artifact | 2026-10-24 | 2026-10-24 | event-addressing-by-board.md, startup-log-secret-hygiene.md, controllers-and-routing.md, authorization.md, user-event-item-authorization.md, docker-deployment.md, domain-model.md |
 | S030 | specs/015-env-log-event-collision/plan.md (summary) | feature-artifact | 2026-10-24 | 2026-10-24 | event-addressing-by-board.md, startup-log-secret-hygiene.md |
 | S031 | specs/017-post-edit-view-link/research.md | feature-artifact | 2026-10-25 | 2026-10-25 | entry-page-view-article-button.md, views-and-frontend.md, show-page-visibility.md |
+| S032 | specs/018-restrict-item-info-access/research.md | feature-artifact | 2026-10-25 | 2026-10-25 | slot-info-page-access.md, show-page-visibility.md, authorization.md, controller-groups.md |
+| S033 | docs/adr/0010-restrict-slot-info-page-to-author-and-admin.md | file | 2026-10-25 | 2026-10-25 | slot-info-page-access.md, show-page-visibility.md, authorization.md, controller-groups.md |
 
 Note: domain-model.md exceeded the 600-word split threshold after S015's
 update; its Authorization section was split into authorization.md (S002,

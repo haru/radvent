@@ -16,3 +16,4 @@ unchanged.
 | [0007](0007-serve-new-images-through-authorized-endpoint.md) | Serve new images through an authorized endpoint | Accepted |
 | [0008](0008-password-reset-hides-account-existence-and-delivery-failure.md) | Password reset hides account existence and delivery failure | Accepted |
 | [0009](0009-address-user-board-events-by-board-and-name.md) | Address user board events by board id and name | Accepted |
+| [0010](0010-restrict-slot-info-page-to-author-and-admin.md) | Restrict the slot info page to its author and admins | Accepted |

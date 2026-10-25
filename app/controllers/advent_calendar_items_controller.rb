@@ -4,11 +4,11 @@
 #
 # Handles creating, reading, updating, and deleting calendar day slots for advent calendar events.
 class AdventCalendarItemsController < ApplicationController
-  before_action :authenticate_user!, only: %i[new create edit update destroy]
+  before_action :authenticate_user!, only: %i[new create show edit update destroy]
   before_action :check_slot_creation_authorization, only: %i[new create]
   before_action :find_calendar_item, only: %i[show edit update destroy]
   before_action :check_visibility, only: [:show]
-  before_action :edit_permission?, only: %i[edit update destroy]
+  before_action :edit_permission?, only: %i[show edit update destroy]
   before_action :find_board
 
   # Shows an advent calendar item.
