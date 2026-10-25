@@ -126,11 +126,11 @@ RSpec.describe ItemsController, '#preview' do
       expect { preview_stored }.not_to(change { item.reload.attributes })
     end
 
-    it 'shows the event name in the breadcrumb trail', :aggregate_failures do
+    it 'shows the event title in the breadcrumb trail', :aggregate_failures do
       sign_in world[:author]
       preview_stored
       expect(response).to have_http_status(:success)
-      expect(Capybara.string(response.body)).to have_css('.breadcrumb-event', text: event_title)
+      expect_breadcrumb_event(event_title)
     end
   end
 
@@ -199,11 +199,11 @@ RSpec.describe ItemsController, '#preview' do
       expect { preview_on(empty_slot.id) }.not_to change(Item, :count)
     end
 
-    it 'shows the event name in the breadcrumb trail for a draft preview', :aggregate_failures do
+    it 'shows the event title in the breadcrumb trail for a draft preview', :aggregate_failures do
       sign_in world[:author]
       preview_on(empty_slot.id)
       expect(response).to have_http_status(:success)
-      expect(Capybara.string(response.body)).to have_css('.breadcrumb-event', text: event_title)
+      expect_breadcrumb_event(event_title)
     end
   end
 end

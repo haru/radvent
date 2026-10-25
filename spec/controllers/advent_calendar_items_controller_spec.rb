@@ -783,7 +783,7 @@ RSpec.describe AdventCalendarItemsController do
       sign_in owner
     end
 
-    it 'shows the event name linked to the calendar page on the slot info page', :aggregate_failures do
+    it 'shows the event title linked to the calendar page on the slot info page', :aggregate_failures do
       get :show, params: { id: slot.id }
       expect(response).to have_http_status(:success)
       doc = Capybara.string(response.body)
@@ -791,40 +791,47 @@ RSpec.describe AdventCalendarItemsController do
       expect(doc).to have_link('Slot Crumb Event Title', href: "/boards/#{board.board_id}/events/slot-crumb")
     end
 
-    it 'shows the event name on the slot edit form', :aggregate_failures do
+    it 'shows the event title on the slot edit form', :aggregate_failures do
       get :edit, params: { id: slot.id }
       expect(response).to have_http_status(:success)
-      expect(Capybara.string(response.body)).to have_css('.breadcrumb-event', text: 'Slot Crumb Event Title')
+      expect_breadcrumb_event('Slot Crumb Event Title')
     end
 
-    it 'shows the event name when the slot update fails and renders edit again', :aggregate_failures do
+    it 'shows the event title when the slot update fails and renders edit again', :aggregate_failures do
       allow_any_instance_of(AdventCalendarItem).to receive(:save).and_return(false)
       patch :update, params: { id: slot.id, advent_calendar_item: attributes_for(:advent_calendar_item) }
       expect(response).to have_http_status(:unprocessable_content)
-      expect(Capybara.string(response.body)).to have_css('.breadcrumb-event', text: 'Slot Crumb Event Title')
+      expect_breadcrumb_event('Slot Crumb Event Title')
     end
 
-    it 'shows the event name on the slot creation form', :aggregate_failures do
+    it 'shows the event title on the slot creation form', :aggregate_failures do
       get :new, params: { event_id: slot_event.id, date: 5 }
       expect(response).to have_http_status(:success)
-      expect(Capybara.string(response.body)).to have_css('.breadcrumb-event', text: 'Slot Crumb Event Title')
+      expect_breadcrumb_event('Slot Crumb Event Title')
     end
 
-    it 'shows the event name when the slot creation fails and renders new again', :aggregate_failures do
+    it 'shows the event title when the slot creation fails and renders new again', :aggregate_failures do
       create(:advent_calendar_item, event: slot_event, user: create(:user), date: 5)
       post :create, params: { advent_calendar_item: { user_name: owner.name, comment: 'crumb', date: 5,
                                                       event_id: slot_event.id } }
       expect(response).to have_http_status(:unprocessable_content)
-      expect(Capybara.string(response.body)).to have_css('.breadcrumb-event', text: 'Slot Crumb Event Title')
+      expect_breadcrumb_event('Slot Crumb Event Title')
     end
 
-    it 'hides the event name on the 403 page of new for an event the user cannot join',
+    it 'hides the event title on the 403 page of edit', :aggregate_failures do
+      sign_in create(:user)
+      get :edit, params: { id: slot.id }
+      expect(response).to have_http_status(:forbidden)
+      expect_no_breadcrumb_event
+    end
+
+    it 'hides the event title on the 403 page of new for an event the user cannot join',
        :aggregate_failures do
       sign_in create(:user)
       get :new, params: { event_id: protected_event.id, date: 5 }
       expect(response).to have_http_status(:forbidden)
       expect(response.body).not_to include('Protected Crumb Title')
-      expect(Capybara.string(response.body)).to have_no_css('.breadcrumb-event')
+      expect_no_breadcrumb_event
     end
   end
 end

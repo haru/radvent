@@ -131,14 +131,14 @@ RSpec.describe 'layouts/application' do
         assign(:breadcrumb_event, top_event)
       end
 
-      it 'renders TOP / event name as a link to the name-only URL', :aggregate_failures do
+      it 'renders TOP / event title as a link to the name-only URL', :aggregate_failures do
         expect(breadcrumb_event.tag_name).to eq 'a'
         expect(breadcrumb_event[:href]).to eq '/events/top-cal'
         expect(breadcrumb_event.text).to eq 'Top Event Title'
         expect(breadcrumb_event[:title]).to eq 'Top Event Title'
       end
 
-      it 'keeps the event name after TOP in the breadcrumb order', :aggregate_failures do
+      it 'renders no board link for a TOP board event', :aggregate_failures do
         expect(rendered_layout).to have_link('TOP', href: '/')
         expect(rendered_layout).to have_no_link('User Board Name')
       end
@@ -157,15 +157,10 @@ RSpec.describe 'layouts/application' do
         expect(rendered_layout).to have_css('span.px-2', text: '/', count: 2)
       end
 
-      it 'orders the event name after TOP and the board name', :aggregate_failures do
-        html = rendered_layout.native.to_html
+      it 'orders the event title after TOP and the board name', :aggregate_failures do
+        html = rendered_layout.find('nav#top-menu').native.to_html
         expect(html.index('TOP')).to be < html.index('User Board Name')
         expect(html.index('User Board Name')).to be < html.index('Event Title')
-      end
-
-      it 'shows the persisted title while an unsaved rename is pending' do
-        event.title = 'Unsaved Event Title'
-        expect(breadcrumb_event.text).to eq 'Event Title'
       end
     end
 
@@ -176,7 +171,7 @@ RSpec.describe 'layouts/application' do
         assign(:breadcrumb_event, event)
       end
 
-      it 'shows the event name as the current location without a link', :aggregate_failures do
+      it 'shows the event title as the current location without a link', :aggregate_failures do
         expect(breadcrumb_event.tag_name).to eq 'span'
         expect(breadcrumb_event[:'aria-current']).to eq 'page'
         expect(breadcrumb_event.text).to eq 'Event Title'

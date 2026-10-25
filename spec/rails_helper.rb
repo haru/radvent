@@ -37,6 +37,7 @@ require 'devise'
 #
 # Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 require Rails.root.join('spec/support/board_item_world')
+require Rails.root.join('spec/support/breadcrumb_helpers')
 
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
@@ -98,5 +99,6 @@ RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
   config.infer_base_class_for_anonymous_controllers = true
   config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include BreadcrumbHelpers, type: :controller
   config.include Devise::Test::ControllerHelpers, type: :view
 end

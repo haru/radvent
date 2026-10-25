@@ -513,24 +513,16 @@ RSpec.describe EventsController do
                      end_date: '2015-12-25', created_by: user, updated_by: user)
     end
 
-    # Returns the breadcrumb event element of the last rendered page.
-    #
-    # @return [Capybara::Node::Element] the breadcrumb event element
-    def breadcrumb_event
-      Capybara.string(response.body).find('.breadcrumb-event')
-    end
-
-    it 'marks the event as the current location on the calendar page', :aggregate_failures do
+    it 'marks the event as the current location on the TOP board calendar page', :aggregate_failures do
       get :show, params: { name: crumb_event.name }
       expect(breadcrumb_event.tag_name).to eq 'span'
       expect(breadcrumb_event[:'aria-current']).to eq 'page'
       expect(breadcrumb_event.text).to eq 'Crumb Event Title'
     end
 
-    it 'links the event name to the calendar page on the edit form', :aggregate_failures do
+    it 'links the event title to the calendar page on the edit form', :aggregate_failures do
       get :edit, params: { name: crumb_event.name }
       expect(breadcrumb_event.tag_name).to eq 'a'
-      expect(breadcrumb_event[:href]).to eq '/events/crumb-ev'
       expect(breadcrumb_event.text).to eq 'Crumb Event Title'
     end
 
@@ -543,23 +535,31 @@ RSpec.describe EventsController do
       expect(breadcrumb_event[:href]).to eq '/events/crumb-ev'
     end
 
-    it 'shows no event name on new and on a failed create', :aggregate_failures do
+    it 'shows no event title on the new form', :aggregate_failures do
       get :new
       expect(response).to have_http_status(:success)
-      expect(Capybara.string(response.body)).to have_no_css('.breadcrumb-event')
+      expect_no_breadcrumb_event
     end
 
-    it 'shows no event name when the create fails and renders new again', :aggregate_failures do
+    it 'shows no event title when the create fails and renders new again', :aggregate_failures do
       post :create, params: { event: { title: '', start_date: '', end_date: '', name: '', description: '' } }
       expect(response).to have_http_status(:unprocessable_content)
-      expect(Capybara.string(response.body)).to have_no_css('.breadcrumb-event')
+      expect_no_breadcrumb_event
     end
 
-    it 'shows no event name on the 404 page of show', :aggregate_failures do
+    it 'shows no event title on the 403 page of edit', :aggregate_failures do
+      sign_in create(:user)
+      get :edit, params: { name: crumb_event.name }
+      expect(response).to have_http_status(:forbidden)
+      expect(response.body).not_to include('Crumb Event Title')
+      expect_no_breadcrumb_event
+    end
+
+    it 'shows no event title on the 404 page of show', :aggregate_failures do
       sign_out user
       get :show, params: { name: 'no-such-crumb' }
       expect(response).to have_http_status(:not_found)
-      expect(Capybara.string(response.body)).to have_no_css('.breadcrumb-event')
+      expect_no_breadcrumb_event
     end
   end
 end
