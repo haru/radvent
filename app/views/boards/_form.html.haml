@@ -1,4 +1,4 @@
-= form_with model: board, url: board.new_record? ? boards_path : board_path(board.board_id),
+= form_with model: board, url: board.new_record? ? boards_path : board_path(board.board_id_in_database),
              method: board.new_record? ? :post : :patch do |f|
   - if board.errors.any?
     %div.alert.alert-danger

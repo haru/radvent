@@ -49,15 +49,12 @@ test.describe.serial('コメントといいねの権限', () => {
     expect(await page.evaluate(() => window.__xss)).toBeUndefined()
   })
 
-  // BUG-3: Comment has no validation, so a comment without a name and a text is stored and shown.
-  // Remove test.fail() once it is rejected.
   test('F-2 (空のコメント) 名前も本文も空のコメントは投稿されない', async ({ browser }) => {
-    test.fail()
     const { page } = await openPage(browser)
     await page.goto(itemPath)
     const before = await comments(page).locator('.comment').count()
     await post(page, '', '')
-    await page.waitForTimeout(500)
+    await expect(page.locator('#comment_errors .alert-danger')).toBeVisible()
     expect(await comments(page).locator('.comment').count()).toBe(before)
   })
 

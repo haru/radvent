@@ -69,7 +69,9 @@ git-ignored.
   states of the earlier ones.
 - Playwright projects run in order: `journey` (user-journey.spec.js) → `setup` → `scenarios` (the other
   specs). Login states are kept in `tmp/e2e/auth/` so every project can reuse them. Sign-up is limited to 5
-  per hour: alice, bob, carol, dave and one failed sign-up (auth.spec.js A-3) use all of it.
+  per hour per client address: alice, bob, carol, dave and one failed sign-up (auth.spec.js A-3) use all of it.
+  eve (who deletes her own account in A-9) signs up with an `X-Forwarded-For` header, which counts as another
+  address, so she does not need a sixth sign-up from the same one.
 - Rate limits stay enabled. The login state of alice and bob is captured once
   right after sign-up and reused; only US2 posts the login form.
 - Uncaught browser errors (`pageerror`, `console.error`) fail the test, except
@@ -80,12 +82,12 @@ git-ignored.
 | File | Role |
 |------|------|
 | `playwright.config.js` | port 4500, Chromium, `ja-JP` / `Asia/Tokyo`, failure artifacts, `webServer` |
-| `e2e/setup.spec.js` | creates the accounts carol and dave and logs the administrator in |
-| `e2e/auth.spec.js`, `boards.spec.js`, `events.spec.js`, `articles.spec.js`, `comments.spec.js`, `users-admin.spec.js` | the extended scenarios, see [e2e-scenarios.md](e2e-scenarios.md); known bugs are pinned with `test.fail()`, see [e2e-bugs.md](e2e-bugs.md) |
+| `e2e/setup.spec.js` | creates the accounts carol, dave and eve and logs the administrator in |
+| `e2e/auth.spec.js`, `boards.spec.js`, `events.spec.js`, `articles.spec.js`, `comments.spec.js`, `users-admin.spec.js` | the extended scenarios, see [e2e-scenarios.md](e2e-scenarios.md) |
 | `e2e/user-journey.spec.js` | the scenarios: US2 (login, sign-up), US3 (board, events), US4 (articles), US5 (comments, likes). Each acceptance scenario is a `test.step` named `AS <story>-<n> ...` |
-| `e2e/support/accounts.js` | the three test accounts, login / logout helpers, login-state reuse, context helpers |
+| `e2e/support/accounts.js` | the test accounts (alice, bob, carol, dave, eve, admin), login / logout helpers, login-state reuse, context helpers |
 | `e2e/support/js-errors.js` | collects browser errors so the test fails on them |
-| `e2e/support/dialog.js` | accepts the next confirm dialog (fails if none appears) |
+| `e2e/support/dialog.js` | accepts or dismisses the next confirm dialog (fails if none appears) |
 | `e2e/support/dates.js` | event periods computed from today's date in Tokyo |
 | `e2e/support/editor.js` | typing into the EasyMDE (CodeMirror) editor, opening the preview |
 

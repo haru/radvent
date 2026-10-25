@@ -1,0 +1,5 @@
+- if record.errors.any?
+  %div.alert.alert-danger
+    %ul.mb-0
+      - record.errors.full_messages.each do |message|
+        %li= message

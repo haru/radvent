@@ -111,6 +111,24 @@ RSpec.describe UsersController do
       put :update_info, params: { id: other_user, user: { email: '' }, name: '', admin: true }
       expect(response).to render_template :edit_info
     end
+
+    context 'when the update fails' do
+      render_views
+
+      before { put :update_info, params: { id: other_user, user: { email: 'not-an-email' } } }
+
+      it 'answers 422 so Turbo accepts the page', :aggregate_failures do
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(other_user.reload.email).not_to eq 'not-an-email'
+      end
+
+      it 'renders it in the admin layout with the error message', :aggregate_failures do
+        expect(response).to render_template(layout: 'admin')
+        expect(assigns(:menu)).to eq :users
+        page = Capybara.string(response.body)
+        expect(page).to have_css('.invalid-feedback, .alert-danger')
+      end
+    end
   end
 
   describe 'delete #destroy' do

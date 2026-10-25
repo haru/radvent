@@ -42,11 +42,7 @@ test.describe.serial('ボード', () => {
     await expect(page.getByRole('cell', { name: 'E2E 重複ID' })).toHaveCount(0)
   })
 
-  // BUG-2: an id with a character outside a-z, 0-9, "-" and "_" fails validation, but the layout then builds
-  // board_path from the invalid id, so the request ends in ActionController::UrlGenerationError (500).
-  // Remove test.fail() once fixed.
   test('C-2 (不正なID) 記号を含むIDでは、500にならず入力エラーが出る', async ({ browser }) => {
-    test.fail()
     const { page } = await openAs(browser, accounts.alice)
     await page.goto('/boards/new')
     await page.getByLabel('ボードID').fill('Bad ID!')
@@ -57,6 +53,7 @@ test.describe.serial('ボード', () => {
     ])
     expect(response.status()).toBe(422)
     await expect(page.locator('.alert-danger li').first()).toBeVisible()
+    await expect(page.getByLabel('ボードID')).toHaveValue('bad id!')
   })
 
   test('C-4 メンバー管理: メールアドレスでも名前でも追加でき、未登録・重複は弾かれ、削除できる', async ({ browser }) => {

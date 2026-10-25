@@ -6,7 +6,7 @@
 class BoardsController < ApplicationController
   include OtherBoardsListing
 
-  before_action :require_authentication, only: %i[index new create edit update destroy]
+  before_action :authenticate_user!, only: %i[index new create edit update destroy]
   before_action :find_board, only: %i[show edit update destroy]
   before_action :check_visibility, only: [:show]
   before_action :check_editability, only: %i[edit update]
@@ -69,12 +69,6 @@ class BoardsController < ApplicationController
   end
 
   private
-
-  def require_authentication
-    return if user_signed_in?
-
-    redirect_to new_user_session_path
-  end
 
   def find_board
     @board = Board.find_by(board_id: params[:board_id])

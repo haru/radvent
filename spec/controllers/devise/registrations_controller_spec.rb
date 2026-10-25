@@ -43,6 +43,40 @@ RSpec.describe Users::RegistrationsController do # rubocop:disable RSpec/SpecFil
         get :edit
         expect(response.body).to match(%r{<fieldset[^>]*>.*<legend[^>]*>.*</legend>.*theme_light.*</fieldset>}m)
       end
+
+      it 'renders the account deletion as a Turbo DELETE button with a confirmation, not a UJS link',
+         :aggregate_failures do # rubocop:disable RSpec/ExampleLength
+        get :edit
+        page = Capybara.string(response.body)
+        button = page.find_button(I18n.t('devise.registrations.edit.cancel_my_account'))
+        form = button.find(:xpath, 'ancestor::form[1]')
+        expect(form['action']).to eq '/users'
+        expect(form).to have_css('input[name="_method"][value="delete"]', visible: :all)
+        expect(button['data-turbo-confirm']).to be_present
+        expect(page).to have_no_css('a[data-method="delete"]')
+      end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    before { sign_in user }
+
+    it 'deletes the account, signs out and redirects to the top page with 303', :aggregate_failures do
+      expect { delete :destroy }.to change(User, :count).by(-1)
+      expect(response).to redirect_to(root_path)
+      expect(response).to have_http_status(:see_other)
+      expect(controller.current_user).to be_nil
+    end
+
+    it 'announces the cancellation', :aggregate_failures do
+      delete :destroy
+      expect(flash[:notice]).to eq I18n.t('devise.registrations.destroyed')
+    end
+
+    it 'leaves other accounts untouched' do
+      other = create(:user)
+      delete :destroy
+      expect(User.exists?(other.id)).to be true
     end
   end
 

@@ -7,6 +7,36 @@ describe Comment do
 
   let(:comment) { create(:comment, item: world[:item]) }
 
+  describe 'validations' do
+    it 'is valid with a name and a body' do
+      expect(build(:comment)).to be_valid
+    end
+
+    %i[user_name body].each do |attribute|
+      ['', '   ', nil].each do |value|
+        it "is invalid when #{attribute} is #{value.inspect}", :aggregate_failures do
+          comment = build(:comment, attribute => value)
+          expect(comment).not_to be_valid
+          expect(comment.errors[attribute]).to be_present
+        end
+      end
+    end
+  end
+
+  describe 'length limits' do
+    it 'rejects a user_name over 255 characters' do
+      expect(build(:comment, user_name: 'a' * 256)).not_to be_valid
+    end
+
+    it 'rejects a body over 10000 characters' do
+      expect(build(:comment, body: 'a' * 10_001)).not_to be_valid
+    end
+
+    it 'accepts the maximum lengths' do
+      expect(build(:comment, user_name: 'a' * 255, body: 'a' * 10_000)).to be_valid
+    end
+  end
+
   describe '#deletable?' do
     {
       nil => false, admin: true, owner: true, member: false, author: false, outsider: false

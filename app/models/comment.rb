@@ -8,6 +8,12 @@ class Comment < ApplicationRecord
 
   belongs_to :item, counter_cache: true
 
+  validates :user_name, :body, presence: true
+  # Keep within the column sizes (string: 255, text: 64KB in MySQL) so that overlong input is a
+  # validation error rather than a database error.
+  validates :user_name, length: { maximum: 255 }
+  validates :body, length: { maximum: 10_000 }
+
   # --- Permissionable implementation ---
 
   # A comment is visible exactly when its item is readable (visible and published).

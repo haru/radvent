@@ -125,6 +125,29 @@ RSpec.describe 'layouts/application' do
       end
     end
 
+    context 'when the board is unsaved with a malformed board_id' do
+      before do
+        assign(:board, Board.new(board_type: :user, board_id: 'Bad ID!', name: 'Draft'))
+        assign(:breadcrumb_event, nil)
+      end
+
+      it 'renders no board link instead of failing to build its path' do
+        expect(rendered_layout).to have_no_link('Draft')
+      end
+    end
+
+    context 'when a saved board has a malformed board_id in memory' do
+      before do
+        user_board.board_id = 'Bad ID!'
+        assign(:board, user_board)
+        assign(:breadcrumb_event, nil)
+      end
+
+      it 'links to the stored board_id' do
+        expect(rendered_layout).to have_link('User Board Name', href: "/boards/#{user_board.board_id_in_database}")
+      end
+    end
+
     context 'when a top board event is given' do
       before do
         assign(:board, top_board)

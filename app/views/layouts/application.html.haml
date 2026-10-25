@@ -18,9 +18,11 @@
     %nav#top-menu.navbar.navbar-light.navbar-expand-lg.px-3
       %div.d-flex.align-items-center
         = link_to "TOP", root_path, class: "navbar-brand me-0"
-        - if @board&.board_type_user? && @board.board_id.present?
+        -# board_id may hold rejected input after a failed update; links must use the stored value.
+        - persisted_board_id = @board&.board_id_in_database
+        - if @board&.board_type_user? && persisted_board_id.present?
           %span.px-2 /
-          = link_to @board.name, board_path(@board.board_id), class: "navbar-brand ms-0"
+          = link_to @board.name, board_path(persisted_board_id), class: "navbar-brand ms-0"
         - if @breadcrumb_event
           %span.px-2 /
           - crumb_title = persisted_event_title(@breadcrumb_event)

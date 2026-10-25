@@ -73,6 +73,9 @@ en:
             end_date:
               different_month: must be in the same month as start date
     attributes:
+      comment:
+        user_name: Name
+        body: Comment
       advent_calendar_item:
         user_name: Name
         comment: Comment
@@ -260,6 +263,7 @@ en:
       add_member: 'Add Member'
       member_placeholder: 'Username or email address'
       no_members: 'No members yet'
+      deleted_user: 'Deleted user'
     member_added: 'Member added successfully'
     member_removed: 'Member removed'
     remove: 'Remove'

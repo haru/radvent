@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test'
 import {
   accounts, closeOpenedContexts, login, logout, openAs, openPage, submitLogin, userMenu
 } from './support/accounts.js'
+import { acceptNextDialog, dismissNextDialog } from './support/dialog.js'
 import { fillSignUp } from './support/forms.js'
 import { clearJsErrors, expectNoJsErrors, watchJsErrors } from './support/js-errors.js'
 
@@ -124,17 +125,23 @@ test.describe.serial('アカウント', () => {
     }
   })
 
-  // BUG-1: the link is a Rails UJS link (data-method=delete) but the app runs on Turbo, so the click is a
-  // plain GET /users, which answers 403 and never asks for a confirmation. Remove test.fail() once fixed.
-  test('A-9 アカウントを削除すると、ログアウトされて同じ認証情報では入れない', async ({ page }) => {
-    test.fail()
-    await login(page, accounts.dave)
+  test('A-9 アカウントを削除すると、ログアウトされて同じ認証情報では入れない', async ({ browser }) => {
+    const { page } = await openAs(browser, accounts.eve)
     await page.goto('/users/edit')
-    const dialog = page.waitForEvent('dialog', { timeout: 3000 }).then((d) => d.accept()).catch(() => null)
-    await page.getByRole('link', { name: 'アカウント削除' }).click()
-    await dialog
+
+    // Declining the confirmation sends nothing: the account stays.
+    const dismissed = dismissNextDialog(page)
+    await page.getByRole('button', { name: 'アカウント削除' }).click()
+    await dismissed
+    await page.reload()
+    await expect(userMenu(page)).toHaveText(accounts.eve.name)
+
+    const accepted = acceptNextDialog(page)
+    await page.getByRole('button', { name: 'アカウント削除' }).click()
+    await accepted
+    await expect(page.getByText('アカウントを削除しました')).toBeVisible()
     await expect(page.getByRole('link', { name: 'ログイン' })).toBeVisible()
-    await submitLogin(page, accounts.dave.email, accounts.dave.password)
+    await submitLogin(page, accounts.eve.email, accounts.eve.password)
     await expect(page.getByText('メールアドレスかパスワードが違う')).toBeVisible()
   })
 
@@ -143,10 +150,6 @@ test.describe.serial('アカウント', () => {
     for (const path of ['/boards', '/boards/new', '/items/new', '/advent_calendar_items/new']) {
       await page.goto(path)
       await expect(page).toHaveURL(/\/users\/sign_in$/)
-    }
-    // OBS-1: the board screens redirect without the notice that the other protected screens show.
-    for (const path of ['/items/new', '/advent_calendar_items/new']) {
-      await page.goto(path)
       await expect(page.getByText('ログインもしくはアカウント登録してください。')).toBeVisible()
     }
   })

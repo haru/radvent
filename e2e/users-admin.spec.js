@@ -61,11 +61,7 @@ test.describe.serial('管理者の画面', () => {
     await expect(userRow(page, 'e2e-dave-edited')).toContainText('true')
   })
 
-  // BUG-4: UsersController#update_info renders :edit_info with status 200 when the save fails, so Turbo
-  // refuses the answer ("Form responses must redirect to another location") and the form shows no error.
-  // Remove test.fail() once it answers 422.
   test('B-3 (入力エラー) 不正なメールアドレスは保存されず、エラーが表示される', async ({ browser }) => {
-    test.fail()
     const { page } = await openAs(browser, accounts.admin)
     await page.goto('/users')
     await userRow(page, 'e2e-dave-edited').getByRole('link').click()
@@ -73,6 +69,7 @@ test.describe.serial('管理者の画面', () => {
     await page.locator('form[action^="/user/"]').evaluate((form) => form.setAttribute('novalidate', ''))
     await page.getByRole('button', { name: '更新する' }).click()
     await expect(page.locator('.invalid-feedback, .alert-danger, .help-block').first()).toBeVisible()
+    await expect(page.locator('#admin-menu')).toBeVisible()
     await page.goto('/users')
     await expect(page.getByRole('cell', { name: accounts.dave.email })).toBeVisible()
   })

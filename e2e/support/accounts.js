@@ -8,7 +8,9 @@ export const accounts = {
   alice: { name: 'e2e-alice', email: 'alice@e2e.example.com', password: 'alice-password' },
   bob: { name: 'e2e-bob', email: 'bob@e2e.example.com', password: 'bob-password' },
   carol: { name: 'e2e-carol', email: 'carol@e2e.example.com', password: 'carol-password' },
-  dave: { name: 'e2e-dave', email: 'dave@e2e.example.com', password: 'dave-password' }
+  dave: { name: 'e2e-dave', email: 'dave@e2e.example.com', password: 'dave-password' },
+  // Deletes their own account in auth.spec.js A-9, so no other scenario may use it.
+  eve: { name: 'e2e-eve', email: 'eve@e2e.example.com', password: 'eve-password' }
 }
 
 // Login states captured right after sign-up and reused for the rest of the run, so later tests do
