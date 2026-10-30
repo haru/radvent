@@ -367,6 +367,8 @@ ja:
   boards:
     index:
       title: 'ボード管理'
+      description: 'ボードは、自分用のイベント（アドベントカレンダー）を作るための場所です。ボードを作ると、そのボードの中で自分用のイベントを作成・管理できます。公開範囲を決めたり、一緒に使うメンバーを招待したりすることもできます。'
+      settings: '設定'
       new_board: '新しいボードを作成'
       no_boards: 'ボードがまだありません'
     show:
@@ -417,6 +419,7 @@ ja:
   board_memberships:
     index:
       title: 'メンバー管理'
+      back_to_settings: 'ボード設定に戻る'
       add_member: 'メンバーを追加'
       member_placeholder: 'ユーザー名またはメールアドレス'
       no_members: 'メンバーがいません'
@@ -430,7 +433,7 @@ ja:
     member_added: 'メンバーを追加しました'
     member_removed: 'メンバーを削除しました'
     remove: '削除'
-    remove_confirm: 'このメンバーを削除しますか？'
+    remove_confirm: '%{name} をメンバーから削除しますか？'
     errors:
       user_not_found: 'ユーザーが見つかりません'
       already_member: 'すでにメンバーです'

@@ -45,6 +45,37 @@ RSpec.describe BoardMembershipsController do
       end
     end
 
+    context 'when authenticated as owner with a member' do
+      render_views
+      before do
+        sign_in owner
+        create(:board_membership, board: board, user: other_user)
+        get :index, params: { board_board_id: board.board_id }
+      end
+
+      let(:row) { Capybara.string(response.body).find('tbody tr', text: other_user.name) }
+
+      it 'shows user and envelope icons next to name and e-mail', :aggregate_failures do
+        expect(row).to have_css("td i.fa-user[aria-hidden='true']", count: 1)
+        expect(row).to have_css("td i.fa-envelope[aria-hidden='true']", count: 1)
+      end
+
+      it 'links back to the board settings page' do
+        expect(Capybara.string(response.body)).to have_link(I18n.t('board_memberships.index.back_to_settings'),
+                                                            href: edit_board_path(board.board_id))
+      end
+
+      it 'names the member in the remove confirmation' do
+        confirm = I18n.t('board_memberships.remove_confirm', name: other_user.name)
+        expect(row.find('button')['data-turbo-confirm']).to eq confirm
+      end
+
+      it 'shows a trash icon together with the remove label', :aggregate_failures do
+        expect(row).to have_css("button i.fa-trash[aria-hidden='true']", count: 1)
+        expect(row).to have_button(I18n.t('board_memberships.remove'))
+      end
+    end
+
     context 'when a member has deleted their account' do
       render_views
       before do
@@ -59,6 +90,19 @@ RSpec.describe BoardMembershipsController do
         page = Capybara.string(response.body)
         expect(page).to have_css('td', text: I18n.t('board_memberships.index.deleted_user'))
         expect(page).to have_button(I18n.t('board_memberships.remove'))
+      end
+
+      it 'shows the user icon but no envelope icon on the deleted-user row', :aggregate_failures do
+        get :index, params: { board_board_id: board.board_id }
+        page = Capybara.string(response.body)
+        expect(page.find('td', text: I18n.t('board_memberships.index.deleted_user'))).to have_css('i.fa-user')
+        expect(page).to have_no_css('i.fa-envelope')
+      end
+
+      it 'uses the deleted-user label in the remove confirmation' do
+        get :index, params: { board_board_id: board.board_id }
+        confirm = I18n.t('board_memberships.remove_confirm', name: I18n.t('board_memberships.index.deleted_user'))
+        expect(Capybara.string(response.body).find('tbody tr button')['data-turbo-confirm']).to eq confirm
       end
     end
 

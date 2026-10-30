@@ -91,7 +91,7 @@ test.describe.serial('利用者の一連の操作', () => {
     })
 
     await test.step('AS 3-2 ボードを編集すると、変更が反映される', async () => {
-      await page.getByRole('row', { name: boardName }).getByRole('link', { name: 'ボード設定' }).click()
+      await page.getByRole('row', { name: boardName }).getByRole('link', { name: '設定', exact: true }).click()
       await page.getByLabel('ボード名').fill(boardNameEdited)
       await page.getByRole('button', { name: '更新する' }).click()
       await expect(page.getByRole('heading', { name: boardNameEdited })).toBeVisible()
