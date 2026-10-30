@@ -22,12 +22,12 @@
         - persisted_board_id = @board&.board_id_in_database
         - if @board&.board_type_user? && persisted_board_id.present?
           %span.px-2 /
-          = link_to @board.name, board_path(persisted_board_id), class: "navbar-brand ms-0"
+          = link_to @board.name, board_path(persisted_board_id), class: "navbar-brand ms-0 me-0"
         - if @breadcrumb_event
           %span.px-2 /
           - crumb_title = persisted_event_title(@breadcrumb_event)
           - crumb_path = event_page_path(@breadcrumb_event)
-          - crumb_options = { class: "navbar-brand ms-0 breadcrumb-event", title: crumb_title }
+          - crumb_options = { class: "navbar-brand ms-0 me-0 breadcrumb-event", title: crumb_title }
           - if current_page?(crumb_path)
             %span{ crumb_options, "aria-current" => "page" }= crumb_title
           - else
