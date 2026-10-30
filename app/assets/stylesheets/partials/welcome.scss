@@ -107,6 +107,8 @@ body#advent_calendar_body {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      // The fixed .navbar-brand height would clip the text under overflow: hidden.
+      height: auto;
     }
   }
 
