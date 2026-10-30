@@ -16,7 +16,13 @@ export default [
         fetch: 'readonly',
         navigator: 'readonly',
         localStorage: 'readonly',
-        sessionStorage: 'readonly'
+        sessionStorage: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
+        AbortController: 'readonly',
+        AbortSignal: 'readonly',
+        URL: 'readonly',
+        console: 'readonly'
       }
     },
     rules: {
@@ -26,10 +32,13 @@ export default [
     }
   },
   {
-    files: ['e2e/**/*.js', 'playwright.config.js'],
+    files: ['e2e/**/*.js'],
     languageOptions: {
+      // Used inside page.evaluate callbacks, which run in the browser.
       globals: {
-        URL: 'readonly'
+        CompositionEvent: 'readonly',
+        InputEvent: 'readonly',
+        KeyboardEvent: 'readonly'
       }
     }
   }

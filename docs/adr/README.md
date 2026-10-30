@@ -20,3 +20,4 @@ unchanged.
 | [0011](0011-share-auth-rate-limit-counters-in-solid-cache.md) | Share authentication rate-limit counters in Solid Cache | Accepted |
 | [0012](0012-account-lockout-is-time-based-and-invisible.md) | Account lockout is time-based, invisible and does not end sessions | Accepted |
 | [0013](0013-e2e-tests-with-playwright-and-dedicated-rails-env.md) | E2E tests run with Playwright against a dedicated Rails environment | Accepted |
+| [0014](0014-show-user-email-in-board-member-search.md) | Show user email addresses in the board member search | Accepted |

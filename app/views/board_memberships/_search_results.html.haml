@@ -1,0 +1,11 @@
+- users.each do |user|
+  %div.member-search-option{role: 'option', id: "member-search-option-#{user.id}",
+                            data: { 'member-search-user-id': user.id,
+                                    'member-search-label': [user.name, user.email].compact_blank.join(' / ') }}
+    - if user.name.present?
+      %span.member-search-name= user.name
+    %span.member-search-email.text-muted= user.email
+- if users.empty?
+  %div.member-search-note.text-muted= t('board_memberships.index.no_results')
+- elsif more
+  %div.member-search-note.text-muted= t('board_memberships.index.refine_search')

@@ -1,8 +1,8 @@
 ---
 title: JavaScript and CSS Asset Pipeline
 type: component
-sources: [S010, S011, S012, S013, S015, S017, S021]
-updated: 2026-10-24
+sources: [S010, S011, S012, S013, S015, S017, S021, S040]
+updated: 2026-10-30
 ---
 
 # JavaScript and CSS Asset Pipeline
@@ -37,6 +37,7 @@ calls `new mdb.Input(el).init()` / `.update()`, bound to `turbo:load` and
 | `popover_controller` | MDB Popover lifecycle — init on `connect`, dispose on `disconnect` (S010) |
 | `navbar_dropdown_controller` | Mobile/desktop dropdown state; closes on outside click (S010) |
 | `board_delete_confirmation_controller` | Disables the board-delete submit button until the typed board ID matches the target board's ID in real time (S013) |
+| `member_search_controller` | Debounced, abortable candidate search for the member form — see [Board Member Search](board-member-search.md) (S040) |
 | `theme_controller` | Feature `007-theme-switch`: applies the picked theme to `data-theme` immediately, `fetch`-PATCHes `theme_path`, and rolls back on failure — see [Manual Theme Selection](./theme-switch.md) (S015) |
 
 Controllers are auto-registered via a manifest rather than explicit imports —

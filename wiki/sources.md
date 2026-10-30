@@ -44,6 +44,8 @@ Sources are immutable inputs — the wiki never edits them.
 | S037 | docs/adr/0012-account-lockout-is-time-based-and-invisible.md | file | 2026-10-25 | 2026-10-25 | auth-rate-limit-and-lockout.md |
 | S038 | specs/021-e2e-playwright-tests/research.md | feature-artifact | 2026-10-25 | 2026-10-25 | e2e-testing.md, e2e-scenario-design.md, development-setup.md, tech-stack.md, auth-rate-limit-and-lockout.md |
 | S039 | docs/adr/0013-e2e-tests-with-playwright-and-dedicated-rails-env.md | file | 2026-10-25 | 2026-10-25 | e2e-testing.md, e2e-scenario-design.md |
+| S040 | specs/023-board-member-search/research.md | feature-artifact | 2026-10-30 | 2026-10-30 | board-member-search.md, controller-groups.md, javascript-asset-pipeline.md, auth-rate-limit-and-lockout.md |
+| S041 | docs/adr/0014-show-user-email-in-board-member-search.md | file | 2026-10-30 | 2026-10-30 | board-member-search.md |
 
 Note: domain-model.md exceeded the 600-word split threshold after S015's
 update; its Authorization section was split into authorization.md (S002,

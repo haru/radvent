@@ -91,6 +91,244 @@ test.describe.serial('ボード', () => {
     await expect(page.getByText('メンバーがいません')).toBeVisible()
   })
 
+  test('C-4b メンバー検索: 入力途中の候補を選んで追加でき、既存メンバーやオーナーは候補に出ない', async ({ browser }) => {
+    const { page } = await openAs(browser, accounts.alice)
+    await createBoard(page, { boardId: 'e2e-member-search', name: 'E2E メンバー検索ボード' })
+    await page.goto('/boards/e2e-member-search/board_memberships')
+
+    const input = page.getByPlaceholder('ユーザー名またはメールアドレス')
+    const candidate = (account) => page.locator('#member-search-results').getByRole('option').filter({ hasText: account.email })
+    const memberCell = (account) => page.getByRole('cell', { name: account.name, exact: true })
+    const noMatch = page.getByText('該当するユーザーがいません')
+    const add = () => page.getByRole('button', { name: 'メンバーを追加' }).click()
+
+    await test.step('1文字では候補が出ず、2文字で名前とメールアドレスが見える', async () => {
+      await input.fill('ca')
+      await expect(candidate(accounts.carol)).toContainText(accounts.carol.name)
+      await input.fill('e')
+      await expect(page.getByRole('listbox')).toBeHidden()
+    })
+
+    await test.step('マウスで選ぶと入力欄に反映されるだけで、追加ボタンで確定する', async () => {
+      await input.fill('e2e-ca')
+      await candidate(accounts.carol).click()
+      await expect(input).toHaveValue(new RegExp(accounts.carol.name))
+      await expect(memberCell(accounts.carol)).toHaveCount(0)
+      await add()
+      await expect(page.getByText('メンバーを追加しました')).toBeVisible()
+      await expect(memberCell(accounts.carol)).toBeVisible()
+    })
+
+    await test.step('メールアドレスの一部は大文字小文字を区別せず検索できる', async () => {
+      await input.fill('BOB@E2E')
+      await candidate(accounts.bob).click()
+      await add()
+      await expect(memberCell(accounts.bob)).toBeVisible()
+    })
+
+    await test.step('キーボードだけで候補を選んで追加できる', async () => {
+      await input.fill('e2e-da')
+      await expect(candidate(accounts.dave)).toBeVisible()
+      await input.press('ArrowDown')
+      await input.press('Enter')
+      await expect(input).toHaveValue(new RegExp(accounts.dave.name))
+      await expect(memberCell(accounts.dave)).toHaveCount(0)
+      await input.press('Enter')
+      await expect(memberCell(accounts.dave)).toBeVisible()
+    })
+
+    await test.step('選んだ後に入力欄を編集すると選択は解除され、入力値で処理される', async () => {
+      await input.fill('admin@')
+      await candidate(accounts.admin).click()
+      await input.fill('nobody-with-this-name')
+      await add()
+      await expect(page.getByText('ユーザーが見つかりません')).toBeVisible()
+      await expect(memberCell(accounts.admin)).toHaveCount(0)
+    })
+
+    await test.step('既存メンバー・オーナー・該当なしでは候補が出ない', async () => {
+      for (const query of [accounts.carol.name, accounts.alice.name, 'zzzz-no-such-user']) {
+        await input.fill(query)
+        await expect(noMatch).toBeVisible()
+        await expect(page.locator('#member-search-results [role="option"]')).toHaveCount(0)
+        await input.fill('')
+        await expect(noMatch).toBeHidden()
+      }
+    })
+  })
+
+  test('C-4c メンバー検索の操作: 間引き・取り消し・キーボード・IME・失敗表示', async ({ browser }) => {
+    const { page, context } = await openAs(browser, accounts.alice)
+    await createBoard(page, { boardId: 'e2e-member-search-ui', name: 'E2E メンバー検索操作ボード' })
+    const searchUrl = '**/board_memberships/search**'
+    const searches = []
+    const logged = []
+    page.on('request', (request) => { if (request.url().includes('/board_memberships/search')) searches.push(request.url()) })
+    page.on('console', (message) => { if (message.text().startsWith('Member search')) logged.push(message.text()) })
+    const open = async () => {
+      await page.goto('/boards/e2e-member-search-ui/board_memberships')
+      return page.getByPlaceholder('ユーザー名またはメールアドレス')
+    }
+    const input = await open()
+    const listbox = page.getByRole('listbox')
+    const options = page.locator('#member-search-results [role="option"]')
+    const userId = page.locator('input[name="user_id"]')
+    const candidate = (account) => options.filter({ hasText: account.email })
+    const alert = page.getByRole('alert')
+
+    await test.step('入力欄は長さに上限がある', async () => {
+      await expect(input).toHaveAttribute('maxlength', '255')
+    })
+
+    await test.step('連続入力は1回の検索にまとまり、1文字では検索しない', async () => {
+      searches.length = 0
+      await input.pressSequentially('e2e-ca', { delay: 30 })
+      await expect(candidate(accounts.carol)).toBeVisible()
+      expect(searches).toHaveLength(1)
+      searches.length = 0
+      await input.fill('e')
+      await page.waitForTimeout(600)
+      expect(searches).toHaveLength(0)
+    })
+
+    await test.step('↑は最後の候補から、↓は先頭へ回り込み、選択中の候補が支援技術に伝わる', async () => {
+      await input.fill('e2e-')
+      await expect(options.nth(1)).toBeVisible()
+      const count = await options.count()
+      await input.press('ArrowUp')
+      await expect(options.nth(count - 1)).toHaveAttribute('aria-selected', 'true')
+      await expect(input).toHaveAttribute('aria-activedescendant', await options.nth(count - 1).getAttribute('id'))
+      await input.press('ArrowDown')
+      await expect(options.nth(0)).toHaveAttribute('aria-selected', 'true')
+      await expect(options.nth(count - 1)).toHaveAttribute('aria-selected', 'false')
+    })
+
+    await test.step('候補を選んだ直後に入力すると古い候補は確定されない', async () => {
+      await input.press('ArrowDown')
+      await input.press('x')
+      await input.press('Enter')
+      await expect(userId).toHaveValue('')
+      await expect(input).toHaveValue(/x$/)
+    })
+
+    await test.step('Esc とフォーカス移動で候補が閉じ、検索待ちの結果が後から開き直さない', async () => {
+      await input.fill('e2e-ca')
+      await expect(listbox).toBeVisible()
+      await input.press('Escape')
+      await expect(listbox).toBeHidden()
+
+      await page.route(searchUrl, async (route) => {
+        const response = await route.fetch()
+        await new Promise((resolve) => setTimeout(resolve, 800))
+        await route.fulfill({ response }).catch(() => {}) // the page has cancelled the request
+      })
+      await input.fill('e2e-da')
+      await page.waitForTimeout(400)
+      await input.press('Escape')
+      await page.waitForTimeout(1200)
+      await expect(listbox).toBeHidden()
+
+      await page.unroute(searchUrl)
+      await input.fill('e2e-ca')
+      await expect(listbox).toBeVisible()
+      await input.blur()
+      await expect(listbox).toBeHidden()
+    })
+
+    await test.step('古い検索の応答は新しい検索の結果を上書きしない', async () => {
+      let first = true
+      await page.route(searchUrl, async (route) => {
+        const slow = first
+        first = false
+        const response = await route.fetch()
+        if (slow) await new Promise((resolve) => setTimeout(resolve, 1200))
+        await route.fulfill({ response }).catch(() => {})
+      })
+      await input.fill('e2e-ca')
+      await page.waitForRequest((request) => request.url().includes('member_query=e2e-ca'))
+      await input.fill('e2e-da')
+      await expect(candidate(accounts.dave)).toBeVisible()
+      await page.waitForTimeout(1500)
+      await expect(candidate(accounts.dave)).toBeVisible()
+      await expect(candidate(accounts.carol)).toHaveCount(0)
+      await page.unroute(searchUrl)
+    })
+
+    await test.step('IMEの変換中は検索せず、確定で1回だけ検索し、変換を確定するEnterで候補を選ばない', async () => {
+      await input.fill('')
+      searches.length = 0
+      await input.evaluate((element) => {
+        element.dispatchEvent(new CompositionEvent('compositionstart', { bubbles: true }))
+        element.value = 'e2e-ca'
+        element.dispatchEvent(new InputEvent('input', { bubbles: true, isComposing: true }))
+      })
+      await page.waitForTimeout(600)
+      expect(searches).toHaveLength(0)
+      await input.evaluate((element) => element.dispatchEvent(new CompositionEvent('compositionend', { bubbles: true })))
+      await expect(candidate(accounts.carol)).toBeVisible()
+      expect(searches).toHaveLength(1)
+      await input.press('ArrowDown')
+      await input.evaluate((element) => element.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'Enter', isComposing: true, bubbles: true, cancelable: true })
+      ))
+      await expect(userId).toHaveValue('')
+      await expect(listbox).toBeVisible()
+    })
+
+    await test.step('ページを戻って復元されても候補は開いておらず、キーボード操作で例外にならない', async () => {
+      await input.fill('e2e-ca')
+      await expect(listbox).toBeVisible()
+      await page.goto('/boards')
+      await page.goBack()
+      const restored = page.getByPlaceholder('ユーザー名またはメールアドレス')
+      await expect(page.getByRole('listbox')).toBeHidden()
+      await restored.fill('e2e-ca')
+      await expect(candidate(accounts.carol)).toBeVisible()
+      await restored.press('ArrowDown')
+      await expect(options.first()).toHaveAttribute('aria-selected', 'true')
+    })
+
+    await test.step('失敗は原因ごとに表示され、「該当なし」とは区別され、次の入力で消える', async () => {
+      const failures = [
+        [429, '検索の回数が上限に達しました'],
+        [500, '検索に失敗しました'],
+        [403, '権限がありません'],
+        [404, '権限がありません']
+      ]
+      for (const [status, text] of failures) {
+        await page.route(searchUrl, (route) => route.fulfill({ status, contentType: 'text/plain', body: 'x' }))
+        await input.fill('e2e-ca')
+        await expect(alert).toContainText(text)
+        await expect(page.getByText('該当するユーザーがいません')).toBeHidden()
+        await page.unroute(searchUrl)
+      }
+
+      await page.route(searchUrl, (route) => route.fulfill({ status: 200, contentType: 'text/plain', body: 'x' }))
+      await input.fill('e2e-ca')
+      await expect(alert).toContainText('検索に失敗しました')
+      await page.unroute(searchUrl)
+
+      await page.route(searchUrl, (route) => route.abort())
+      await input.fill('e2e-ca')
+      await expect(alert).toContainText('検索に失敗しました')
+      await page.unroute(searchUrl)
+
+      await input.fill('e2e-ca')
+      await expect(alert).toBeHidden()
+      await expect(candidate(accounts.carol)).toBeVisible()
+      expect(logged.length).toBeGreaterThanOrEqual(6)
+      // The application logs each failure to the console on purpose; they are not unexpected errors.
+      clearJsErrors()
+    })
+
+    await test.step('セッション切れはログインし直しを促す', async () => {
+      await context.clearCookies()
+      await input.fill('e2e-da')
+      await expect(alert).toContainText('ログインの有効期限が切れました')
+      clearJsErrors()
+    })
+  })
+
   test('C-3 公開範囲ごとに、オーナー・メンバー・他のユーザー・ゲストの見え方が決まる', async ({ browser }) => {
     const alice = await openAs(browser, accounts.alice)
     const bob = await openAs(browser, accounts.bob)
