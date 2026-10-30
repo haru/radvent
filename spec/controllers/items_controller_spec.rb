@@ -747,6 +747,14 @@ RSpec.describe ItemsController do
         expect(response).to render_template :show
         expect(breadcrumb_event[:href]).to eq "/boards/#{board.board_id}/events/crumb-cal"
       end
+
+      it 'removes the navbar-brand side margins so the separators sit evenly', :aggregate_failures do
+        sign_in owner
+        get :show, params: { id: article.id }
+        menu = Capybara.string(response.body).find('nav#top-menu')
+        expect(menu.find_link('Crumb Board Name')[:class].split).to include('ms-0', 'me-0')
+        expect(breadcrumb_event[:class].split).to include('ms-0', 'me-0')
+      end
     end
 
     context 'when the article is on a top board event' do
