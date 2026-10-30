@@ -34,6 +34,32 @@ RSpec.describe BoardsController do
         get :index
         expect(response.body).to include('data-controller="datatable"')
       end
+
+      it 'explains what a board is when the user has no boards' do
+        get :index
+        expect(Capybara.string(response.body)).to have_css('p', text: I18n.t('boards.index.description'))
+      end
+    end
+
+    context 'when authenticated with an owned board' do
+      render_views
+      before do
+        sign_in owner
+        board
+      end
+
+      it 'explains what a board is above the list' do
+        get :index
+        expect(Capybara.string(response.body)).to have_css('p', text: I18n.t('boards.index.description'))
+      end
+
+      it 'links a gear-icon settings button to the edit page', :aggregate_failures do
+        get :index
+        page = Capybara.string(response.body)
+        expect(page).to have_link(I18n.t('boards.index.settings'), href: edit_board_path(board.board_id))
+        expect(page).to have_css("a[href='#{edit_board_path(board.board_id)}'] i.fa-gear[aria-hidden='true']")
+        expect(page).to have_no_link(I18n.t('boards.edit.title'))
+      end
     end
   end
 

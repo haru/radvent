@@ -38,6 +38,7 @@ page files, not here.
 - [Slot Info Page — Author and Admin Only](pages/slot-info-page-access.md) — `#show` reuses the edit-side filters; guests get the sign-in redirect, invisible boards 404, non-editors 403 (ADR-0010)
 - [Navbar Breadcrumb — Event Segment](pages/navbar-breadcrumb.md) — layout-only `@breadcrumb_event` assigned after authorization filters, saved-title helper, `aria-current` on the calendar page, CSS ellipsis
 - [Authentication Rate Limits and Account Lockout](pages/auth-rate-limit-and-lockout.md) — per-IP and per-address limits via Solid Cache, 429 page, time-based invisible lockout (ADR-0011, ADR-0012)
+- [Board Member Search (Incremental Candidates)](pages/board-member-search.md) — HTML-fragment search endpoint, `!`-escaped LIKE, per-user rate limit, `user_id` picking, abortable Stimulus client, and the accepted email exposure (ADR-0014)
 - [E2E Tests with Playwright (Dedicated Rails Environment)](pages/e2e-testing.md) — `e2e` env on port 4500, per-run SQLite reset, one-command runner, Chromium via the devcontainer (ADR-0013)
 
 ## howto

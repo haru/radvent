@@ -13,6 +13,12 @@ class Board < ApplicationRecord
     sign_up password confirmation unlock rails assets
   ].freeze
 
+  # Number of member candidates offered at once.
+  CANDIDATE_LIMIT = 10
+
+  # Case-insensitive partial match on name or email; +!+ is the escape character (see #member_candidates).
+  MATCH_SQL = "LOWER(users.name) LIKE LOWER(:p) ESCAPE '!' OR LOWER(users.email) LIKE LOWER(:p) ESCAPE '!'"
+
   attribute :board_type, :integer, default: 1
   enum :board_type, { top: 0, user: 1 }, prefix: true
   enum :visibility, { public: 0, protected: 1, private: 2 }, prefix: :visibility
@@ -107,6 +113,20 @@ class Board < ApplicationRecord
     owner?(user)
   end
 
+  # Users that can be offered as new members for a search term.
+  #
+  # Matches the user name or email address by partial, case-insensitive comparison (non-ASCII case
+  # folding and the sort order depend on the database). +%+, +_+ and +!+ in the term are plain
+  # characters. The owner and existing members are left out. Returns at most CANDIDATE_LIMIT users
+  # sorted by name then email, and whether more matched.
+  # @param query [String] the search term, already stripped
+  # @return [Array(Array<User>, Boolean)] the candidates and whether further users matched
+  def member_candidates(query)
+    pattern = "%#{User.sanitize_sql_like(query, '!')}%"
+    users = addable_users.where(MATCH_SQL, p: pattern).order(:name, :email).limit(CANDIDATE_LIMIT + 1).to_a
+    [users.first(CANDIDATE_LIMIT), users.size > CANDIDATE_LIMIT]
+  end
+
   def deletable?(user)
     return false if board_type_top?
     return true if user&.admin?
@@ -115,6 +135,12 @@ class Board < ApplicationRecord
   end
 
   private
+
+  # Users who are neither the owner nor a member. The join behind +members+ drops rows with a NULL user_id,
+  # which would otherwise make NOT IN match nothing.
+  def addable_users
+    User.where.not(id: members.select(:id)).where.not(id: owner_id)
+  end
 
   def normalize_board_id
     return if board_id.blank?

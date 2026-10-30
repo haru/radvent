@@ -107,6 +107,13 @@ body#advent_calendar_body {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      // The fixed .navbar-brand height would clip the text under overflow: hidden.
+      height: auto;
+      // The current-page crumb is a span, which misses the top padding that
+      // `a:not(.dropdown-item)` gives the links, so its text sat higher. Use the
+      // same padding so both variants render identically.
+      padding-top: 5px;
+      padding-bottom: 5px;
     }
   }
 

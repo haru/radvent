@@ -1,8 +1,8 @@
 ---
 title: Authentication Rate Limits and Account Lockout
 type: decision
-sources: [S035, S036, S037, S038]
-updated: 2026-10-25
+sources: [S035, S036, S037, S038, S040]
+updated: 2026-10-30
 ---
 
 # Authentication Rate Limits and Account Lockout
@@ -30,6 +30,10 @@ Feature `020-auth-rate-limit-lockout` (Issue #289) limits brute-force sign-in, b
 - Development uses `:null_store` unless `tmp/caching-dev.txt` exists, so no limit applies there by default (S036).
 - Test env uses `:memory_store`, cleared before each example, because `:null_store` never counts (S035).
 - The `e2e` env also uses `:memory_store` (fresh per boot) and keeps the limits on; see [E2E Scenario Design](./e2e-scenario-design.md) (S038).
+
+## Reuse outside authentication
+
+The board member search reuses `rate_limit` with the Solid Cache counters, keyed by user id instead of IP, and answers 429 through `render_too_many_requests` — see [Board Member Search](board-member-search.md) (S040).
 
 ## Account lockout
 

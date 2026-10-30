@@ -228,6 +228,146 @@ RSpec.describe Board do
     end
   end
 
+  describe '#member_candidates' do
+    let(:board) { create(:board, :private_user) }
+
+    def names_for(query)
+      board.member_candidates(query).first.map(&:name)
+    end
+
+    it 'matches a part of the name' do
+      create(:user, name: 'Yamada Taro')
+      create(:user, name: 'Suzuki Hanako')
+      expect(names_for('amada')).to eq ['Yamada Taro']
+    end
+
+    it 'ignores case' do
+      create(:user, name: 'Yamada Taro')
+      expect(names_for('YAMADA')).to eq ['Yamada Taro']
+    end
+
+    it 'matches multibyte names' do
+      create(:user, name: '山田太郎')
+      expect(names_for('山田')).to eq ['山田太郎']
+    end
+
+    it 'treats % as a plain character' do
+      create(:user, name: '100% sure')
+      create(:user, name: '100 sure')
+      expect(names_for('0% s')).to eq ['100% sure']
+    end
+
+    it 'treats _ as a plain character' do
+      create(:user, name: 'a_bc')
+      create(:user, name: 'axbc')
+      expect(names_for('a_')).to eq ['a_bc']
+    end
+
+    it 'treats the escape character ! as a plain character' do
+      create(:user, name: 'wow!x')
+      create(:user, name: 'wowxx')
+      expect(names_for('w!x')).to eq ['wow!x']
+    end
+
+    it 'returns an empty list when nothing matches' do
+      expect(board.member_candidates('zzzz')).to eq [[], false]
+    end
+
+    it 'sorts by name ascending' do
+      create(:user, name: 'kk-b')
+      create(:user, name: 'kk-a')
+      expect(names_for('kk-')).to eq %w[kk-a kk-b]
+    end
+
+    it 'returns 10 candidates and no more flag for exactly 10 matches', :aggregate_failures do
+      10.times { |i| create(:user, name: format('many-%02d', i)) }
+      users, more = board.member_candidates('many-')
+      expect(users.size).to eq 10
+      expect(more).to be false
+    end
+
+    it 'returns the first 10 and a more flag for 11 matches', :aggregate_failures do
+      10.downto(0) { |i| create(:user, name: format('many-%02d', i)) }
+      users, more = board.member_candidates('many-')
+      expect(users.map(&:name)).to eq((0..9).map { |i| format('many-%02d', i) })
+      expect(more).to be true
+    end
+
+    it 'matches a part of the email address ignoring case' do
+      create(:user, name: 'Someone', email: 'taro.yamada@example.com')
+      expect(names_for('YAMADA@EXAMPLE')).to eq ['Someone']
+    end
+
+    it 'treats _ in the email term as a plain character' do
+      create(:user, name: 'Under', email: 'a_b@example.com')
+      create(:user, name: 'Other', email: 'axb@example.com')
+      expect(names_for('a_b@')).to eq ['Under']
+    end
+
+    it 'treats % in the email term as a plain character' do
+      create(:user, name: 'Percent', email: 'a%b@example.com')
+      create(:user, name: 'Other', email: 'axyb@example.com')
+      expect(names_for('a%b@')).to eq ['Percent']
+    end
+
+    it 'lists a user matching both name and email only once' do
+      create(:user, name: 'dup-match', email: 'dup-match@example.com')
+      expect(names_for('dup-match')).to eq ['dup-match']
+    end
+
+    it 'finds users matching only by name or only by email' do
+      create(:user, name: 'only-name', email: 'x1@example.com')
+      create(:user, name: 'Zed', email: 'only-name-mail@example.com')
+      expect(names_for('only-name')).to match_array %w[Zed only-name]
+    end
+
+    it 'orders users with the same name by email' do
+      create(:user, name: 'twin', email: 'b@example.com')
+      create(:user, name: 'twin', email: 'a@example.com')
+      expect(board.member_candidates('twin').first.map(&:email)).to eq %w[a@example.com b@example.com]
+    end
+
+    it 'excludes the board owner' do
+      board.owner.update!(name: 'owner-zz')
+      expect(names_for('owner-zz')).to eq []
+    end
+
+    it 'excludes existing members' do
+      create(:board_membership, board: board, user: create(:user, name: 'member-zz'))
+      create(:user, name: 'member-yy')
+      expect(names_for('member-')).to eq ['member-yy']
+    end
+
+    it 'still lists candidates when a membership has a NULL user_id' do
+      create(:board_membership, board: board).update_column(:user_id, nil) # rubocop:disable Rails/SkipsModelValidations
+      create(:user, name: 'cand-zz')
+      expect(names_for('cand-')).to eq ['cand-zz']
+    end
+
+    it 'does not exclude members of other boards' do
+      create(:board_membership, board: create(:board, :private_user), user: create(:user, name: 'elsewhere'))
+      expect(names_for('elsewhere')).to eq ['elsewhere']
+    end
+
+    it 'still lists candidates when the board has no owner' do
+      board.update_column(:owner_id, nil) # rubocop:disable Rails/SkipsModelValidations
+      create(:user, name: 'cand-zz')
+      expect(names_for('cand-')).to eq ['cand-zz']
+    end
+
+    it 'finds a user without a name by email', :aggregate_failures do
+      user = create(:user, email: 'noname@example.com')
+      user.update_column(:name, nil) # rubocop:disable Rails/SkipsModelValidations
+      expect(board.member_candidates('noname@').first).to eq [user]
+    end
+
+    it 'does not fail for users without a name' do
+      create(:user, email: 'noname@example.com').update_column(:name, nil) # rubocop:disable Rails/SkipsModelValidations
+      create(:user, name: 'nomatch-zz')
+      expect(names_for('nomatch')).to eq ['nomatch-zz']
+    end
+  end
+
   # --- Delete confirmation ---
   describe '#board_id_match?' do
     let(:board) { create(:board, :public_user, board_id: 'myboard') }

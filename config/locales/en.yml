@@ -264,6 +264,12 @@ en:
       member_placeholder: 'Username or email address'
       no_members: 'No members yet'
       deleted_user: 'Deleted user'
+      no_results: 'No matching users'
+      refine_search: 'More users match. Please narrow your search'
+      search_failed: 'Search failed. Please try again later'
+      rate_limited: 'Too many searches. Please wait a moment'
+      session_expired: 'Your session has expired. Please reload the page and sign in again'
+      not_permitted: 'You are not allowed to manage the members of this board. Please reload the page'
     member_added: 'Member added successfully'
     member_removed: 'Member removed'
     remove: 'Remove'
@@ -271,6 +277,7 @@ en:
     errors:
       user_not_found: 'User not found'
       already_member: 'Already a member'
+      ambiguous_name: 'Several users have this name. Please pick one from the candidates'
   theme:
     label: 'Theme'
     system: 'System'

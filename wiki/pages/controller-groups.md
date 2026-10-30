@@ -1,15 +1,15 @@
 ---
 title: Controller Groups
 type: component
-sources: [S004, S015, S019, S023, S026, S028, S033]
-updated: 2026-10-25
+sources: [S004, S015, S019, S023, S026, S028, S033, S040]
+updated: 2026-10-30
 ---
 
 # Controller Groups
 
 | Group | Responsibility |
 |-------|-----------------|
-| Boards / BoardMemberships | Board lifecycle, visibility-based access, membership management (add/remove users by email or name) (S004) |
+| Boards / BoardMemberships | Board lifecycle, visibility-based access, membership management (add/remove users by email or name, plus incremental candidate search — see [Board Member Search](board-member-search.md)) (S004, S040) |
 | Events / AdventCalendarItems | Advent calendar management, date-slot assignment (`date` is Integer 1–31) (S004); the slot info page is author/admin only since feature `018` — see [Slot Info Page — Author and Admin Only](./slot-info-page-access.md) (S033) |
 | Items | Content creation for a calendar slot, plus the Markdown preview pipeline (S004); previews are authorized — see [Article Preview Authorization](./article-preview-authorization.md) (S028) |
 | Users | Admin-only account/profile management (S004) |

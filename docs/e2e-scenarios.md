@@ -61,8 +61,10 @@ Legend: ✅ covered by the main journey, 🆕 added by the extended specs.
 | C-1 ✅ | Create, edit a board; add a member (US3) |
 | C-2 🆕 | Board form errors: empty id/name, malformed id, taken id |
 | C-3 🆕 | Visibility: public / protected / private boards for owner, member, other user and guest |
-| C-4 🆕 | Members: add by e-mail, unknown user, duplicate, remove (with confirmation) |
-| C-5 🆕 | Board list shows only own boards; empty state; a guest or other user cannot edit a board (403) |
+| C-4 🆕 | Members: add by e-mail, unknown user, duplicate, remove (the confirmation names the member); the "back to board settings" link goes to the settings page; member rows show user / envelope / trash icons |
+| C-4b 🆕 | Member search: candidates from 2 characters (name or e-mail, any case), pick by mouse (confirm with the add button) or by keyboard only (confirm with Enter), editing after picking drops the pick, members and the owner are not offered, no-match message. IME composition is checked by hand (quickstart #13) |
+| C-4c 🆕 | Member search behaviour: debounced single request, no request below 2 characters, ArrowUp / ArrowDown wrap and `aria-activedescendant`, typing after a highlight drops it, Esc and blur close the list and cancel a pending search, a stale response never overwrites a newer one, IME composition (no search while composing, one on end, composing Enter picks nothing), a Turbo-restored page works, 429 / 500 / 403 / 404 / non-HTML / network failure / expired session each show their own message |
+| C-5 🆕 | Board list shows only own boards; empty state; the explanation of what a board is is always shown; each row has a gear-icon "設定" button; a guest or other user cannot edit a board (403) |
 | C-6 🆕 | Public boards are listed under "other boards" on the TOP |
 | C-7 🆕 | Delete a board: wrong id is refused, the right id deletes it and the board is 404 afterwards |
 | C-8 🆕 | Unknown board / event gives the 404 page |

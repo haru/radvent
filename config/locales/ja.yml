@@ -367,6 +367,8 @@ ja:
   boards:
     index:
       title: 'ボード管理'
+      description: 'ボードは、自分用のイベント（アドベントカレンダー）を作るための場所です。ボードを作ると、そのボードの中で自分用のイベントを作成・管理できます。公開範囲を決めたり、一緒に使うメンバーを招待したりすることもできます。'
+      settings: '設定'
       new_board: '新しいボードを作成'
       no_boards: 'ボードがまだありません'
     show:
@@ -417,17 +419,25 @@ ja:
   board_memberships:
     index:
       title: 'メンバー管理'
+      back_to_settings: 'ボード設定に戻る'
       add_member: 'メンバーを追加'
       member_placeholder: 'ユーザー名またはメールアドレス'
       no_members: 'メンバーがいません'
       deleted_user: '削除されたユーザー'
+      no_results: '該当するユーザーがいません'
+      refine_search: '他にも該当するユーザーがいます。絞り込んでください'
+      search_failed: '検索に失敗しました。時間をおいてもう一度お試しください'
+      rate_limited: '検索の回数が上限に達しました。しばらく待ってください'
+      session_expired: 'ログインの有効期限が切れました。ページを再読み込みしてログインし直してください'
+      not_permitted: 'このボードのメンバーを管理する権限がありません。ページを再読み込みしてください'
     member_added: 'メンバーを追加しました'
     member_removed: 'メンバーを削除しました'
     remove: '削除'
-    remove_confirm: 'このメンバーを削除しますか？'
+    remove_confirm: '%{name} をメンバーから削除しますか？'
     errors:
       user_not_found: 'ユーザーが見つかりません'
       already_member: 'すでにメンバーです'
+      ambiguous_name: '同じ名前のユーザーが複数います。候補から選んでください'
   theme:
     label: 'テーマ'
     system: 'システム設定'
