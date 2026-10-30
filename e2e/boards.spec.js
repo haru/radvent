@@ -71,6 +71,10 @@ test.describe.serial('ボード', () => {
     await add(boards.protected.boardId, accounts.bob.email)
     await expect(page.getByText('メンバーを追加しました')).toBeVisible()
     await expect(page.getByRole('cell', { name: accounts.bob.name, exact: true })).toBeVisible()
+    const bobRow = page.getByRole('row', { name: accounts.bob.name })
+    await expect(bobRow.locator('svg[data-icon="user"]')).toBeVisible()
+    await expect(bobRow.locator('svg[data-icon="envelope"]')).toBeVisible()
+    await expect(bobRow.getByRole('button', { name: '削除' }).locator('svg[data-icon="trash"]')).toBeVisible()
 
     await add(boards.private.boardId, accounts.bob.name)
     await expect(page.getByText('メンバーを追加しました')).toBeVisible()
@@ -82,10 +86,16 @@ test.describe.serial('ボード', () => {
     await expect(page.getByText('すでにメンバーです')).toBeVisible()
 
     await add(boards.public.boardId, accounts.carol.name)
+    await page.getByRole('link', { name: 'ボード設定に戻る' }).click()
+    await expect(page).toHaveURL(new RegExp(`/boards/${boards.public.boardId}/edit$`))
+    await page.goBack()
     await expect(page.getByRole('cell', { name: accounts.carol.name, exact: true })).toBeVisible()
-    const confirmed = acceptNextDialog(page)
+    const dialogMessage = page.waitForEvent('dialog').then(async (dialog) => {
+      await dialog.accept()
+      return dialog.message()
+    })
     await page.getByRole('row', { name: accounts.carol.name }).getByRole('button', { name: '削除' }).click()
-    await confirmed
+    expect(await dialogMessage).toContain(accounts.carol.name)
     await expect(page.getByText('メンバーを削除しました')).toBeVisible()
     await expect(page.getByRole('cell', { name: accounts.carol.name, exact: true })).toHaveCount(0)
     await expect(page.getByText('メンバーがいません')).toBeVisible()
@@ -372,9 +382,14 @@ test.describe.serial('ボード', () => {
     for (const board of Object.values(boards)) {
       await expect(alice.page.getByRole('cell', { name: board.name, exact: true })).toBeVisible()
     }
+    await expect(alice.page.getByText('自分用のイベント')).toBeVisible()
+    const settings = alice.page.getByRole('row', { name: boards.public.name }).getByRole('link', { name: '設定', exact: true })
+    await expect(settings.locator('svg[data-icon="gear"]')).toBeVisible()
+    await expect(alice.page.getByRole('link', { name: 'ボード設定' })).toHaveCount(0)
     const carol = await openAs(browser, accounts.carol)
     await carol.page.goto('/boards')
     await expect(carol.page.getByText('ボードがまだありません')).toBeVisible()
+    await expect(carol.page.getByText('自分用のイベント')).toBeVisible()
     await expect(carol.page.getByRole('cell', { name: boards.public.name, exact: true })).toHaveCount(0)
 
     for (const path of ['edit', 'board_memberships']) {
