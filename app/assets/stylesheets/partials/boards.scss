@@ -166,3 +166,46 @@ body#advent_calendar_body {
     padding-right: 1.5rem;
   }
 }
+
+// Member search on the member management page: candidates drop down under the input.
+.member-search {
+  position: relative;
+
+  .member-search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    max-height: 20rem;
+    overflow-y: auto;
+  }
+
+  .member-search-option,
+  .member-search-note {
+    padding: 0.5rem 1rem;
+    background-color: var(--mdb-body-bg, #fff);
+    border: 1px solid var(--mdb-border-color, rgba(0, 0, 0, 0.125));
+  }
+
+  .member-search-option {
+    cursor: pointer;
+    display: flex;
+    gap: 0.75rem;
+    justify-content: space-between;
+
+    &:hover,
+    &.active {
+      background-color: var(--mdb-primary, #1266f1);
+      color: #fff;
+
+      .member-search-email {
+        color: inherit !important;
+      }
+    }
+  }
+
+  .member-search-name {
+    font-weight: 600;
+  }
+}

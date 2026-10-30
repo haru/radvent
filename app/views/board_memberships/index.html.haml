@@ -4,10 +4,25 @@
     %p= link_to @board.name, board_path(@board.board_id)
     %hr
 
-    = form_with url: board_board_memberships_path(@board.board_id), method: :post do |f|
-      %div.input-group.mb-3
-        = f.text_field :member_query, class: 'form-control', placeholder: t('board_memberships.index.member_placeholder')
-        %button.btn.btn-outline-primary{type: "submit"}= t('board_memberships.index.add_member')
+    = form_with url: board_board_memberships_path(@board.board_id), method: :post,
+                data: { controller: 'member-search',
+                        'member-search-url-value': search_board_board_memberships_path(@board.board_id),
+                        'member-search-rate-limited-message-value': t('board_memberships.index.rate_limited'),
+                        'member-search-search-failed-message-value': t('board_memberships.index.search_failed'),
+                        'member-search-session-expired-message-value': t('board_memberships.index.session_expired'),
+                        'member-search-not-permitted-message-value': t('board_memberships.index.not_permitted'),
+                        action: 'turbo:before-cache@document->member-search#dismiss' } do |f|
+      %div.member-search.mb-3
+        %div.input-group
+          = f.hidden_field :user_id, data: { 'member-search-target': 'userId' }
+          = f.text_field :member_query, class: 'form-control', placeholder: t('board_memberships.index.member_placeholder'),
+                         autocomplete: 'off', maxlength: BoardMembershipsController::MAX_QUERY_LENGTH, role: 'combobox', 'aria-autocomplete': 'list', 'aria-expanded': 'false',
+                         'aria-controls': 'member-search-results',
+                         data: { 'member-search-target': 'input', action: 'input->member-search#input compositionstart->member-search#compositionStart compositionend->member-search#compositionEnd keydown->member-search#keydown blur->member-search#dismiss' }
+          %button.btn.btn-outline-primary{type: "submit"}= t('board_memberships.index.add_member')
+        %div#member-search-results.member-search-results.list-group{role: 'listbox', hidden: true,
+                                                                   data: { 'member-search-target': 'results', action: 'mousedown->member-search#keepFocus click->member-search#choose' }}
+        %div.text-danger.small.mt-1{role: 'alert', hidden: true, data: { 'member-search-target': 'message' }}
 
     - if @memberships.any?
       %table.table.table-striped

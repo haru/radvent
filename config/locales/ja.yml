@@ -421,6 +421,12 @@ ja:
       member_placeholder: 'ユーザー名またはメールアドレス'
       no_members: 'メンバーがいません'
       deleted_user: '削除されたユーザー'
+      no_results: '該当するユーザーがいません'
+      refine_search: '他にも該当するユーザーがいます。絞り込んでください'
+      search_failed: '検索に失敗しました。時間をおいてもう一度お試しください'
+      rate_limited: '検索の回数が上限に達しました。しばらく待ってください'
+      session_expired: 'ログインの有効期限が切れました。ページを再読み込みしてログインし直してください'
+      not_permitted: 'このボードのメンバーを管理する権限がありません。ページを再読み込みしてください'
     member_added: 'メンバーを追加しました'
     member_removed: 'メンバーを削除しました'
     remove: '削除'
@@ -428,6 +434,7 @@ ja:
     errors:
       user_not_found: 'ユーザーが見つかりません'
       already_member: 'すでにメンバーです'
+      ambiguous_name: '同じ名前のユーザーが複数います。候補から選んでください'
   theme:
     label: 'テーマ'
     system: 'システム設定'
