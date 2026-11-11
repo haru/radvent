@@ -170,4 +170,108 @@ describe AdventCalendarItem do
       expect(duplicate).not_to be_valid
     end
   end
+
+  describe '.posts_of' do
+    let(:author) { create(:user, admin: false) }
+    let(:old_event) { create(:event, start_date: '2014-12-01', end_date: '2014-12-25') }
+    let(:new_event) { create(:event, start_date: '2015-12-01', end_date: '2015-12-25') }
+
+    it 'returns only slots owned by the user (other users and admins excluded)' do
+      mine = create(:advent_calendar_item, user: author, event: new_event, date: 3)
+      create(:advent_calendar_item, user: user, event: new_event, date: 4)
+      expect(described_class.posts_of(author)).to eq([mine])
+    end
+
+    it 'does not widen the result for an admin user' do
+      admin = create(:user, admin: true)
+      mine = create(:advent_calendar_item, user: admin, event: new_event, date: 3)
+      create(:advent_calendar_item, user: author, event: new_event, date: 4)
+      expect(described_class.posts_of(admin)).to eq([mine])
+    end
+
+    it 'excludes slots whose user_id is NULL' do
+      legacy = described_class.new(event: new_event, date: 9, user_name: author.name)
+      legacy.save!(validate: false)
+      expect(described_class.posts_of(author)).to be_empty
+    end
+
+    it 'orders by event start date, then date, then id (all descending) regardless of status' do
+      a = create(:advent_calendar_item, user: author, event: old_event, date: 20)
+      b = create(:advent_calendar_item, user: author, event: new_event, date: 2)
+      c = create(:advent_calendar_item, user: author, event: new_event, date: 10)
+      create(:item, advent_calendar_item: c)
+      expect(described_class.posts_of(author)).to eq([c, b, a])
+    end
+
+    it 'orders slots with the same event and date by id descending' do
+      other_event = create(:event, start_date: '2015-12-01', end_date: '2015-12-25')
+      first = create(:advent_calendar_item, user: author, event: new_event, date: 5)
+      second = create(:advent_calendar_item, user: author, event: other_event, date: 5)
+      expect(described_class.posts_of(author)).to eq([second, first])
+    end
+
+    describe 'private board visibility' do # rubocop:disable RSpec/MultipleMemoizedHelpers
+      let(:board) { create(:board, :private_user) }
+      let(:private_event) { create(:event, board: board, start_date: '2015-12-01', end_date: '2015-12-25') }
+      let!(:slot) { create(:advent_calendar_item, user: author, event: private_event, date: 1) }
+
+      it 'excludes slots on a private board where the user is not a member' do
+        expect(described_class.posts_of(author)).to be_empty
+      end
+
+      it 'includes them again once the user becomes a member' do
+        create(:board_membership, board: board, user: author)
+        expect(described_class.posts_of(author)).to eq([slot])
+      end
+    end
+
+    it 'returns an Array and avoids per-row queries for item, event and board' do # rubocop:disable RSpec/ExampleLength
+      3.times do |i|
+        slot = create(:advent_calendar_item, user: author, event: new_event, date: i + 1)
+        create(:item, advent_calendar_item: slot)
+      end
+      result = described_class.posts_of(author)
+      queries = count_queries { result.each { |slot| [slot.item&.title, slot.event.title, slot.event.board.name] } }
+      expect([result, queries]).to match([an_instance_of(Array), 0])
+    end
+
+    it 'checks private board membership at most once per board' do # rubocop:disable RSpec/ExampleLength
+      board = create(:board, :private_user)
+      create(:board_membership, board: board, user: author)
+      event = create(:event, board: board, start_date: '2015-12-01', end_date: '2015-12-25')
+      3.times { |i| create(:advent_calendar_item, user: author, event: event, date: i + 1) }
+      membership_queries = []
+      callback = lambda { |*, payload|
+        membership_queries << payload[:sql] if payload[:sql].include?('board_memberships')
+      }
+      ActiveSupport::Notifications.subscribed(callback, 'sql.active_record') { described_class.posts_of(author) }
+      expect(membership_queries.size).to be <= 1
+    end
+
+    def count_queries(&)
+      count = 0
+      counter = ->(*, payload) { count += 1 unless %w[SCHEMA TRANSACTION].include?(payload[:name]) }
+      ActiveSupport::Notifications.subscribed(counter, 'sql.active_record', &)
+      count
+    end
+  end
+
+  describe '#post_status' do
+    let(:slot) { create(:advent_calendar_item, user: user, event: event, date: 10) }
+
+    before { allow(Time.zone).to receive(:today).and_return(Date.new(2015, 12, 2)) }
+
+    it 'is :unwritten when there is no item' do
+      expect(slot.post_status).to eq(:unwritten)
+    end
+
+    it 'is :scheduled when the item exists but is not yet published' do
+      create(:item, advent_calendar_item: slot)
+      expect(slot.reload.post_status).to eq(:scheduled)
+    end
+
+    it 'is :published when the item exists and the date has come' do
+      expect(first_advent_calendar_item.reload.post_status).to eq(:published)
+    end
+  end
 end

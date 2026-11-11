@@ -38,6 +38,7 @@ Rails.application.routes.draw do
     resources :events, param: :name, only: %i[show edit update destroy]
   end
   get 'boards/:board_ref_id/other_boards' => 'board_other_boards#index', as: :board_other_boards
+  get 'my_posts' => 'my_posts#index', as: :my_posts
   resources :board_memberships, only: [:destroy]
 
   root 'welcome#index'

@@ -58,6 +58,179 @@ RSpec.describe Users::RegistrationsController do # rubocop:disable RSpec/SpecFil
     end
   end
 
+  # rubocop:disable RSpec/ExampleLength
+  describe 'GET #edit my posts tab' do
+    render_views
+
+    let(:today) { Date.new(2015, 12, 2) }
+    let(:event) { create(:event, title: 'Winter Event', start_date: '2015-12-01', end_date: '2015-12-25') }
+    let(:page) { Capybara.string(response.body) }
+
+    before do
+      allow(Time.zone).to receive(:today).and_return(today)
+      sign_in user
+    end
+
+    # Creates one of the user's own slots, optionally with an article.
+    #
+    # @param attrs [Hash] slot attributes
+    # @param title [String, nil] article title; no article is created when +false+
+    # @return [AdventCalendarItem] the created slot
+    def own_slot(attrs = {}, title: false)
+      slot = create(:advent_calendar_item, { user: user, event: event, date: 1 }.merge(attrs))
+      create(:item, advent_calendar_item: slot, title: title) unless title == false
+      slot
+    end
+
+    it 'renders the two tabs with the posts tab active by default', :aggregate_failures do
+      get :edit
+      expect(page).to have_css('ul.nav.nav-tabs[role=tablist]')
+      expect(page).to have_css('a#my-page-posts-tab.active[data-mdb-tab-init][href="#my-page-posts"]' \
+                               '[aria-controls="my-page-posts"][aria-selected="true"]')
+      expect(page).to have_css('a#my-page-settings-tab[data-mdb-tab-init][aria-selected="false"]:not(.active)')
+      expect(page).to have_css('#my-page-posts.tab-pane.show.active')
+      expect(page).to have_css('#my-page-settings.tab-pane:not(.active)', visible: :all)
+    end
+
+    it 'keeps the account form, theme and cancel button in the settings pane', :aggregate_failures do
+      get :edit
+      settings = page.find_by_id('my-page-settings', visible: :all)
+      %w[email name password current_password].each do |field|
+        expect(settings).to have_css("input[name='user[#{field}]']", visible: :all)
+      end
+      expect(settings).to have_css('fieldset', visible: :all)
+      expect(settings).to have_button(I18n.t('devise.registrations.edit.cancel_my_account'), visible: :all)
+    end
+
+    it 'lists own slots newest first with title, board, event and date', :aggregate_failures do
+      own_slot({ date: 3 }, title: 'Older in event')
+      own_slot({ date: 10, event: create(:event, title: 'Autumn', start_date: '2015-10-01', end_date: '2015-10-25') },
+               title: 'Autumn post')
+      own_slot({ date: 20 }, title: 'Newest')
+      get :edit
+      titles = page.all('table.my-posts-table tbody tr').map { |row| row.find('td:first-child').text.strip }
+      expect(titles).to eq(['Newest', 'Older in event', 'Autumn post'])
+      first_row = page.first('table.my-posts-table tbody tr')
+      expect(first_row).to have_text('Winter Event')
+      expect(first_row).to have_text(ApplicationController.helpers.system_title)
+      expect(first_row).to have_text('2015年12月20日')
+    end
+
+    it 'shows a placeholder for an untitled article' do
+      own_slot({ date: 1 }, title: '')
+      get :edit
+      expect(page).to have_text(I18n.t('activerecord.attributes.item.title_empty'))
+    end
+
+    it 'never shows other users slots, even for an admin', :aggregate_failures do
+      admin = create(:user, admin: true)
+      sign_in admin
+      create(:item, advent_calendar_item: create(:advent_calendar_item, user: user, event: event, date: 4),
+                    title: 'Someone elses')
+      get :edit
+      expect(response.body).not_to include('Someone elses')
+      expect(page).to have_no_table(class: 'my-posts-table')
+    end
+
+    it 'hides slots on a private board the user was removed from, including the event name', :aggregate_failures do
+      board = create(:board, :private_user)
+      private_event = create(:event, board: board, title: 'Secret Event', start_date: '2015-12-01',
+                                     end_date: '2015-12-25')
+      create(:item, advent_calendar_item: create(:advent_calendar_item, user: user, event: private_event, date: 1),
+                    title: 'Hidden post')
+      get :edit
+      expect(response.body).not_to include('Secret Event')
+      expect(response.body).not_to include('Hidden post')
+    end
+
+    it 'renders 20 rows and a load-more frame when there are 21 or more slots', :aggregate_failures do
+      21.times { |i| own_slot({ date: i + 1 }, title: "Post #{i + 1}") }
+      get :edit
+      expect(page).to have_css('table.my-posts-table tbody tr', count: 20)
+      expect(page).to have_css("turbo-frame#my-posts-page-2 a[href='#{my_posts_path(page: 2)}']")
+    end
+
+    it 'renders no load-more frame for 20 slots or fewer' do
+      20.times { |i| own_slot({ date: i + 1 }, title: "Post #{i + 1}") }
+      get :edit
+      expect(page).to have_no_css('turbo-frame[id^=my-posts-page-]')
+    end
+
+    it 'shows status badges and the matching link for every status', :aggregate_failures do
+      published = own_slot({ date: 1 }, title: 'Pub')
+      scheduled = own_slot({ date: 20 }, title: 'Sched')
+      unwritten = own_slot({ date: 25 })
+      get :edit
+      pub_row = page.find('tr', text: 'Pub')
+      expect(pub_row).to have_text(I18n.t('my_page.status.published'))
+      expect(pub_row).to have_link('Pub', href: item_path(published.item))
+      expect(pub_row).to have_no_css("a[href='#{edit_item_path(published.item)}']")
+      sched_row = page.find('tr', text: 'Sched')
+      expect(sched_row).to have_text(I18n.t('my_page.status.scheduled'))
+      expect(sched_row).to have_link('Sched', href: edit_item_path(scheduled.item))
+      expect(sched_row).to have_no_css("a[href='#{item_path(scheduled.item)}']")
+      unwritten_row = page.find('tr', text: I18n.t('my_page.status.unwritten'))
+      expect(unwritten_row).to have_text(I18n.t('my_page.status.unwritten'))
+      expect(unwritten_row).to have_link(I18n.t('my_page.write_article'),
+                                         href: new_item_path(id: unwritten.id, date: unwritten.date))
+    end
+
+    it 'shows the empty state without a table when the user has no slots', :aggregate_failures do
+      get :edit
+      expect(page).to have_text(I18n.t('my_page.empty'))
+      expect(page).to have_no_table(class: 'my-posts-table')
+      expect(page).to have_no_css('turbo-frame[id^=my-posts-page-]')
+    end
+
+    it 'shows the empty state when the only slots are on an inaccessible private board', :aggregate_failures do
+      board = create(:board, :private_user)
+      private_event = create(:event, board: board, start_date: '2015-12-01', end_date: '2015-12-25')
+      create(:advent_calendar_item, user: user, event: private_event, date: 1)
+      get :edit
+      expect(page).to have_text(I18n.t('my_page.empty'))
+      expect(page).to have_no_table(class: 'my-posts-table')
+    end
+
+    it 'does not show the empty state when the user has a slot' do
+      own_slot({ date: 1 }, title: 'x')
+      get :edit
+      expect(page).to have_no_text(I18n.t('my_page.empty'))
+    end
+  end
+
+  # rubocop:enable RSpec/ExampleLength
+
+  describe 'GET #edit when unauthenticated' do
+    it 'redirects to the sign-in page' do
+      get :edit
+      expect(response).to redirect_to(new_user_session_path)
+    end
+  end
+
+  describe 'PUT #update failure re-render' do
+    render_views
+
+    let(:page) { Capybara.string(response.body) }
+
+    before do
+      sign_in user
+      create(:item, advent_calendar_item: create(:advent_calendar_item, user: user, date: 1), title: 'Still listed')
+      allow(Time.zone).to receive(:today).and_return(Date.new(2030, 1, 1))
+      put :update, params: { user: { name: 'renamed', current_password: 'wrong-password' } }
+    end
+
+    it 'activates the settings tab and shows the errors', :aggregate_failures do
+      expect(page).to have_css('a#my-page-settings-tab.active[aria-selected="true"]')
+      expect(page).to have_css('a#my-page-posts-tab[aria-selected="false"]:not(.active)')
+      expect(page).to have_css('#my-page-settings.show.active')
+      expect(page).to have_css('#error_explanation, .alert', visible: :all)
+    end
+
+    it 'still renders the posts list in the posts pane' do
+      expect(page.find_by_id('my-page-posts', visible: :all).text(:all)).to include('Still listed')
+    end
+  end
+
   describe 'DELETE #destroy' do
     before { sign_in user }
 

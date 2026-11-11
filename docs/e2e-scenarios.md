@@ -14,7 +14,7 @@ Legend: ✅ covered by the main journey, 🆕 added by the extended specs.
 | S2 | Sign-in | `/users/sign_in` |
 | S3 | Sign-up | `/users/sign_up` |
 | S4 | Password reset request / edit | `/users/password/new`, `/users/password/edit` |
-| S5 | My page (account edit, theme, cancel account) | `/users/edit` |
+| S5 | My page ("My posts" tab, "Account settings" tab: account edit, theme, cancel account) | `/users/edit` |
 | S6 | Board list | `/boards` |
 | S7 | Board create / edit / delete | `/boards/new`, `/boards/:id/edit` |
 | S8 | Board members | `/boards/:id/board_memberships` |
@@ -31,6 +31,8 @@ Legend: ✅ covered by the main journey, 🆕 added by the extended specs.
 
 ### A. Accounts (`e2e/auth.spec.js`) — S2, S3, S4, S5
 
+A-6 to A-9 first open the "Account settings" tab of the my page.
+
 | ID | Scenario |
 |----|----------|
 | A-1 ✅ | Sign up, log in, log out, wrong password (US2) |
@@ -38,11 +40,20 @@ Legend: ✅ covered by the main journey, 🆕 added by the extended specs.
 | A-3 🆕 | Sign-up with a taken e-mail and a mismatching confirmation shows the errors and creates no account |
 | A-4 🆕 | Signed-in users are redirected away from the sign-in and sign-up screens |
 | A-5 🆕 | Password reset request: malformed e-mail is rejected, unknown and known e-mails get the same notice |
-| A-6 🆕 | My page: changing the name needs the current password; with it the header shows the new name |
+| A-6 🆕 | My page (settings tab): changing the name needs the current password; with it the header shows the new name |
 | A-7 🆕 | My page: changing the password, then logging in with the new one only |
 | A-8 🆕 | Theme switch (light / dark / system) is applied to the page and survives a reload |
 | A-9 🆕 | Cancel my account removes the account and ends the session |
 | A-10 🆕 | Guests are sent to the sign-in screen from board list / article form / slot form |
+
+### M. My page (`e2e/my-page.spec.js`) — S5
+
+| ID | Scenario |
+|----|----------|
+| M-1 🆕 | "My posts" tab is selected by default; a published article is listed with its status, board and event, and its title opens the article |
+| M-2 🆕 | A scheduled article's title leads to the edit screen; an unwritten slot's "write article" link leads to the article form |
+| M-3 🆕 | The "Account settings" tab holds the account form, the theme settings and the cancel-account button |
+| M-4 🆕 | A failed save re-renders the my page with the errors and the "Account settings" tab selected |
 
 ### B. Administration (`e2e/admin.spec.js`) — S15
 

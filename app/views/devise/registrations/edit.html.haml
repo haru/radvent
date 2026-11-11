@@ -1,41 +1,54 @@
-= bootstrap_devise_error_messages!
-.panel.panel-default.devise-bs
-  .panel-heading
-    %h4= t('.title', resource: resource_class.model_name.human, default: "Edit #{resource_name.to_s.humanize}")
-  .panel-body
-    = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f|
-      .form-group
-        = f.label :email
-        = f.email_field :email, autofocus: true, class: 'form-control'
-      .form-group
-        = f.label :name
-        = f.text_field :name, class: 'form-control'
-      .form-group
-        = f.label :password
-        %i
-          = "(#{t('.leave_blank_if_you_don_t_want_to_change_it', default: "leave blank if you don't want to change it")})"
-        = f.password_field :password, autocomplete: 'off', class: 'form-control'
-      .form-group
-        = f.label :password_confirmation
-        = f.password_field :password_confirmation, class: 'form-control'
-      .form-group
-        = f.label :current_password
-        %i
-          = "(#{t('.we_need_your_current_password_to_confirm_your_changes', default: 'we need your current password to confirm your changes')})"
-        = f.password_field :current_password, class: 'form-control'
-      = f.submit t('.update', default: 'Update'), class: 'btn btn-primary'
+- settings_active = resource.errors.any?
+%ul.nav.nav-tabs.mb-3#my-page-tabs{ role: 'tablist' }
+  %li.nav-item{ role: 'presentation' }
+    %a.nav-link#my-page-posts-tab{ class: ('active' unless settings_active), href: '#my-page-posts', role: 'tab', aria: { controls: 'my-page-posts', selected: (!settings_active).to_s }, data: { mdb_tab_init: true } }= t('my_page.tabs.posts')
+  %li.nav-item{ role: 'presentation' }
+    %a.nav-link#my-page-settings-tab{ class: ('active' if settings_active), href: '#my-page-settings', role: 'tab', aria: { controls: 'my-page-settings', selected: settings_active.to_s }, data: { mdb_tab_init: true } }= t('my_page.tabs.settings')
+.tab-content
+  .tab-pane.fade#my-page-posts{ role: 'tabpanel', class: ('show active' unless settings_active) }
+    - if @my_posts.empty?
+      %p.my-posts-empty= t('my_page.empty')
+    - else
+      = render 'my_posts/list', header: true
+  .tab-pane.fade#my-page-settings{ role: 'tabpanel', class: ('show active' if settings_active) }
+    = bootstrap_devise_error_messages!
+    .panel.panel-default.devise-bs
+      .panel-heading
+        %h4= t('.title', resource: resource_class.model_name.human, default: "Edit #{resource_name.to_s.humanize}")
+      .panel-body
+        = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f|
+          .form-group
+            = f.label :email
+            = f.email_field :email, autofocus: true, class: 'form-control'
+          .form-group
+            = f.label :name
+            = f.text_field :name, class: 'form-control'
+          .form-group
+            = f.label :password
+            %i
+              = "(#{t('.leave_blank_if_you_don_t_want_to_change_it', default: "leave blank if you don't want to change it")})"
+            = f.password_field :password, autocomplete: 'off', class: 'form-control'
+          .form-group
+            = f.label :password_confirmation
+            = f.password_field :password_confirmation, class: 'form-control'
+          .form-group
+            = f.label :current_password
+            %i
+              = "(#{t('.we_need_your_current_password_to_confirm_your_changes', default: 'we need your current password to confirm your changes')})"
+            = f.password_field :current_password, class: 'form-control'
+          = f.submit t('.update', default: 'Update'), class: 'btn btn-primary'
 
-.panel.panel-default.mb-4{ data: { controller: 'theme', theme_update_failed_message_value: t('theme.update_failed'), theme_path_value: theme_path } }
-  %fieldset
-    %legend.panel-heading= t('theme.label')
-    .panel-body
-      - %w[light dark system].each do |theme_value|
-        .form-check.form-check-inline
-          = radio_button_tag :theme, theme_value, current_user.theme == theme_value, class: 'form-check-input', id: "theme_#{theme_value}", data: { theme_target: 'radio', action: 'change->theme#change' }
-          = label_tag "theme_#{theme_value}", t("theme.#{theme_value}"), class: 'form-check-label'
+    .panel.panel-default.mb-4{ data: { controller: 'theme', theme_update_failed_message_value: t('theme.update_failed'), theme_path_value: theme_path } }
+      %fieldset
+        %legend.panel-heading= t('theme.label')
+        .panel-body
+          - %w[light dark system].each do |theme_value|
+            .form-check.form-check-inline
+              = radio_button_tag :theme, theme_value, current_user.theme == theme_value, class: 'form-check-input', id: "theme_#{theme_value}", data: { theme_target: 'radio', action: 'change->theme#change' }
+              = label_tag "theme_#{theme_value}", t("theme.#{theme_value}"), class: 'form-check-label'
 
-= button_to t('.cancel_my_account'), registration_path(resource_name),
-            method: :delete, class: 'btn btn-outline-danger mb-3',
-            data: { turbo_confirm: t('.are_you_sure') }
+    = button_to t('.cancel_my_account'), registration_path(resource_name),
+                method: :delete, class: 'btn btn-outline-danger mb-3',
+                data: { turbo_confirm: t('.are_you_sure') }
 
-= link_to t('.back', default: 'Back'), :back
+    = link_to t('.back', default: 'Back'), :back

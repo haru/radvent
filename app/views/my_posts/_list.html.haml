@@ -1,0 +1,35 @@
+-# One page of the my-posts list: a table of rows followed by the load-more frame.
+-# Locals: header (Boolean) - render the column headings (first page only).
+-# Each page is its own table because a turbo-frame cannot live inside a table body.
+%table.table.my-posts-table
+  - if header
+    %thead
+      %tr
+        %th= t('my_page.columns.title')
+        %th= t('my_page.columns.status')
+        %th= t('my_page.columns.board')
+        %th= t('my_page.columns.event')
+        %th= t('my_page.columns.date')
+  %tbody
+    - @my_posts.each do |slot|
+      - item = slot.item
+      %tr
+        %td.my-posts-title
+          - case slot.post_status
+          - when :published
+            = link_to item.title, item_path(item)
+          - when :scheduled
+            = link_to item.title, edit_item_path(item)
+          - else
+            = link_to t('my_page.write_article'), new_item_path(id: slot.id, date: slot.date)
+        %td
+          %span.my-posts-status{ class: "my-posts-status-#{slot.post_status}" }= t("my_page.status.#{slot.post_status}")
+        %td= other_board_label(slot.event.board)
+        %td= slot.event.title
+        %td= t('my_page.post_date', year: slot.year, month: slot.month, day: slot.date)
+- if @my_posts_next_page
+  = turbo_frame_tag "my-posts-page-#{@my_posts_next_page}" do
+    .my-posts-more
+      = link_to my_posts_path(page: @my_posts_next_page), class: 'btn btn-outline-secondary' do
+        = t('my_page.load_more')
+        %i.fas.fa-chevron-down.ms-2

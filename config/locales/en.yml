@@ -278,6 +278,24 @@ en:
       user_not_found: 'User not found'
       already_member: 'Already a member'
       ambiguous_name: 'Several users have this name. Please pick one from the candidates'
+  my_page:
+    tabs:
+      posts: 'My posts'
+      settings: 'Account settings'
+    columns:
+      title: 'Title'
+      status: 'Status'
+      board: 'Board'
+      event: 'Event'
+      date: 'Date'
+    status:
+      published: 'Published'
+      scheduled: 'Scheduled'
+      unwritten: 'Not written'
+    write_article: 'Write article'
+    post_date: '%{month}/%{day}/%{year}'
+    empty: 'No posts yet'
+    load_more: 'Load more'
   theme:
     label: 'Theme'
     system: 'System'
