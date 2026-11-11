@@ -1,17 +1,10 @@
--# A failed PUT /users re-renders this view, so open the settings tab to show the errors.
-- settings_active = resource.errors.any?
 %ul.nav.nav-tabs.mb-3#my-page-tabs{ role: 'tablist' }
   %li.nav-item{ role: 'presentation' }
-    %a.nav-link#my-page-posts-tab{ class: ('active' unless settings_active), href: '#my-page-posts', role: 'tab', aria: { controls: 'my-page-posts', selected: (!settings_active).to_s }, data: { mdb_tab_init: true } }= t('my_page.tabs.posts')
+    %a.nav-link.active#my-page-settings-tab{ href: '#my-page-settings', role: 'tab', aria: { controls: 'my-page-settings', selected: 'true' }, data: { mdb_tab_init: true } }= t('my_page.tabs.settings')
   %li.nav-item{ role: 'presentation' }
-    %a.nav-link#my-page-settings-tab{ class: ('active' if settings_active), href: '#my-page-settings', role: 'tab', aria: { controls: 'my-page-settings', selected: settings_active.to_s }, data: { mdb_tab_init: true } }= t('my_page.tabs.settings')
+    %a.nav-link#my-page-posts-tab{ href: '#my-page-posts', role: 'tab', aria: { controls: 'my-page-posts', selected: 'false' }, data: { mdb_tab_init: true } }= t('my_page.tabs.posts')
 .tab-content
-  .tab-pane.fade#my-page-posts{ role: 'tabpanel', aria: { labelledby: 'my-page-posts-tab' }, class: ('show active' unless settings_active) }
-    - if @my_posts.empty?
-      %p.my-posts-empty= t('my_page.empty')
-    - else
-      = render 'my_posts/list', header: true
-  .tab-pane.fade#my-page-settings{ role: 'tabpanel', aria: { labelledby: 'my-page-settings-tab' }, class: ('show active' if settings_active) }
+  .tab-pane.fade#my-page-settings{ role: 'tabpanel', aria: { labelledby: 'my-page-settings-tab' }, class: 'show active' }
     = bootstrap_devise_error_messages!
     .panel.panel-default.devise-bs
       .panel-heading
@@ -53,3 +46,9 @@
                 data: { turbo_confirm: t('.are_you_sure') }
 
     = link_to t('.back', default: 'Back'), :back
+
+  .tab-pane.fade#my-page-posts{ role: 'tabpanel', aria: { labelledby: 'my-page-posts-tab' } }
+    - if @my_posts.empty?
+      %p.my-posts-empty= t('my_page.empty')
+    - else
+      = render 'my_posts/list', header: true

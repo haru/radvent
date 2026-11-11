@@ -50,9 +50,9 @@ A-6 to A-9 first open the "Account settings" tab of the my page.
 
 | ID | Scenario |
 |----|----------|
-| M-1 🆕 | "My posts" tab is selected by default; a published article is listed with its status, board and event, and its title opens the article |
+| M-1 🆕 | The my page opens on the "Account settings" tab; in the "My posts" tab a published article is listed with its status, board and event, and its title opens the article |
 | M-2 🆕 | A scheduled article's title leads to the edit screen; an unwritten slot's "write article" link leads to the article form |
-| M-3 🆕 | The "Account settings" tab holds the account form, the theme settings and the cancel-account button |
+| M-3 🆕 | The "Account settings" tab is selected by default and holds the account form, the theme settings and the cancel-account button |
 | M-4 🆕 | A failed save re-renders the my page with the errors and the "Account settings" tab selected |
 
 Not covered by E2E: the "Load more" paging of the my-posts list (it needs 21+ slots, i.e. 21+ `joinDay` calls). It is covered by `spec/controllers/my_posts_controller_spec.rb`, `spec/controllers/concerns/my_posts_listing_spec.rb` and the 21-slot case in `spec/controllers/devise/registrations_controller_spec.rb`.

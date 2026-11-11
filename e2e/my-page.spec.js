@@ -9,6 +9,12 @@ const pastEvent = { name: 'e2e-my-page-past', title: 'E2E マイページ過去'
 const futureEvent = { name: 'e2e-my-page-future', title: 'E2E マイページ未来', ...futureEventPeriod() }
 const eventPath = (event) => `/boards/${board.boardId}/events/${event.name}`
 
+// The my page opens on the "アカウント設定" tab; the post list lives in the "自分の投稿" tab.
+const openPostsTab = async (page) => {
+  await page.goto('/users/edit')
+  await page.locator('#my-page-posts-tab').click()
+  await expect(page.locator('#my-page-posts')).toBeVisible()
+}
 const postsRow = (page, text) => page.locator('#my-page-posts tr', { hasText: text })
 
 test.describe.serial('マイページ', () => {
@@ -36,8 +42,7 @@ test.describe.serial('マイページ', () => {
 
   test('M-1 自分の投稿: 公開済みの記事がステータス付きで並び、タイトルから記事を開ける', async ({ browser }) => {
     const { page } = await openAs(browser, accounts.bob)
-    await page.goto('/users/edit')
-    await expect(page.locator('#my-page-posts-tab')).toHaveAttribute('aria-selected', 'true')
+    await openPostsTab(page)
     const row = postsRow(page, 'E2E マイページ公開済み記事')
     await expect(row).toContainText('公開済み')
     await expect(row).toContainText(board.name)
@@ -48,13 +53,13 @@ test.describe.serial('マイページ', () => {
 
   test('M-2 公開前の記事は編集画面へ、未執筆の枠は記事作成画面へ進める', async ({ browser }) => {
     const { page } = await openAs(browser, accounts.bob)
-    await page.goto('/users/edit')
+    await openPostsTab(page)
     const scheduled = postsRow(page, 'E2E マイページ公開前記事')
     await expect(scheduled).toContainText('公開前')
     await scheduled.getByRole('link', { name: 'E2E マイページ公開前記事' }).click()
     await expect(page).toHaveURL(/\/items\/\d+\/edit$/)
 
-    await page.goto('/users/edit')
+    await openPostsTab(page)
     const unwritten = postsRow(page, futureEvent.title).filter({ hasText: '未執筆' })
     await expect(unwritten).toContainText(futureEvent.title)
     await unwritten.getByRole('link', { name: '記事を書く' }).click()
@@ -64,7 +69,7 @@ test.describe.serial('マイページ', () => {
   test('M-3 アカウント設定タブにフォーム・テーマ・アカウント削除がある', async ({ browser }) => {
     const { page } = await openAs(browser, accounts.bob)
     await page.goto('/users/edit')
-    await page.locator('#my-page-settings-tab').click()
+    await expect(page.locator('#my-page-settings-tab')).toHaveAttribute('aria-selected', 'true')
     await expect(page.locator('#my-page-settings')).toBeVisible()
     await expect(page.getByLabel('現在のパスワード')).toBeVisible()
     await expect(page.locator('#theme_dark')).toBeVisible()
@@ -75,7 +80,6 @@ test.describe.serial('マイページ', () => {
   test('M-4 保存に失敗すると、エラー付きでアカウント設定タブが選ばれて再表示される', async ({ browser }) => {
     const { page } = await openAs(browser, accounts.bob)
     await page.goto('/users/edit')
-    await page.locator('#my-page-settings-tab').click()
     await page.getByLabel('名前').fill('e2e-bob-renamed')
     await page.getByLabel('現在のパスワード').fill('wrong-password')
     await page.locator('form[action="/users"] input[type=submit]').click()
