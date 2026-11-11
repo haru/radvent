@@ -9,15 +9,13 @@ class MyPostsController < ApplicationController
   include LoadMorePage
 
   before_action :authenticate_user!
+  before_action :require_load_more_page
   layout false
 
   # Returns the requested page of the user's posts as a Turbo Frame fragment.
   #
   # @return [void]
   def index
-    @page = page_number
-    return if performed?
-
     assign_my_posts(current_user, page: @page)
   end
 end

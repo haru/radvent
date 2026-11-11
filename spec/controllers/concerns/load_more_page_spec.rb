@@ -8,11 +8,10 @@ RSpec.describe LoadMorePage do
   controller(ApplicationController) do
     include concern
 
-    def index
-      page = page_number
-      return if performed?
+    before_action :require_load_more_page
 
-      render plain: page.to_s
+    def index
+      render plain: instance_variable_get(:@page).to_s
     end
   end
 
@@ -21,7 +20,7 @@ RSpec.describe LoadMorePage do
     expect(response.body).to eq('3')
   end
 
-  [nil, 'abc', '0', '1', '-4'].each do |bad|
+  [nil, 'abc', '0', '1', '-4', ' 2 ', '1_0', '0x2', '2.5'].each do |bad|
     it "renders 422 with an empty body for page=#{bad.inspect}", :aggregate_failures do
       get :index, params: { page: bad }
       expect(response).to have_http_status(:unprocessable_content)

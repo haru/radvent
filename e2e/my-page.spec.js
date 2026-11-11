@@ -9,13 +9,13 @@ const pastEvent = { name: 'e2e-my-page-past', title: 'E2E マイページ過去'
 const futureEvent = { name: 'e2e-my-page-future', title: 'E2E マイページ未来', ...futureEventPeriod() }
 const eventPath = (event) => `/boards/${board.boardId}/events/${event.name}`
 
-// The my page opens on the "アカウント設定" tab; the post list lives in the "自分の投稿" tab.
+// The my page opens on the account settings tab; the post list lives in the "my posts" tab.
 const openPostsTab = async (page) => {
   await page.goto('/users/edit')
   await page.locator('#my-page-posts-tab').click()
   await expect(page.locator('#my-page-posts')).toBeVisible()
 }
-const postsRow = (page, text) => page.locator('#my-page-posts tr', { hasText: text })
+const postsRow = (page, text) => page.locator('#my-page-posts li.my-posts-item', { hasText: text })
 
 test.describe.serial('マイページ', () => {
   test.beforeEach(async ({ page }) => {
@@ -86,5 +86,19 @@ test.describe.serial('マイページ', () => {
     await expect(page.locator('.alert-danger')).toBeVisible()
     await expect(page.locator('#my-page-settings-tab')).toHaveAttribute('aria-selected', 'true')
     await expect(page.locator('#my-page-posts-tab')).toHaveAttribute('aria-selected', 'false')
+  })
+
+  test('M-5 21件以上の枠は「もっと見る」で続きが同じ画面に追加される', async ({ browser }) => {
+    const { page } = await openAs(browser, accounts.bob)
+    // bob already owns several slots in this run; 18 more push the total past one page (20).
+    for (let day = 4; day <= 21; day += 1) await joinDay(page, eventPath(pastEvent), day)
+    await openPostsTab(page)
+    await expect(page.locator('#my-page-posts li.my-posts-item')).toHaveCount(20)
+    await expect(postsRow(page, 'E2E マイページ公開済み記事')).toHaveCount(0)
+    await page.getByRole('link', { name: 'もっと見る' }).click()
+    await expect(postsRow(page, 'E2E マイページ公開済み記事')).toBeVisible()
+    await expect.poll(() => page.locator('#my-page-posts li.my-posts-item').count()).toBeGreaterThan(20)
+    await expect(page.getByRole('link', { name: 'もっと見る' })).toHaveCount(0)
+    await expect(page).toHaveURL(/\/users\/edit$/)
   })
 })

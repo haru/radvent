@@ -32,6 +32,22 @@ RSpec.describe MyPostsListing do
     expect(described_class::PAGE_SIZE).to eq(20)
   end
 
+  it 'preloads the likes of the page items so counts need no per-row queries', :aggregate_failures do # rubocop:disable RSpec/ExampleLength
+    2.times do |i|
+      slot = create(:advent_calendar_item, user: user, event: event, date: i + 1)
+      item = create(:item, advent_calendar_item: slot)
+      create_list(:like, i + 1, item: item)
+    end
+    get :index, params: { page: 1 }
+    queries = 0
+    callback = ->(*, payload) { queries += 1 if payload[:sql].match?(/\bSELECT\b/) }
+    counts = ActiveSupport::Notifications.subscribed(callback, 'sql.active_record') do
+      assigns(:my_posts).map { |slot| [slot.item.like_count, slot.item.comments_count] }
+    end
+    expect(queries).to eq(0)
+    expect(counts).to eq([[2, 0], [1, 0]])
+  end
+
   it 'assigns the first 20 slots and the next page number for page 1 of 25', :aggregate_failures do
     create_slots(25)
     get :index, params: { page: 1 }

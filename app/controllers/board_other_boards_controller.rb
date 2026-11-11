@@ -9,15 +9,13 @@ class BoardOtherBoardsController < ApplicationController
   include LoadMorePage
 
   before_action :find_board
+  before_action :require_load_more_page
 
   # Returns the requested page of other boards as a Turbo Frame fragment.
   #
   # @return [void]
   def index
-    page = page_number
-    return if performed?
-
-    assign_other_boards(@board, current_user, page: page)
+    assign_other_boards(@board, current_user, page: @page)
   end
 
   private

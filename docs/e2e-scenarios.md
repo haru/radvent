@@ -31,7 +31,7 @@ Legend: ✅ covered by the main journey, 🆕 added by the extended specs.
 
 ### A. Accounts (`e2e/auth.spec.js`) — S2, S3, S4, S5
 
-A-6 to A-9 first open the "Account settings" tab of the my page.
+A-6 to A-9 click the "Account settings" tab of the my page first (already the default tab; a safeguard).
 
 | ID | Scenario |
 |----|----------|

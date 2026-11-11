@@ -34,8 +34,12 @@ class Item < ApplicationRecord
 
   # Counts the users who liked this item, a user with duplicate like rows counting once.
   #
+  # Uses the already loaded likes (no query) when they were preloaded, e.g. by +includes(:likes)+.
+  #
   # @return [Integer] the number of distinct users
   def like_count
+    return likes.map(&:user_id).uniq.size if likes.loaded?
+
     likes.distinct.count(:user_id)
   end
 

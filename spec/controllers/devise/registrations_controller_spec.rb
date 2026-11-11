@@ -74,7 +74,7 @@ RSpec.describe Users::RegistrationsController do # rubocop:disable RSpec/SpecFil
     # Creates one of the user's own slots, optionally with an article.
     #
     # @param attrs [Hash] slot attributes
-    # @param title [String, nil] article title; no article is created when +false+
+    # @param title [String, nil, false] article title; no article is created when +false+
     # @return [AdventCalendarItem] the created slot
     def own_slot(attrs = {}, title: false)
       slot = create(:advent_calendar_item, { user: user, event: event, date: 1 }.merge(attrs))
@@ -124,9 +124,9 @@ RSpec.describe Users::RegistrationsController do # rubocop:disable RSpec/SpecFil
                title: 'Autumn post')
       own_slot({ date: 20 }, title: 'Newest')
       get :edit
-      titles = page.all('table.my-posts-table tbody tr').map { |row| row.find('td:first-child').text.strip }
+      titles = page.all('li.my-posts-item').map { |row| row.find('.my-posts-title').text.strip }
       expect(titles).to eq(['Newest', 'Older in event', 'Autumn post'])
-      first_row = page.first('table.my-posts-table tbody tr')
+      first_row = page.first('li.my-posts-item')
       expect(first_row).to have_text('Winter Event')
       expect(first_row).to have_text(ApplicationController.helpers.system_title)
       expect(first_row).to have_text('2015年12月20日')
@@ -145,7 +145,7 @@ RSpec.describe Users::RegistrationsController do # rubocop:disable RSpec/SpecFil
                     title: 'Someone elses')
       get :edit
       expect(response.body).not_to include('Someone elses')
-      expect(page).to have_no_table(class: 'my-posts-table')
+      expect(page).to have_no_css('.my-posts-list')
     end
 
     it 'hides slots on a private board the user was removed from, including the event name', :aggregate_failures do
@@ -162,7 +162,7 @@ RSpec.describe Users::RegistrationsController do # rubocop:disable RSpec/SpecFil
     it 'renders 20 rows and a load-more frame when there are 21 or more slots', :aggregate_failures do
       21.times { |i| own_slot({ date: i + 1 }, title: "Post #{i + 1}") }
       get :edit
-      expect(page).to have_css('table.my-posts-table tbody tr', count: 20)
+      expect(page).to have_css('li.my-posts-item', count: 20)
       expect(page).to have_css("turbo-frame#my-posts-page-2 a[href='#{my_posts_path(page: 2)}']")
     end
 
@@ -177,24 +177,48 @@ RSpec.describe Users::RegistrationsController do # rubocop:disable RSpec/SpecFil
       scheduled = own_slot({ date: 20 }, title: 'Sched')
       unwritten = own_slot({ date: 25 })
       get :edit
-      pub_row = page.find('tr', text: 'Pub')
+      pub_row = page.find('li.my-posts-item', text: 'Pub')
       expect(pub_row).to have_text(I18n.t('my_page.status.published'))
       expect(pub_row).to have_link('Pub', href: item_path(published.item))
       expect(pub_row).to have_no_css("a[href='#{edit_item_path(published.item)}']")
-      sched_row = page.find('tr', text: 'Sched')
+      sched_row = page.find('li.my-posts-item', text: 'Sched')
       expect(sched_row).to have_text(I18n.t('my_page.status.scheduled'))
       expect(sched_row).to have_link('Sched', href: edit_item_path(scheduled.item))
       expect(sched_row).to have_no_css("a[href='#{item_path(scheduled.item)}']")
-      unwritten_row = page.find('tr', text: I18n.t('my_page.status.unwritten'))
+      unwritten_row = page.find('li.my-posts-item', text: I18n.t('my_page.status.unwritten'))
       expect(unwritten_row).to have_text(I18n.t('my_page.status.unwritten'))
       expect(unwritten_row).to have_link(I18n.t('my_page.write_article'),
                                          href: new_item_path(id: unwritten.id, date: unwritten.date))
     end
 
-    it 'shows the empty state without a table when the user has no slots', :aggregate_failures do
+    it 'shows like and comment counts only on published cards', :aggregate_failures do
+      published = own_slot({ date: 1 }, title: 'Pub')
+      2.times { create(:like, item: published.item) }
+      create(:comment, item: published.item)
+      own_slot({ date: 20 }, title: 'Sched')
+      own_slot({ date: 25 })
+      get :edit
+      pub_card = page.find('li.my-posts-item', text: 'Pub')
+      expect(pub_card.find('.my-posts-likes')).to have_text('2')
+      expect(pub_card.find('.my-posts-likes')).to have_css('.visually-hidden', text: I18n.t('my_page.likes', count: 2))
+      expect(pub_card.find('.my-posts-comments')).to have_text('1')
+      expect(pub_card.find('.my-posts-comments')).to have_css('.visually-hidden',
+                                                              text: I18n.t('my_page.comments', count: 1))
+      expect(page).to have_css('.my-posts-likes', count: 1)
+      expect(page).to have_css('.my-posts-comments', count: 1)
+    end
+
+    it 'shows zero counts on a published card without reactions', :aggregate_failures do
+      own_slot({ date: 1 }, title: 'Quiet')
+      get :edit
+      expect(page.find('.my-posts-likes')).to have_text('0')
+      expect(page.find('.my-posts-comments')).to have_text('0')
+    end
+
+    it 'shows the empty state without a list when the user has no slots', :aggregate_failures do
       get :edit
       expect(page).to have_text(I18n.t('my_page.empty'))
-      expect(page).to have_no_table(class: 'my-posts-table')
+      expect(page).to have_no_css('.my-posts-list')
       expect(page).to have_no_css('turbo-frame[id^=my-posts-page-]')
     end
 
@@ -204,7 +228,7 @@ RSpec.describe Users::RegistrationsController do # rubocop:disable RSpec/SpecFil
       create(:advent_calendar_item, user: user, event: private_event, date: 1)
       get :edit
       expect(page).to have_text(I18n.t('my_page.empty'))
-      expect(page).to have_no_table(class: 'my-posts-table')
+      expect(page).to have_no_css('.my-posts-list')
     end
 
     it 'does not show the empty state when the user has a slot' do

@@ -48,14 +48,14 @@ RSpec.describe MyPostsController do
         expect(response).to have_http_status(:ok)
         expect(response.body).not_to include('<html')
         expect(page).to have_css('turbo-frame#my-posts-page-2')
-        expect(page).to have_css('tr', count: 5)
+        expect(page).to have_css('li.my-posts-item', count: 5)
         expect(page).to have_no_css('turbo-frame#my-posts-page-3')
       end
 
       it 'links to the next page when more rows remain', :aggregate_failures do
         create_slots(45)
         get :index, params: { page: 2 }
-        expect(page).to have_css('tr', count: 20)
+        expect(page).to have_css('li.my-posts-item', count: 20)
         expect(page).to have_css("turbo-frame#my-posts-page-3 a[href='#{my_posts_path(page: 3)}']")
       end
 
@@ -64,14 +64,23 @@ RSpec.describe MyPostsController do
         get :index, params: { page: 9 }
         expect(response).to have_http_status(:ok)
         expect(page).to have_css('turbo-frame#my-posts-page-9')
-        expect(page).to have_no_css('tr')
+        expect(page).to have_no_css('li.my-posts-item')
       end
 
-      it 'only lists the signed-in user visible slots', :aggregate_failures do
+      it 'only lists the signed-in user slots', :aggregate_failures do
         create_slots(21)
         create(:advent_calendar_item, user: create(:user), event: event, date: 30)
         get :index, params: { page: 2 }
-        expect(page).to have_css('tr', count: 1)
+        expect(page).to have_css('li.my-posts-item', count: 1)
+      end
+
+      it 'leaves out slots on boards the user can no longer see', :aggregate_failures do # rubocop:disable RSpec/ExampleLength
+        create_slots(20)
+        hidden_event = create(:event, board: create(:board, :private_user), start_date: '2015-09-01',
+                                      end_date: '2015-09-25')
+        create(:advent_calendar_item, user: user, event: hidden_event, date: 1)
+        get :index, params: { page: 2 }
+        expect(page).to have_no_css('li.my-posts-item')
       end
 
       it 'renders status badges and links per row', :aggregate_failures do # rubocop:disable RSpec/ExampleLength

@@ -72,6 +72,8 @@ en:
           attributes:
             end_date:
               different_month: must be in the same month as start date
+            start_date:
+              slot_date_missing: has no day %{days} that existing slots use
     attributes:
       comment:
         user_name: Name
@@ -282,16 +284,16 @@ en:
     tabs:
       posts: 'My posts'
       settings: 'Account settings'
-    columns:
-      title: 'Title'
-      status: 'Status'
-      board: 'Board'
-      event: 'Event'
-      date: 'Date'
     status:
       published: 'Published'
       scheduled: 'Scheduled'
       unwritten: 'Not written'
+    likes:
+      one: '%{count} like'
+      other: '%{count} likes'
+    comments:
+      one: '%{count} comment'
+      other: '%{count} comments'
     write_article: 'Write article'
     post_date: '%{month}/%{day}/%{year}'
     empty: 'No posts yet'

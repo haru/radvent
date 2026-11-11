@@ -1,8 +1,8 @@
 ---
 title: Domain Model
 type: component
-sources: [S001, S002, S003, S006, S008, S010, S015, S019, S023, S029]
-updated: 2026-10-25
+sources: [S001, S002, S003, S006, S008, S010, S015, S019, S023, S029, S042]
+updated: 2026-11-11
 ---
 
 # Domain Model
@@ -26,7 +26,7 @@ Board ──< Event ──< AdventCalendarItem >── User
 | `Board` | Container for events. Two types: `top` (system-wide) and `user` (user-created), with `public` / `protected` / `private` visibility. Routed by slug via `board_id` (S003). Feature `009-board-list` adds `#list_sort_key`, an instance method ranking a board by its newest published-item activity — see [Other Boards Listing](./other-boards-listing.md) (S019) |
 | `BoardMembership` | Join table between `Board` and `User` (membership management, owner-added only) |
 | `Event` | Advent Calendar event. Belongs to a `Board`. `name` doubles as the routing slug; `title` and `name` are each unique per board (composite unique index with `board_id`, `uniqueness: { scope: :board_id }`), so two boards may share an event name (S029). Pages are addressed by board + name for user boards — see [Event Addressing by Board](./event-addressing-by-board.md) (S029) |
-| `AdventCalendarItem` | Calendar date slot (`date` is an Integer 1–31). Exposes a `published?` method that gates visibility once the claimed date passes (S006) |
+| `AdventCalendarItem` | Calendar date slot (`date` is an Integer 1–31). Exposes a `published?` method that gates visibility once the claimed date passes (S006). Feature `025-my-past-posts` adds `.posts_of(user)` and `#post_status` — see [My Posts Listing](./my-posts-listing.md) (S042) |
 | `Item` | Markdown article. One-to-one with `AdventCalendarItem` |
 | `Like` | Like on an article |
 | `Comment` | Comment on an article. Stores `user_name` as a plain string, not a `User` reference |

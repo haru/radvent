@@ -33,8 +33,8 @@ class AdventCalendarItem < ApplicationRecord
   def self.posts_of(user)
     visible = Hash.new { |memo, board| memo[board] = board.visible?(user) }
     where(user_id: user.id)
-      .includes(:item, event: :board)
-      .references(:event)
+      .joins(:event)
+      .preload(:item, event: :board)
       .order('events.start_date DESC', 'advent_calendar_items.date DESC', 'advent_calendar_items.id DESC')
       .select { |slot| visible[slot.event.board] }
   end
@@ -48,6 +48,10 @@ class AdventCalendarItem < ApplicationRecord
     published? ? :published : :scheduled
   end
 
+  # Returns whether this slot has an article whose publish date has come.
+  #
+  # @return [Boolean] true when the item exists and the slot's date is today or earlier
+  # @raise [Date::Error] when +date+ does not exist in the event's month (legacy data; new records are validated)
   def published?
     return false unless item
 
@@ -89,7 +93,7 @@ class AdventCalendarItem < ApplicationRecord
   #
   # @return [void]
   def date_exists_in_event_month
-    return unless date && event&.start_date
+    return unless date && event
 
     errors.add(:date, :invalid) unless Date.valid_date?(year, month, date)
   end

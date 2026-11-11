@@ -20,6 +20,8 @@ ja:
           attributes:
             end_date:
               different_month: は開始日と同じ月にしてください
+            start_date:
+              slot_date_missing: の月には、登録済みの枠が使っている日（%{days}日）がありません
           format:
             end_date: "%{message}"
     models:
@@ -442,17 +444,13 @@ ja:
     tabs:
       posts: '自分の投稿'
       settings: 'アカウント設定'
-    columns:
-      title: 'タイトル'
-      status: 'ステータス'
-      board: 'ボード'
-      event: 'イベント'
-      date: '掲載日'
     status:
       published: '公開済み'
       scheduled: '公開前'
       unwritten: '未執筆'
     write_article: '記事を書く'
+    likes: 'いいね %{count}'
+    comments: 'コメント %{count}'
     post_date: '%{year}年%{month}月%{day}日'
     empty: 'まだ投稿がありません'
     load_more: 'もっと見る'

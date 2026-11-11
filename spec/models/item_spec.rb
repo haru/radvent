@@ -102,6 +102,16 @@ describe Item do
       expect(item.liked_users.to_a).to eq [alice]
     end
 
+    it 'counts duplicate rows once from preloaded likes without a query', :aggregate_failures do # rubocop:disable RSpec/ExampleLength
+      2.times { like!(alice) }
+      like!(bob)
+      preloaded = described_class.includes(:likes).find(item.id)
+      queries = 0
+      counter = ->(*, payload) { queries += 1 unless %w[SCHEMA TRANSACTION].include?(payload[:name]) }
+      count = ActiveSupport::Notifications.subscribed(counter, 'sql.active_record') { preloaded.like_count }
+      expect([count, queries]).to eq [2, 0]
+    end
+
     it 'ignores likes of other items' do
       like!(alice, create(:item))
       expect(item.like_count).to eq 0
