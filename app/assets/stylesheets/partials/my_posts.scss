@@ -44,20 +44,6 @@
   white-space: nowrap;
 }
 
-.my-posts-status-published { color: #1b7f4b; }
-.my-posts-status-scheduled { color: #b26a00; }
-.my-posts-status-unwritten { color: #6c757d; }
-
-:root[data-theme="dark"] {
-  .my-posts-status-published { color: #5fd49a; }
-  .my-posts-status-scheduled { color: #ffc266; }
-  .my-posts-status-unwritten { color: #adb5bd; }
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    .my-posts-status-published { color: #5fd49a; }
-    .my-posts-status-scheduled { color: #ffc266; }
-    .my-posts-status-unwritten { color: #adb5bd; }
-  }
-}
+.my-posts-status-published { color: var(--my-posts-status-published-color); }
+.my-posts-status-scheduled { color: var(--my-posts-status-scheduled-color); }
+.my-posts-status-unwritten { color: var(--my-posts-status-unwritten-color); }

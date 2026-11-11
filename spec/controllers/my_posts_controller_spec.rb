@@ -12,7 +12,7 @@ RSpec.describe MyPostsController do
 
   before { allow(Time.zone).to receive(:today).and_return(Date.new(2015, 12, 2)) }
 
-  # Creates +count+ own slots, newest first by ascending date across two events.
+  # Creates +count+ own slots in ascending date order: the first 25 in the December event, the rest in October.
   #
   # @param count [Integer] number of slots (max 50)
   # @return [void]

@@ -28,4 +28,11 @@ RSpec.describe LoadMorePage do
       expect(response.body).to be_empty
     end
   end
+
+  it 'renders 422 for non-scalar page params', :aggregate_failures do
+    get :index, params: { page: [2] }
+    expect(response).to have_http_status(:unprocessable_content)
+    get :index, params: { page: { a: 2 } }
+    expect(response).to have_http_status(:unprocessable_content)
+  end
 end

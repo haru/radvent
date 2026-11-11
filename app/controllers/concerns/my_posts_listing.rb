@@ -18,11 +18,17 @@ module MyPostsListing
   # next page number (nil when everything is already shown).
   #
   # @param user [User] the owner of the posts
-  # @param page [Integer] 1-based page number (20 slots per page)
+  # A page past the last one yields an empty list (e.g. posts removed since the previous page was shown).
+  #
+  # @param page [Integer] 1-based page number (+PAGE_SIZE+ slots per page)
   # @return [Array<AdventCalendarItem>] the slots assigned to +@my_posts+
+  # @raise [ArgumentError] when +page+ is not an Integer of 1 or more
   def assign_my_posts(user, page: 1)
+    raise ArgumentError, "page must be an Integer >= 1, got #{page.inspect}" unless page.is_a?(Integer) && page >= 1
+
     posts = AdventCalendarItem.posts_of(user)
-    @my_posts = posts.slice((page - 1) * PAGE_SIZE, PAGE_SIZE) || []
+    offset = (page - 1) * PAGE_SIZE
+    @my_posts = offset >= posts.size ? [] : posts.slice(offset, PAGE_SIZE)
     @my_posts_next_page = posts.size > page * PAGE_SIZE ? page + 1 : nil
     @my_posts
   end

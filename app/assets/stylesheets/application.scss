@@ -48,7 +48,10 @@
     --markdown-hr-color: #ccc;
     --markdown-table-border-color: #d9d9d9;
     --markdown-table-cell-border-color: #ccc;
-    --markdown-table-header-bg-color: #fff
+    --markdown-table-header-bg-color: #fff;
+    --my-posts-status-published-color: #1b7f4b;
+    --my-posts-status-scheduled-color: #b26a00;
+    --my-posts-status-unwritten-color: #6c757d
 }
   
 // Dark theme rules, parameterized by the selector that decides when they apply.
@@ -87,6 +90,9 @@
         --markdown-table-border-color: var(--main-txt-color);
         --markdown-table-cell-border-color: var(--main-txt-color);
         --markdown-table-header-bg-color: var(--card-body-bg-color);
+        --my-posts-status-published-color: #5fd49a;
+        --my-posts-status-scheduled-color: #ffc266;
+        --my-posts-status-unwritten-color: #adb5bd;
     }
     #{$root-selector} body#advent_calendar_body {
         .event-card{

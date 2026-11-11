@@ -55,6 +55,8 @@ A-6 to A-9 first open the "Account settings" tab of the my page.
 | M-3 🆕 | The "Account settings" tab holds the account form, the theme settings and the cancel-account button |
 | M-4 🆕 | A failed save re-renders the my page with the errors and the "Account settings" tab selected |
 
+Not covered by E2E: the "Load more" paging of the my-posts list (it needs 21+ slots, i.e. 21+ `joinDay` calls). It is covered by `spec/controllers/my_posts_controller_spec.rb`, `spec/controllers/concerns/my_posts_listing_spec.rb` and the 21-slot case in `spec/controllers/devise/registrations_controller_spec.rb`.
+
 ### B. Administration (`e2e/admin.spec.js`) — S15
 
 | ID | Scenario |

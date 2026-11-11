@@ -92,6 +92,20 @@ RSpec.describe Users::RegistrationsController do # rubocop:disable RSpec/SpecFil
       expect(page).to have_css('#my-page-settings.tab-pane:not(.active)', visible: :all)
     end
 
+    it 'labels each tab panel by its tab', :aggregate_failures do
+      get :edit
+      expect(page).to have_css('#my-page-posts[aria-labelledby="my-page-posts-tab"]')
+      expect(page).to have_css('#my-page-settings[aria-labelledby="my-page-settings-tab"]', visible: :all)
+    end
+
+    it 'renders the my page in English for an English Accept-Language', :aggregate_failures do
+      own_slot({}, title: 'English post')
+      request.headers['Accept-Language'] = 'en'
+      get :edit
+      expect(page).to have_css('a#my-page-posts-tab', text: I18n.t('my_page.tabs.posts', locale: :en))
+      expect(page).to have_css('.my-posts-status', text: I18n.t('my_page.status.published', locale: :en))
+    end
+
     it 'keeps the account form, theme and cancel button in the settings pane', :aggregate_failures do
       get :edit
       settings = page.find_by_id('my-page-settings', visible: :all)
@@ -228,6 +242,17 @@ RSpec.describe Users::RegistrationsController do # rubocop:disable RSpec/SpecFil
 
     it 'still renders the posts list in the posts pane' do
       expect(page.find_by_id('my-page-posts', visible: :all).text(:all)).to include('Still listed')
+    end
+  end
+
+  describe 'PUT #update success' do
+    before { sign_in user }
+
+    it 'does not load the posts list because it redirects', :aggregate_failures do
+      allow(AdventCalendarItem).to receive(:posts_of)
+      put :update, params: { user: { name: 'renamed', current_password: user.password } }
+      expect(response).to have_http_status(:redirect)
+      expect(AdventCalendarItem).not_to have_received(:posts_of)
     end
   end
 

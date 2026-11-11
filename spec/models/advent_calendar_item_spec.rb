@@ -101,13 +101,6 @@ describe AdventCalendarItem do
       advent_calendar_item = build(:advent_calendar_item, date: 2, event: event)
       expect(advent_calendar_item).not_to be_published
     end
-
-    it 'returns false instead of raising when the date is out of range for the month' do
-      advent_calendar_item = build(:advent_calendar_item, date: 32, event: event)
-      advent_calendar_item.save(validate: false)
-      create(:item, advent_calendar_item: advent_calendar_item)
-      expect(advent_calendar_item.reload).not_to be_published
-    end
   end
 
   describe 'date validity' do
@@ -124,11 +117,16 @@ describe AdventCalendarItem do
       expect(build(:advent_calendar_item, event: event, date: 25)).to be_valid
     end
 
-    it 'returns false instead of raising when a legacy slot has no date' do
-      slot = build(:advent_calendar_item, event: event, date: nil)
-      slot.save(validate: false)
-      create(:item, advent_calendar_item: slot)
-      expect(slot.reload.published?).to be false
+    it 'is invalid when the day does not exist in the event month', :aggregate_failures do
+      november = create(:event, start_date: '2015-11-01', end_date: '2015-11-25')
+      slot = build(:advent_calendar_item, event: november, date: 31)
+      expect(slot).not_to be_valid
+      expect(slot.errors[:date]).to be_present
+    end
+
+    it 'is valid on the last day of the event month' do
+      november = create(:event, start_date: '2015-11-01', end_date: '2015-11-25')
+      expect(build(:advent_calendar_item, event: november, date: 30)).to be_valid
     end
   end
 

@@ -6,10 +6,17 @@ module Users
     include Users::DeviseViews
     include MyPostsListing
 
-    # Prepares the first page of the "my posts" tab for the my page and for its re-render on a failed update.
+    # Prepares the first page of the "my posts" tab for the my page.
     #
     # Runs after Devise's +authenticate_scope!+ (a prepended callback), so +current_user+ is present.
-    before_action :load_my_posts, only: %i[edit update] # rubocop:disable Rails/LexicallyScopedActionFilter
+    before_action :load_my_posts, only: :edit # rubocop:disable Rails/LexicallyScopedActionFilter
+
+    # Updates the account; loads the posts list only when the form is re-rendered after a failure.
+    #
+    # @return [void]
+    def update
+      super { |resource| load_my_posts if resource.errors.any? }
+    end
 
     # Caps sign-ups per connection at 5 per hour (FR-010).
     #
@@ -27,7 +34,7 @@ module Users
     #
     # @return [void]
     def load_my_posts
-      assign_my_posts(current_user, page: 1)
+      assign_my_posts(current_user)
     end
   end
 end

@@ -1,5 +1,6 @@
 -# One page of the my-posts list: a table of rows followed by the load-more frame.
 -# Locals: header (Boolean) - render the column headings (first page only).
+-# Needs @my_posts and @my_posts_next_page (see MyPostsListing#assign_my_posts).
 -# Each page is its own table because a turbo-frame cannot live inside a table body.
 %table.table.my-posts-table
   - if header
@@ -13,9 +14,10 @@
   %tbody
     - @my_posts.each do |slot|
       - item = slot.item
+      - status = slot.post_status
       %tr
         %td.my-posts-title
-          - case slot.post_status
+          - case status
           - when :published
             = link_to item.title, item_path(item)
           - when :scheduled
@@ -23,7 +25,7 @@
           - else
             = link_to t('my_page.write_article'), new_item_path(id: slot.id, date: slot.date)
         %td
-          %span.my-posts-status{ class: "my-posts-status-#{slot.post_status}" }= t("my_page.status.#{slot.post_status}")
+          %span.my-posts-status{ class: "my-posts-status-#{status}" }= t("my_page.status.#{status}")
         %td= other_board_label(slot.event.board)
         %td= slot.event.title
         %td= t('my_page.post_date', year: slot.year, month: slot.month, day: slot.date)

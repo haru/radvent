@@ -11,10 +11,11 @@ module LoadMorePage
 
   # Returns the requested page number after explicit validation.
   #
-  # Renders 422 and halts when +page+ is missing, not an integer, or smaller
+  # Renders 422 and returns nil when +page+ is missing, not an integer, or smaller
   # than 2 (page 1 is rendered by the host page itself; no silent fallback).
+  # Rendering does not halt the action: callers must check +performed?+ and return.
   #
-  # @return [Integer, nil] the validated page number
+  # @return [Integer, nil] the validated page number, nil when 422 was rendered
   def page_number
     page = Integer(params[:page], 10)
     return page if page >= 2
@@ -24,7 +25,7 @@ module LoadMorePage
     reject_page
   end
 
-  # Renders 422 and halts the request for an invalid page number.
+  # Renders 422 for an invalid page number (the caller must stop, see {#page_number}).
   #
   # @return [nil]
   def reject_page
