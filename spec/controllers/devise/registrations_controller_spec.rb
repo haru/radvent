@@ -82,16 +82,16 @@ RSpec.describe Users::RegistrationsController do # rubocop:disable RSpec/SpecFil
       slot
     end
 
-    it 'renders the two tabs with the settings tab first and active by default', :aggregate_failures do
+    it 'renders the two tabs with the posts tab first and active by default', :aggregate_failures do
       get :edit
       expect(page).to have_css('ul.nav.nav-tabs[role=tablist]')
-      expect(page).to have_css('a#my-page-settings-tab.active[data-mdb-tab-init][href="#my-page-settings"]' \
-                               '[aria-controls="my-page-settings"][aria-selected="true"]')
-      expect(page).to have_css('a#my-page-posts-tab[data-mdb-tab-init][aria-selected="false"]:not(.active)')
-      expect(page).to have_css('#my-page-settings.tab-pane.show.active')
-      expect(page).to have_css('#my-page-posts.tab-pane:not(.active)', visible: :all)
+      expect(page).to have_css('a#my-page-posts-tab.active[data-mdb-tab-init][href="#my-page-posts"]' \
+                               '[aria-controls="my-page-posts"][aria-selected="true"]')
+      expect(page).to have_css('a#my-page-settings-tab[data-mdb-tab-init][aria-selected="false"]:not(.active)')
+      expect(page).to have_css('#my-page-posts.tab-pane.show.active')
+      expect(page).to have_css('#my-page-settings.tab-pane:not(.active)', visible: :all)
       tab_ids = page.all('#my-page-tabs a.nav-link').map { |tab| tab[:id] } # rubocop:disable Rails/Pluck
-      expect(tab_ids).to eq(%w[my-page-settings-tab my-page-posts-tab])
+      expect(tab_ids).to eq(%w[my-page-posts-tab my-page-settings-tab])
     end
 
     it 'labels each tab panel by its tab', :aggregate_failures do

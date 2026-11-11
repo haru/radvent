@@ -9,10 +9,10 @@ const pastEvent = { name: 'e2e-my-page-past', title: 'E2E マイページ過去'
 const futureEvent = { name: 'e2e-my-page-future', title: 'E2E マイページ未来', ...futureEventPeriod() }
 const eventPath = (event) => `/boards/${board.boardId}/events/${event.name}`
 
-// The my page opens on the account settings tab; the post list lives in the "my posts" tab.
+// The my page opens on the "my posts" tab; the account settings live in the other tab.
 const openPostsTab = async (page) => {
   await page.goto('/users/edit')
-  await page.locator('#my-page-posts-tab').click()
+  await expect(page.locator('#my-page-posts-tab')).toHaveAttribute('aria-selected', 'true')
   await expect(page.locator('#my-page-posts')).toBeVisible()
 }
 const postsRow = (page, text) => page.locator('#my-page-posts li.my-posts-item', { hasText: text })
@@ -69,7 +69,9 @@ test.describe.serial('マイページ', () => {
   test('M-3 アカウント設定タブにフォーム・テーマ・アカウント削除がある', async ({ browser }) => {
     const { page } = await openAs(browser, accounts.bob)
     await page.goto('/users/edit')
-    await expect(page.locator('#my-page-settings-tab')).toHaveAttribute('aria-selected', 'true')
+    await expect(page.locator('#my-page-posts-tab')).toHaveAttribute('aria-selected', 'true')
+    await expect(page.locator('#my-page-settings')).toBeHidden()
+    await page.locator('#my-page-settings-tab').click()
     await expect(page.locator('#my-page-settings')).toBeVisible()
     await expect(page.getByLabel('現在のパスワード')).toBeVisible()
     await expect(page.locator('#theme_dark')).toBeVisible()
@@ -80,6 +82,7 @@ test.describe.serial('マイページ', () => {
   test('M-4 保存に失敗すると、エラー付きでアカウント設定タブが選ばれて再表示される', async ({ browser }) => {
     const { page } = await openAs(browser, accounts.bob)
     await page.goto('/users/edit')
+    await page.locator('#my-page-settings-tab').click()
     await page.getByLabel('名前').fill('e2e-bob-renamed')
     await page.getByLabel('現在のパスワード').fill('wrong-password')
     await page.locator('form[action="/users"] input[type=submit]').click()

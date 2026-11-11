@@ -26,10 +26,10 @@ file is unused because `Users::DeviseViews` empties `local_prefixes` (S042).
 server round-trip tabs via `?tab=` (clashes with the `/users` URL on failed
 update); a custom Stimulus tab controller (YAGNI) (S042).
 
-The account settings tab is first and selected by default; the "my posts"
-tab follows it (S042, revised after commit `88927ff`). Because settings is
-already the default, a failed `update` re-render opens the same tab and no
-tab-switching logic is needed (S042).
+The "my posts" tab is first and selected by default (FR-013); the account
+settings tab follows it. The view selects the settings tab server-side only when
+`resource.errors.any?`, so a failed `update` re-render shows the errors (S042;
+the default briefly flipped in commit `88927ff` and was restored by convergence task T040).
 
 ## Query and visibility
 
