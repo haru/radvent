@@ -7,8 +7,8 @@ import { fillSignUp } from './support/forms.js'
 import { clearJsErrors, expectNoJsErrors, watchJsErrors } from './support/js-errors.js'
 
 const guestMenu = (page) => page.locator('#top-menu')
-// The account form, theme and cancel button live in the account settings tab of the my page,
-// which is already the default tab; clicking it is only a safeguard.
+// The account form, theme and cancel button live in the account settings tab of the my page;
+// "My posts" is the default tab, so the settings tab must be opened first.
 const openSettingsTab = async (page) => {
   await page.locator('#my-page-settings-tab').click()
   await expect(page.locator('#my-page-settings')).toBeVisible()
