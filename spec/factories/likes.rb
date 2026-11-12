@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :like, class: 'Likes' do
-    item_id { 1 }
-    user_id { 1 }
+  factory :like do
+    item
+    user
   end
 end

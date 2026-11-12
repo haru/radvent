@@ -12,6 +12,7 @@ class AdventCalendarItem < ApplicationRecord
   has_one :item, dependent: :destroy
   has_many :attachments, dependent: :destroy
   validates :date, presence: true, numericality: { only_integer: true, in: 1..31 }
+  validate :date_exists_in_event_month
   validates :date, uniqueness: { scope: :event_id }, if: :will_save_change_to_date?
   scope :prev, lambda { |item|
     joins(:item, :event).where('event_id = ? and date < ?', item.event_id, item.date).order(:date).reverse_order
@@ -20,12 +21,41 @@ class AdventCalendarItem < ApplicationRecord
     joins(:item, :event).where('event_id = ? and date > ?', item.event_id, item.date).order(:date)
   }
 
+  # Returns the slots owned by the user that the user can currently see, newest first.
+  #
+  # Only slots with +user_id+ equal to the user's id are returned (even for admins).
+  # They are ordered by the event's start date, then +date+, then +id+, all descending,
+  # regardless of status. Slots on boards the user can no longer view are dropped.
+  # Visibility is delegated to +Board#visible?+ and evaluated once per board id.
+  #
+  # @param user [User] the owner of the slots
+  # @return [Array<AdventCalendarItem>] visible slots, newest first
+  def self.posts_of(user)
+    visible = Hash.new { |memo, board| memo[board] = board.visible?(user) }
+    where(user_id: user.id)
+      .joins(:event)
+      .preload(:item, event: :board)
+      .order('events.start_date DESC', 'advent_calendar_items.date DESC', 'advent_calendar_items.id DESC')
+      .select { |slot| visible[slot.event.board] }
+  end
+
+  # Returns the publication status of this slot as shown in the my-page post list.
+  #
+  # @return [Symbol] +:published+, +:scheduled+ (item exists but +published?+ is false) or +:unwritten+
+  def post_status
+    return :unwritten unless item
+
+    published? ? :published : :scheduled
+  end
+
+  # Returns whether this slot has an article whose publish date has come.
+  #
+  # @return [Boolean] true when the item exists and the slot's date is today or earlier
+  # @raise [Date::Error] when +date+ does not exist in the event's month (legacy data; new records are validated)
   def published?
     return false unless item
 
     Date.new(year, month, date) <= Time.zone.today
-  rescue Date::Error, TypeError
-    false
   end
 
   def editable_by?(author)
@@ -56,4 +86,15 @@ class AdventCalendarItem < ApplicationRecord
   delegate :editable?, to: :event
 
   delegate :deletable?, to: :event
+
+  private
+
+  # Rejects a +date+ that does not exist in the month of the event's start date (e.g. 31 in November).
+  #
+  # @return [void]
+  def date_exists_in_event_month
+    return unless date && event
+
+    errors.add(:date, :invalid) unless Date.valid_date?(year, month, date)
+  end
 end

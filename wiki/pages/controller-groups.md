@@ -1,8 +1,8 @@
 ---
 title: Controller Groups
 type: component
-sources: [S004, S015, S019, S023, S026, S028, S033, S040]
-updated: 2026-10-30
+sources: [S004, S015, S019, S023, S026, S028, S033, S040, S042]
+updated: 2026-11-11
 ---
 
 # Controller Groups
@@ -17,6 +17,7 @@ updated: 2026-10-30
 | Attachments | Image uploads via CarrierWave for the Markdown editor (S004); `show` (`GET /attachments/:id/:filename`) serves images with access control — see [Protected Image Serving](./protected-image-serving.md) (S023) |
 | Themes | Single `update` action persisting `current_user.theme`; added by feature `007-theme-switch` (S015) |
 | BoardOtherBoards | Single `index` action returning a page of the viewer's visible boards, newest-activity-first, for the load-more listing; added by feature `009-board-list` (S019) |
+| MyPosts | Single `index` action (`GET /my_posts?page=N`, sign-in required, 422 on bad page) returning the load-more fragment of the user's own slots; includes shared `LoadMorePage` — see [My Posts Listing](./my-posts-listing.md) (S042) |
 
 See [Controllers and Routing](./controllers-and-routing.md) for routes, layouts and filters,
 [Domain Model](./domain-model.md) for the underlying entities and

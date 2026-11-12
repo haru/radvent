@@ -1,0 +1,39 @@
+-# One page of the my-posts list: a card list followed by the load-more frame.
+-# Needs @my_posts and @my_posts_next_page (see MyPostsListing#assign_my_posts).
+-# Each page is its own list because a turbo-frame cannot live inside a list.
+%ul.my-posts-list
+  - @my_posts.each do |slot|
+    - item = slot.item
+    - status = slot.post_status
+    %li.my-posts-item{ class: "my-posts-item-#{status}" }
+      .my-posts-main
+        .my-posts-title
+          - case status
+          - when :published
+            = link_to item.title, item_path(item), class: 'stretched-link'
+          - when :scheduled
+            = link_to item.title, edit_item_path(item), class: 'stretched-link'
+          - when :unwritten
+            = link_to t('my_page.write_article'), new_item_path(id: slot.id, date: slot.date), class: 'stretched-link'
+          - else
+            - raise ArgumentError, "unknown post status: #{status.inspect}"
+        .my-posts-meta
+          %span.my-posts-date= t('my_page.post_date', year: slot.year, month: slot.month, day: slot.date)
+          %span.my-posts-board= other_board_label(slot.event.board)
+          %span.my-posts-event= slot.event.title
+          - if status == :published
+            %span.my-posts-likes
+              %i.far.fa-heart{ aria: { hidden: 'true' } }
+              %span{ aria: { hidden: 'true' } }= item.like_count
+              %span.visually-hidden= t('my_page.likes', count: item.like_count)
+            %span.my-posts-comments
+              %i.far.fa-comment{ aria: { hidden: 'true' } }
+              %span{ aria: { hidden: 'true' } }= item.comments_count
+              %span.visually-hidden= t('my_page.comments', count: item.comments_count)
+      %span.my-posts-status= t("my_page.status.#{status}")
+- if @my_posts_next_page
+  = turbo_frame_tag "my-posts-page-#{@my_posts_next_page}" do
+    .my-posts-more
+      = link_to my_posts_path(page: @my_posts_next_page), class: 'btn btn-outline-secondary' do
+        = t('my_page.load_more')
+        %i.fas.fa-chevron-down.ms-2

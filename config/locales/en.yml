@@ -72,6 +72,8 @@ en:
           attributes:
             end_date:
               different_month: must be in the same month as start date
+            start_date:
+              slot_date_missing: has no day %{days} that existing slots use
     attributes:
       comment:
         user_name: Name
@@ -278,6 +280,24 @@ en:
       user_not_found: 'User not found'
       already_member: 'Already a member'
       ambiguous_name: 'Several users have this name. Please pick one from the candidates'
+  my_page:
+    tabs:
+      posts: 'My posts'
+      settings: 'Account settings'
+    status:
+      published: 'Published'
+      scheduled: 'Scheduled'
+      unwritten: 'Not written'
+    likes:
+      one: '%{count} like'
+      other: '%{count} likes'
+    comments:
+      one: '%{count} comment'
+      other: '%{count} comments'
+    write_article: 'Write article'
+    post_date: '%{month}/%{day}/%{year}'
+    empty: 'No posts yet'
+    load_more: 'Load more'
   theme:
     label: 'Theme'
     system: 'System'

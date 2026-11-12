@@ -1,8 +1,8 @@
 ---
 title: Other Boards Listing (Load-More Pagination)
 type: decision
-sources: [S019, S020]
-updated: 2026-09-18
+sources: [S019, S020, S042]
+updated: 2026-11-11
 ---
 
 # Other Boards Listing (Load-More Pagination)
@@ -82,6 +82,10 @@ framework behavior (S019).
 (duplicate rendering logic between server and client); a `turbo_stream`
 append pattern like Likes (this is a plain pagination link, not a form
 submission) (S019).
+
+Feature `025-my-past-posts` reuses this load-more pattern for the user's own
+posts and extracts page-number validation into a shared `LoadMorePage`
+concern — see [My Posts Listing](./my-posts-listing.md) (S042).
 
 See [Domain Model](./domain-model.md) for `Board`/`Event`/`Item` and
 [Controllers and Routing](./controllers-and-routing.md) for the route table.
