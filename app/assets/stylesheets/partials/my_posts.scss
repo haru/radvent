@@ -1,0 +1,94 @@
+// Styles for the "my posts" tab of the my page: a card list (one card per slot).
+// Each page of the list is its own <ul> because the load-more turbo frame
+// cannot live inside a list.
+
+.my-posts-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.my-posts-item {
+  position: relative; // anchors the card-wide .stretched-link
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+  padding: 1rem 1.25rem;
+  color: var(--main-txt-color);
+  background: var(--event-card-bg-color);
+  border: 1px solid var(--footer-border-color);
+  border-left: 4px solid var(--my-posts-status-color);
+  border-radius: 0.75rem;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+
+  &:hover {
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    transform: translateY(-1px);
+  }
+}
+
+.my-posts-item-published { --my-posts-status-color: var(--my-posts-status-published-color); }
+.my-posts-item-scheduled { --my-posts-status-color: var(--my-posts-status-scheduled-color); }
+.my-posts-item-unwritten { --my-posts-status-color: var(--my-posts-status-unwritten-color); }
+
+.my-posts-main {
+  min-width: 0;
+  flex: 1;
+}
+
+.my-posts-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+
+  a {
+    color: var(--main-txt-color);
+    text-decoration: none;
+  }
+}
+
+.my-posts-item:hover .my-posts-title a { color: var(--anchor-color); }
+
+.my-posts-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.9rem;
+  margin-top: 0.35rem;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+.my-posts-likes,
+.my-posts-comments {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.my-posts-more {
+  text-align: center;
+  margin: 1rem 0;
+}
+
+// Status badges: the text always carries the meaning; colour is secondary.
+.my-posts-status {
+  flex-shrink: 0;
+  padding: 0.15rem 0.7rem;
+  border-radius: 1rem;
+  border: 1px solid var(--my-posts-status-color);
+  color: var(--my-posts-status-color);
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+// Narrow screens: put the badge under the text instead of squeezing the title.
+@media (max-width: 576px) {
+  .my-posts-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+}

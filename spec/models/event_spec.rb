@@ -30,6 +30,35 @@ describe Event do
       end
     end
 
+    describe 'dates' do
+      it 'is invalid without a start date', :aggregate_failures do
+        event = build(:event, start_date: nil)
+        expect(event).not_to be_valid
+        expect(event.errors[:start_date]).to be_present
+      end
+
+      it 'is invalid without an end date', :aggregate_failures do
+        event = build(:event, end_date: nil)
+        expect(event).not_to be_valid
+        expect(event.errors[:end_date]).to be_present
+      end
+
+      it 'is invalid when moving to a month lacking a slot date', :aggregate_failures do
+        event = create(:event, board: board, start_date: '2015-12-01', end_date: '2015-12-31')
+        create(:advent_calendar_item, event: event, user: user, date: 31)
+        event.assign_attributes(start_date: '2015-11-01', end_date: '2015-11-25')
+        expect(event).not_to be_valid
+        expect(event.errors[:start_date]).to be_present
+      end
+
+      it 'is valid when moving to a month containing every slot date' do
+        event = create(:event, board: board, start_date: '2015-12-01', end_date: '2015-12-31')
+        create(:advent_calendar_item, event: event, user: user, date: 31)
+        event.assign_attributes(start_date: '2016-01-01', end_date: '2016-01-25')
+        expect(event).to be_valid
+      end
+    end
+
     describe 'name format' do
       it 'is invalid when containing only numbers' do
         expect(build(:event, name: '123')).not_to be_valid

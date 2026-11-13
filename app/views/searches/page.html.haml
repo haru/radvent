@@ -1,0 +1,3 @@
+= turbo_frame_tag "search-results-page-#{@page}" do
+  - if @search_items.any?
+    = render 'searches/list'

@@ -221,4 +221,47 @@ RSpec.describe 'layouts/application' do
       end
     end
   end
+
+  describe 'title-bar search form' do
+    before do
+      allow(view).to receive_messages(current_user: nil, user_signed_in?: false)
+    end
+
+    it 'initializes the navbar toggler so the menu holding the search form opens on narrow screens' do
+      render
+      toggler = 'button.navbar-toggler[data-mdb-collapse-init][data-mdb-target="#navTopMenu"]'
+      expect(Capybara.string(rendered)).to have_css(toggler)
+    end
+
+    it 'renders a GET search form inside the collapsible menu' do
+      render
+      form = "#navTopMenu form[role=search][action='#{search_path}'][method=get]"
+      expect(Capybara.string(rendered)).to have_css("#{form} input[type=search][name=q][maxlength='100']")
+    end
+
+    it 'renders a submit button and visually hidden labels', :aggregate_failures do
+      render
+      page = Capybara.string(rendered)
+      expect(page).to have_css('#navTopMenu button[type=submit] .visually-hidden', text: I18n.t('search.form.submit'))
+      expect(page).to have_css('label.visually-hidden', text: I18n.t('search.form.label'))
+    end
+
+    it 'is shown to signed-in users too' do
+      allow(view).to receive_messages(current_user: regular_user, user_signed_in?: true)
+      render
+      expect(Capybara.string(rendered)).to have_css('#navTopMenu form[role=search]')
+    end
+
+    it 'fills the field with @search_query, escaped', :aggregate_failures do
+      assign(:search_query, '"><b>x')
+      render
+      expect(Capybara.string(rendered)).to have_field('q', with: '"><b>x')
+      expect(rendered).not_to include('<b>x')
+    end
+
+    it 'leaves the field empty without @search_query' do
+      render
+      expect(Capybara.string(rendered).find_field('q').value).to be_blank
+    end
+  end
 end

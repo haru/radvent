@@ -15,7 +15,9 @@ class Event < ApplicationRecord
   belongs_to :updated_by, class_name: 'User'
   validates :title, presence: true, uniqueness: { scope: :board_id }
   validates :name, presence: true, uniqueness: { scope: :board_id }, format: { with: NAME_FORMAT }
+  validates :start_date, :end_date, presence: true
   validate :start_and_end_dates_must_be_same_month
+  validate :slot_dates_exist_in_start_month, on: :update
 
   # Events that belong to the TOP board.
   scope :on_top_board, -> { joins(:board).merge(Board.board_type_top) }
@@ -97,6 +99,18 @@ class Event < ApplicationRecord
     return unless start_date.month != end_date.month || start_date.year != end_date.year
 
     errors.add(:end_date, :different_month)
+  end
+
+  # Rejects a new start month in which a day used by an existing slot does not exist (e.g. 31 in November).
+  #
+  # @return [void]
+  def slot_dates_exist_in_start_month
+    return unless start_date && will_save_change_to_start_date?
+
+    year = start_date.year
+    month = start_date.month
+    missing = advent_calendar_items.pluck(:date).reject { |day| Date.valid_date?(year, month, day) }
+    errors.add(:start_date, :slot_date_missing, days: missing.sort.join(', ')) if missing.any?
   end
 
   public

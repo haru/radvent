@@ -20,6 +20,8 @@ ja:
           attributes:
             end_date:
               different_month: は開始日と同じ月にしてください
+            start_date:
+              slot_date_missing: の月には、登録済みの枠が使っている日（%{days}日）がありません
           format:
             end_date: "%{message}"
     models:
@@ -438,6 +440,35 @@ ja:
       user_not_found: 'ユーザーが見つかりません'
       already_member: 'すでにメンバーです'
       ambiguous_name: '同じ名前のユーザーが複数います。候補から選んでください'
+  my_page:
+    tabs:
+      posts: '自分の投稿'
+      settings: 'アカウント設定'
+    status:
+      published: '公開済み'
+      scheduled: '公開前'
+      unwritten: '未執筆'
+    write_article: '記事を書く'
+    likes: 'いいね %{count}'
+    comments: 'コメント %{count}'
+    post_date: '%{year}年%{month}月%{day}日'
+    empty: 'まだ投稿がありません'
+    load_more: 'もっと見る'
+  search:
+    form:
+      label: '記事を検索'
+      placeholder: '記事を検索'
+      submit: '検索'
+    index:
+      title: '検索結果'
+      count: '%{count}件の記事が見つかりました'
+      blank: '検索するキーワードを入力してください'
+      too_long: 'キーワードは%{count}文字以内で入力してください'
+      no_results: '該当する記事が見つかりませんでした。別のキーワードで試してください'
+      load_more: 'もっと見る'
+    result:
+      post_date: '%{year}年%{month}月%{day}日'
+    rate_limited: '検索の回数が上限に達しました。しばらく待ってください'
   theme:
     label: 'テーマ'
     system: 'システム設定'
