@@ -14,7 +14,7 @@ Legend: ✅ covered by the main journey, 🆕 added by the extended specs.
 | S2 | Sign-in | `/users/sign_in` |
 | S3 | Sign-up | `/users/sign_up` |
 | S4 | Password reset request / edit | `/users/password/new`, `/users/password/edit` |
-| S5 | My page ("My posts" tab, "Account settings" tab: account edit, theme, cancel account) | `/users/edit` |
+| S5 | My page ("Account settings" tab: account edit, theme, cancel account; "My posts" tab) | `/users/edit` |
 | S6 | Board list | `/boards` |
 | S7 | Board create / edit / delete | `/boards/new`, `/boards/:id/edit` |
 | S8 | Board members | `/boards/:id/board_memberships` |
@@ -32,7 +32,7 @@ Legend: ✅ covered by the main journey, 🆕 added by the extended specs.
 
 ### A. Accounts (`e2e/auth.spec.js`) — S2, S3, S4, S5
 
-A-6 to A-9 click the "Account settings" tab of the my page first (it is not the default tab).
+A-6 to A-9 need no tab click: the my page opens on the "Account settings" tab.
 
 | ID | Scenario |
 |----|----------|
@@ -51,9 +51,9 @@ A-6 to A-9 click the "Account settings" tab of the my page first (it is not the 
 
 | ID | Scenario |
 |----|----------|
-| M-1 🆕 | The my page opens on the "My posts" tab, where a published article is listed with its status, board and event, and its title opens the article |
+| M-1 🆕 | The my page opens on the "Account settings" tab; clicking "My posts" lists a published article with its status, board and event, and its title opens the article |
 | M-2 🆕 | A scheduled article's title leads to the edit screen; an unwritten slot's "write article" link leads to the article form |
-| M-3 🆕 | The "Account settings" tab (reached by clicking it; "My posts" is the default) holds the account form, the theme settings and the cancel-account button |
+| M-3 🆕 | The "Account settings" tab (the default, shown without clicking) holds the account form, the theme settings and the cancel-account button |
 | M-4 🆕 | A failed save re-renders the my page with the errors and the "Account settings" tab selected |
 | M-5 🆕 | With 21+ slots, "Load more" appends the next page on the same screen and the link disappears on the last page |
 
