@@ -50,6 +50,7 @@ Sources are immutable inputs — the wiki never edits them.
 | S043 | specs/025-my-past-posts/plan.md (summary) | feature-artifact | 2026-11-11 | 2026-11-11 | my-posts-listing.md |
 | S044 | specs/026-article-search/research.md | feature-artifact | 2026-11-13 | 2026-11-13 | article-search.md, my-posts-listing.md, controller-groups.md |
 | S045 | docs/adr/0015-article-search-with-like-and-ruby-side-readability.md | file | 2026-11-13 | 2026-11-13 | article-search.md |
+| S046 | specs/027-my-page-settings-tab-first/research.md | feature-artifact | 2026-11-13 | 2026-11-13 | my-posts-listing.md |
 
 Note: domain-model.md exceeded the 600-word split threshold after S015's
 update; its Authorization section was split into authorization.md (S002,

@@ -39,7 +39,7 @@ page files, not here.
 - [Navbar Breadcrumb — Event Segment](pages/navbar-breadcrumb.md) — layout-only `@breadcrumb_event` assigned after authorization filters, saved-title helper, `aria-current` on the calendar page, CSS ellipsis
 - [Authentication Rate Limits and Account Lockout](pages/auth-rate-limit-and-lockout.md) — per-IP and per-address limits via Solid Cache, 429 page, time-based invisible lockout (ADR-0011, ADR-0012)
 - [Board Member Search (Incremental Candidates)](pages/board-member-search.md) — HTML-fragment search endpoint, `!`-escaped LIKE, per-user rate limit, `user_id` picking, abortable Stimulus client, and the accepted email exposure (ADR-0014)
-- [My Posts Listing on My Page](pages/my-posts-listing.md) — tabbed My Page, Ruby-side `visible?` filter, `post_status` link targets, load-more via `GET /my_posts`
+- [My Posts Listing on My Page](pages/my-posts-listing.md) — tabbed My Page (settings tab first, always selected), Ruby-side `visible?` filter, `post_status` link targets, load-more via `GET /my_posts`
 - [Article Search from the Title Bar](pages/article-search.md) — `Item.search_readable` (LIKE on title/body, AND keywords), Ruby-side `visible?` + `published?`, 20-per-page Turbo Frame paging, IP rate limit, escaped `mark` highlighting (ADR-0015)
 - [E2E Tests with Playwright (Dedicated Rails Environment)](pages/e2e-testing.md) — `e2e` env on port 4500, per-run SQLite reset, one-command runner, Chromium via the devcontainer (ADR-0013)
 

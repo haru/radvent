@@ -1,7 +1,7 @@
 ---
 title: My Posts Listing on My Page
 type: decision
-sources: [S042, S043, S044]
+sources: [S042, S043, S044, S046]
 updated: 2026-11-13
 ---
 
@@ -26,10 +26,16 @@ file is unused because `Users::DeviseViews` empties `local_prefixes` (S042).
 server round-trip tabs via `?tab=` (clashes with the `/users` URL on failed
 update); a custom Stimulus tab controller (YAGNI) (S042).
 
-The "my posts" tab is first and selected by default (FR-013); the account
-settings tab follows it. The view selects the settings tab server-side only when
-`resource.errors.any?`, so a failed `update` re-render shows the errors (S042;
-the default briefly flipped in commit `88927ff` and was restored by convergence task T040).
+The account settings tab is first and always selected (feature 027 FR-001/FR-002,
+superseding 025 FR-013); "my posts" follows and opens on click (S046). The
+`settings_active = resource.errors.any?` branch was deleted: the error messages
+sit inside the settings pane, so a failed `update` shows them with no tab
+switching (S046). The controller is unchanged and `load_my_posts` still runs,
+because the posts pane stays in the DOM (S046). The default briefly flipped in
+`88927ff` and was reverted by convergence task T040 (S042).
+Gotcha: the settings pane's `autofocus` email field now takes focus on first
+paint, which may open the keyboard on mobile (S046). Selection is not
+remembered via URL (YAGNI) (S046).
 
 ## Query and visibility
 
