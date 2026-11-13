@@ -1,0 +1,22 @@
+-# One page of search results followed by the load-more frame.
+-# Needs @search_items, @keywords, @search_query and @search_next_page.
+%ol.search-results
+  - @search_items.each do |item|
+    - slot = item.advent_calendar_item
+    - excerpt = search_excerpt(item.body, @keywords)
+    %li.search-result
+      %h2.search-result-title
+        = link_to highlight_keywords(item.title, @keywords), item_path(item), class: 'stretched-link'
+      .search-result-meta
+        %span.search-result-author= "#{slot.user_name}#{t('views.courtesy_title')}"
+        %span.search-result-board= other_board_label(slot.event.board)
+        %span.search-result-event= slot.event.title
+        %span.search-result-date= t('search.result.post_date', year: slot.year, month: slot.month, day: slot.date)
+      - if excerpt
+        %p.search-result-excerpt= highlight_keywords(excerpt, @keywords)
+- if @search_next_page
+  = turbo_frame_tag "search-results-page-#{@search_next_page}" do
+    .search-more
+      = link_to search_page_path(q: @search_query, page: @search_next_page), class: 'btn btn-outline-secondary' do
+        = t('search.index.load_more')
+        %i.fas.fa-chevron-down.ms-2

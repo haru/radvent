@@ -26,6 +26,7 @@ Legend: ✅ covered by the main journey, 🆕 added by the extended specs.
 | S14 | Article (comments, likes, prev / next) | `/items/:id` |
 | S15 | Admin: user list / edit / delete | `/users`, `/user/:id/edit` |
 | S16 | Error pages (403, 404) | — |
+| S17 | Article search (title-bar search form, results) | `/search`, `/search/page` |
 
 ## 2. Scenarios
 
@@ -55,6 +56,18 @@ A-6 to A-9 click the "Account settings" tab of the my page first (it is not the 
 | M-3 🆕 | The "Account settings" tab (reached by clicking it; "My posts" is the default) holds the account form, the theme settings and the cancel-account button |
 | M-4 🆕 | A failed save re-renders the my page with the errors and the "Account settings" tab selected |
 | M-5 🆕 | With 21+ slots, "Load more" appends the next page on the same screen and the link disappears on the last page |
+
+### R. Article search (`e2e/search.spec.js`) — S17
+
+| ID | Scenario |
+|----|----------|
+| R-1 🆕 | Searching from the title bar opens `/search?q=…` with the matching article's title, author, board, event, date and excerpt, the keyword highlighted, the total count shown and the word kept in the search field |
+| R-2 🆕 | A result's title opens the article page |
+| R-3 🆕 | An article of a private board is not found by a guest or a non-member (notice, no count), but is found by the board owner |
+| R-4 🆕 | A word that matches nothing shows the "not found" notice; an empty search shows the "enter a keyword" notice |
+| R-5 🆕 | With 21+ matches, "Load more" appends the next page on the same screen and the button disappears on the last page; the count shows all matches |
+| R-6 🆕 | At 375px width the search works from the opened hamburger menu and the page does not scroll horizontally |
+| R-7 🆕 | In the dark theme the results and the highlight stay readable |
 
 ### B. Administration (`e2e/admin.spec.js`) — S15
 

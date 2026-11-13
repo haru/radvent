@@ -1,8 +1,8 @@
 ---
 title: My Posts Listing on My Page
 type: decision
-sources: [S042, S043]
-updated: 2026-11-11
+sources: [S042, S043, S044]
+updated: 2026-11-13
 ---
 
 # My Posts Listing on My Page
@@ -75,6 +75,8 @@ Board name via `other_board_label`; the date is rendered from
 `slot.year/month/date` through i18n rather than `Date.new`, which raises on
 invalid dates; title via `Item#title` (S042). No ADR was written: everything
 reuses existing patterns (S042).
+
+See also [Article Search](./article-search.md), which reuses the same load-more concern and Ruby-side visibility filter (S044).
 
 See [Controller Groups](./controller-groups.md) and
 [Domain Model](./domain-model.md).

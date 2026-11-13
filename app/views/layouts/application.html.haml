@@ -32,10 +32,16 @@
             %span{ crumb_options, "aria-current" => "page" }= crumb_title
           - else
             = link_to crumb_title, crumb_path, crumb_options
-      %button.navbar-toggler{type:"button", "data-mdb-toggle": "collapse", "data-mdb-target": "#navTopMenu", "aria-controls": "navTopMenu", "aria-expanded": "false", "aria-label": "Toggle navigation"}
+      %button.navbar-toggler{type:"button", "data-mdb-collapse-init": "", "data-mdb-toggle": "collapse", "data-mdb-target": "#navTopMenu", "aria-controls": "navTopMenu", "aria-expanded": "false", "aria-label": "Toggle navigation"}
         %span.navbar-toggler-icon
       %div#navTopMenu.collapse.navbar-collapse
-        %div.navbar-nav.ms-auto
+        = form_with url: search_path, method: :get, html: { role: 'search', class: 'navbar-search' } do
+          %label.visually-hidden{ for: 'navbar-search-q' }= t('search.form.label')
+          = search_field_tag :q, @search_query, id: 'navbar-search-q', maxlength: SearchesController::MAX_QUERY_LENGTH, class: 'form-control form-control-sm', placeholder: t('search.form.placeholder')
+          %button.btn.btn-link.nav-link{ type: 'submit' }
+            %i.fas.fa-search{ aria: { hidden: 'true' } }
+            %span.visually-hidden= t('search.form.submit')
+        %div.navbar-nav
           - if user_signed_in?
             - if current_user.admin?
               = link_to users_path, class: "nav-item nav-link" do
