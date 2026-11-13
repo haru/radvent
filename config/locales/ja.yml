@@ -454,6 +454,21 @@ ja:
     post_date: '%{year}年%{month}月%{day}日'
     empty: 'まだ投稿がありません'
     load_more: 'もっと見る'
+  search:
+    form:
+      label: '記事を検索'
+      placeholder: '記事を検索'
+      submit: '検索'
+    index:
+      title: '検索結果'
+      count: '%{count}件の記事が見つかりました'
+      blank: '検索するキーワードを入力してください'
+      too_long: 'キーワードは%{count}文字以内で入力してください'
+      no_results: '該当する記事が見つかりませんでした。別のキーワードで試してください'
+      load_more: 'もっと見る'
+    result:
+      post_date: '%{year}年%{month}月%{day}日'
+    rate_limited: '検索の回数が上限に達しました。しばらく待ってください'
   theme:
     label: 'テーマ'
     system: 'システム設定'

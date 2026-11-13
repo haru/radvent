@@ -1,0 +1,62 @@
+// Title-bar search form and the search result list.
+.navbar-search {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin: 0.5rem 0;
+  max-width: 100%;
+
+  input[type="search"] {
+    min-width: 0;
+    width: 14rem;
+    max-width: 100%;
+  }
+
+  @media (min-width: 992px) {
+    margin: 0 1rem 0 auto;
+  }
+}
+
+.search-results {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+}
+
+.search-result {
+  position: relative;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.3);
+}
+
+.search-result-title {
+  font-size: 1.15rem;
+  margin: 0 0 0.25rem;
+  overflow-wrap: anywhere;
+}
+
+.search-result-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
+.search-result-excerpt {
+  margin: 0.5rem 0 0;
+  overflow-wrap: anywhere;
+}
+
+.search-more {
+  margin: 1rem 0;
+  text-align: center;
+}
+
+// Highlight by weight as well as colour so it does not rely on colour alone.
+.search-results mark {
+  font-weight: bold;
+  color: inherit;
+  background-color: rgba(255, 193, 7, 0.45);
+  padding: 0 0.1em;
+}

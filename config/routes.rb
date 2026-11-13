@@ -39,6 +39,8 @@ Rails.application.routes.draw do
   end
   get 'boards/:board_ref_id/other_boards' => 'board_other_boards#index', as: :board_other_boards
   get 'my_posts' => 'my_posts#index', as: :my_posts
+  get 'search' => 'searches#index', as: :search
+  get 'search/page' => 'searches#page', as: :search_page
   resources :board_memberships, only: [:destroy]
 
   root 'welcome#index'

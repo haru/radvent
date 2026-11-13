@@ -1,0 +1,8 @@
+%h1.search-heading= t('search.index.title')
+- if @search_notice
+  %p.search-notice= t("search.index.#{@search_notice}", count: SearchesController::MAX_QUERY_LENGTH)
+- elsif @search_total.zero?
+  %p.search-notice= t('search.index.no_results')
+- else
+  %p.search-count= t('search.index.count', count: @search_total)
+  = render 'searches/list'

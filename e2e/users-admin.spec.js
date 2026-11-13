@@ -43,7 +43,7 @@ test.describe.serial('管理者の画面', () => {
     for (const account of [accounts.admin, accounts.alice, accounts.bob, accounts.carol]) {
       await expect(page.getByRole('cell', { name: account.email })).toBeVisible()
     }
-    await page.getByRole('searchbox').or(page.locator('input[type=search]')).first().fill(accounts.carol.name)
+    await page.locator('[data-controller=datatable] input[type=search]').fill(accounts.carol.name)
     await expect(page.getByRole('cell', { name: accounts.carol.email })).toBeVisible()
     await expect(page.getByRole('cell', { name: accounts.alice.email })).toHaveCount(0)
   })

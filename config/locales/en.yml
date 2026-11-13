@@ -298,6 +298,23 @@ en:
     post_date: '%{month}/%{day}/%{year}'
     empty: 'No posts yet'
     load_more: 'Load more'
+  search:
+    form:
+      label: 'Search articles'
+      placeholder: 'Search articles'
+      submit: 'Search'
+    index:
+      title: 'Search results'
+      count:
+        one: '1 article found'
+        other: '%{count} articles found'
+      blank: 'Enter a keyword to search'
+      too_long: 'Keywords must be %{count} characters or fewer'
+      no_results: 'No articles found. Try different keywords'
+      load_more: 'Load more'
+    result:
+      post_date: '%{month}/%{day}/%{year}'
+    rate_limited: 'Too many searches. Please wait a moment'
   theme:
     label: 'Theme'
     system: 'System'
