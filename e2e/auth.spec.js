@@ -7,7 +7,6 @@ import { fillSignUp } from './support/forms.js'
 import { clearJsErrors, expectNoJsErrors, watchJsErrors } from './support/js-errors.js'
 
 const guestMenu = (page) => page.locator('#top-menu')
-// The account form, theme and cancel button live in the account settings tab, which is the my page default.
 const updateButton = (page) => page.locator('form[action="/users"] input[type=submit]')
 
 test.describe.serial('アカウント', () => {

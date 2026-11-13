@@ -59,7 +59,7 @@ RSpec.describe Users::RegistrationsController do # rubocop:disable RSpec/SpecFil
   end
 
   # rubocop:disable RSpec/ExampleLength
-  describe 'GET #edit my posts tab' do
+  describe 'GET #edit my page tabs' do
     render_views
 
     let(:today) { Date.new(2015, 12, 2) }
@@ -96,14 +96,15 @@ RSpec.describe Users::RegistrationsController do # rubocop:disable RSpec/SpecFil
 
     it 'labels each tab panel by its tab', :aggregate_failures do
       get :edit
-      expect(page).to have_css('#my-page-posts[aria-labelledby="my-page-posts-tab"]')
-      expect(page).to have_css('#my-page-settings[aria-labelledby="my-page-settings-tab"]', visible: :all)
+      expect(page).to have_css('#my-page-posts[aria-labelledby="my-page-posts-tab"]', visible: :all)
+      expect(page).to have_css('#my-page-settings[aria-labelledby="my-page-settings-tab"]')
     end
 
     it 'renders the my page in English for an English Accept-Language', :aggregate_failures do
       own_slot({}, title: 'English post')
       request.headers['Accept-Language'] = 'en'
       get :edit
+      expect(page).to have_css('a#my-page-settings-tab', text: I18n.t('my_page.tabs.settings', locale: :en))
       expect(page).to have_css('a#my-page-posts-tab', text: I18n.t('my_page.tabs.posts', locale: :en))
       expect(page).to have_css('.my-posts-status', text: I18n.t('my_page.status.published', locale: :en))
     end
@@ -259,7 +260,7 @@ RSpec.describe Users::RegistrationsController do # rubocop:disable RSpec/SpecFil
       put :update, params: { user: { name: 'renamed', current_password: 'wrong-password' } }
     end
 
-    it 'activates the settings tab and shows the errors', :aggregate_failures do
+    it 'keeps the settings tab selected and shows the errors', :aggregate_failures do
       expect(page).to have_css('a#my-page-settings-tab.active[aria-selected="true"]')
       expect(page).to have_css('a#my-page-posts-tab[aria-selected="false"]:not(.active)')
       expect(page).to have_css('#my-page-settings.show.active')

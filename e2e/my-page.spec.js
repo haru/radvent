@@ -12,8 +12,8 @@ const eventPath = (event) => `/boards/${board.boardId}/events/${event.name}`
 // The my page opens on the "account settings" tab; the posts list lives in the other tab.
 const openPostsTab = async (page) => {
   await page.goto('/users/edit')
-  await expect(page.locator('#my-page-settings-tab')).toHaveAttribute('aria-selected', 'true')
   await page.locator('#my-page-posts-tab').click()
+  await expect(page.locator('#my-page-posts-tab')).toHaveAttribute('aria-selected', 'true')
   await expect(page.locator('#my-page-posts')).toBeVisible()
 }
 const postsRow = (page, text) => page.locator('#my-page-posts li.my-posts-item', { hasText: text })
