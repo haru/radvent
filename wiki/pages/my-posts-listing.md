@@ -1,7 +1,7 @@
 ---
 title: My Posts Listing on My Page
 type: decision
-sources: [S042, S043, S044]
+sources: [S042, S043, S044, S046]
 updated: 2026-11-13
 ---
 
@@ -14,7 +14,7 @@ newest posting date first (S043).
 ## Placement: tabs inside the existing page
 
 My Page is split with mdb-ui-kit 9.3.0 tabs (`data-mdb-tab-init`) into
-"my posts" and "account settings"; no new Stimulus controller, because
+"account settings" and "my posts"; no new Stimulus controller, because
 `mdb.initMDB` already runs on every `turbo:load` (S042). The list data is
 prepared by `before_action :load_my_posts, only: :edit`, and in `update` only
 inside Devise's block when `resource.errors.any?`, because Devise re-renders
@@ -26,10 +26,17 @@ file is unused because `Users::DeviseViews` empties `local_prefixes` (S042).
 server round-trip tabs via `?tab=` (clashes with the `/users` URL on failed
 update); a custom Stimulus tab controller (YAGNI) (S042).
 
-The "my posts" tab is first and selected by default (FR-013); the account
-settings tab follows it. The view selects the settings tab server-side only when
-`resource.errors.any?`, so a failed `update` re-render shows the errors (S042;
-the default briefly flipped in commit `88927ff` and was restored by convergence task T040).
+The account settings tab is first and always selected (feature 027 FR-001–FR-003,
+superseding 025 FR-013); "my posts" follows and opens on click (S046). The
+`settings_active = resource.errors.any?` branch was deleted: the error messages
+sit inside the settings pane, so a failed `update` shows them with no tab
+switching (S046). The controller is unchanged and `load_my_posts` still runs,
+because the posts pane stays in the DOM (S046). History: `88927ff` first made
+settings the default without updating 025's spec; convergence task T040 reverted
+it to match FR-013 (S042); feature 027 reinstates it as the specified behavior (S046).
+Gotcha: the settings pane's `autofocus` email field takes focus on first
+paint, which may open the keyboard on mobile (S046). Selection is not
+remembered via URL (YAGNI) (S046).
 
 ## Query and visibility
 

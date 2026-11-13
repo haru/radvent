@@ -7,12 +7,6 @@ import { fillSignUp } from './support/forms.js'
 import { clearJsErrors, expectNoJsErrors, watchJsErrors } from './support/js-errors.js'
 
 const guestMenu = (page) => page.locator('#top-menu')
-// The account form, theme and cancel button live in the account settings tab of the my page;
-// "My posts" is the default tab, so the settings tab must be opened first.
-const openSettingsTab = async (page) => {
-  await page.locator('#my-page-settings-tab').click()
-  await expect(page.locator('#my-page-settings')).toBeVisible()
-}
 const updateButton = (page) => page.locator('form[action="/users"] input[type=submit]')
 
 test.describe.serial('アカウント', () => {
@@ -83,7 +77,6 @@ test.describe.serial('アカウント', () => {
   test('A-6 マイページ: 現在のパスワードなしでは名前を変更できない', async ({ browser }) => {
     const { page } = await openAs(browser, accounts.dave)
     await page.goto('/users/edit')
-    await openSettingsTab(page)
     await page.getByLabel('名前').fill('e2e-dave-renamed')
     await updateButton(page).click()
     await expect(page.locator('.alert-danger')).toBeVisible()
@@ -91,13 +84,11 @@ test.describe.serial('アカウント', () => {
     await expect(userMenu(page)).toHaveText(accounts.dave.name)
 
     await page.goto('/users/edit')
-    await openSettingsTab(page)
     await page.getByLabel('名前').fill('e2e-dave-renamed')
     await page.getByLabel('現在のパスワード').fill(accounts.dave.password)
     await updateButton(page).click()
     await expect(userMenu(page)).toHaveText('e2e-dave-renamed')
     await page.goto('/users/edit')
-    await openSettingsTab(page)
     await page.getByLabel('名前').fill(accounts.dave.name)
     await page.getByLabel('現在のパスワード').fill(accounts.dave.password)
     await updateButton(page).click()
@@ -108,7 +99,6 @@ test.describe.serial('アカウント', () => {
     const { page } = await openAs(browser, accounts.dave)
     const newPassword = 'dave-new-password'
     await page.goto('/users/edit')
-    await openSettingsTab(page)
     await page.getByLabel('パスワード', { exact: true }).fill(newPassword)
     await page.getByLabel('確認用パスワード').fill(newPassword)
     await page.getByLabel('現在のパスワード').fill(accounts.dave.password)
@@ -126,13 +116,11 @@ test.describe.serial('アカウント', () => {
   test('A-8 テーマを切り替えると画面に反映され、再読み込みしても保たれる', async ({ page }) => {
     await login(page, accounts.dave)
     await page.goto('/users/edit')
-    await openSettingsTab(page)
     for (const [label, value] of [['Dark', 'dark'], ['Light', 'light'], ['システム設定', 'system']]) {
       await page.getByText(label, { exact: true }).click()
       await expect(page.locator('html')).toHaveAttribute('data-theme', value)
       await page.reload()
       await expect(page.locator('html')).toHaveAttribute('data-theme', value)
-      await openSettingsTab(page)
       await expect(page.locator(`#theme_${value}`)).toBeChecked()
     }
   })
@@ -140,7 +128,6 @@ test.describe.serial('アカウント', () => {
   test('A-9 アカウントを削除すると、ログアウトされて同じ認証情報では入れない', async ({ browser }) => {
     const { page } = await openAs(browser, accounts.eve)
     await page.goto('/users/edit')
-    await openSettingsTab(page)
 
     // Declining the confirmation sends nothing: the account stays.
     const dismissed = dismissNextDialog(page)
@@ -148,7 +135,6 @@ test.describe.serial('アカウント', () => {
     await dismissed
     await page.reload()
     await expect(userMenu(page)).toHaveText(accounts.eve.name)
-    await openSettingsTab(page)
 
     const accepted = acceptNextDialog(page)
     await page.getByRole('button', { name: 'アカウント削除' }).click()

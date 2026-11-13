@@ -59,7 +59,7 @@ RSpec.describe Users::RegistrationsController do # rubocop:disable RSpec/SpecFil
   end
 
   # rubocop:disable RSpec/ExampleLength
-  describe 'GET #edit my posts tab' do
+  describe 'GET #edit my page tabs' do
     render_views
 
     let(:today) { Date.new(2015, 12, 2) }
@@ -82,28 +82,29 @@ RSpec.describe Users::RegistrationsController do # rubocop:disable RSpec/SpecFil
       slot
     end
 
-    it 'renders the two tabs with the posts tab first and active by default', :aggregate_failures do
+    it 'renders the two tabs with the settings tab first and active by default', :aggregate_failures do
       get :edit
       expect(page).to have_css('ul.nav.nav-tabs[role=tablist]')
-      expect(page).to have_css('a#my-page-posts-tab.active[data-mdb-tab-init][href="#my-page-posts"]' \
-                               '[aria-controls="my-page-posts"][aria-selected="true"]')
-      expect(page).to have_css('a#my-page-settings-tab[data-mdb-tab-init][aria-selected="false"]:not(.active)')
-      expect(page).to have_css('#my-page-posts.tab-pane.show.active')
-      expect(page).to have_css('#my-page-settings.tab-pane:not(.active)', visible: :all)
+      expect(page).to have_css('a#my-page-settings-tab.active[data-mdb-tab-init][href="#my-page-settings"]' \
+                               '[aria-controls="my-page-settings"][aria-selected="true"]')
+      expect(page).to have_css('a#my-page-posts-tab[data-mdb-tab-init][aria-selected="false"]:not(.active)')
+      expect(page).to have_css('#my-page-settings.tab-pane.show.active')
+      expect(page).to have_css('#my-page-posts.tab-pane:not(.active)', visible: :all)
       tab_ids = page.all('#my-page-tabs a.nav-link').map { |tab| tab[:id] } # rubocop:disable Rails/Pluck
-      expect(tab_ids).to eq(%w[my-page-posts-tab my-page-settings-tab])
+      expect(tab_ids).to eq(%w[my-page-settings-tab my-page-posts-tab])
     end
 
     it 'labels each tab panel by its tab', :aggregate_failures do
       get :edit
-      expect(page).to have_css('#my-page-posts[aria-labelledby="my-page-posts-tab"]')
-      expect(page).to have_css('#my-page-settings[aria-labelledby="my-page-settings-tab"]', visible: :all)
+      expect(page).to have_css('#my-page-posts[aria-labelledby="my-page-posts-tab"]', visible: :all)
+      expect(page).to have_css('#my-page-settings[aria-labelledby="my-page-settings-tab"]')
     end
 
     it 'renders the my page in English for an English Accept-Language', :aggregate_failures do
       own_slot({}, title: 'English post')
       request.headers['Accept-Language'] = 'en'
       get :edit
+      expect(page).to have_css('a#my-page-settings-tab', text: I18n.t('my_page.tabs.settings', locale: :en))
       expect(page).to have_css('a#my-page-posts-tab', text: I18n.t('my_page.tabs.posts', locale: :en))
       expect(page).to have_css('.my-posts-status', text: I18n.t('my_page.status.published', locale: :en))
     end
@@ -259,7 +260,7 @@ RSpec.describe Users::RegistrationsController do # rubocop:disable RSpec/SpecFil
       put :update, params: { user: { name: 'renamed', current_password: 'wrong-password' } }
     end
 
-    it 'activates the settings tab and shows the errors', :aggregate_failures do
+    it 'keeps the settings tab selected and shows the errors', :aggregate_failures do
       expect(page).to have_css('a#my-page-settings-tab.active[aria-selected="true"]')
       expect(page).to have_css('a#my-page-posts-tab[aria-selected="false"]:not(.active)')
       expect(page).to have_css('#my-page-settings.show.active')
