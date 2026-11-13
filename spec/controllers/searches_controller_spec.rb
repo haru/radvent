@@ -54,6 +54,12 @@ RSpec.describe SearchesController do
       expect(response).to have_http_status(:bad_request)
     end
 
+    it 'sends Cache-Control no-store with the 400', :aggregate_failures do
+      get :index, params: { q: ['a'] }
+      expect(response).to have_http_status(:bad_request)
+      expect(response.headers['Cache-Control']).to include('no-store')
+    end
+
     [nil, '', '   ', "　　"].each do |blank|
       it "asks for a keyword when q is #{blank.inspect}", :aggregate_failures do
         make_item
@@ -90,6 +96,13 @@ RSpec.describe SearchesController do
       expect(response).to have_http_status(:ok)
     end
 
+    it 'handles a long run of inner whitespace in linear time', :aggregate_failures do
+      started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+      get :index, params: { q: "a#{' ' * 200_000}a" }
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(Process.clock_gettime(Process::CLOCK_MONOTONIC) - started).to be < 1
+    end
+
     it "responds 400 when q contains a control character such as NUL" do
       get :index, params: { q: "ab\u0000c" }
       expect(response).to have_http_status(:bad_request)
@@ -107,6 +120,12 @@ RSpec.describe SearchesController do
         get :page, params: { q: 'rails', page: bad }
         expect(response).to have_http_status(:unprocessable_content)
       end
+    end
+
+    it 'sends Cache-Control no-store with the 422 for an invalid page', :aggregate_failures do
+      get :page, params: { q: 'rails', page: 'abc' }
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(response.headers['Cache-Control']).to include('no-store')
     end
 
     [nil, '', '  ', 'a' * 101].each do |bad|
@@ -255,6 +274,11 @@ RSpec.describe SearchesController do
     it 'keeps the stripped query in the title-bar field' do
       get :index, params: { q: '  rails  ' }
       expect(page).to have_field('q', with: 'rails')
+    end
+
+    it 'strips surrounding full-width spaces but keeps the inner whitespace' do
+      get :index, params: { q: "　 Ruby 　Rails　 " }
+      expect(page).to have_field('q', with: "Ruby 　Rails")
     end
 
     it 'keeps the typed query in the field when nothing matches' do
@@ -428,6 +452,12 @@ RSpec.describe SearchesController do
       get :index, params: { q: 'rails' }
       expect(response).to have_http_status(:too_many_requests)
       expect(response.body).to include(I18n.t('errors.too_many_requests.title'))
+    end
+
+    it 'sends Cache-Control no-store with the 429', :aggregate_failures do
+      31.times { get :index, params: { q: 'rails' } }
+      expect(response).to have_http_status(:too_many_requests)
+      expect(response.headers['Cache-Control']).to include('no-store')
     end
 
     it 'shares the counter between index and page' do

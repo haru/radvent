@@ -13,13 +13,16 @@ class SearchesController < ApplicationController
   MAX_QUERY_LENGTH = 100
   # Characters that are never valid in a query: control characters other than whitespace (e.g. NUL).
   INVALID_QUERY_CHARS = /[[:cntrl:]&&[^[:space:]]]/
+  # A single character that is not half- or full-width whitespace.
+  NON_SPACE_CHAR = /[^[:space:]]/
   # HTTP status of the guidance rendered for each query problem.
   QUERY_PROBLEM_STATUS = { blank: :ok, too_long: :unprocessable_content }.freeze
 
+  # Registered first so that every response, including the early 400/422/429 ones, is not cached.
+  before_action :no_store
   rate_limit to: 30, within: 1.minute, by: -> { request.remote_ip }, with: :render_rate_limited
   before_action :require_search_text
   before_action :require_load_more_page, only: :page
-  before_action :no_store
 
   # Renders the search result screen (page 1), or only a guidance message when the query is blank (200)
   # or too long (422).
@@ -54,8 +57,20 @@ class SearchesController < ApplicationController
     raw = params[:q]
     return head :bad_request unless raw.nil? || (raw.is_a?(String) && !raw.match?(INVALID_QUERY_CHARS))
 
-    @search_query = raw.to_s.gsub(/\A[[:space:]]+|[[:space:]]+\z/, '')
+    @search_query = strip_whitespace(raw.to_s)
     @keywords = @search_query.split(/[[:space:]]+/).uniq
+  end
+
+  # Removes surrounding half- and full-width whitespace (String#strip only handles ASCII).
+  #
+  # Locates the first and last non-whitespace characters with single-character patterns instead of an
+  # anchored +[[:space:]]+\z+, which rescans long whitespace runs (polynomial-time regexp).
+  #
+  # @param text [String] the raw text
+  # @return [String] the text without surrounding whitespace
+  def strip_whitespace(text)
+    first = text.index(NON_SPACE_CHAR)
+    first ? text[first..text.rindex(NON_SPACE_CHAR)] : ''
   end
 
   # Names what is wrong with the query, if anything.

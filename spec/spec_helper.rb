@@ -47,7 +47,7 @@ RSpec.configure do |config|
   config.shared_context_metadata_behavior = :apply_to_host_groups
 
   # Wall-clock performance examples are slow and machine dependent: run them with RUN_PERFORMANCE=1.
-  config.filter_run_excluding :performance unless ENV['RUN_PERFORMANCE']
+  config.filter_run_excluding :performance unless ENV['RUN_PERFORMANCE'] == '1'
 
   # The settings below are suggested to provide a good initial experience
   # with RSpec, but feel free to customize to your heart's content.
