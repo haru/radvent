@@ -29,13 +29,16 @@ class UsersController < ApplicationController
     render layout: 'admin'
   end
 
-  # Updates user info.
+  # Updates user info (email, name, admin flag).
+  #
+  # On success redirects to the edit screen with a success notice;
+  # on failure re-renders the edit form in the admin layout with 422.
   #
   # @return [void]
   def update_info
     @user.attributes = params.expect(user: %i[email name admin])
     if @user.save
-      redirect_to edit_user_path(@user)
+      redirect_to edit_user_path(@user), status: :see_other, notice: t('users.updated')
     else
       @menu = :users
       render :edit_info, layout: 'admin', status: :unprocessable_content

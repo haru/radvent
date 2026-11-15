@@ -87,35 +87,45 @@ RSpec.describe UsersController do
 
     context 'with valid params' do
       before do
-        put :update_info, params: { id: other_user, user: { email: 'aaa@bbb.com' }, name: 'newname', admin: true }
+        put :update_info, params: { id: other_user, user: { email: 'aaa@bbb.com', name: 'newname', admin: true } }
       end
 
       it 'assigns @user as requested user' do
         expect(assigns(:user).id).to eq other_user.id
       end
 
-      it 'updates email' do
-        expect(assigns(:user).email).to eq 'aaa@bbb.com'
+      it 'updates email and name', :aggregate_failures do
+        other_user.reload
+        expect(other_user.email).to eq 'aaa@bbb.com'
+        expect(other_user.name).to eq 'newname'
       end
 
-      it 'does not grant admin status' do
-        expect(assigns(:user).admin).to be false
+      it 'grants admin status' do
+        expect(other_user.reload.admin).to be true
       end
 
-      it 'redirects to edit_user_path' do
+      it 'redirects to edit_user_path with 303 See Other', :aggregate_failures do
         expect(response).to redirect_to edit_user_path(id: other_user)
+        expect(response).to have_http_status(:see_other)
       end
-    end
 
-    it 'renders the :edit_info template when update fails' do
-      put :update_info, params: { id: other_user, user: { email: '' }, name: '', admin: true }
-      expect(response).to render_template :edit_info
+      it 'sets the update success notice' do
+        expect(flash[:notice]).to eq I18n.t('users.updated')
+      end
     end
 
     context 'when the update fails' do
       render_views
 
       before { put :update_info, params: { id: other_user, user: { email: 'not-an-email' } } }
+
+      it 'renders the :edit_info template' do
+        expect(response).to render_template :edit_info
+      end
+
+      it 'does not set a success notice' do
+        expect(flash[:notice]).to be_nil
+      end
 
       it 'answers 422 so Turbo accepts the page', :aggregate_failures do
         expect(response).to have_http_status(:unprocessable_content)

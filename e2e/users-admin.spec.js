@@ -48,13 +48,14 @@ test.describe.serial('管理者の画面', () => {
     await expect(page.getByRole('cell', { name: accounts.alice.email })).toHaveCount(0)
   })
 
-  test('B-3 管理者はユーザーの名前と管理者権限を変更できる', async ({ browser }) => {
+  test('B-3 管理者はユーザーの名前と管理者権限を変更でき、更新メッセージが表示される', async ({ browser }) => {
     const { page } = await openAs(browser, accounts.admin)
     await page.goto('/users')
     await page.getByRole('link', { name: accounts.dave.name }).click()
     await page.getByLabel('名前').fill('e2e-dave-edited')
     await page.getByLabel('管理者').check()
     await page.getByRole('button', { name: '更新する' }).click()
+    await expect(page.locator('.alert-success')).toContainText('ユーザーを更新しました')
     await expect(page.getByLabel('名前')).toHaveValue('e2e-dave-edited')
     await expect(page.getByLabel('管理者')).toBeChecked()
     await page.goto('/users')
@@ -70,6 +71,7 @@ test.describe.serial('管理者の画面', () => {
     await page.getByRole('button', { name: '更新する' }).click()
     await expect(page.locator('.invalid-feedback, .alert-danger, .help-block').first()).toBeVisible()
     await expect(page.locator('#admin-menu')).toBeVisible()
+    await expect(page.locator('.alert-success')).toHaveCount(0)
     await page.goto('/users')
     await expect(page.getByRole('cell', { name: accounts.dave.email })).toBeVisible()
   })
