@@ -75,7 +75,7 @@ A-6 to A-9 need no tab click: the my page opens on the "Account settings" tab.
 |----|----------|
 | B-1 🆕 | A non-admin gets 403 on the user list and the user edit screen; the settings menu is hidden |
 | B-2 🆕 | Admin sees the settings menu and the user list |
-| B-3 🆕 | Admin edits a user (name, admin flag); a malformed e-mail is rejected |
+| B-3 🆕 | Admin edits a user (name, admin flag) and sees the update confirmation message; a malformed e-mail is rejected with no confirmation |
 | B-4 🆕 | Admin deletes a user after the confirmation dialog; the user is gone from the list |
 | B-5 🆕 | Admin creates, edits and deletes an event on the TOP board |
 

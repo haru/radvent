@@ -211,6 +211,8 @@ en:
     top: 'TOP'
   advent_calendar_items:
     delete_failed: 'Failed to delete the slot'
+  users:
+    updated: 'User updated successfully'
   events:
     updated: 'Event updated successfully'
   boards:
