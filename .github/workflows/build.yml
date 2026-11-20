@@ -50,7 +50,7 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: dbpassword
       postgres:
-        image: postgres:18
+        image: postgres:19
         env:
           POSTGRES_USER: root
           POSTGRES_PASSWORD: dbpassword
