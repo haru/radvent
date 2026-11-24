@@ -1311,9 +1311,9 @@ locate-path@^6.0.0:
     p-locate "^5.0.0"
 
 marked@^18.0.7:
-  version "18.2.0"
-  resolved "https://registry.yarnpkg.com/marked/-/marked-18.2.0.tgz#58d7f91aa57cab1591bce1be264b1251694a63f3"
-  integrity sha512-KaeL+tAbtvI930q7HE2PN5lYXYdT8EiSmxHlN6F3rsfb57wd5mp5W5TLazpdj4inTQBJdgjYwbs40W/0VUGU+Q==
+  version "18.3.0"
+  resolved "https://registry.yarnpkg.com/marked/-/marked-18.3.0.tgz#6d5806657a56567edc9e25beb436b9053b1738ea"
+  integrity sha512-ed8zmPXlBb3UfGXN5iHMQyMhFpdqLgoV5umUXx/Q1R+FW3q8VpqpyoKUwlENL9appo2UMvNLURDVaT3AMOryGA==
 
 marked@^4.1.0:
   version "4.3.0"
